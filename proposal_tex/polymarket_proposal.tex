@@ -1,0 +1,85 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=0.65in]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{array}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\setlist{nosep, leftmargin=1.2em}
+\titleformat{\section}{\large\bfseries}{}{0pt}{}
+\titlespacing*{\section}{0pt}{7pt}{2pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+  {\Large\bfseries When Polymarket Says 70\%, Does It Happen 70\% of the Time?}\\[4pt]
+  {\large Project Proposal --- Introduction to Data Science}\\[6pt]
+  Group [\#] --- Team Brier \quad\textbar\quad Members: [Name], [Name], [Name] \quad\textbar\quad \today
+\end{center}
+
+\section{Motivation}
+Polymarket is the world's largest prediction market, where people bet real money on elections,
+sports, crypto prices, and world events. A share that pays \$1 if an event happens and trades at
+\$0.70 is read as a 70\% chance, and news outlets now quote these numbers as facts. Because every
+market eventually ends with a known outcome, this claim can be tested directly: \emph{of all events
+priced at 70\%, did about 70\% actually happen?}
+
+\section{Dataset}
+\textbf{Polymarket-v1} (Qin \& Yang, 2026) is the complete on-chain trade record of Polymarket's
+first-generation exchange, November 2022 -- April 2026: about 1.2 billion trades across 1.3 million
+markets, freely available on Hugging Face (CC-BY-4.0). Each trade includes price, implied probability,
+trade size, timestamp, category, and the market's final outcome. We will reduce it to one row per
+resolved Yes/No market.\\
+{\small Paper: \url{https://arxiv.org/abs/2606.04217} \quad Data: \url{https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1}}
+
+\section{Research Questions and Hypotheses}
+\textbf{Main question:} Can we trust Polymarket's probabilities?
+\begin{enumerate}[leftmargin=2.2em]
+  \item[\textbf{H1}] Overall, market prices match real-world frequencies (calibration).
+  \item[\textbf{H2}] Low-probability ``longshot'' events happen less often than their price implies.
+  \item[\textbf{H3}] Uncertainty drops and accuracy improves as the event approaches its end.
+\end{enumerate}
+
+\section{Approach}
+The analysis follows five steps, each built on methods from the course.
+
+\begin{tabularx}{\textwidth}{@{}l Y Y@{}}
+\toprule
+\textbf{Step} & \textbf{Question} & \textbf{Methods} \\
+\midrule
+1. Meet the data & What is traded, and how much? & Market-level data matrix, summary statistics, bar charts \\
+2. Shape of the data & How are prices and volumes distributed? & Histograms, QQ plots, log transform, z-scores \\
+3. Is the crowd right? (H1) & Do 70\% events happen 70\% of the time? & 10 probability bins, observed vs.\ expected outcomes, chi-square goodness-of-fit test, calibration chart \\
+4. Where does it fail? (H2) & Are longshots overpriced? Does accuracy differ by category? & One-sided binomial tests, Bonferroni and Benjamini--Hochberg correction, chi-square test of independence, Kolmogorov--Smirnov test \\
+5. How does uncertainty fade? (H3) & Is the market smarter 1 day vs.\ 7 days before close? & Binary entropy, Brier score, log loss, Spearman correlation \\
+\bottomrule
+\end{tabularx}
+
+Accuracy is scored with the Brier score,
+$\mathrm{BS} = \frac{1}{N}\sum_{i=1}^{N}(p_i - y_i)^2$, where $p_i$ is the market price and
+$y_i \in \{0,1\}$ is the outcome. Uncertainty is measured by binary entropy,
+$H(p) = -p\log_2 p - (1-p)\log_2(1-p)$.
+
+\textbf{Tools:} Python (pandas, NumPy, SciPy, statsmodels, matplotlib) and DuckDB for querying the large data files.
+
+\section{Timeline}
+\textbf{Week 1:} data access, cleaning, market-level table (Steps 1--2) \quad
+\textbf{Week 2:} calibration analysis (Step 3) \\
+\textbf{Week 3:} longshot, category, and time-to-close analysis (Steps 4--5) \quad
+\textbf{Week 4:} final figures, report, presentation
+
+\section{Expected Outcome}
+A calibration chart showing where Polymarket's prices can and cannot be read as probabilities,
+evidence on whether cheap longshot bets are a bad deal, and a measure of how much uncertainty
+the market resolves in its final week.
+
+\end{document}
