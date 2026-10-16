@@ -1,111 +1,144 @@
-# When Polymarket Says 70%, Does It Happen 70% of the Time?
+# Project Plan: MVP1 and MVP2
 
-## Prediction Accuracy, Trading Concentration, and Statistical Distributions in Prediction Markets
+**When Polymarket Says 70%, Does It Happen 70% of the Time?**
+Group 1 | Team Brier: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
 
-**Group 1 | Team Brier**
-Members: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
+- Class post: `polymarket_proposal_v3.md`
+- Concept-by-concept detail: `../docs/lecture_concept_map.md` (sections 6 and 7)
 
-## Project Description
+## Strategy
 
-On Polymarket, people trade contracts on future events such as elections, sports, and crypto prices. A contract pays $1 if the event happens. If it trades at $0.70, the price is read as a 70% chance. News outlets now quote these numbers as facts. Every market eventually resolves to a known outcome, so the claim can be checked: of all events priced near 70%, did about 70% actually happen?
-
-We also look at who trades. A market price reflects all of its trades, but those trades may come from only a few wallets. Finally, we describe the shape of the data itself: trade sizes, wallet activity, and prices.
-
-## Dataset
-
-**Polymarket-v1** (Qin & Yang, 2026) is the on-chain trade record of Polymarket's first-generation exchange on Polygon, from November 2022 to April 2026. It holds about 1.2 billion trades across 1.3 million markets. Each trade record includes a timestamp, market and token identifiers, price, trade size, maker and taker wallet addresses, and the true trade direction. Market categories and outcomes come from a joined metadata snapshot.
-
-- Paper: https://arxiv.org/abs/2606.04217
-- Data: https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1
-
-We will work with resolved **standard binary (Yes/No) markets**. Multi-outcome markets are excluded because their legs are not independent: exactly one candidate wins. Platform relayer records are removed so that the same trade is not counted twice. NO-token prices are converted to the YES scale (1 − p).
-
-## Research Questions
-
-1. **Prediction accuracy.** Do events priced at *p* happen with frequency *p*?
-2. **Trading concentration.** Do a few wallets account for most of the trading volume?
-3. **Distributions.** What do trade sizes, wallet activity, and prices look like?
-
-## Approach
-
-Each step lists the course lectures it uses (L = lecture deck number).
-
-### Step 1: Build the data (L2, L3, L7)
-
-- Turn the trade-level records into two data matrices: a **market table** (one row per market) and a **wallet table** (one row per wallet). Classify each variable by type: price and trade size are ratio-scaled, category is nominal, and the outcome is binary (L3).
-- Handle the data issues: duplicated rows (relayer records), missing values (markets without an outcome label are dropped, not imputed), and a biased sample (only resolved markets) (L2, L7).
-- Fix the evaluation time. For each market, the predicted probability is the last traded price at a set time before the market's final trade, for example 1 day and 7 days before. This avoids using prices after the outcome was already known.
-
-### Step 2: Describe the data (Q3; L4, L5, L6, L7)
-
-- Report mean, median, mode, range, variance, and quantiles. Compare the mean with the median to show how much a few large values pull the mean (robustness; L4, L5).
-- Plot histograms, box plots, and violin plots by category, and ECDFs (L4, L5). We expect the price histogram to be U-shaped.
-- Fit candidate distributions to trade size and wallet volume: normal, exponential, and power law (L6). Check the fit with QQ plots before and after a log transform, and with a KS test against the fitted distribution (L7, L11).
-- Use z-scores and robust scaling (median, IQR) wherever variables on different scales are compared (L7).
-
-### Step 3: Is the crowd right? (Q1; L6, L7, L9, L10, L12, L15, L16)
-
-- Model each outcome as a Bernoulli trial with probability *p*. Within a probability bin, the number of Yes outcomes is then approximately binomial (L6).
-- Group markets into 10 equal-width probability bins, and into equal-frequency bins as a robustness check (L7).
-- In each bin, test H0: the observed Yes rate equals the average price, using a binomial test and its p-value. Report a 95% confidence interval for each bin, from the normal approximation or a bootstrap (L5, L9, L10).
-- Run a chi-square test on the bin × {Yes, No} table of observed and expected counts (L12).
-- Score accuracy with the Brier score and log loss. Log loss is the average *surprise* of the outcome that actually happened, and the binary entropy H(p) of a price measures how uncertain the market is (L15).
-- Treat the market as a classifier that predicts Yes when *p* > 0.5. Report the confusion matrix, accuracy, precision, and recall, and check for class imbalance between Yes and No outcomes (L16). No model is trained.
-- The low-probability bins (0–10%) show whether "longshot" events are overpriced.
-
-### Step 4: Where does it go wrong? (Q1; L11, L12, L13, L14, L15)
-
-- Repeat the bin tests within each category (10 bins × 5 categories = 50 tests). Correct for multiple testing with Bonferroni and Benjamini–Hochberg (L13).
-- Test whether accuracy depends on category, using a chi-square test of independence on a category × {favorite won, favorite lost} table (L12) and normalized mutual information with a permutation test (L15).
-- Compare Brier scores across categories with ANOVA and with a permutation test that makes no normality assumption (L11, L13).
-- Compare the price distributions of markets that resolved Yes and No with a KS test, at 7 days and at 1 day before close. Test whether the per-market error shrinks from 7 days to 1 day with a one-sample t-test on the per-market differences (L11).
-- Measure the association between log-volume and per-market error with Spearman correlation, which is robust to outliers, and report its significance (L14).
-
-### Step 5: Who trades? (Q2; L4, L5, L6, L11, L14, L17)
-
-- Compute each wallet's lifetime trading volume, separately for makers and takers. Report the share of volume held by the top 1%, 5%, and 10% of wallets, using percentiles (L5).
-- Plot the complementary CDF on log–log axes to check for a power law, and test whether the 80/20 rule holds rather than assuming it (L4, L6).
-- Draw the Lorenz curve and compute the Gini coefficient. Compare our values with those reported in the dataset paper as a check on our pipeline.
-- Compare the maker and taker volume distributions with a KS test (L11).
-- Cluster wallets with k-means on z-normalized features (log-volume, trade count, mean price, number of markets), choosing K with the elbow method. K-means is sensitive to outliers, so the result is treated as exploratory (L14, L17).
-
-## Lecture Coverage
-
-| Lecture | Concepts used | Step |
+| | MVP1 | MVP2 |
 |---|---|---|
-| L2 Data | Data issues: duplicates, missing values, sample bias | 1 |
-| L3 Data and Matrix | Data matrix, variable types | 1 |
-| L4 Basic Stats | Random variable, PMF/PDF, CDF, robustness | 2, 5 |
-| L5 Stats and Visualization | Quantiles, histogram, box/violin plot, CI, bootstrap | 2, 3, 5 |
-| L6 Data Distribution | Normal, exponential, power law, Bernoulli, binomial | 2, 3, 5 |
-| L7 QQ Plot and Normalization | QQ plot, binning, z-score, robust scaling, log transform, missing values | 1, 2, 3 |
-| L9 Hypothesis Testing | Null and alternative hypotheses | 3 |
-| L10 P-value | P-value, CI vs. p-value, effect size | 3 |
-| L11 Comparing Distributions | t-test, ANOVA, KS test | 2, 4, 5 |
-| L12 Chi-Square Test | Contingency table, chi-square test | 3, 4 |
-| L13 Multiple Hypothesis Testing | Bonferroni, Benjamini–Hochberg, permutation test | 4 |
-| L14 Pairwise Association | Scaling, Pearson vs. Spearman, significance of correlation | 4, 5 |
-| L15 Entropy | Surprise, entropy, mutual information (NMI) | 3, 4 |
-| L16 Intro to ML | Confusion matrix, precision, recall, class imbalance | 3 |
-| L17 Clustering | K-means, elbow method, outlier sensitivity | 5 |
+| Research questions | Q1, Q2, Q3 (the three in the class post) | Q1–Q3 plus sub-questions Q1a, Q1b, Q1c |
+| Lecture coverage | All lecture concepts. Three are used in a forced way (see below) | All lecture concepts, each used naturally |
+| Deadline | End of Week 2 | End of Week 3 |
+| Start condition | — | MVP1 is done (see the gate) |
 
-Methods from outside the lectures: calibration curve, Brier score, Lorenz curve, and Gini coefficient. These are cited separately in the report.
+MVP1 is the report we can always submit. MVP2 only adds to it. Nothing in MVP1 is thrown away.
 
-## Tools
+The three forced uses in MVP1 are the chi-square test of independence, ANOVA with a permutation test, and Spearman correlation. In MVP1 they enter Q2 through the wallet clusters. In MVP2 they move to Q1a–Q1c, where they answer real questions.
 
-Python (pandas, NumPy, SciPy, statsmodels, scikit-learn for k-means, matplotlib) and DuckDB to query the large Parquet files. No predictive model is trained.
+## 0. Shared data foundation (Week 1)
 
-## Timeline (4 weeks)
+Everything else depends on this step.
 
-| Week | Work |
+| Task | Rule | Lecture |
+|---|---|---|
+| Inspect the data | List tables, columns, sizes, and the date range. Confirm the license | L2 |
+| Build a pilot | Run the whole pipeline on **one monthly partition** first, then scale up | — |
+| Keep only valid markets | Standard binary (Yes/No) markets with a winning-outcome label. Drop multi-outcome (neg-risk) and Up-Down markets | L2 |
+| Remove duplicates | Drop relayer records | L2 |
+| Put prices on one scale | Convert NO-token prices to the YES scale: p = 1 − price | — |
+| Handle missing values | Drop markets with no outcome. Do not impute | L7 |
+| Choose the evaluation price | The last traded price at or before T − 1 day, where T is the market's last trade. Skip a market if that price is more than 24 h older than the evaluation time | — |
+| Build the tables | **Market table** and **wallet table**, each with its variable types listed | L3 |
+
+**Market table** (one row per market):
+- market_id, category, n_trades, volume_usdc
+- p_1d (price 1 day before close), outcome y ∈ {0, 1}
+
+**Wallet table** (one row per wallet):
+- wallet, role (maker or taker), volume_usdc, n_trades, n_markets, mean_trade_price
+
+## MVP1: three questions
+
+### Q3. What does the data look like? (Week 1)
+
+| Method | Lecture | Output |
+|---|---|---|
+| Mean, median, mode, range, variance, quantiles | L4, L5 | Summary table for price, trade size, wallet volume |
+| Histogram, box plot, violin plot by category, ECDF | L4, L5 | Fig. 1: price histogram (expected U shape). Fig. 2: trade size |
+| Fit normal, exponential, and power law to trade size and wallet volume | L6 | Fitted parameters |
+| QQ plot before and after a log transform | L7 | Fig. 3 |
+| KS test of each fitted distribution against the data | L11 | D statistic and p-value |
+| z-score and robust scaling | L7 | Inputs for the Q2 clustering |
+
+### Q1. Is the crowd right? (Week 2)
+
+| Method | Lecture | Output |
+|---|---|---|
+| Treat each outcome as Bernoulli(p); count Yes outcomes per bin, approximately binomial | L6 | Model statement |
+| 10 equal-width bins; equal-frequency bins as a check | L7 | Bin table |
+| H0: observed Yes rate = average price. Binomial test per bin | L9, L10 | p-value per bin |
+| 95% CI per bin (normal approximation or bootstrap) | L5, L10 | Fig. 4: calibration chart with CIs |
+| Chi-square goodness of fit on the bin × {Yes, No} table | L12 | χ², degrees of freedom, p-value |
+| Bonferroni and BH corrections over the 10 bin tests | L13 | Table: raw vs. corrected |
+| Brier score; log loss read as average surprise; H(p) as market uncertainty | L15 + outside | Scores |
+| Market as a p > 0.5 classifier: confusion matrix, precision, recall, class balance of Yes vs. No | L16 | Confusion matrix |
+| KS test: price distribution of Yes-resolved vs. No-resolved markets | L11 | Fig. 5: two ECDFs |
+| Longshot check: bins 0–10% and 10–20% | L9, L10 | Observed − expected, with CI |
+
+### Q2. Who is the crowd? (Week 2)
+
+| Method | Lecture | Output |
+|---|---|---|
+| Mean vs. median wallet volume (robustness) | L4 | Summary |
+| Top 1%, 5%, 10% volume share (percentiles) | L5 | Table |
+| Complementary CDF on log–log axes; test 80/20 rather than assume it | L4, L6 | Fig. 6 |
+| Lorenz curve, Gini; compare with the dataset paper (maker 0.970, taker 0.943) | outside | Fig. 7, pipeline check |
+| t-test and KS test on log-volume, makers vs. takers | L11 | Test results |
+| k-means on z-scored wallet features; choose K by the elbow method | L7, L14, L17 | Fig. 8: elbow plot, cluster summary |
+| *Forced:* chi-square test of independence on wallet cluster × market category | L12 | Contingency table |
+| *Forced:* ANOVA and permutation test across clusters on mean trade price, a variable not used for clustering | L11, L13 | Test results |
+| *Forced:* Spearman correlation between trade count and volume | L14 | ρ and p-value |
+
+### MVP1 is done when
+
+- [ ] The market table and the wallet table are built from the full data (or a documented subset).
+- [ ] Figures 1–8 exist.
+- [ ] Every row in the MVP1 tables above has a result.
+- [ ] Every test reports an effect size (difference, D, ρ) next to its p-value.
+
+## Gate: MVP1 → MVP2
+
+Start MVP2 only if all of the following are true at the end of Week 2:
+
+1. Every MVP1 box above is checked.
+2. Queries on the full data finish in minutes, not hours.
+3. The team agrees there is time left in Weeks 3 and 4.
+
+If any condition fails, spend Week 3 polishing MVP1.
+
+## MVP2: three sub-questions under Q1 (Week 3)
+
+| Sub-question | Method | Lecture | Output |
+|---|---|---|---|
+| **Q1a. Does accuracy depend on the topic?** | Chi-square test of independence: category × {favorite won, favorite lost} | L12 | Table |
+| | Bin tests within each category (10 × 5 = 50), Bonferroni and BH | L13 | Fig. 9: calibration by category |
+| | ANOVA and permutation test of Brier score across categories | L11, L13 | Test results |
+| **Q1b. Does the market get smarter near the deadline?** | Add p_7d to the market table | — | Data |
+| | KS test: Yes vs. No price distributions at 7 days and at 1 day | L11 | Fig. 10 |
+| | One-sample t-test on per-market (error at 7 days − error at 1 day) | L11 | Test result |
+| | Mean H(p) at 7 days vs. 1 day. The drop is expected by construction; the error change is the real test | L15 | Table |
+| **Q1c. Are busier markets more accurate?** | Spearman correlation: log-volume vs. per-market error, with significance | L14 | Fig. 11 |
+| | z-score and robust scaling of volume, trade count, and error | L7 | Inputs |
+
+In MVP2 the three forced Q2 tests stay in the report as secondary results. The natural versions in Q1a and Q1c become the main ones.
+
+## Timeline
+
+| Week | MVP1 track | MVP2 track |
+|---|---|---|
+| 1 | Data foundation, Q3 | — |
+| 2 | Q1, Q2; the gate decision at the end of the week | — |
+| 3 | If the gate failed: polish MVP1 | If the gate passed: Q1a, Q1b, Q1c |
+| 4 | Report, slides, presentation | Same |
+
+## Risks and fallbacks
+
+| Risk | Fallback |
 |---|---|
-| 1 | Data access, schema check, cleaning, market and wallet tables (Steps 1–2) |
-| 2 | Calibration, accuracy, and tests (Steps 3–4) |
-| 3 | Concentration and clustering (Step 5) |
-| 4 | Figures, report, presentation |
+| Outcomes cannot be linked to markets | Q1 is not possible. Submit Q2 + Q3; neither needs outcomes |
+| Full data too large for our machines | Use a documented random sample of markets, or a range of monthly partitions |
+| Too few markets in a bin or category | Merge bins, and report n and the CI for every bin |
+| Every test gives p ≈ 0 because n is about 10⁶ | Interpret effect sizes and CIs, not p-values alone (L10) |
+| Clusters are unstable | Rerun with several seeds, and report the result as exploratory (L17) |
 
-## Limitations
+## Not in scope
 
-- A wallet is not a person. One trader can use many wallets, and one wallet (e.g., a market maker) can serve many people.
-- Trading volume measures activity, not wealth or profit.
-- With about a million markets, almost any difference becomes statistically significant. We therefore report effect sizes and confidence intervals, not only p-values.
+These are left out because they need full position and cash-flow reconstruction:
+
+- Wallet profit and loss
+- Win rate per wallet
+- Initial capital per wallet
