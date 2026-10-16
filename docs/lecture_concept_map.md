@@ -1,6 +1,8 @@
 # Lecture Concept Map for the Polymarket Project
 
-This file maps each lecture deck in `mscs_utrgv_cs6330_intro_2_ds/notes/` (decks 1–17) to the three research questions in `proposal_md/polymarket_proposal_v2.md`.
+This file maps each lecture deck in `mscs_utrgv_cs6330_intro_2_ds/notes/` (decks 1–17) to the three research questions in `proposal_md/polymarket_proposal_v3.md` (the class post). The step-by-step plan is in `proposal_md/polymarket_plan_detailed.md`.
+
+Sections 2–5 list every concept that could be used. Section 6 places each concept inside the current three questions, and Section 7 gives the alternative of adding three sub-questions.
 
 - **Q1:** Prediction accuracy (calibration)
 - **Q2:** Wallet trading concentration
@@ -196,3 +198,58 @@ Handle missing values by dropping them (deck 7, slide 25). Imputing an outcome i
 | Poisson-binomial distribution | Q1 | Standard probability text |
 | Lorenz curve, Gini coefficient | Q2 | Standard inequality-measurement reference |
 | Favorite–longshot bias | Q1 | Snowberg & Wolfers (2010); dataset paper, Table 3 |
+
+## 6. Coverage with the current three questions only
+
+The current Q1–Q3 can cover every lecture concept without new research questions, provided the methods are chosen on purpose. Most concepts fit naturally. Three can only enter Q2 by way of the k-means wallet clusters (deck 17).
+
+**Fit:** *natural* means the concept answers the question directly. *Moderate* means it works but is not the obvious choice. *Forced* means it is added mainly to cover the concept.
+
+| Concept | Deck | Where | Fit | Concrete use |
+|---|---|---|---|---|
+| Hypothesis test, H0/Ha, p-value | 9, 10 | Q1 | natural | H0: "the bin's observed Yes rate = its average price"; binomial test per bin |
+| Chi-square goodness of fit | 12 | Q1 | natural | Bin × {Yes, No} table, observed vs. expected counts |
+| Multiple testing (Bonferroni, BH) | 13 | Q1 | natural | 10 bins = 10 tests, even without categories |
+| KS test | 11 | Q1, Q3 | natural | Q1: price distributions of Yes vs. No markets. Q3: fitted vs. empirical distribution |
+| Entropy | 15 | Q1 | natural | Log loss as the average surprise of the outcome that happened; H(p) as market uncertainty |
+| Mean vs. median, robustness | 4 | Q2 | natural | Mean wallet volume far above the median is a sign that a few wallets dominate |
+| z-score, robust scaling | 7 | Q2, Q3 | natural | Normalize k-means inputs. Deck 14: an unscaled large variable dominates the distance |
+| Variable types, data matrix | 3 | Data preparation | natural | Define the market table and the wallet table |
+| t-test | 11 | Q2 | moderate | Mean log-volume of makers vs. takers |
+| Chi-square test of independence | 12 | Q2 | forced | Wallet cluster × market category: which markets do the big wallets trade? |
+| ANOVA, permutation test | 11, 13 | Q2 | forced | Compare clusters on a variable **not** used to build them (e.g., mean trade price), to avoid circular results. Deck 17, slide 21 recommends reviewing clusters with such variables |
+| Spearman correlation | 14 | Q2 | forced | Wallet trade count vs. volume. A strong positive correlation is expected, so the finding adds little |
+
+## 7. Alternative: add three sub-questions under Q1
+
+The concepts marked *forced* in Section 6 become natural if Q1 gains three sub-questions. Q1b and Q1c revive H3 and Step 5 of the first proposal (`polymarket_proposal.md`).
+
+| Sub-question | Concept | Deck | Concrete use |
+|---|---|---|---|
+| **Q1a. Does accuracy depend on the topic?** (politics, sports, crypto, …) | Chi-square test of independence | 12 | Category × {favorite won, favorite lost} table |
+| | Multiple testing | 13 | 10 bins × 5 categories = 50 tests |
+| | ANOVA, permutation test | 11, 13 | Brier score by category. Brier scores are not normal, so the permutation test fits better |
+| **Q1b. Does the market get smarter near the deadline?** (7 days vs. 1 day before close) | KS test | 11 | How far apart the Yes and No price distributions are at each time point |
+| | t-test | 11 | One-sample t-test on per-market (error at 7 days − error at 1 day) |
+| | Entropy | 15 | Drop in mean H(p) from 7 days to 1 day |
+| **Q1c. Are busier markets more accurate?** | Spearman, significance of correlation | 14 | Log-volume vs. per-market error |
+| | z-score, robust scaling | 7 | Comparing volume, trade count, and error on one scale |
+
+**Cautions.**
+
+- In Q1b the drop in entropy is expected by construction: prices move toward 0 or 1 as resolution nears. The test that matters is whether the error (Brier score, log loss) falls.
+- In Q1c a correlation is not causation (deck 13, spurious correlations). Category and market duration are possible confounders.
+
+### Comparison
+
+| Criterion | Current Q1–Q3 only | Add Q1a–c |
+|---|---|---|
+| Lecture coverage | All | All |
+| Number of questions | 3 | 6 |
+| Class post (v3) | Unchanged | Unchanged if Q1a–c stay in the detailed plan only |
+| Forced methods | 3 (chi-square independence, ANOVA/permutation, Spearman) | None |
+| Spearman result | Trade count vs. volume: expected, little new | Volume vs. error: answers "are busier markets more accurate?" |
+
+### Applies to both options
+
+With about 10⁶ markets, the t-test, ANOVA, and chi-square tests will almost always give p ≈ 0. Always report an effect size next to the p-value: the mean difference, the KS statistic D, or the correlation coefficient.
