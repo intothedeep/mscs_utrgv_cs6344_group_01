@@ -25,8 +25,8 @@ This file maps each lecture deck in `mscs_utrgv_cs6330_intro_2_ds/notes/` (decks
 | 13 | Multiple testing, permutation test | ● | | ● | Bonferroni / BH over bins × categories; permutation test |
 | 14 | Pairwise association | ● | ● | ● | Spearman: log-volume vs. prediction error |
 | 15 | Entropy, mutual information | ● | | ● | Log loss = average surprise; binary entropy of price |
-| 16 | Intro to ML | | | | Out of scope (proposal: no ML) |
-| 17 | Clustering (k-means) | | ○ | | Optional wallet segmentation |
+| 16 | Intro to ML | ● | | | Market as a p > 0.5 classifier: confusion matrix, precision, recall, class imbalance (no model training) |
+| 17 | Clustering (k-means) | | ● | | Wallet segmentation (exploratory) |
 
 ● = core use, ○ = optional
 
