@@ -23,7 +23,7 @@ MVP1 is due at the end of Week 2. MVP2 starts only if MVP1 passes the gate descr
 | File | What it is |
 |---|---|
 | `proposal_md/polymarket_proposal_v3.md` | **Current class post** (short proposal) |
-| `proposal_md/polymarket_plan_detailed.md` | **Current plan**: MVP1, gate, MVP2, timeline, risks |
+| `tips/polymarket_plan_detailed.md` | **Current plan**: MVP1, gate, MVP2, timeline, risks |
 | `docs/lecture_concept_map.md` | Lecture decks mapped to each question (section 6 = MVP1, section 7 = MVP2) |
 | `polymarket_v1_paper.pdf` | Dataset paper (Qin & Yang, 2026) |
 | `archive/` | Earlier proposal drafts, kept for reference |

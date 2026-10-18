@@ -1,9 +1,9 @@
-# Project Plan: MVP1 and MVP2
+# Project Plan: Phase 1 (MVP1) and Phase 2 (MVP2)
 
 **When Polymarket Says 70%, Does It Happen 70% of the Time?**
 Group 1 | Team Brier: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
 
-- Class post: `polymarket_proposal_v3.md`
+- Class post: `../proposal_md/polymarket_proposal_v3.md`
 - Concept-by-concept detail: `../docs/lecture_concept_map.md` (sections 6 and 7)
 
 ## Strategy
@@ -25,13 +25,15 @@ Everything else depends on this step.
 
 | Task | Rule | Lecture |
 |---|---|---|
-| Inspect the data | List tables, columns, sizes, and the date range. Confirm the license | L2 |
-| Build a pilot | Run the whole pipeline on **one monthly partition** first, then scale up | — |
-| Keep only valid markets | Standard binary (Yes/No) markets with a winning-outcome label. Drop multi-outcome (neg-risk) and Up-Down markets | L2 |
-| Remove duplicates | Drop relayer records | L2 |
-| Put prices on one scale | Convert NO-token prices to the YES scale: p = 1 − price | — |
-| Handle missing values | Drop markets with no outcome. Do not impute | L7 |
-| Choose the evaluation price | The last traded price at or before T − 1 day, where T is the market's last trade. Skip a market if that price is more than 24 h older than the evaluation time | — |
+| Compute | The pilot and all full-data queries run on the cluster (owner, 2026-10-18). A pass over raw parquet does not run on a laptop | — |
+| Inspect the data | List tables, columns, sizes, and the date range. Confirm the license. List the values of `resolution_status`. Confirm how Up-Down markets are marked (`category_refined` or `market_slug`) | L2 |
+| Build a pilot | Run the whole pipeline on **one month of daily partitions** of `daily_aligned/` first, then scale up | — |
+| Keep only valid markets | Use `daily_aligned/` (`neg_risk = false`). Keep markets with a `winning_outcome_label`. Drop Up-Down markets via `category` / `category_refined` | L2 |
+| Remove duplicates | `daily_aligned/` already has relayer records removed. Check this on the pilot | L2 |
+| Put prices on one scale | Use the `p_event` column (YES-scale price). Do not recompute it | — |
+| Handle missing values | Drop markets with no outcome. Do not impute. Report the number dropped | L7 |
+| Check the close time (pilot) | Measure (last `block_timestamp` − `close_at`) and (`resolved_at` − `close_at`). If many markets trade after `close_at`, set T = `close_at`. Why: trades after the event make p_1d look perfect | — |
+| Choose the evaluation price | The last traded price at or before T − 1 day, where T is the market's last trade, or `close_at` if the pilot check says so. Skip a market if that price is more than 24 h older than the evaluation time | — |
 | Build the tables | **Market table** and **wallet table**, each with its variable types listed | L3 |
 
 **Market table** (one row per market):
@@ -40,6 +42,23 @@ Everything else depends on this step.
 
 **Wallet table** (one row per wallet):
 - wallet, role (maker or taker), volume_usdc, n_trades, n_markets, mean_trade_price
+- A wallet is one address. One person can own many addresses, so "wallet" never means "person"
+
+**Where each field comes from** (`daily_aligned/` columns, checked against the dataset card on 2026-10-17):
+
+| Field | Source column | Needed by |
+|---|---|---|
+| market_id | `condition_id` | all |
+| category | `category`, `category_refined` | Q1a, Q2 |
+| price p | `p_event` | Q1, Q3 |
+| outcome y | 1 if `winning_outcome_label` = the `outcome_seq = 1` leg's `outcome_label`, else 0 | Q1 |
+| close time T | last `block_timestamp`, or `close_at` (decided by the pilot check above) | Q1, Q1b |
+| market open time | `opens_at` (Q1b keeps markets open ≥ 7 days) | Q1b |
+| trade size | `usdc_amount` | Q1c, Q3 |
+| wallet, role | `maker`, `taker` (taker = aggressor) | Q2, Q3 |
+| trade time | `block_timestamp` | Q1b |
+
+The dataset has no order-book snapshots and no oracle events in the trade layer. Outcomes are in `winning_outcome_label`, and `CTF/resolutions.parquet` is the backup source.
 
 ## MVP1: three questions
 
@@ -56,6 +75,8 @@ Everything else depends on this step.
 
 ### Q1. Is the crowd right? (Week 2)
 
+**Caution: the close time decides whether Q1 is valid.** Trades can continue after the outcome is known. Then the price "1 day before close" already contains the answer, and calibration looks perfect. Do not run Q1 until the pilot close-time check (section 0) has set T.
+
 | Method | Lecture | Output |
 |---|---|---|
 | Treat each outcome as Bernoulli(p); count Yes outcomes per bin, approximately binomial | L6 | Model statement |
@@ -67,9 +88,13 @@ Everything else depends on this step.
 | Brier score; log loss read as average surprise; H(p) as market uncertainty | L15 + outside | Scores |
 | Market as a p > 0.5 classifier: confusion matrix, precision, recall, class balance of Yes vs. No | L16 | Confusion matrix |
 | KS test: price distribution of Yes-resolved vs. No-resolved markets | L11 | Fig. 5: two ECDFs |
-| Longshot check: bins 0–10% and 10–20% | L9, L10 | Observed − expected, with CI |
+| Longshot check: bins 0–10% and 10–20%. Compare with the paper (Table 3: payout − price per token, counted per trade, so it differs from our per-market count) | L9, L10 | Observed − expected, with CI |
 
 ### Q2. Who is the crowd? (Week 2)
+
+**Caution: a wallet is one address, not one person.** One person can own many addresses. Write "wallet" or "address" in every result, never "trader" or "person".
+
+**Scope: k-means is a side analysis, not a main result.** It takes less than 1/10 of the report (owner, 2026-10-18). The main Q2 answer comes from the shares, the Lorenz curve, and Gini.
 
 | Method | Lecture | Output |
 |---|---|---|
@@ -102,6 +127,10 @@ If any condition fails, spend Week 3 polishing MVP1.
 
 ## MVP2: three sub-questions under Q1 (Week 3)
 
+**Caution for Q1a: Sports mostly drops out.** Sports is the largest category by market count. Most Sports markets are Neg-Risk (multi-outcome) or Up-Down, so they are not in the Standard Binary sample (paper, limitation 7). Report n per category, and state that Sports is under-represented.
+
+**Caution for Q1b:** it uses the same close time T as Q1 (section 0).
+
 | Sub-question | Method | Lecture | Output |
 |---|---|---|---|
 | **Q1a. Does accuracy depend on the topic?** | Chi-square test of independence: category × {favorite won, favorite lost} | L12 | Table |
@@ -116,6 +145,16 @@ If any condition fails, spend Week 3 polishing MVP1.
 
 In MVP2 the three forced Q2 tests stay in the report as secondary results. The natural versions in Q1a and Q1c become the main ones.
 
+## Backlog: open after MVP1 is done (owner, 2026-10-18)
+
+Do not start these before the MVP1 gate passes.
+
+| Item | Data | Lecture | Priority |
+|---|---|---|---|
+| Did trading change after the 2026 taker fee started? Fees started by category: Crypto Jan, Sports Feb, others Mar | `fee_usdc`, `taker_base_fee`, `block_timestamp`, `category` | L11 (t-test), L13 (permutation test) | After MVP1 |
+| Does trade direction persist? Autocorrelation of `D` within a market | `D`, `block_timestamp` | L14 | After MVP1 |
+| Reword "no machine-learning models" in the class post. k-means (L17) is unsupervised learning. Example: "lecture methods only, no model training" | — | L17 | Done 2026-10-18: "using only methods from our lectures". k-means stays as a side analysis (owner) |
+
 ## Timeline
 
 | Week | MVP1 track | MVP2 track |
@@ -129,7 +168,8 @@ In MVP2 the three forced Q2 tests stay in the report as secondary results. The n
 
 | Risk | Fallback |
 |---|---|
-| Outcomes cannot be linked to markets | Q1 is not possible. Submit Q2 + Q3; neither needs outcomes |
+| Some markets have no `winning_outcome_label` (paper, limitation 4) | Drop them and report the count. Use `CTF/resolutions.parquet` as a backup source |
+| Sports is the largest category but is mostly Neg-Risk or Up-Down (paper, limitation 7) | Q1a under-represents Sports. Report n per category and state this in the report |
 | Full data too large for our machines | Use a documented random sample of markets, or a range of monthly partitions |
 | Too few markets in a bin or category | Merge bins, and report n and the CI for every bin |
 | Every test gives p ≈ 0 because n is about 10⁶ | Interpret effect sizes and CIs, not p-values alone (L10) |
