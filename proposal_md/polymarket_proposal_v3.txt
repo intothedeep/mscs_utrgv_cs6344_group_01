@@ -4,7 +4,7 @@ Prediction Accuracy, Trading Concentration, and Statistical Distributions in Pre
 Group 1 | Team Brier: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
 
 THE HOOK
-News headlines now quote Polymarket odds as if they were facts: "70% chance of X." Those numbers come from people betting real money, but almost nobody checks the scoreboard afterward. We will. Polymarket-v1 records every trade on Polymarket's first exchange: 1.2 billion trades across 1.3 million markets from 2022 to 2026. Almost every one of those markets ended with a known answer.
+A Polymarket YES share pays $1 if the event happens. At $0.70, the price is read as a 70% chance. Is that chance right? Polymarket-v1 records every trade on Polymarket's first exchange: 1.2 billion trades, 1.3 million markets, and $61 billion in nominal volume, from November 2022 to April 2026 (Qin and Yang, 2026). Only a small subset of markets lacks a known winner. So we can check each price against what happened.
 
 THREE QUESTIONS
 1. Is the crowd right? If we collect every event priced at 70%, about 70% should have happened. We test this one price range at a time with binomial and chi-square tests, confidence intervals, and the Brier score. We also ask whether cheap "longshot" bets are a trap.
@@ -13,34 +13,28 @@ THREE QUESTIONS
 
 WHY IT MATTERS
 
-Why is the hypothesis interesting?
-- Our hypothesis is simple: a price of 70% means a 70% chance.
-- Many people already act as if this is true. News sites quote the odds as facts.
-- But nobody promised it. Prices come from bettors, not from a forecasting model.
-- Betting research shows a known gap. In horse racing, longshots win less often than their odds suggest (Snowberg and Wolfers, 2010).
-- Polymarket is a newer and much larger crowd. Does the same gap exist there?
-- The dataset paper sees a small gap of the same kind (Qin and Yang, 2026, Table 3).
-- On average, tokens priced under 30% paid out 0.2 to 0.3 cents less than their price.
-- But the paper counts trades. We count markets, so our answer can differ.
+  Question: a price of 70%  -->  does it happen 70% of the time?
 
-What will we test?
-- Calibration: do events priced at p happen with frequency p?
-- Longshots: are cheap bets overpriced?
-- Concentration: do a few wallets do most of the trading?
-- Distributions: what do trade sizes look like?
+  What the references show              What we add
+  ----------------------------------    ------------------------------
+  Horse racing: longshots win less  --> Test the same gap on
+  often than their odds say [1]         Polymarket
+  Polymarket: cheap tokens pay out  --> Count markets, not trades
+  slightly less than their price,
+  counted by trade [2, Table 3]
+  The paper scores 1,019 markets    --> Score all resolved Yes/No
+  with the Brier score [2]              markets we keep
+  Top 1% of maker addresses hold    --> Ask if a few wallets
+  84.1% of maker volume [2, Table 5]    set the prices
 
-How will we test it?
-- Resolved markets have a known answer. So we can check each price against what happened.
-- We group markets by price, count how many events happened, and compare with the price.
-- Statistical tests and confidence intervals tell us if a gap is real or only noise.
+  What we learn, either way
+    70% happens 70%    the price can be read as a chance
+    70% does not       we show which prices and topics are off
 
-Why is it important?
-- For readers: it shows when to trust a headline that quotes the odds.
-- For bettors: it shows which price ranges lose money on average.
-- For research: a large, open dataset gives a clean test of the "wisdom of crowds".
-- If a few wallets set most prices, the "crowd" is a small group. Then the odds may reflect only a few views.
-
-Bottom line: if 70% really means 70%, anyone gets a free, live forecast. If it does not, we will show where the odds break, and who is behind them.
+  References
+  [1] Snowberg and Wolfers (2010). Explaining the Favorite-Long Shot
+      Bias. Journal of Political Economy 118(4): 723-746.
+  [2] Qin and Yang (2026). Polymarket-v1 Database. arXiv:2606.04217
 
 Tools: Python and DuckDB, using only methods from our lectures.
 Data:  https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1
