@@ -51,6 +51,7 @@ Everything else depends on this step.
 | Handle missing values | Drop markets with no outcome. Do not impute. Report the number dropped | L7 |
 | Check the close time (pilot) | Measure (last `block_timestamp` − `close_at`) and (`resolved_at` − `close_at`). If many markets trade after `close_at`, set T = `close_at`. Why: trades after the event make p_1d look perfect | — |
 | Choose the evaluation price | The last traded price at or before T − 1 day, where T is the market's last trade, or `close_at` if the pilot check says so. Skip a market if that price is more than 24 h older than the evaluation time | — |
+| Set a minimum-activity filter | Drop markets with too few trades before T − 1 day. Why: a price from a nearly empty market is not a crowd view. Fix the cutoff from the pilot, before any Q1 result is seen. Report Q1 with and without the filter | L7 |
 | Build the tables | **Market table** and **wallet table**, each with its variable types listed | L3 |
 
 **Market table** (one row per market):
@@ -120,7 +121,7 @@ The dataset has no order-book snapshots and no oracle events in the trade layer.
 | Complementary CDF on log–log axes; test 80/20 rather than assume it | L4, L6 | Fig. 6 |
 | Lorenz curve, Gini; compare with the dataset paper (maker 0.970, taker 0.943) | outside | Fig. 7, pipeline check |
 | t-test and KS test on log-volume, makers vs. takers | L11 | Test results |
-| k-means on z-scored wallet features; choose K by the elbow method | L7, L14, L17 | Fig. 8: elbow plot, cluster summary |
+| k-means on wallet features: log-transform the heavy-tailed ones, then z-score; choose K by the elbow method | L7, L14, L17 | Fig. 8: elbow plot, cluster summary |
 | *Forced:* chi-square test of independence on wallet cluster × market category | L12 | Contingency table |
 | *Forced:* ANOVA and permutation test across clusters on mean trade price, a variable not used for clustering | L11, L13 | Test results |
 | *Forced:* Spearman correlation between trade count and volume | L14 | ρ and p-value |
@@ -190,6 +191,7 @@ Do not start these before the MVP1 gate passes.
 | Full data too large for our machines | Use a documented random sample of markets, or a range of monthly partitions |
 | Too few markets in a bin or category | Merge bins, and report n and the CI for every bin |
 | Every test gives p ≈ 0 because n is about 10⁶ | Interpret effect sizes and CIs, not p-values alone (L10) |
+| Markets on one event are not independent (e.g. many markets on one election). The binomial and chi-square tests assume independence | Run the tests per category (Q1a), and state this limit in the report |
 | Clusters are unstable | Rerun with several seeds, and report the result as exploratory (L17) |
 
 ## Not in scope
