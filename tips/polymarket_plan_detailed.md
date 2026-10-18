@@ -6,6 +6,23 @@ Group 1 | Team Brier: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
 - Class post: `../proposal_md/polymarket_proposal_v3.md`
 - Concept-by-concept detail: `../docs/lecture_concept_map.md` (sections 6 and 7)
 
+## Facts in the class post and their sources
+
+Rule: every fact in the class post has a source. If we cannot cite it, we do not write it (owner, 2026-10-18).
+
+| Fact | Source |
+|---|---|
+| 1.2 billion trades, 1.3 million markets, $61 billion nominal volume, Nov 2022 to Apr 2026 | Dataset paper, abstract |
+| Only a small subset of markets lacks a known winner | Dataset paper, limitation 4 |
+| Cheap tokens (price under 0.30) pay out 0.2 to 0.3 cents less than their price, counted by trade | Dataset paper, Table 3 (payout − price per token) |
+| The paper's Brier panel has 1,019 markets | Dataset paper, Brier panel |
+| Top 1% of maker addresses hold 84.1% of maker volume (Gini 0.970) | Dataset paper, Table 5 |
+| In horse racing, longshots are overbet, so they win less often than their odds say | Snowberg and Wolfers (2010), abstract, checked on NBER w15923 |
+
+- The dataset paper calls its Table 3 result a "reversal" of the horse-racing bias. Snowberg and Wolfers say longshots are overbet. So the Polymarket result is the same direction. Do not copy the paper's "reversal" wording.
+- Removed as unsourced: "news headlines quote the odds as facts" and "nobody checks the odds afterward".
+- Posting: the class forum uses a proportional font. Do not use column-aligned tables in the `.txt`. Use one fact line, then one "→" line.
+
 ## Strategy
 
 | | MVP1 | MVP2 |

@@ -14,30 +14,28 @@
 
 **Why it matters.**
 
-```text
-  Question: a price of 70%  -->  does it happen 70% of the time?
+**Question:** a price of 70% → does it happen 70% of the time?
 
-  What the references show              What we add
-  ----------------------------------    ------------------------------
-  Horse racing: longshots win less  --> Test the same gap on
-  often than their odds say [1]         Polymarket
-  Polymarket: cheap tokens pay out  --> Count markets, not trades
-  slightly less than their price,
-  counted by trade [2, Table 3]
-  The paper scores 1,019 markets    --> Score all resolved Yes/No
-  with the Brier score [2]              markets we keep
-  Top 1% of maker addresses hold    --> Ask if a few wallets
-  84.1% of maker volume [2, Table 5]    set the prices
+*What the references show, and what we add:*
 
-  What we learn, either way
-    70% happens 70%    the price can be read as a chance
-    70% does not       we show which prices and topics are off
+1. Horse racing: longshots win less often than their odds say [1].
+   → We test the same gap on Polymarket.
+2. Polymarket: cheap tokens pay out slightly less than their price, counted by trade [2, Table 3].
+   → We count markets, not trades.
+3. The paper scores 1,019 markets with the Brier score [2].
+   → We score all resolved Yes/No markets we keep.
+4. The top 1% of maker addresses hold 84.1% of maker volume [2, Table 5].
+   → We ask if a few wallets set the prices.
 
-  References
-  [1] Snowberg and Wolfers (2010). Explaining the Favorite-Long Shot
-      Bias. Journal of Political Economy 118(4): 723-746.
-  [2] Qin and Yang (2026). Polymarket-v1 Database. arXiv:2606.04217
-```
+*What we learn, either way:*
+
+- If 70% happens 70%: the price can be read as a chance.
+- If not: we show which prices and topics are off.
+
+*References*
+
+1. Snowberg and Wolfers (2010). Explaining the Favorite-Long Shot Bias. *Journal of Political Economy* 118(4): 723-746.
+2. Qin and Yang (2026). Polymarket-v1 Database. arXiv:2606.04217
 
 *Tools:* Python and DuckDB, using only methods from our lectures.
 *Data:* https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1
