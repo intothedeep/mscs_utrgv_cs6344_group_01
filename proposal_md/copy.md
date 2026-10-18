@@ -1,0 +1,68 @@
+When Polymarket Says 70%, Does It Happen 70% of the Time?
+Prediction Accuracy, Trading Concentration, and Statistical Distributions in Prediction Markets
+
+Group 1 | Team Brier: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
+
+
+
+THE HOOK
+
+A Polymarket YES share pays $1 if the event happens. At $0.70, the price is read as a 70% chance. Is that chance right? Polymarket-v1 records every trade on Polymarket's first exchange: 1.2 billion trades, 1.3 million markets, and $61 billion in nominal volume, from November 2022 to April 2026 (Qin and Yang, 2026). Only a small subset of markets lacks a known winner. So we can check each price against what happened.
+
+
+
+
+THREE QUESTIONS
+
+1. Is the crowd right?
+
+If we collect every event priced at 70%, about 70% should have happened. We test this one price range at a time with binomial and chi-square tests, confidence intervals, and the Brier score. We also ask whether cheap "longshot" bets are a trap.
+
+2. Who is the crowd?
+
+Does a small group of wallets do most of the trading? We look for an 80/20 power law with Lorenz curves and the Gini coefficient, and group wallets into types with k-means.
+
+3. What does betting look like?
+
+We examine trade sizes and wallet activity with histograms, QQ plots, log transforms, and KS tests.
+
+
+
+
+WHY IT MATTERS
+
+Question: a price of 70% → does it happen 70% of the time?
+
+
+
+
+What the references show, and what we add:
+
+1. Horse racing: longshots win less often than their odds say [1].
+&nbsp; &nbsp;→ We test the same gap on Polymarket.
+2. Polymarket: cheap tokens pay out slightly less than their price, counted by trade [2, Table 3].
+&nbsp; &nbsp;→ We count markets, not trades.
+3. The paper scores 1,019 markets with the Brier score [2].
+&nbsp; &nbsp;→ We score all resolved Yes/No markets we keep.
+4. The top 1% of maker addresses hold 84.1% of maker volume [2, Table 5].
+&nbsp; &nbsp;→ We ask if a few wallets set the prices.
+
+
+
+
+What we learn, either way:
+
+- If 70% happens 70%: the price can be read as a chance.
+- If not: we show which prices and topics are off.
+
+
+
+
+References
+
+[1] Snowberg and Wolfers (2010). Explaining the Favorite-Long Shot Bias. Journal of Political Economy 118(4): 723-746.
+[2] Qin and Yang (2026). Polymarket-v1 Database. arXiv:2606.04217
+
+Tools: Python and DuckDB, using only methods from our lectures.
+Data: &nbsp;https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1
+Paper: https://arxiv.org/abs/2606.04217
