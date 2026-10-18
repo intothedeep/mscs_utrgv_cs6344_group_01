@@ -2,7 +2,7 @@
 
 This file maps each lecture deck in `mscs_utrgv_cs6330_intro_2_ds/notes/` (decks 1–17) to the three research questions in `proposal_md/polymarket_proposal_v3.md` (the class post). The step-by-step plan is in `proposal_md/polymarket_plan_detailed.md`.
 
-Sections 2–5 list every concept that could be used. Section 6 places each concept inside the current three questions, and Section 7 gives the alternative of adding three sub-questions.
+Sections 2–5 list every concept that could be used. Section 6 (**MVP1**) places each concept inside the current three questions. Section 7 (**MVP2**) adds three sub-questions under Q1. The schedule and the gate between them are in `proposal_md/polymarket_plan_detailed.md`.
 
 - **Q1:** Prediction accuracy (calibration)
 - **Q2:** Wallet trading concentration
@@ -199,7 +199,7 @@ Handle missing values by dropping them (deck 7, slide 25). Imputing an outcome i
 | Lorenz curve, Gini coefficient | Q2 | Standard inequality-measurement reference |
 | Favorite–longshot bias | Q1 | Snowberg & Wolfers (2010); dataset paper, Table 3 |
 
-## 6. Coverage with the current three questions only
+## 6. MVP1: coverage with the current three questions only
 
 The current Q1–Q3 can cover every lecture concept without new research questions, provided the methods are chosen on purpose. Most concepts fit naturally. Three can only enter Q2 by way of the k-means wallet clusters (deck 17).
 
@@ -220,9 +220,9 @@ The current Q1–Q3 can cover every lecture concept without new research questio
 | ANOVA, permutation test | 11, 13 | Q2 | forced | Compare clusters on a variable **not** used to build them (e.g., mean trade price), to avoid circular results. Deck 17, slide 21 recommends reviewing clusters with such variables |
 | Spearman correlation | 14 | Q2 | forced | Wallet trade count vs. volume. A strong positive correlation is expected, so the finding adds little |
 
-## 7. Alternative: add three sub-questions under Q1
+## 7. MVP2: add three sub-questions under Q1
 
-The concepts marked *forced* in Section 6 become natural if Q1 gains three sub-questions. Q1b and Q1c revive H3 and Step 5 of the first proposal (`polymarket_proposal.md`).
+The concepts marked *forced* in Section 6 become natural if Q1 gains three sub-questions. Q1b and Q1c revive H3 and Step 5 of the first proposal (`archive/polymarket_proposal_v1_long.md`).
 
 | Sub-question | Concept | Deck | Concrete use |
 |---|---|---|---|
