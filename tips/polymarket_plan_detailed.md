@@ -14,6 +14,7 @@ Rule: every fact in the class post has a source. If we cannot cite it, we do not
 |---|---|
 | 1.2 billion trades, 1.3 million markets, $61 billion nominal volume, Nov 2022 to Apr 2026 | Dataset paper, abstract |
 | Only a small subset of markets lacks a known winner | Dataset paper, limitation 4 |
+| In our full run, 62,718 of 688,131 markets (9.1%) have no usable winner label. Our rule is wider than the paper: it also drops markets whose Yes-side label never traded | `runs/142082_mvp1_full_v1r3/tables_summary.json` (`no_outcome`) |
 | Cheap tokens (price under 0.30) pay out 0.2 to 0.3 cents less than their price, counted by trade | Dataset paper, Table 3 (payout − price per token) |
 | The paper's Brier panel has 1,019 markets | Dataset paper, Brier panel |
 | Top 1% of maker addresses hold 84.1% of maker volume (Gini 0.970) | Dataset paper, Table 5 |

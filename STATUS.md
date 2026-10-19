@@ -44,3 +44,5 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-10-19 rerun: 142082 and 142083 ran all stages in about 27 min each; n_kept 47,948 and drop reasons unchanged; 77 of 77 MVP1 values equal across v1 and v2; verdicts unchanged (00.runs.md, runs/*_v*r3/verdicts.json)
 2026-10-19 report: v1 and v2 rebuilt from the v3 runs (reports/report_v1.html, reports/report_v2.html)
 2026-10-19 prereg: MVP1 amendment records the tie rule change after the first full result; verdict unchanged (analysis/prereg_mvp1.md)
+2026-10-19 hygiene: individual-level CSVs untracked (stay on cluster; jobs/fetch_run.sh); proposal states 9.1% no usable winner label (owner)
+2026-10-19 plan: mission and vision set by the owner; PLAN.md and RQ.md created (D-012)

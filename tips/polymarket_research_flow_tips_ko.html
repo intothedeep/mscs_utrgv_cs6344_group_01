@@ -72,6 +72,7 @@ a{color:var(--signal-plan)}
 <section id="why">
   <div class="eyebrow">Step 1 of 9</div>
   <h2>왜 이 연구를 하나</h2>
+  <div class="add"><p><b>임무(mission):</b> Polymarket 가격을 확률로 읽어도 되는지, 결과가 확정된 모든 시장과 수업에서 배운 방법만으로 검정한다.</p><p><b>비전(vision):</b> 독자가 Polymarket 가격을 보고 얼마나 믿을지 안다. 어떤 가격 구간, 주제, 시점이 얼마나 어긋나는지, 그리고 누가 가격을 정하는지.</p><p class="note">소유자, 2026-10-19. 기록: <code>PLAN.md</code>, <code>DECISIONS.md</code> D-012.</p></div>
   <div class="flow">
     <div class="stage"><div class="n">문제</div><div class="s">사람들은 Polymarket 가격을 확률로 읽는다. 사건은 한 번만 일어나서, 가격 하나로는 그 읽기가 맞는지 알 수 없다.</div></div>
     <div class="stage big"><div class="n">아이디어</div><div class="s">같은 가격의 시장을 모아, 그 사건이 실제로 일어난 비율과 비교한다.</div></div>
@@ -295,6 +296,7 @@ a{color:var(--signal-plan)}
     <tr><td class="num">13</td><td>10-19</td><td>고침 (코드 v3)</td><td>끝남. 같은 시각 거래는 가격 평균, Q2 범주는 <code>category_refined</code>, 표본은 고정 순서, 판정은 <code>verdicts.json</code>에 따로 저장</td><td>D-011, <code>CHANGELOG.md</code></td></tr>
     <tr><td class="num">14</td><td>10-19</td><td>v3로 두 전체 실행 다시 (142082, 142083)</td><td><ul><li>각 약 27분, 모든 단계 성공</li><li>남은 시장 47,948개, 빠진 이유별 개수 그대로</li><li>v1과 v2의 MVP1 값 77개가 모두 같음</li></ul></td><td><code>00.runs.md</code> (실행 대장)</td></tr>
     <tr><td class="num">15</td><td>10-19</td><td>보고서 v1, v2 다시 만듦 (영어)</td><td><ul><li>Q1: 전체로 보정되지 않음. 카이제곱 68.0, p &lt; 0.0001, w = 0.038 (작음)</li><li>Q1a: 주제에 따라 다름. Cramér V = 0.258</li><li>Q1b: 마감이 가까울수록 나아짐. Brier 차이 0.0257, d = 0.19, 시장 11,005개</li><li>Q1c: 거래가 많을수록 정확하다는 증거 없음. ρ = +0.226</li></ul></td><td><code>runs/142083_mvp2_full_v2r3/verdicts.json</code></td></tr>
+    <tr><td class="num">16</td><td>10-19</td><td>정리</td><td><ul><li>시장별, 지갑별 CSV는 git에서 뺌. 클러스터에 남아 있고 <code>jobs/fetch_run.sh</code>로 받음</li><li>제안서: 결과 라벨이 없어 뺀 시장 62,718 / 688,131 (9.1%)을 적음</li><li>임무와 비전을 정함. <code>PLAN.md</code>, <code>RQ.md</code> 만듦</li></ul></td><td>D-012 (소유자)</td></tr>
   </table></div>
   <p class="note">MVP1과 MVP2 끝 (2026-10-19). 다음: 소유자 검토. 남은 정리: <code>make_report.py</code> 나누기 (별도 커밋). 같은 기록: <code>STATUS.md</code>, 실행 대장 <code>00.runs.md</code>.</p>
   <h3>최종판까지 지킬 제약</h3>

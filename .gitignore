@@ -225,3 +225,11 @@ data/
 runs/**/*.parquet
 # Full-run market table is ~190 MB, over the GitHub file limit; markets.parquet on the cluster is the source
 runs/*_full_*/markets.csv
+# Individual-level outputs (per market, per wallet). They stay on the cluster run folder;
+# get them with: bash jobs/fetch_run.sh <run_folder>
+runs/**/markets.csv
+runs/**/q1_markets.csv
+runs/**/q1a_markets.csv
+runs/**/q1b_markets.csv
+runs/**/q1c_scaled.csv
+runs/**/q2_kmeans_sample.csv

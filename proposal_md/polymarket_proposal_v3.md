@@ -4,7 +4,7 @@
 
 **Group 1 | Team Brier**: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
 
-**The hook.** A Polymarket YES share pays $1 if the event happens. At $0.70, the price is read as a 70% chance. Is that chance right? **Polymarket-v1** records every trade on Polymarket's first exchange: 1.2 billion trades, 1.3 million markets, and $61 billion in nominal volume, from November 2022 to April 2026 (Qin and Yang, 2026). Only a small subset of markets lacks a known winner. So we can check each price against what happened.
+**The hook.** A Polymarket YES share pays $1 if the event happens. At $0.70, the price is read as a 70% chance. Is that chance right? **Polymarket-v1** records every trade on Polymarket's first exchange: 1.2 billion trades, 1.3 million markets, and $61 billion in nominal volume, from November 2022 to April 2026 (Qin and Yang, 2026). The paper says only a small subset of markets lacks a known winner. In our full run, 62,718 of 688,131 markets (9.1%) have no usable winner label, and we drop them. So we can check each remaining price against what happened.
 
 **Three questions.**
 
