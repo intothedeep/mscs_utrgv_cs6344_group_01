@@ -43,3 +43,4 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-10-19 rerun: code v3 full runs submitted, MVP1 142082 and MVP2 142083 (D-011)
 2026-10-19 rerun: 142082 and 142083 ran all stages in about 27 min each; n_kept 47,948 and drop reasons unchanged; 77 of 77 MVP1 values equal across v1 and v2; verdicts unchanged (00.runs.md, runs/*_v*r3/verdicts.json)
 2026-10-19 report: v1 and v2 rebuilt from the v3 runs (reports/report_v1.html, reports/report_v2.html)
+2026-10-19 prereg: MVP1 amendment records the tie rule change after the first full result; verdict unchanged (analysis/prereg_mvp1.md)

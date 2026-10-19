@@ -27,3 +27,14 @@
 
 - The pilot run (`scope = pilot`) is the first end-to-end cycle. It gets no verdict (`.claude/CLAUDE.md`, MVP ladder).
 - The verdict applies to the full-data run with these same parameters.
+
+## Amendment (2026-10-19, after review, AFTER the first full Q1 result)
+
+- The original rule "last `p_event` at or before T − 1 day" left the order of trades inside one block undefined. Many trades share one block timestamp.
+- New rule: the mean `p_event` of the trades at the last timestamp at or before T − 1 day (D-011, review F1). Motivation: determinism, not the result.
+- This change came after Q1 results were seen (run 142057). The verdict did not change:
+
+| Run | Rule | chi-square p | Cohen's w | Verdict |
+| --- | --- | --- | --- | --- |
+| `runs/142057_mvp1_full_v1` | last trade, unordered ties | `q1_results.json` | `q1_results.json` | not calibrated as a whole |
+| `runs/142082_mvp1_full_v1r3` | mean at last timestamp | `verdicts.json` | `verdicts.json` | not calibrated as a whole |
