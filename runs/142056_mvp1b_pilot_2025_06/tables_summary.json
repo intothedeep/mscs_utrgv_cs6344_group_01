@@ -1,0 +1,32 @@
+{
+  "n_markets_in_scope": 3841,
+  "n_kept": 726,
+  "n_kept_no_min_filter": 840,
+  "drop_reasons": {
+    "stale_price": 851,
+    "below_min_trades": 114,
+    "no_outcome": 29,
+    "no_price": 343,
+    "kept": 726,
+    "updown": 1778
+  },
+  "drop_reasons_no_min_filter": {
+    "updown": 1778,
+    "kept": 840,
+    "stale_price": 851,
+    "no_outcome": 29,
+    "no_price": 343
+  },
+  "reason_order": [
+    "updown",
+    "non_binary",
+    "no_outcome",
+    "no_price",
+    "stale_price",
+    "below_min_trades"
+  ],
+  "n_wallet_role_rows": 197543,
+  "n_trades_in_kept_markets": 1269037,
+  "trade_size_sample_rows": 1000000,
+  "trade_size_sample_seed": 42
+}

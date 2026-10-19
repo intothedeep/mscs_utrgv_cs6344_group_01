@@ -34,8 +34,8 @@ def fit_and_ks(x: np.ndarray) -> dict:
     The KS p-values are optimistic because parameters are estimated from the same data.
     """
     mu, sd = x.mean(), x.std(ddof=1)
-    ks_norm = stats.kstest(x, "norm", args=(mu, sd))
-    ks_exp = stats.kstest(x, "expon", args=(0, x.mean()))
+    ks_norm = stats.kstest(x, stats.norm(mu, sd).cdf)  # frozen cdf: scipy 1.18 string+args path breaks (ndtr arity)
+    ks_exp = stats.kstest(x, stats.expon(0, x.mean()).cdf)
     xmin = float(np.quantile(x, POWER_LAW_XMIN_QUANTILE))
     tail = x[x >= xmin]
     alpha = 1 + len(tail) / np.log(tail / xmin).sum()  # continuous MLE (Clauset et al. 2009)

@@ -25,3 +25,7 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-10-19 pilot: Job A 142041 ran on gpul40q in about 2.5 min, inspect only (D-004, D-006, runs/142041_pilotA_2025_06/report_pilot_inspect.md)
 2026-10-19 prereg: T = close_at, min 10 trades, keep duplicate rows (D-007, analysis/prereg_mvp1.md)
 2026-10-19 next: commit the prereg, then Job B on the pilot set (first end-to-end cycle, no verdict)
+2026-10-19 decision: gpul40q CPUs for all jobs; deliver report v1 (MVP1) and v2 (MVP1 + MVP2) (D-008, D-009)
+2026-10-19 pilot: Job B 142056 ran in about 75 s; build_tables, q1, q2 ran; q3 failed on a scipy 1.18 KS call, fixed (runs/142056_mvp1b_pilot_2025_06/summary.md)
+2026-10-19 pilot: 726 markets kept of 2,063; stale price (> 24 h) drops 851 (runs/142056_mvp1b_pilot_2025_06/tables_summary.json). First cycle, no verdict
+2026-10-19 full: MVP1 full run submitted as 142057, 16 CPUs, 200 GB (runs/batch_20261019a.txt)

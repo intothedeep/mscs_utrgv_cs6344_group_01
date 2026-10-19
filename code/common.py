@@ -11,7 +11,7 @@ from typing import Callable
 
 import duckdb
 
-CODE_VERSION = "v1"
+CODE_VERSION = "v2"
 
 # Pilot = Standard Binary markets whose close_at falls in this month (UTC), with ALL their trades.
 # Why: one month of trade partitions would cut markets mid-life and break the close-time check.
@@ -28,6 +28,11 @@ DEFAULT_PARAMS = {
     "pilot_month": PILOT_MONTH,
     "scope": "pilot",           # "pilot" or "full"
     "updown_rule": "default",   # "default" or "none"
+    # v2 (MVP2) additions. Defaults only, so the MVP1 prereg still loads; prereg_mvp2.json sets them.
+    "horizon_long_days": 7,
+    "min_category_n": 30,
+    "n_perm": 1000,
+    "seed": 42,
 }
 
 # Up/Down markets: slug pattern or category_refined pattern. Job A confirms which one marks them.

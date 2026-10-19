@@ -1,0 +1,123 @@
+{
+  "code_version": "v1",
+  "code_sha": "3c80edea2d50",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "pilot",
+    "updown_rule": "default",
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "owner, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu012",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142056"
+  },
+  "metrics": {
+    "main": {
+      "n_markets": 726,
+      "class_balance_yes": 0.2837465564738292,
+      "brier": 0.09228801075807119,
+      "log_loss": 0.2763279179341221,
+      "mean_entropy_bits": 0.39307560038025385,
+      "chi2_gof": {
+        "chi2": 22.688672574465002,
+        "df": 10,
+        "p": 0.011955943458015055,
+        "effect_w": 0.17678126347648662
+      },
+      "confusion_at_0.5": {
+        "tp": 161,
+        "fp": 56,
+        "fn": 45,
+        "tn": 464,
+        "accuracy": 0.8608815426997245,
+        "precision": 0.7419354838709677,
+        "recall": 0.7815533980582524
+      },
+      "ks_yes_vs_no": {
+        "D": 0.7159260642270352,
+        "p": 4.380430796474667e-74,
+        "n_yes": 206,
+        "n_no": 520
+      },
+      "longshot": {
+        "0.0-0.1": {
+          "n": 371,
+          "mean_price": 0.017018876611903565,
+          "observed_rate": 0.013477088948787063,
+          "obs_minus_expected": -0.003541787663116502,
+          "ci_low_diff": -0.011248899042720755,
+          "ci_high_diff": 0.014137314189513223
+        },
+        "0.1-0.2": {
+          "n": 33,
+          "mean_price": 0.15503029518155134,
+          "observed_rate": 0.12121212121212122,
+          "obs_minus_expected": -0.033818173969430126,
+          "ci_low_diff": -0.10686868208741579,
+          "ci_high_diff": 0.11822475652920103
+        }
+      },
+      "bins_reject_bonferroni": 1,
+      "bins_reject_bh": 1
+    },
+    "no_min_filter": {
+      "n_markets": 840,
+      "class_balance_yes": 0.2988095238095238,
+      "brier": 0.10877448693215525,
+      "log_loss": 0.320329944123753,
+      "mean_entropy_bits": 0.4478301901252929,
+      "chi2_gof": {
+        "chi2": 26.88834751793703,
+        "df": 10,
+        "p": 0.0027123692693934052,
+        "effect_w": 0.17891321226045215
+      },
+      "confusion_at_0.5": {
+        "tp": 186,
+        "fp": 74,
+        "fn": 65,
+        "tn": 515,
+        "accuracy": 0.8345238095238096,
+        "precision": 0.7153846153846154,
+        "recall": 0.7410358565737052
+      },
+      "ks_yes_vs_no": {
+        "D": 0.65285885321194,
+        "p": 8.745784864870837e-72,
+        "n_yes": 251,
+        "n_no": 589
+      },
+      "longshot": {
+        "0.0-0.1": {
+          "n": 383,
+          "mean_price": 0.018240217439208336,
+          "observed_rate": 0.013054830287206266,
+          "obs_minus_expected": -0.00518538715200207,
+          "ci_low_diff": -0.012651430293381017,
+          "ci_high_diff": 0.011951697056640797
+        },
+        "0.1-0.2": {
+          "n": 35,
+          "mean_price": 0.15474285022832038,
+          "observed_rate": 0.14285714285714285,
+          "obs_minus_expected": -0.011885707371177529,
+          "ci_low_diff": -0.09214053943398326,
+          "ci_high_diff": 0.13901269063763108
+        }
+      },
+      "bins_reject_bonferroni": 0,
+      "bins_reject_bh": 0
+    }
+  }
+}

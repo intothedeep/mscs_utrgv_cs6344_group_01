@@ -54,6 +54,27 @@ def build_market_table(con, params: dict) -> None:
     con.execute("ALTER TABLE markets ADD COLUMN kept BOOLEAN")
     con.execute("ALTER TABLE markets ADD COLUMN kept_no_min BOOLEAN")
     con.execute("UPDATE markets SET kept = (drop_reason IS NULL), kept_no_min = (drop_reason_no_min IS NULL)")
+    add_long_horizon_columns(con, int(params["horizon_long_days"]))
+
+
+def add_long_horizon_columns(con, days: int) -> None:
+    """v2: append p_7d, p_age_7d_h, open_ge_7d (Q1b). Adds columns only: no existing column or drop rule changes.
+
+    p_7d = last p_event at or before T - days. Its age is stored; Q1b applies the same max_staleness_h rule.
+    open_ge_7d = opens_at <= T - days (NULL opens_at or T counts as FALSE).
+    """
+    con.execute(f"""
+        CREATE TEMP TABLE p_long AS
+        SELECT t.condition_id, arg_max(t.p_event, t.ts) AS p_7d, max(t.ts) AS p_ts
+        FROM tr t JOIN mk_stats k ON t.condition_id = k.market_id
+        WHERE t.ts <= k.T - INTERVAL {days} DAY GROUP BY 1""")
+    con.execute("ALTER TABLE markets ADD COLUMN p_7d DOUBLE")
+    con.execute("ALTER TABLE markets ADD COLUMN p_age_7d_h DOUBLE")
+    con.execute("ALTER TABLE markets ADD COLUMN open_ge_7d BOOLEAN")
+    con.execute(f"""
+        UPDATE markets SET p_7d = l.p_7d, p_age_7d_h = epoch((markets.T - INTERVAL {days} DAY) - l.p_ts) / 3600
+        FROM p_long l WHERE l.condition_id = markets.market_id""")
+    con.execute(f"UPDATE markets SET open_ge_7d = coalesce(opens_at <= T - INTERVAL {days} DAY, FALSE)")
 
 
 def build_wallet_table(con) -> None:
@@ -102,6 +123,8 @@ def summarize(con) -> dict:
         "drop_reasons": counts("drop_reason"),
         "drop_reasons_no_min_filter": counts("drop_reason_no_min"),
         "reason_order": REASON_ORDER,
+        "n_kept_open_ge_7d": con.execute("SELECT count(*) FROM markets WHERE kept AND open_ge_7d").fetchone()[0],
+        "n_kept_with_p_7d": con.execute("SELECT count(*) FROM markets WHERE kept AND p_7d IS NOT NULL").fetchone()[0],
         "n_wallet_role_rows": con.execute("SELECT count(*) FROM wallets").fetchone()[0],
         "n_trades_in_kept_markets": con.execute(
             "SELECT count(*) FROM tr SEMI JOIN markets k ON k.market_id = tr.condition_id AND k.kept").fetchone()[0],
@@ -149,7 +172,8 @@ def main() -> None:
                            f"({summary['n_wallet_role_rows']} rows), trade_sizes_sample.parquet "
                            f"({SAMPLE_ROWS} rows max, seed {SAMPLE_SEED}), tables_summary.json",
             "Result": f"Kept {summary['n_kept']} markets with the min_trades filter and "
-                      f"{summary['n_kept_no_min_filter']} without it.\n\n{table}",
+                      f"{summary['n_kept_no_min_filter']} without it. Of the kept, {summary['n_kept_open_ge_7d']} opened "
+                      f"at least 7 days before T and {summary['n_kept_with_p_7d']} have a p_7d.\n\n{table}",
             "Figure": "![drop reasons](drop_reasons.png)  Caption: markets by first failing rule. "
                       "Why: it shows which rule removes the most markets. Source: this run folder.",
         }

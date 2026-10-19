@@ -24,7 +24,8 @@ cp "$PROJ/$PREREG" "$RUN_DIR/prereg.json"  # the criteria fixed before the run, 
 cd "$RUN_DIR"
 
 source "$ENV/bin/activate"
-export DUCKDB_THREADS=8 DUCKDB_MEM=48GB OMP_NUM_THREADS=8
+# Sized from the request so a bigger sbatch -c/--mem needs no edit here.
+export DUCKDB_THREADS=${SLURM_CPUS_PER_TASK:-8} DUCKDB_MEM=${DUCKDB_MEM:-48GB} OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK:-8}
 echo "=== run $RUN job $SLURM_JOB_ID host $(hostname) dir $RUN_DIR start $(date -Is) ==="
 python - <<'PY'
 import platform, duckdb, pandas
