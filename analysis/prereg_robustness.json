@@ -1,0 +1,23 @@
+{
+  "t_rule": "close_at",
+  "min_trades": 10,
+  "max_staleness_h": 24,
+  "n_bins": 10,
+  "alpha": 0.05,
+  "pilot_month": "2025-06",
+  "scope": "full",
+  "updown_rule": "default",
+  "keep_duplicate_rows": true,
+  "horizon_long_days": 7,
+  "min_category_n": 30,
+  "n_perm": 1000,
+  "seed": 42,
+  "robust_agree_min": 0.95,
+  "robust_delta_thresholds": [0.10, 0.25, 0.50],
+  "robust_quantiles": [0.5, 0.75, 0.9, 0.95, 0.99],
+  "robust_yes_payout_index": 0,
+  "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+  "decided_by": "developer from the plan, main session, 2026-10-19 (MVP1 keys: owner, D-007; robustness keys: D-013)",
+  "mvp2_added_from": "tips/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19",
+  "robust_added_from": "DECISIONS.md D-013 and the developer task, 2026-10-19"
+}

@@ -10,7 +10,7 @@ import hashlib
 import json
 from pathlib import Path
 
-CODE_VERSION = "v3"   # no import from common.py: that module needs duckdb, this stage needs only the JSON files
+CODE_VERSION = "v4"   # no import from common.py: that module needs duckdb, this stage needs only the JSON files
 CRITERIA = {"Q1": "analysis/prereg_mvp1.md", "Q1a": "analysis/prereg_mvp2.md",
             "Q1b": "analysis/prereg_mvp2.md", "Q1c": "analysis/prereg_mvp2.md"}
 

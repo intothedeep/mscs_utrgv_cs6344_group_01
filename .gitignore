@@ -233,3 +233,5 @@ runs/**/q1a_markets.csv
 runs/**/q1b_markets.csv
 runs/**/q1c_scaled.csv
 runs/**/q2_kmeans_sample.csv
+runs/**/r1_markets.csv
+runs/**/r2_markets.csv
