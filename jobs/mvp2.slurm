@@ -44,6 +44,7 @@ python "$C/q2_concentration.py"   --params prereg.json --out "$RUN_DIR" || echo 
 python "$C/q1a_category.py"       --params prereg.json --out "$RUN_DIR" || echo "STAGE q1a_category FAILED"
 python "$C/q1b_deadline.py"       --params prereg.json --out "$RUN_DIR" || echo "STAGE q1b_deadline FAILED"
 python "$C/q1c_volume.py"         --params prereg.json --out "$RUN_DIR" || echo "STAGE q1c_volume FAILED"
+python "$C/verdicts.py"           --out "$RUN_DIR"                      || echo "STAGE verdicts FAILED"
 python "$C/make_summary.py"       --out "$RUN_DIR"                      || echo "STAGE make_summary FAILED"
 
 ls -la "$RUN_DIR"

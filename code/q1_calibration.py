@@ -94,7 +94,7 @@ def draw_calibration(main: pd.DataFrame, nomin: pd.DataFrame, out: Path) -> None
     ax.plot([0, 1], [0, 1], color="#888888", ls="--", label="Perfect calibration")
     for name, b, color, dx in [("With min_trades filter (main)", main, "#222222", 0.0),
                                ("Without filter", nomin, "#aa5500", 0.006)]:
-        err = np.vstack([b["observed_rate"] - b["ci_low"], b["ci_high"] - b["observed_rate"]])
+        err = np.clip(np.vstack([b["observed_rate"] - b["ci_low"], b["ci_high"] - b["observed_rate"]]), 0, None)  # float rounding can give -1e-17 at rate 0 or 1; plot only
         ax.errorbar(b["mean_price"] + dx, b["observed_rate"], yerr=err, fmt="o", ms=4, capsize=3, color=color, label=name)
     ax.set(xlabel="Mean price p_1d in bin (USDC per share)", ylabel="Observed Yes rate", xlim=(0, 1), ylim=(0, 1))
     ax.grid(alpha=0.3)

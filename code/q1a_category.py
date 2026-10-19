@@ -20,11 +20,12 @@ from q1_calibration import bin_table
 
 STAGE = "q1a_category"
 MIN_BIN_N = 5          # bins with fewer markets are listed but not tested
-OTHER, UNKNOWN = "Other", "Unknown"
+# "Other" is a real category_refined value, so the sink for small categories gets its own name (review F16).
+OTHER, UNKNOWN = "Merged", "Unknown"
 
 
 def group_categories(df: pd.DataFrame, min_n: int) -> tuple[pd.DataFrame, pd.Series]:
-    """Add category_group: categories with >= min_n kept markets stay, the rest merge into 'Other'."""
+    """Add category_group: categories with >= min_n kept markets stay, the rest merge into 'Merged'."""
     cat = df["category_refined"].fillna(UNKNOWN).astype(str)
     counts = cat.value_counts()
     big = counts[counts >= min_n].index
@@ -124,7 +125,7 @@ def draw_calibration_by_category(bins: pd.DataFrame, tab: pd.DataFrame, out: Pat
                              layout="constrained", squeeze=False)
     for ax, cat in zip(axes.flat, cats):
         b = bins[(bins["category"] == cat) & bins["tested"]]
-        err = np.vstack([b["observed_rate"] - b["ci_low"], b["ci_high"] - b["observed_rate"]])
+        err = np.clip(np.vstack([b["observed_rate"] - b["ci_low"], b["ci_high"] - b["observed_rate"]]), 0, None)  # float rounding can give -1e-17 at rate 0 or 1; plot only
         ax.plot([0, 1], [0, 1], color="#888888", ls="--")
         ax.errorbar(b["mean_price"], b["observed_rate"], yerr=err, fmt="o", ms=3.5, capsize=2, color="#222222")
         ax.set_title(f"{cat} (n={int(tab.loc[cat, 'n'])})", fontsize=9)
@@ -150,7 +151,7 @@ def main() -> None:
 
     def work() -> dict[str, str]:
         m = pd.read_parquet(out / "markets.parquet")
-        main_df = m[m["kept"]][["market_id", "category_refined", "p_1d", "y"]]
+        main_df = m[m["kept"]][["market_id", "category_refined", "p_1d", "y"]].sort_values("market_id").reset_index(drop=True)  # fixed row order: the permutation test shuffles by position (review F4)
         if len(main_df) < 20:
             raise ValueError(f"only {len(main_df)} kept markets: too few for Q1a")
         res, tab, bins, per_market = analyze(main_df, params)
@@ -180,8 +181,7 @@ def main() -> None:
                        f"Brier across categories: ANOVA F={br.get('anova_F')}, p={br.get('anova_p')}, "
                        f"eta squared={br.get('eta_squared')}, permutation p={br.get('perm_p')} "
                        f"({br.get('n_perm')} perms, seed {br.get('seed')}).\n\n"
-                       f"Under-represented: merged into '{OTHER}': {merged}. Sports: {saved['sports_n']}. "
-                       f"Sports mostly drops out of the Standard Binary sample (plan, paper limitation 7).\n\n"
+                       f"Under-represented: merged into '{OTHER}': {merged}. Sports: {saved['sports_n']}.\n\n"
                        f"n per category, favorite win rate and mean Brier:\n\n{tab_md}"),
             "Figure": "![calibration by category](fig9_calibration_by_category.png)  Caption: observed Yes rate against "
                       "mean price per bin, one panel per category, shared axes. "

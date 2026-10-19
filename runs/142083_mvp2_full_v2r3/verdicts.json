@@ -1,0 +1,98 @@
+{
+  "code_version": "v3",
+  "verdicts_py_sha256_12": "fdcca90b6588",
+  "alpha": 0.05,
+  "scope": "full",
+  "prereg_json_sha256_12": "416898b0c2cf",
+  "comparisons": {
+    "Q1": {
+      "statistic": {
+        "name": "chi-square",
+        "value": 67.9867245888779,
+        "df": 10
+      },
+      "p": 1.0834473799353825e-10,
+      "effect_size": {
+        "name": "Cohen's w",
+        "value": 0.037655360605086674
+      },
+      "n": 47948,
+      "verdict": "Prices are not calibrated as a whole at this n.",
+      "extra": {
+        "bins_off_bh": 5,
+        "bins_off_bonferroni": 4,
+        "brier": 0.10707126160833004
+      },
+      "judged": true,
+      "rule_result": "Prices are not calibrated as a whole at this n.",
+      "criteria_file": "analysis/prereg_mvp1.md",
+      "criteria_sha256_12": null
+    },
+    "Q1a": {
+      "statistic": {
+        "name": "chi-square",
+        "value": 3203.8056862450953,
+        "df": 7
+      },
+      "p": 0.0,
+      "effect_size": {
+        "name": "Cramer's V",
+        "value": 0.2584924337963562
+      },
+      "n": 47948,
+      "verdict": "Accuracy depends on the topic at this n.",
+      "extra": {
+        "n_categories": 8
+      },
+      "judged": true,
+      "rule_result": "Accuracy depends on the topic at this n.",
+      "criteria_file": "analysis/prereg_mvp2.md",
+      "criteria_sha256_12": null
+    },
+    "Q1b": {
+      "statistic": {
+        "name": "t",
+        "value": 19.960580104631127,
+        "df": 11004
+      },
+      "p": 4.178499107281447e-87,
+      "effect_size": {
+        "name": "Cohen's d",
+        "value": 0.1902734248468339,
+        "mean_diff": 0.02569907095470225,
+        "ci": [
+          0.023175357008734125,
+          0.028222784900670372
+        ]
+      },
+      "n": 11005,
+      "verdict": "Better near the deadline.",
+      "judged": true,
+      "rule_result": "Better near the deadline.",
+      "criteria_file": "analysis/prereg_mvp2.md",
+      "criteria_sha256_12": null
+    },
+    "Q1c": {
+      "statistic": {
+        "name": "Spearman rho",
+        "value": 0.2260423035392175,
+        "df": null
+      },
+      "p": 0.0,
+      "effect_size": {
+        "name": "rho",
+        "value": 0.2260423035392175,
+        "ci": [
+          0.21727945385804653,
+          0.23476872160582582
+        ]
+      },
+      "n": 47948,
+      "verdict": "No evidence that busier markets are more accurate at this n.",
+      "judged": true,
+      "rule_result": "No evidence that busier markets are more accurate at this n.",
+      "criteria_file": "analysis/prereg_mvp2.md",
+      "criteria_sha256_12": null
+    }
+  }
+}

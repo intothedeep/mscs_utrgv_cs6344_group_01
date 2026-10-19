@@ -1,0 +1,52 @@
+{
+  "code_version": "v3",
+  "code_sha": "f20fd6e1827c",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "full",
+    "updown_rule": "default",
+    "horizon_long_days": 7,
+    "min_category_n": 30,
+    "n_perm": 1000,
+    "seed": 42,
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "developer from the plan, main session, 2026-10-19 (MVP1 keys: owner, D-007)",
+    "mvp2_added_from": "tips/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu012",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142083",
+    "slurm_cpus_per_task": "16",
+    "slurm_mem_per_node": "204800",
+    "duckdb_threads": "16",
+    "duckdb_mem": "160GB"
+  },
+  "metrics": {
+    "n_markets": 47948,
+    "spearman_log_volume_vs_error": {
+      "n": 47948,
+      "rho": 0.2260423035392175,
+      "p": 0.0,
+      "ci_low": 0.21727945385804653,
+      "ci_high": 0.23476872160582582
+    },
+    "spearman_log_trades_vs_error": {
+      "n": 47948,
+      "rho": 0.20815484634712272,
+      "p": 0.0,
+      "ci_low": 0.19932173279713664,
+      "ci_high": 0.21695413666397464
+    },
+    "scaling": "z = (x - mean) / sd; robust = (x - median) / IQR; columns in q1c_scaled.csv"
+  }
+}

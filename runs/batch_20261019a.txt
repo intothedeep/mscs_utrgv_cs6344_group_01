@@ -3,3 +3,7 @@
 142041 pilotA_2025_06
 142056 mvp1b_pilot_2025_06
 142057 mvp1_full_v1
+142077 mvp2_pilot_2025_06
+142078 mvp2_full_v2
+142082 mvp1_full_v1r3
+142083 mvp2_full_v2r3

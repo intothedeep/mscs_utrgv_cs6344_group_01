@@ -1,0 +1,64 @@
+{
+  "code_version": "v2",
+  "code_sha": "c335ae65139e",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "pilot",
+    "updown_rule": "default",
+    "horizon_long_days": 7,
+    "min_category_n": 30,
+    "n_perm": 1000,
+    "seed": 42,
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "owner, 2026-10-19",
+    "mvp2_added_from": "tips/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu012",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142077"
+  },
+  "metrics": {
+    "n_markets_in_scope": 3841,
+    "n_kept": 726,
+    "n_kept_no_min_filter": 840,
+    "drop_reasons": {
+      "stale_price": 851,
+      "below_min_trades": 114,
+      "kept": 726,
+      "updown": 1778,
+      "no_outcome": 29,
+      "no_price": 343
+    },
+    "drop_reasons_no_min_filter": {
+      "updown": 1778,
+      "kept": 840,
+      "no_price": 343,
+      "stale_price": 851,
+      "no_outcome": 29
+    },
+    "reason_order": [
+      "updown",
+      "non_binary",
+      "no_outcome",
+      "no_price",
+      "stale_price",
+      "below_min_trades"
+    ],
+    "n_kept_open_ge_7d": 445,
+    "n_kept_with_p_7d": 404,
+    "n_wallet_role_rows": 197543,
+    "n_trades_in_kept_markets": 1269037,
+    "trade_size_sample_rows": 1000000,
+    "trade_size_sample_seed": 42
+  }
+}

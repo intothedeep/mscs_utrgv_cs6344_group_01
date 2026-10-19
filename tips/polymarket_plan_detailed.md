@@ -128,10 +128,10 @@ The dataset has no order-book snapshots and no oracle events in the trade layer.
 
 ### MVP1 is done when
 
-- [ ] The market table and the wallet table are built from the full data (or a documented subset).
-- [ ] Figures 1–8 exist.
-- [ ] Every row in the MVP1 tables above has a result.
-- [ ] Every test reports an effect size (difference, D, ρ) next to its p-value.
+- [x] The market table and the wallet table are built from the full data (or a documented subset).
+- [x] Figures 1–8 exist.
+- [x] Every row in the MVP1 tables above has a result.
+- [x] Every test reports an effect size (difference, D, ρ) next to its p-value.
 
 ## Gate: MVP1 → MVP2
 

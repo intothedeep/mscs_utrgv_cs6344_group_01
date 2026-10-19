@@ -1,0 +1,32 @@
+{
+  "code_version": "v3",
+  "verdicts_py_sha256_12": "fdcca90b6588",
+  "alpha": 0.05,
+  "scope": "full",
+  "prereg_json_sha256_12": "498ee2a5d4a8",
+  "comparisons": {
+    "Q1": {
+      "statistic": {
+        "name": "chi-square",
+        "value": 67.9867245888779,
+        "df": 10
+      },
+      "p": 1.0834473799353825e-10,
+      "effect_size": {
+        "name": "Cohen's w",
+        "value": 0.037655360605086674
+      },
+      "n": 47948,
+      "verdict": "Prices are not calibrated as a whole at this n.",
+      "extra": {
+        "bins_off_bh": 5,
+        "bins_off_bonferroni": 4,
+        "brier": 0.10707126160833004
+      },
+      "judged": true,
+      "rule_result": "Prices are not calibrated as a whole at this n.",
+      "criteria_file": "analysis/prereg_mvp1.md",
+      "criteria_sha256_12": null
+    }
+  }
+}

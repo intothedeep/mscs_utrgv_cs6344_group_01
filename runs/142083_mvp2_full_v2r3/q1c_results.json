@@ -1,0 +1,18 @@
+{
+  "n_markets": 47948,
+  "spearman_log_volume_vs_error": {
+    "n": 47948,
+    "rho": 0.2260423035392175,
+    "p": 0.0,
+    "ci_low": 0.21727945385804653,
+    "ci_high": 0.23476872160582582
+  },
+  "spearman_log_trades_vs_error": {
+    "n": 47948,
+    "rho": 0.20815484634712272,
+    "p": 0.0,
+    "ci_low": 0.19932173279713664,
+    "ci_high": 0.21695413666397464
+  },
+  "scaling": "z = (x - mean) / sd; robust = (x - median) / IQR; columns in q1c_scaled.csv"
+}

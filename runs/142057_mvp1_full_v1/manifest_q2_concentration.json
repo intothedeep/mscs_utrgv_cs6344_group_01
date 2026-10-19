@@ -1,0 +1,29 @@
+{
+  "code_version": "v1",
+  "code_sha": "7ba870acf28a",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "full",
+    "updown_rule": "default",
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "owner, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu011",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142057"
+  },
+  "metrics": {
+    "n_wallet_role_rows": 2117412,
+    "k": 4
+  }
+}

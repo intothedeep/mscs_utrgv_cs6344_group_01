@@ -277,15 +277,26 @@ a{color:var(--signal-plan)}
     <tr><td><code>DECISIONS.md</code></td><td>선택마다 한 행: 무엇을, 왜, 버린 대안, 누가, 근거</td></tr>
     <tr><td><code>analysis/prereg_mvp1.md</code></td><td>결과를 보기 전에 정한 기준과 판정선</td></tr>
   </table></div>
-  <h3>지금까지 (2026-10-19)</h3>
+  <h3>진행 기록 (단계마다 한 줄, 새 줄은 아래에)</h3>
   <div class="tablewrap"><table>
-    <tr><th>단계</th><th>상태</th><th>결정</th></tr>
-    <tr><td>1 데이터 받기</td><td>끝남. 파일 1,248개 크기가 목록과 같음</td><td>D-001 환경, D-002 CPU만, D-003 데이터 층</td></tr>
-    <tr><td>2 Job A 살펴보기</td><td>끝남. 작업 142041</td><td>D-004 파일럿 범위, D-006 파티션</td></tr>
-    <tr><td>3 기준 사전 등록</td><td>정함. 커밋함</td><td>D-005 두 작업 사이의 벽, D-007 T와 최소 거래</td></tr>
-    <tr><td>4–7 Job B: 표, Q3, Q1, Q2</td><td>다음 차례</td><td>첫 한 바퀴라 판정하지 않는다</td></tr>
-    <tr><td>8 게이트</td><td>MVP1 뒤</td><td></td></tr>
+    <tr><th>#</th><th>날짜</th><th>단계</th><th>결과</th><th>결정과 근거</th></tr>
+    <tr><td class="num">1</td><td>10-19</td><td>데이터 받기</td><td>파일 1,248개, 13 GB. 크기가 목록과 모두 같음</td><td>D-001 환경, D-002 CPU만, D-003 데이터 층</td></tr>
+    <tr><td class="num">2</td><td>10-19</td><td>Job A 살펴보기 (142041)</td><td>약 2.5분. 마감 뒤 거래가 있는 시장 51.3%</td><td>D-004 파일럿 범위, D-006 파티션</td></tr>
+    <tr><td class="num">3</td><td>10-19</td><td>MVP1 기준 사전 등록</td><td>T = <code>close_at</code>, 최소 거래 10건, 중복 남김. 커밋 <code>530fe0d</code></td><td>D-005 벽, D-007 기준</td></tr>
+    <tr><td class="num">4</td><td>10-19</td><td>Job B 파일럿 (142056), 첫 바퀴</td><td><ul><li>약 75초. 시장 2,063개 중 726개가 남음</li><li>가장 많이 빠진 이유: 가격이 24시간보다 오래됨 (851개)</li><li>q3 단계 실패: scipy 1.18의 KS 호출. 고침</li></ul></td><td>판정 없음 (첫 바퀴)</td></tr>
+    <tr><td class="num">5</td><td>10-19</td><td>계획 확장</td><td>gpul40q의 CPU 사용. 보고서 v1 (MVP1)과 v2 (MVP1 + MVP2)</td><td>D-008, D-009 (소유자)</td></tr>
+    <tr><td class="num">6</td><td>10-19</td><td>MVP2 기준 사전 등록</td><td>Q1a 카이제곱 독립성, Q1b Brier 차이 t-검정, Q1c 스피어만. 커밋 <code>a6fb2c7</code></td><td>D-010</td></tr>
+    <tr><td class="num">7</td><td>10-19</td><td>MVP1 전체 실행 (142057)</td><td><ul><li>약 15분, 네 단계 모두 성공</li><li>범위 안 시장 688,131개 중 47,948개가 남음</li><li>Q1 카이제곱 p = 2.6e-10, 효과 크기 w = 0.037 (작음). BH 보정 뒤 10개 구간 중 5개가 어긋남</li></ul></td><td>D-007 기준 그대로. <code>runs/142057_mvp1_full_v1/</code></td></tr>
+    <tr><td class="num">8</td><td>10-19</td><td>보고서 v1 (영어)</td><td>MVP1 전체 실행에서 숫자를 읽어 만듦</td><td><code>reports/report_v1.html</code></td></tr>
+    <tr><td class="num">9</td><td>10-19</td><td>MVP2 파일럿 (142077), 첫 바퀴</td><td><ul><li>약 5분. q1b, q1c 성공</li><li>q1a 실패: 그림 오차 막대의 -1e-17. 그림만 고침</li><li>남은 시장 726개 = MVP1 파일럿. 기존 숫자가 그대로임</li></ul></td><td>판정 없음 (첫 바퀴)</td></tr>
+    <tr><td class="num">10</td><td>10-19</td><td>MVP2 전체 실행 (142078)</td><td>약 14분, 일곱 단계 모두 성공</td><td>D-010 기준 그대로. <code>runs/142078_mvp2_full_v2/</code></td></tr>
+    <tr><td class="num">11</td><td>10-19</td><td>보고서 v2 (영어)</td><td><ul><li>v1과의 일관성 표: 남은 시장 수와 지니 계수는 같음</li><li>Brier 점수가 여섯째 자리에서 다름. 같은 시각 거래의 순서가 정해지지 않은 탓. 고칠 예정</li></ul></td><td><code>reports/report_v2.html</code></td></tr>
+    <tr><td class="num">12</td><td>10-19</td><td>reviewer 한 번</td><td><ul><li>막는 문제 0, 중요 8, 작은 것 16</li><li>사전 등록 판정 4건은 기준대로 적용되어 유지</li><li>중요: 같은 시각 거래 순서, 표본 추출이 실행마다 달라짐, Q2 카이제곱 칸이 너무 희소, 버전 기록 누락, 대장과 판정 파일 없음</li></ul></td><td><code>analysis/review_mvp1_mvp2.md</code></td></tr>
+    <tr><td class="num">13</td><td>10-19</td><td>고침 (코드 v3)</td><td>끝남. 같은 시각 거래는 가격 평균, Q2 범주는 <code>category_refined</code>, 표본은 고정 순서, 판정은 <code>verdicts.json</code>에 따로 저장</td><td>D-011, <code>CHANGELOG.md</code></td></tr>
+    <tr><td class="num">14</td><td>10-19</td><td>v3로 두 전체 실행 다시 (142082, 142083)</td><td><ul><li>각 약 27분, 모든 단계 성공</li><li>남은 시장 47,948개, 빠진 이유별 개수 그대로</li><li>v1과 v2의 MVP1 값 77개가 모두 같음</li></ul></td><td><code>00.runs.md</code> (실행 대장)</td></tr>
+    <tr><td class="num">15</td><td>10-19</td><td>보고서 v1, v2 다시 만듦 (영어)</td><td><ul><li>Q1: 전체로 보정되지 않음. 카이제곱 68.0, p &lt; 0.0001, w = 0.038 (작음)</li><li>Q1a: 주제에 따라 다름. Cramér V = 0.258</li><li>Q1b: 마감이 가까울수록 나아짐. Brier 차이 0.0257, d = 0.19, 시장 11,005개</li><li>Q1c: 거래가 많을수록 정확하다는 증거 없음. ρ = +0.226</li></ul></td><td><code>runs/142083_mvp2_full_v2r3/verdicts.json</code></td></tr>
   </table></div>
+  <p class="note">MVP1과 MVP2 끝 (2026-10-19). 다음: 소유자 검토. 남은 정리: <code>make_report.py</code> 나누기 (별도 커밋). 같은 기록: <code>STATUS.md</code>, 실행 대장 <code>00.runs.md</code>.</p>
   <h3>최종판까지 지킬 제약</h3>
   <ul>
     <li>강의에서 배운 방법만 쓴다. k-평균은 곁가지, 보고서의 1/10 미만.</li>

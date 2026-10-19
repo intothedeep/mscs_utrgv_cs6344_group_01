@@ -1,0 +1,37 @@
+{
+  "code_version": "v3",
+  "code_sha": "bbd0badc95df",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "full",
+    "updown_rule": "default",
+    "horizon_long_days": 7,
+    "min_category_n": 30,
+    "n_perm": 1000,
+    "seed": 42,
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "owner, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu011",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142082",
+    "slurm_cpus_per_task": "16",
+    "slurm_mem_per_node": "204800",
+    "duckdb_threads": "16",
+    "duckdb_mem": "160GB"
+  },
+  "metrics": {
+    "n_wallet_role_rows": 2117412,
+    "k": 4
+  }
+}

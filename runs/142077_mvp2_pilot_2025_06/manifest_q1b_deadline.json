@@ -1,0 +1,82 @@
+{
+  "code_version": "v2",
+  "code_sha": "2e5d24f51637",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "pilot",
+    "updown_rule": "default",
+    "horizon_long_days": 7,
+    "min_category_n": 30,
+    "n_perm": 1000,
+    "seed": 42,
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "owner, 2026-10-19",
+    "mvp2_added_from": "tips/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu012",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142077"
+  },
+  "metrics": {
+    "n_markets": 348,
+    "brier_diff_7d_minus_1d": {
+      "n": 348,
+      "mean_diff": 0.01612372352226003,
+      "ci_low": 0.004782354850693258,
+      "ci_high": 0.027465092193826802,
+      "t": 2.7961816041698793,
+      "df": 347,
+      "p": 0.00545901527518124,
+      "cohens_d": 0.14989106737566904
+    },
+    "abs_error_diff_7d_minus_1d": {
+      "n": 348,
+      "mean_diff": 0.03912068561198587,
+      "ci_low": 0.02532995894846475,
+      "ci_high": 0.05291141227550698,
+      "t": 5.5793654216391015,
+      "df": 347,
+      "p": 4.867974121154194e-08,
+      "cohens_d": 0.29908538024899195
+    },
+    "brier": {
+      "7d": 0.053428769762717536,
+      "1d": 0.037305046240457496
+    },
+    "ks_yes_vs_no": {
+      "7d": {
+        "D": 0.8473182155709146,
+        "p": 7.473144114644378e-39,
+        "n_yes": 61,
+        "n_no": 287
+      },
+      "1d": {
+        "D": 0.8989547038327527,
+        "p": 1.3062643567805185e-45,
+        "n_yes": 61,
+        "n_no": 287
+      }
+    },
+    "mean_entropy_bits": {
+      "7d": 0.353448985322044,
+      "1d": 0.24515916715953834,
+      "diff_7d_minus_1d": 0.10828981816250562
+    },
+    "selection": {
+      "n_kept": 726,
+      "n_kept_open_ge_7d": 445,
+      "n_used": 348,
+      "max_staleness_h": 24.0
+    }
+  }
+}

@@ -110,7 +110,7 @@ def main() -> None:
                        f"accurate.\n\n{md_table(tab)}"),
             "Figure": "![volume vs error](fig11_volume_vs_error.png)  Caption: per-market Brier error against volume and "
                       "trade count (log x) with the mean error per decile of x. "
-                      "Why: a falling line means busier markets have smaller errors. Source: this run folder.",
+                      "Why: the line shows how mean error changes with activity. A rising line means busier markets have larger errors. Source: this run folder.",
         }
 
     run_stage(out, STAGE, "Q1c: are busier markets more accurate?", work)

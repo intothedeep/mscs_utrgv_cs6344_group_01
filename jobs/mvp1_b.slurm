@@ -41,6 +41,7 @@ python "$C/build_tables.py"       --params prereg.json --out "$RUN_DIR" || echo 
 python "$C/q3_describe.py"        --params prereg.json --out "$RUN_DIR" || echo "STAGE q3_describe FAILED"
 python "$C/q1_calibration.py"     --params prereg.json --out "$RUN_DIR" || echo "STAGE q1_calibration FAILED"
 python "$C/q2_concentration.py"   --params prereg.json --out "$RUN_DIR" || echo "STAGE q2_concentration FAILED"
+python "$C/verdicts.py"           --out "$RUN_DIR"                      || echo "STAGE verdicts FAILED"
 python "$C/make_summary.py"       --out "$RUN_DIR"                      || echo "STAGE make_summary FAILED"
 
 ls -la "$RUN_DIR"

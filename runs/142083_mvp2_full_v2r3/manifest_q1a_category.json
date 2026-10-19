@@ -1,0 +1,86 @@
+{
+  "code_version": "v3",
+  "code_sha": "9cb869fda1ca",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "full",
+    "updown_rule": "default",
+    "horizon_long_days": 7,
+    "min_category_n": 30,
+    "n_perm": 1000,
+    "seed": 42,
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "developer from the plan, main session, 2026-10-19 (MVP1 keys: owner, D-007)",
+    "mvp2_added_from": "tips/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu012",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142083",
+    "slurm_cpus_per_task": "16",
+    "slurm_mem_per_node": "204800",
+    "duckdb_threads": "16",
+    "duckdb_mem": "160GB"
+  },
+  "metrics": {
+    "n_markets": 47948,
+    "min_category_n": 30,
+    "n_by_category_raw": {
+      "Sports": 19162,
+      "Crypto": 11888,
+      "Politics": 6922,
+      "Finance": 5146,
+      "Other": 2274,
+      "Culture": 1074,
+      "Sci-Tech": 819,
+      "Price Action": 663
+    },
+    "merged_into_other": {},
+    "sports_n": {
+      "Sports": 19162
+    },
+    "chi_square_independence": {
+      "chi2": 3203.8056862450953,
+      "df": 7,
+      "p": 0.0,
+      "cramers_v": 0.2584924337963562,
+      "n": 47948,
+      "n_categories": 8,
+      "min_expected_count": 109.76253441227998
+    },
+    "bin_tests": {
+      "n_tested": 80,
+      "bins_total": 80,
+      "reject_bonferroni": 2,
+      "reject_bh": 9
+    },
+    "brier_tests": {
+      "anova_F": 837.6878226514474,
+      "anova_p": 0.0,
+      "eta_squared": 0.10898511164820039,
+      "perm_p": 0.000999000999000999,
+      "n_perm": 1000,
+      "seed": 42,
+      "n_categories": 8,
+      "mean_brier_by_category": {
+        "Crypto": 0.037328254086770936,
+        "Culture": 0.06614838524655663,
+        "Finance": 0.0665153488271453,
+        "Other": 0.09593616299147636,
+        "Politics": 0.0916853847057364,
+        "Price Action": 0.04926572649701147,
+        "Sci-Tech": 0.07893310936660838,
+        "Sports": 0.17360655231076552
+      }
+    }
+  }
+}

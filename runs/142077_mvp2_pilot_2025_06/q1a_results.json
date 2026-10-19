@@ -1,0 +1,53 @@
+{
+  "n_markets": 726,
+  "min_category_n": 30,
+  "n_by_category_raw": {
+    "Politics": 389,
+    "Sports": 146,
+    "Crypto": 61,
+    "Other": 48,
+    "Culture": 31,
+    "Sci-Tech": 28,
+    "Finance": 16,
+    "Price Action": 7
+  },
+  "merged_into_other": {
+    "Sci-Tech": 28,
+    "Finance": 16,
+    "Price Action": 7
+  },
+  "sports_n": {
+    "Sports": 146
+  },
+  "chi_square_independence": {
+    "chi2": 39.5461313487053,
+    "df": 4,
+    "p": 5.3723869000588734e-08,
+    "cramers_v": 0.23339077809812234,
+    "n": 726,
+    "n_categories": 5,
+    "min_expected_count": 4.398071625344353
+  },
+  "bin_tests": {
+    "n_tested": 25,
+    "bins_total": 40,
+    "reject_bonferroni": 0,
+    "reject_bh": 0
+  },
+  "brier_tests": {
+    "anova_F": 14.983136586137073,
+    "anova_p": 9.033640769083879e-12,
+    "eta_squared": 0.07674484387298931,
+    "perm_p": 0.000999000999000999,
+    "n_perm": 1000,
+    "seed": 42,
+    "n_categories": 5,
+    "mean_brier_by_category": {
+      "Crypto": 0.07701718478962997,
+      "Culture": 0.016642290348802647,
+      "Other": 0.06713185737619909,
+      "Politics": 0.07143276326930029,
+      "Sports": 0.18735436811902634
+    }
+  }
+}

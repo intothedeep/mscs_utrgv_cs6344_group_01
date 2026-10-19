@@ -1,0 +1,82 @@
+{
+  "code_version": "v2",
+  "code_sha": "2e5d24f51637",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "full",
+    "updown_rule": "default",
+    "horizon_long_days": 7,
+    "min_category_n": 30,
+    "n_perm": 1000,
+    "seed": 42,
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "owner, 2026-10-19",
+    "mvp2_added_from": "tips/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu011",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142078"
+  },
+  "metrics": {
+    "n_markets": 11005,
+    "brier_diff_7d_minus_1d": {
+      "n": 11005,
+      "mean_diff": 0.025676263474333494,
+      "ci_low": 0.023144983791962757,
+      "ci_high": 0.02820754315670423,
+      "t": 19.883258247861562,
+      "df": 11004,
+      "p": 1.8549721406578353e-86,
+      "cohens_d": 0.1895363573655312
+    },
+    "abs_error_diff_7d_minus_1d": {
+      "n": 11005,
+      "mean_diff": 0.05475932650318995,
+      "ci_low": 0.05174106228266036,
+      "ci_high": 0.057777590723719546,
+      "t": 35.562862081398166,
+      "df": 11004,
+      "p": 2.5856397520650575e-262,
+      "cohens_d": 0.3390015485578635
+    },
+    "brier": {
+      "7d": 0.0958966084982058,
+      "1d": 0.0702203450238723
+    },
+    "ks_yes_vs_no": {
+      "7d": {
+        "D": 0.7047124114701776,
+        "p": 1.546e-321,
+        "n_yes": 2773,
+        "n_no": 8232
+      },
+      "1d": {
+        "D": 0.7850111813310147,
+        "p": 0.0,
+        "n_yes": 2773,
+        "n_no": 8232
+      }
+    },
+    "mean_entropy_bits": {
+      "7d": 0.4530548688709455,
+      "1d": 0.32447767157846497,
+      "diff_7d_minus_1d": 0.1285771972924806
+    },
+    "selection": {
+      "n_kept": 47948,
+      "n_kept_open_ge_7d": 21816,
+      "n_used": 11005,
+      "max_staleness_h": 24.0
+    }
+  }
+}

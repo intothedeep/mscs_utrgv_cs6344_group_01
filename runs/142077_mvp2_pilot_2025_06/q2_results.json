@@ -1,0 +1,110 @@
+{
+  "concentration": {
+    "maker": {
+      "n_wallets": 50837,
+      "mean": 6083.58478448146,
+      "median": 21.451,
+      "mean_over_median": 283.60378464787,
+      "top1_share": 0.872267790640774,
+      "top5_share": 0.9772536835851664,
+      "top10_share": 0.991100392547791,
+      "top20_share": 0.9968002586834918,
+      "gini": 0.9868047066846359
+    },
+    "taker": {
+      "n_wallets": 146706,
+      "mean": 2108.101915999918,
+      "median": 7.9970285,
+      "mean_over_median": 263.61065438242696,
+      "top1_share": 0.7416077904121603,
+      "top5_share": 0.9414233174750576,
+      "top10_share": 0.9784254775641166,
+      "top20_share": 0.9939784606331928,
+      "gini": 0.9748370308826169
+    }
+  },
+  "paper_gini_full_data_reference": {
+    "maker": 0.97,
+    "taker": 0.943
+  },
+  "role_tests": {
+    "welch_t": {
+      "t": 93.79583700887983,
+      "p": 0.0,
+      "cohens_d": 0.4415291382118357,
+      "mean_log10_maker": 1.4599291593008514,
+      "mean_log10_taker": 0.8585944411179942
+    },
+    "ks": {
+      "D": 0.27084137662611973,
+      "p": 0.0
+    }
+  },
+  "spearman_n_trades_vs_volume": {
+    "rho": 0.6220361636812083,
+    "p": 0.0,
+    "n": 197543
+  },
+  "kmeans": {
+    "n_sample": 197543,
+    "sample_seed": 42,
+    "k_chosen": 4,
+    "k_rule": "farthest point from the first-last line of the elbow curve",
+    "inertia": {
+      "2": 493809.8897564445,
+      "3": 350360.56759453577,
+      "4": 270423.0178985256,
+      "5": 233770.19364897974,
+      "6": 203361.43771923566,
+      "7": 184009.63673836435,
+      "8": 167411.21873073032
+    },
+    "cluster_summary": [
+      {
+        "cluster": 0,
+        "n": 104169,
+        "median_volume": 2.129998,
+        "median_n_trades": 1.0,
+        "median_n_markets": 1.0,
+        "mean_trade_price": 0.048392690521660175
+      },
+      {
+        "cluster": 1,
+        "n": 12702,
+        "median_volume": 2710.5113115000004,
+        "median_n_trades": 39.0,
+        "median_n_markets": 9.0,
+        "mean_trade_price": 0.3261324809259077
+      },
+      {
+        "cluster": 2,
+        "n": 31911,
+        "median_volume": 10.1,
+        "median_n_trades": 2.0,
+        "median_n_markets": 1.0,
+        "mean_trade_price": 0.7033788824760239
+      },
+      {
+        "cluster": 3,
+        "n": 48761,
+        "median_volume": 94.304,
+        "median_n_trades": 6.0,
+        "median_n_markets": 2.0,
+        "mean_trade_price": 0.1469002203887976
+      }
+    ],
+    "chi2_cluster_x_category": {
+      "chi2": 88292.30475447225,
+      "df": 291,
+      "p": 0.0,
+      "cramers_v": 0.3859845995138259,
+      "n_categories": 98
+    },
+    "anova_log_median_trade_size": {
+      "F": 9097.616909888246,
+      "eta_squared": 0.12139227890127258,
+      "perm_p": 0.000999000999000999,
+      "n_perm": 1000
+    }
+  }
+}

@@ -223,3 +223,5 @@ __marimo__/
 # Polymarket pipeline (mvp1)
 data/
 runs/**/*.parquet
+# Full-run market table is ~190 MB, over the GitHub file limit; markets.parquet on the cluster is the source
+runs/*_full_*/markets.csv

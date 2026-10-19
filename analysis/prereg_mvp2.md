@@ -38,3 +38,7 @@
 - The pilot run (`scope = pilot`) is the first end-to-end cycle of MVP2. It gets no verdict.
 - The verdict applies to the full-data run with these same parameters.
 - Q1a: report n per category. The plan expected Sports to be under-represented. The pilot had 921 Sports markets in scope (`runs/142041_pilotA_2025_06/value_counts.csv`), so the report states the real n.
+
+## Amendment (2026-10-19, after review, before any v3 result)
+
+- The merge sink for small categories is named "Merged", not "Other", because "Other" is a real `category_refined` value (review F16, D-011). No criterion changes.

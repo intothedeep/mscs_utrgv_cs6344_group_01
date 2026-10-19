@@ -11,7 +11,7 @@ from typing import Callable
 
 import duckdb
 
-CODE_VERSION = "v2"
+CODE_VERSION = "v3"
 
 # Pilot = Standard Binary markets whose close_at falls in this month (UTC), with ALL their trades.
 # Why: one month of trade partitions would cut markets mid-life and break the close-time check.
@@ -75,6 +75,11 @@ def env_info() -> dict:
         "hostname": socket.gethostname(), "python": platform.python_version(),
         "duckdb": duckdb.__version__, "pandas": pandas.__version__, "numpy": numpy.__version__,
         "slurm_job_id": os.environ.get("SLURM_JOB_ID", "none"),
+        # Thread count caused the v1/v2 non-determinism (review F3, F4): the run folder must show it.
+        "slurm_cpus_per_task": os.environ.get("SLURM_CPUS_PER_TASK", "none"),
+        "slurm_mem_per_node": os.environ.get("SLURM_MEM_PER_NODE", "none"),
+        "duckdb_threads": os.environ.get("DUCKDB_THREADS", "none"),
+        "duckdb_mem": os.environ.get("DUCKDB_MEM", "none"),
     }
 
 

@@ -77,7 +77,7 @@ def draw_qq(size: np.ndarray, vol: np.ndarray, out: Path) -> None:
     rng = np.random.default_rng(SEED)
     fig, axes = plt.subplots(2, 2, figsize=(8, 7), layout="constrained")
     for row, (name, x) in enumerate([("Trade size", size), ("Wallet volume", vol)]):
-        s = rng.choice(x, min(QQ_POINTS, len(x)), replace=False)
+        s = rng.choice(np.sort(x), min(QQ_POINTS, len(x)), replace=False)  # sorted first: row order must not pick the points (review F4)
         for col, (tag, v) in enumerate([("raw", s), ("log", np.log(s))]):
             stats.probplot(v, dist="norm", plot=axes[row, col])
             axes[row, col].set_title(f"{name}, {tag}")
@@ -86,6 +86,24 @@ def draw_qq(size: np.ndarray, vol: np.ndarray, out: Path) -> None:
             axes[row, col].grid(alpha=0.3)
     fig.savefig(out / "fig3_qq.png", dpi=150)
     plt.close(fig)
+
+
+def draw_violin(markets: pd.DataFrame, min_n: int, out: Path) -> list[dict]:
+    """Violin of p_1d by category_refined over the kept markets. Categories under min_n are merged into 'Merged'."""
+    kept = markets.loc[markets["kept"] & markets["p_1d"].notna(), ["category_refined", "p_1d"]].copy()
+    cat = kept["category_refined"].fillna("Unknown").astype(str)
+    counts = cat.value_counts()
+    kept["group"] = cat.where(cat.map(counts) >= min_n, "Merged")
+    order = kept["group"].value_counts().sort_index().sort_values(ascending=False, kind="stable")  # n desc, name asc
+    data = [kept.loc[kept["group"] == c, "p_1d"].to_numpy(float) for c in order.index]
+    fig, ax = plt.subplots(figsize=(max(6, 1.0 * len(order) + 2), 4.5), layout="constrained")
+    ax.violinplot(data, showmedians=True)  # one series, so no legend: the median bar is named in the caption
+    ax.set_xticks(range(1, len(order) + 1), [f"{c}\n(n={n})" for c, n in order.items()])
+    ax.set(xlabel="Category (category_refined)", ylabel="p_1d (price, USDC per share)", ylim=(0, 1))
+    ax.grid(axis="y", alpha=0.3)
+    fig.savefig(out / "fig_violin_p1d_by_category.png", dpi=150)
+    plt.close(fig)
+    return [{"category": c, "n": int(n), "median_p_1d": float(np.median(d))} for (c, n), d in zip(order.items(), data)]
 
 
 def main() -> None:
@@ -107,6 +125,7 @@ def main() -> None:
                    "fits": {"trade_size_usdc": fit_and_ks(size), "wallet_volume_usdc": fit_and_ks(vol)},
                    "notes": {"trade_size_sample_rows": int(len(size)),
                              "wallet_volume": "wallet x role rows pooled (maker and taker rows)"}}
+        results["violin_p1d_by_category"] = draw_violin(markets, int(params["min_category_n"]), out)
         write_json(out / "q3_results.json", results)
         pd.DataFrame(results["summary"]).T.to_csv(out / "q3_summary.csv")
         draw_hist(price, size, out)
@@ -119,13 +138,14 @@ def main() -> None:
         return {
             "Why": "Q3: describe price, trade size and wallet volume before Q1 and Q2 use them.",
             "Input data": f"markets.parquet kept markets ({len(price)}), trade_sizes_sample.parquet ({len(size)} trades, "
-                          f"fixed-seed sample), wallets.parquet ({len(vol)} wallet x role rows).",
-            "Output data": "q3_results.json, q3_summary.csv, fig1_fig2_hist.png, ecdf.png, fig3_qq.png",
+                          f"deterministic hash-order sample), wallets.parquet ({len(vol)} wallet x role rows).",
+            "Output data": "q3_results.json, q3_summary.csv, fig1_fig2_hist.png, ecdf.png, fig3_qq.png, fig_violin_p1d_by_category.png",
             "Result": "Summary:\n\n" + md_table(tab) + "\n\nFits and KS (D is the effect size; p is optimistic because "
                       f"parameters are fitted on the same data; power law fitted on the top "
                       f"{1 - POWER_LAW_XMIN_QUANTILE:.0%} tail with xmin = the {POWER_LAW_XMIN_QUANTILE:.0%} quantile):\n\n" + tab_fit,
-            "Figure": "![hist](fig1_fig2_hist.png) ![ecdf](ecdf.png) ![qq](fig3_qq.png)  Caption: price and trade-size "
-                      "histograms, ECDFs, and QQ plots before and after log. Why: a straight QQ line after log means "
+            "Figure": "![hist](fig1_fig2_hist.png) ![ecdf](ecdf.png) ![qq](fig3_qq.png) ![violin](fig_violin_p1d_by_category.png)  "
+                      "Caption: price and trade-size histograms, ECDFs, QQ plots before and after log, and p_1d by category "
+                      "(violin, bar = median). Why: a straight QQ line after log means "
                       "the log-values are close to normal. Source: this run folder.",
         }
 
