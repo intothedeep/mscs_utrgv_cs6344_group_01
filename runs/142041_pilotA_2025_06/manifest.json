@@ -1,0 +1,86 @@
+{
+  "code_version": "v1",
+  "code_sha": "9ef6bfae4acf",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "pilot",
+    "updown_rule": "default"
+  },
+  "env": {
+    "hostname": "gpu012",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142041"
+  },
+  "metrics": {
+    "n_markets_pilot_all": 3841,
+    "n_trades_pilot_all": 3065179,
+    "duplicates": {
+      "total_rows": 3065179,
+      "distinct_rows": 2909294,
+      "duplicate_rows": 155885,
+      "key": "asset_id, block_timestamp, maker, taker, price, usdc_amount, outcome_seq"
+    },
+    "missing": {
+      "markets_in_set": 2063,
+      "markets_no_winning_label": 14,
+      "markets_no_outcome_seq1_label": 15,
+      "markets_all_pilot_no_winning_label": 14
+    },
+    "close_time": {
+      "n_markets": 2063,
+      "quantiles": [
+        0,
+        0.05,
+        0.25,
+        0.5,
+        0.75,
+        0.95,
+        1
+      ],
+      "last_minus_close_h": [
+        -5294.867222222222,
+        -766.3446666666661,
+        -163.40125,
+        0.8897222222222222,
+        17.416527777777777,
+        30.65305555555555,
+        4437.759166666667
+      ],
+      "resolved_minus_close_h": [
+        32.223055555555554,
+        34.312958333333334,
+        42.67256944444444,
+        53.122083333333336,
+        63.57159722222222,
+        71.93120833333333,
+        74.02111111111111
+      ],
+      "share_markets_trade_after_close": 0.5133301017935046,
+      "share_volume_after_close": 0.3396986243343607
+    },
+    "kept_at_cutoff": {
+      "kept_at_cutoff_last_rule": {
+        "1": 1633,
+        "5": 1328,
+        "10": 1172,
+        "20": 1011,
+        "50": 851
+      },
+      "kept_at_cutoff_close_rule": {
+        "1": 1709,
+        "5": 1629,
+        "10": 1563,
+        "20": 1475,
+        "50": 1314
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "t_rule": "close_at",
+  "min_trades": 10,
+  "max_staleness_h": 24,
+  "n_bins": 10,
+  "alpha": 0.05,
+  "pilot_month": "2025-06",
+  "scope": "pilot",
+  "updown_rule": "default"
+}

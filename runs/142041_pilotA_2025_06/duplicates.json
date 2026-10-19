@@ -1,0 +1,6 @@
+{
+  "total_rows": 3065179,
+  "distinct_rows": 2909294,
+  "duplicate_rows": 155885,
+  "key": "asset_id, block_timestamp, maker, taker, price, usdc_amount, outcome_seq"
+}

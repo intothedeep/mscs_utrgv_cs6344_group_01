@@ -1,0 +1,168 @@
+field,value,n_markets
+resolution_status,resolved,3841
+category,Sports,921
+category,Crypto,282
+category,Crypto Prices,280
+category,1H,275
+category,Hide From New,264
+category,Recurring,223
+category,Up or Down,191
+category,Bitcoin,138
+category,Mentions,97
+category,Trump Presidency,91
+category,Politics,85
+category,Trump,81
+category,Ethereum,61
+category,Games,56
+category,Solana,52
+category,Esports,39
+category,Iran,38
+category,World,35
+category,NYC Mayor,32
+category,XRP,25
+category,Geopolitics,25
+category,NBA,23
+category,Kash Patel,23
+category,U.S. Politics,22
+category,Ripple,21
+category,Poland,21
+category,Formula 1,20
+category,Economic Policy,18
+category,buy,18
+category,UFC 316,16
+category,Today 🚀,16
+category,NBA Playoffs,16
+category,Tennis,16
+category,Tech,13
+category,Soccer,13
+category,Culture,13
+category,Middle East,12
+category,f1,11
+category,Israel,11
+category,Breaking News,11
+category,Courts,9
+category,CS2,9
+category,SpaceX,9
+category,Hockey,8
+category,FIFA Club World Cup,7
+category,Ukraine,7
+category,Trump vs Elon,7
+category,German Election,7
+category,Elon Musk,7
+category,Weekly,6
+category,NBA Finals,6
+category,Trade War,6
+category,Daily,5
+category,French Open,5
+category,DeepSeek,5
+category,Other,5
+category,OpenAI,5
+category,TikTok,4
+category,LA Protests,4
+category,Military Actions,4
+category,Los Angeles,3
+category,Big Tech,3
+category,Music,3
+category,Congress,3
+category,Basketball,3
+category,South Korea,3
+category,Economy,3
+category,Memecoins,2
+category,Weather,2
+category,China,2
+category,Epstein,2
+category,ATP 250,2
+category,Space,2
+category,Business,2
+category,UEFA European U21,2
+category,June 27,2
+category,futures,1
+category,make up,1
+category,yankees,1
+category,Mamdani,1
+category,Lexus Eastbourne,1
+category,Sam,1
+category,Wildfire,1
+category,U.S. Open,1
+category,Stanley Cup,1
+category,New Pope,1
+category,BOSS Open,1
+category,Trump Cabinet,1
+category,Tariffs,1
+category,Serbia,1
+category,Celebrities,1
+category,Angel Reese,1
+category,MicroStrategy,1
+category,Pandemics,1
+category,world affairs,1
+category,HSBC Championships,1
+category,nyc,1
+category,India-Pakistan,1
+category,UK,1
+category,Italy,1
+category,Trudeau out,1
+category,RFK Jr.,1
+category,Argentina,1
+category,FBI,1
+category,zerohedge,1
+category,IShowSpeed,1
+category,Hit Price,1
+category,Global Elections,1
+category,SGA,1
+category,defense,1
+category,NJ Governor,1
+category,Starmer,1
+category,Foreign Policy,1
+category,drug,1
+category,Approval,1
+category,Dogecoin,1
+category,Airdrops,1
+category,atomic,1
+category,drone,1
+category,YR4,1
+category,SAINT,1
+category,Romania,1
+category,Houthis,1
+category,MLB,1
+category,horse racing,1
+category,Elections,1
+category,Portugal,1
+category,Greta Thunberg,1
+category,gas,1
+category,Finance,1
+category,robert f. kennedy jr.,1
+category,Turkey,1
+category,flu,1
+category,Tulsi Gabbard,1
+category,X,1
+category,NHL,1
+category,Tweet Markets,1
+category,Kanye,1
+category,Crypto Summit,1
+category,poilievre,1
+category,Treasuries,1
+category,Australia,1
+category,Featured,1
+category,xtrd-1,1
+category,el salvador,1
+category,Syria,1
+category,putin,1
+category,Senate,1
+category_refined,Crypto,1383
+category_refined,Sports,1112
+category_refined,Politics,617
+category_refined,Price Action,473
+category_refined,Other,145
+category_refined,Sci-Tech,51
+category_refined,Culture,40
+category_refined,Finance,20
+neg_risk,f,3841
+slug_updown_prefix,bitcoin-up-or,722
+slug_updown_prefix,ethereum-up-or,505
+slug_updown_prefix,solana-up-or,361
+slug_updown_prefix,xrp-up-or,175
+slug_updown_prefix,dogecoin-up-or,6
+slug_updown_prefix,trump-approval-up,4
+slug_updown_prefix,hyperliquid-up-or,3
+slug_updown_prefix,fartcoin-up-or,2
+slug_updown_prefix,will-pope-francis,1

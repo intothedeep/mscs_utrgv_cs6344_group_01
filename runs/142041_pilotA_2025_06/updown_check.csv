@@ -1,0 +1,184 @@
+category,category_refined,n_markets,n_flagged_updown
+Sports,Sports,921,0.0
+Crypto,Crypto,282,259.0
+Crypto Prices,Crypto,280,274.0
+1H,Price Action,275,275.0
+Hide From New,Crypto,261,258.0
+Recurring,Crypto,223,214.0
+Up or Down,Price Action,191,191.0
+Bitcoin,Crypto,138,127.0
+Mentions,Politics,91,0.0
+Trump Presidency,Politics,91,1.0
+Politics,Politics,85,1.0
+Trump,Politics,81,2.0
+Ethereum,Crypto,61,58.0
+Solana,Crypto,52,50.0
+Games,Other,42,0.0
+Esports,Sports,39,0.0
+Iran,Politics,38,0.0
+NYC Mayor,Politics,26,0.0
+XRP,Crypto,25,24.0
+Geopolitics,Politics,25,0.0
+World,Politics,25,0.0
+NBA,Sports,23,0.0
+U.S. Politics,Politics,22,0.0
+Ripple,Crypto,21,21.0
+Formula 1,Sports,20,0.0
+Poland,Other,19,0.0
+Economic Policy,Politics,18,0.0
+Kash Patel,Other,17,0.0
+Tennis,Sports,16,0.0
+Today 🚀,Crypto,16,16.0
+UFC 316,Sports,16,0.0
+NBA Playoffs,Sports,16,0.0
+buy,Culture,15,0.0
+Tech,Sci-Tech,13,0.0
+Soccer,Sports,13,0.0
+Culture,Culture,13,0.0
+Israel,Politics,11,0.0
+f1,Sports,11,0.0
+Games,Politics,9,0.0
+SpaceX,Sci-Tech,9,0.0
+Middle East,Politics,9,0.0
+Hockey,Sports,8,0.0
+World,Other,8,0.0
+FIFA Club World Cup,Sports,7,0.0
+CS2,Other,7,0.0
+German Election,Politics,7,0.0
+Ukraine,Politics,7,0.0
+Trump vs Elon,Politics,7,0.0
+Mentions,Crypto,6,0.0
+Breaking News,Politics,6,0.0
+Trade War,Politics,6,0.0
+Weekly,Price Action,6,0.0
+NBA Finals,Sports,6,0.0
+French Open,Other,5,0.0
+Daily,Sci-Tech,5,5.0
+Other,Crypto,5,0.0
+OpenAI,Sci-Tech,5,0.0
+Military Actions,Politics,4,0.0
+Courts,Other,4,0.0
+Elon Musk,Politics,4,0.0
+DeepSeek,Other,4,0.0
+TikTok,Culture,4,0.0
+Courts,Politics,4,0.0
+Games,Sci-Tech,3,0.0
+Middle East,Other,3,0.0
+Basketball,Sports,3,0.0
+Big Tech,Finance,3,0.0
+NYC Mayor,Other,3,0.0
+Economy,Finance,3,0.0
+buy,Finance,3,0.0
+Music,Culture,3,0.0
+Business,Finance,2,0.0
+Epstein,Other,2,0.0
+June 27,Politics,2,0.0
+Poland,Politics,2,0.0
+Space,Sci-Tech,2,0.0
+NYC Mayor,Finance,2,0.0
+Breaking News,Culture,2,0.0
+CS2,Sci-Tech,2,0.0
+China,Politics,2,0.0
+ATP 250,Sports,2,0.0
+UEFA European U21,Other,2,0.0
+Congress,Politics,2,0.0
+Hide From New,Politics,2,1.0
+Memecoins,Crypto,2,0.0
+LA Protests,Other,2,0.0
+Kash Patel,Sci-Tech,2,0.0
+Los Angeles,Politics,2,0.0
+South Korea,Other,2,0.0
+Weather,Sci-Tech,2,0.0
+Kash Patel,Politics,2,0.0
+LA Protests,Politics,2,0.0
+Games,Finance,1,0.0
+Turkey,Politics,1,0.0
+Argentina,Other,1,0.0
+make up,Politics,1,0.0
+Kanye,Culture,1,0.0
+Breaking News,Sci-Tech,1,0.0
+Portugal,Politics,1,0.0
+SGA,Other,1,0.0
+NJ Governor,Other,1,0.0
+nyc,Other,1,0.0
+atomic,Politics,1,0.0
+putin,Politics,1,0.0
+Tweet Markets,Finance,1,0.0
+Sam,Sci-Tech,1,0.0
+MicroStrategy,Crypto,1,0.0
+Kash Patel,Crypto,1,0.0
+Elon Musk,Other,1,0.0
+Kash Patel,Culture,1,0.0
+drone,Other,1,0.0
+Stanley Cup,Sports,1,0.0
+Tulsi Gabbard,Other,1,0.0
+IShowSpeed,Sci-Tech,1,0.0
+yankees,Politics,1,0.0
+X,Politics,1,0.0
+Mamdani,Finance,1,0.0
+Elections,Politics,1,0.0
+Finance,Finance,1,0.0
+Syria,Politics,1,0.0
+FBI,Sports,1,0.0
+Senate,Politics,1,0.0
+India-Pakistan,Other,1,0.0
+U.S. Open,Crypto,1,0.0
+Greta Thunberg,Politics,1,0.0
+Courts,Crypto,1,0.0
+YR4,Sci-Tech,1,0.0
+horse racing,Sports,1,0.0
+Pandemics,Other,1,0.0
+Breaking News,Other,1,0.0
+DeepSeek,Politics,1,0.0
+Elon Musk,Finance,1,0.0
+Los Angeles,Sports,1,0.0
+defense,Other,1,0.0
+NYC Mayor,Crypto,1,0.0
+Serbia,Other,1,0.0
+World,Crypto,1,0.0
+Romania,Politics,1,0.0
+MLB,Sports,1,0.0
+Crypto Summit,Crypto,1,0.0
+xtrd-1,Politics,1,0.0
+BOSS Open,Other,1,0.0
+el salvador,Other,1,0.0
+Foreign Policy,Politics,1,0.0
+Congress,Other,1,0.0
+Games,Sports,1,0.0
+South Korea,Politics,1,0.0
+Celebrities,Culture,1,0.0
+Lexus Eastbourne,Other,1,0.0
+Trudeau out,Other,1,0.0
+Treasuries,Politics,1,0.0
+Angel Reese,Sports,1,0.0
+Australia,Politics,1,0.0
+Featured,Crypto,1,0.0
+SAINT,Sci-Tech,1,0.0
+Trump Cabinet,Politics,1,0.0
+UK,Other,1,0.0
+RFK Jr.,Other,1,0.0
+Breaking News,Sports,1,0.0
+zerohedge,Finance,1,0.0
+gas,Politics,1,0.0
+World,Sci-Tech,1,0.0
+futures,Sports,1,0.0
+Elon Musk,Crypto,1,0.0
+Italy,Other,1,0.0
+drug,Crypto,1,0.0
+Airdrops,Sci-Tech,1,0.0
+NHL,Sports,1,0.0
+Starmer,Politics,1,0.0
+HSBC Championships,Other,1,0.0
+New Pope,Other,1,0.0
+poilievre,Finance,1,0.0
+Houthis,Politics,1,0.0
+Hit Price,Price Action,1,0.0
+flu,Other,1,0.0
+Dogecoin,Crypto,1,1.0
+Approval,Politics,1,0.0
+Tariffs,Politics,1,0.0
+world affairs,Sci-Tech,1,0.0
+Global Elections,Politics,1,0.0
+Wildfire,Other,1,0.0
+robert f. kennedy jr.,Other,1,0.0
+Hide From New,Sports,1,0.0

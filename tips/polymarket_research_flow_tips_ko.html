@@ -1,0 +1,304 @@
+<title>Polymarket 연구 흐름</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<style>
+/* theme.css (skills/html-theme), inlined. Layout: tips exemplar, step boxes. */
+:root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--card-foreground:oklch(0.145 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
+--over:oklch(0.62 0.17 45);--under:oklch(0.5 0.1 210);--busy:oklch(0.62 0.17 45);--quiet:oklch(0.82 0 0);--pilot:#0432ff;--wall:#d40000}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--background:oklch(0.145 0 0);--foreground:oklch(0.985 0 0);--card:oklch(0.185 0 0);--card-foreground:oklch(0.985 0 0);--primary:oklch(0.922 0 0);--primary-foreground:oklch(0.205 0 0);--muted:oklch(0.269 0 0);--muted-foreground:oklch(0.708 0 0);--border:oklch(0.5 0 0);--rule:oklch(0.3 0 0);--ring:oklch(0.6 0 0);--signal-instruction:#ff5a52;--signal-plan:#6f8cff;--signal-flag-fill:#4a4312;--signal-flag-line:#c9b53a;--signal-dead-fill:#2b2b2a;--signal-dead-ink:oklch(0.68 0.01 260);--over:oklch(0.72 0.15 50);--under:oklch(0.72 0.1 210);--busy:oklch(0.72 0.15 50);--quiet:oklch(0.42 0 0)}}
+:root[data-theme="dark"]{color-scheme:dark;--background:oklch(0.145 0 0);--foreground:oklch(0.985 0 0);--card:oklch(0.185 0 0);--card-foreground:oklch(0.985 0 0);--primary:oklch(0.922 0 0);--primary-foreground:oklch(0.205 0 0);--muted:oklch(0.269 0 0);--muted-foreground:oklch(0.708 0 0);--border:oklch(0.5 0 0);--rule:oklch(0.3 0 0);--ring:oklch(0.6 0 0);--signal-instruction:#ff5a52;--signal-plan:#6f8cff;--signal-flag-fill:#4a4312;--signal-flag-line:#c9b53a;--signal-dead-fill:#2b2b2a;--signal-dead-ink:oklch(0.68 0.01 260);--over:oklch(0.72 0.15 50);--under:oklch(0.72 0.1 210);--busy:oklch(0.72 0.15 50);--quiet:oklch(0.42 0 0)}
+*{box-sizing:border-box;border-radius:var(--radius)}
+body{background:var(--background);color:var(--foreground);font:15px/1.5 var(--font);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 40px;margin:0;overflow-wrap:anywhere}
+main{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:650;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:650;margin-bottom:10px}
+h3{font-size:14px;font-weight:600;margin:12px 0 4px}
+p{margin:0 0 6px}
+.eyebrow{font:500 11px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--signal-plan);margin-bottom:8px}
+.lede{font-size:15.5px;color:var(--muted-foreground);margin-top:8px}
+.steps-nav{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0;padding:0;list-style:none;counter-reset:st}
+.steps-nav li{counter-increment:st}
+.steps-nav a{display:block;padding:4px 10px;border:1px solid var(--rule);color:var(--foreground);text-decoration:none;font-size:12.5px}
+.steps-nav a::before{content:counter(st) " ";color:var(--signal-plan);font-weight:600}
+main>section{border:1px solid var(--border);border-top:4px solid var(--signal-plan);background:var(--card);padding:16px 18px 18px;margin-top:14px;scroll-margin-top:12px;display:flex;flex-direction:column;gap:8px}
+main>section>.eyebrow{font-size:12px;margin-bottom:0}
+.flow{display:flex;flex-wrap:wrap;gap:6px}
+.stage{flex:1 1 160px;background:var(--card);border:1px solid var(--rule);padding:6px 8px;min-width:0}
+.stage.big{border-color:var(--signal-plan)}
+.stage .n{font:600 12.5px var(--font)}
+.stage .s{font:12px/1.4 var(--font);color:var(--muted-foreground)}
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:520px}
+svg text{font-family:var(--font)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card);overflow-wrap:normal}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 11px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground);background:var(--background)}
+tr:last-child td{border-bottom:0}
+td.num{white-space:nowrap;color:var(--signal-plan)}
+td ul{margin:0;padding-left:16px}
+ul,ol{margin:0;padding-left:18px}
+li{margin:2px 0}
+.note{font-size:12.5px;color:var(--muted-foreground)}
+.callout{border-left:3px solid var(--signal-flag-line);background:var(--signal-flag-fill);padding:6px 12px;font-size:13px}
+.callout p:last-child{margin:0}
+.add{border:1px solid var(--signal-plan);padding:6px 12px;font-size:13.5px}
+.add b{color:var(--signal-plan)}
+footer{font-size:12.5px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:8px}
+a{color:var(--signal-plan)}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+@media (max-width:720px){main>section{padding:12px}}
+</style>
+
+<main>
+<header>
+  <div class="eyebrow">CS 6330 데이터 과학 입문 · 1조 프로젝트 · 연구 흐름</div>
+  <h1>Polymarket 연구는 어떤 순서로, 왜 그렇게 하나</h1>
+  <p class="lede">제안서에서 결과까지 가는 길. 무엇을 하고, 왜 그 순서이며, 왜 중요한지. 9단계로, 앞 단계 위에 다음 단계를 쌓습니다.</p>
+  <ol class="steps-nav">
+    <li><a href="#why">왜 하나</a></li>
+    <li><a href="#flow">전체 흐름</a></li>
+    <li><a href="#data">어떤 데이터</a></li>
+    <li><a href="#wall">결과를 보기 전에 정한다</a></li>
+    <li><a href="#pilot">파일럿에서 정한 것</a></li>
+    <li><a href="#traps">세 가지 함정</a></li>
+    <li><a href="#mvp">MVP1, 게이트, MVP2</a></li>
+    <li><a href="#where">어디서 계산하나</a></li>
+    <li><a href="#log">진행 기록과 결정</a></li>
+  </ol>
+</header>
+
+<section id="why">
+  <div class="eyebrow">Step 1 of 9</div>
+  <h2>왜 이 연구를 하나</h2>
+  <div class="flow">
+    <div class="stage"><div class="n">문제</div><div class="s">사람들은 Polymarket 가격을 확률로 읽는다. 사건은 한 번만 일어나서, 가격 하나로는 그 읽기가 맞는지 알 수 없다.</div></div>
+    <div class="stage big"><div class="n">아이디어</div><div class="s">같은 가격의 시장을 모아, 그 사건이 실제로 일어난 비율과 비교한다.</div></div>
+    <div class="stage"><div class="n">임무(mission)</div><div class="s">가격을 확률로 읽어도 되는지, 실제 거래 기록으로 보인다.</div></div>
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th>질문</th><th>무엇을 알려고</th><th>왜 중요한가</th></tr>
+    <tr><td>Q1. 군중이 맞나?</td><td>70% 가격의 사건이 70%로 일어나는가</td><td>맞으면 가격을 확률로 읽어도 된다. 틀리면 어디가 어긋나는지 보인다</td></tr>
+    <tr><td>Q2. 군중은 누구인가?</td><td>소수 지갑(wallet)이 거래 대부분을 하는가</td><td>그렇다면 "군중의 가격"은 작은 군중의 가격이다</td></tr>
+    <tr><td>Q3. 데이터는 어떻게 생겼나?</td><td>거래 크기와 지갑 활동의 분포</td><td>분포를 알아야 맞는 검정과 변환을 고른다</td></tr>
+  </table></div>
+</section>
+
+<section id="flow">
+  <div class="eyebrow">Step 2 of 9</div>
+  <h2>전체 흐름</h2>
+  <div class="chart">
+    <svg viewBox="0 0 740 210" role="img" aria-label="연구 흐름. 윗줄: 1 데이터 받기, 2 Job A 살펴보기, 3 기준 사전 등록, 그다음 빨간 점선 벽, 4 Job B 표 만들기. 아랫줄: 5 Q3 분포, 6 Q1 보정, 7 Q2 집중도, 8 게이트, 9 MVP2.">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted-foreground)"/></marker></defs>
+      <text x="540" y="16" font-size="10.5" fill="var(--signal-instruction)" text-anchor="end">벽: 이 앞에서는 가격과 결과를 함께 보지 않는다</text>
+      <g fill="var(--card)" stroke="var(--border)">
+        <rect x="20" y="30" width="150" height="54"/><rect x="200" y="30" width="150" height="54"/><rect x="380" y="30" width="150" height="54"/><rect x="570" y="30" width="150" height="54"/>
+        <rect x="20" y="140" width="120" height="54"/><rect x="162" y="140" width="120" height="54"/><rect x="304" y="140" width="120" height="54"/><rect x="446" y="140" width="120" height="54"/>
+      </g>
+      <rect x="588" y="140" width="120" height="54" fill="var(--card)" stroke="var(--border)" stroke-dasharray="4 3"/>
+      <rect x="380" y="30" width="150" height="54" fill="none" stroke="var(--signal-plan)" stroke-width="1.5"/>
+      <line x1="550" y1="24" x2="550" y2="92" stroke="var(--signal-instruction)" stroke-width="2" stroke-dasharray="5 3"/>
+      <g font-size="11.5" fill="var(--foreground)" text-anchor="middle" font-weight="600">
+        <text x="95" y="53">1 데이터 받기</text><text x="275" y="53">2 Job A 살펴보기</text><text x="455" y="53">3 기준 사전 등록</text><text x="645" y="53">4 Job B 표 만들기</text>
+        <text x="80" y="163">5 Q3 분포</text><text x="222" y="163">6 Q1 보정</text><text x="364" y="163">7 Q2 집중도</text><text x="506" y="163">8 게이트</text><text x="648" y="163">9 MVP2</text>
+      </g>
+      <g font-size="10" fill="var(--muted-foreground)" text-anchor="middle">
+        <text x="95" y="72">13.2 GB, 한 번만</text><text x="275" y="72">마감 시각, 거래 수</text><text x="455" y="72">T 규칙, 최소 거래</text><text x="645" y="72">시장 표, 지갑 표</text>
+        <text x="80" y="182">그림 1–3</text><text x="222" y="182">그림 4–5</text><text x="364" y="182">그림 6–8</text><text x="506" y="182">통과해야 다음</text><text x="648" y="182">Q1a, Q1b, Q1c</text>
+      </g>
+      <g stroke="var(--muted-foreground)" stroke-width="1.3" fill="none" marker-end="url(#ar)">
+        <path d="M170 57H198"/><path d="M350 57H378"/><path d="M530 57H568"/>
+        <path d="M645 84V112H80V138"/>
+        <path d="M140 167H160"/><path d="M282 167H302"/><path d="M424 167H444"/><path d="M566 167H586"/>
+      </g>
+    </svg>
+  </div>
+  <p class="note">그림 1. 데이터에서 MVP2까지 아홉 단계. 3번(파란 테두리)에서 기준을 커밋한 뒤에만 4번으로 넘어간다. 왜: 기준을 정하는 단계와 결과를 보는 단계를 떼어 놓아야 결과가 기준을 바꾸지 못한다.</p>
+  <ol>
+    <li><b>데이터 받기.</b> 분석층(<code>daily_aligned/</code>)을 클러스터에 한 번 내려받는다. 작업마다 다시 받지 않는다.</li>
+    <li><b>Job A 살펴보기.</b> 열 이름, 값의 종류, 중복, 마감 시각 뒤의 거래, 시장마다 거래 수를 본다. 가격과 결과는 함께 보지 않는다.</li>
+    <li><b>기준 사전 등록(pre-registration).</b> Job A를 보고 두 가지를 정해 커밋한다: 마감 시각 T를 무엇으로 볼지, 최소 거래 수.</li>
+    <li><b>Job B.</b> 시장 표(시장 하나에 한 줄)와 지갑 표(지갑 하나에 한 줄)를 만든다.</li>
+    <li><b>Q3 → Q1 → Q2.</b> 분포를 먼저 본다. 그래야 Q1과 Q2에서 쓸 변환과 검정을 고른다.</li>
+  </ol>
+</section>
+
+<section id="data">
+  <div class="eyebrow">Step 3 of 9</div>
+  <h2>어떤 데이터를 쓰나</h2>
+  <p>데이터셋에는 네 층(layer)이 있다. 우리는 그중 두 개만 쓴다.</p>
+  <div class="tablewrap"><table>
+    <tr><th>층</th><th>무엇</th><th>우리 사용</th></tr>
+    <tr><td><code>daily_aligned/</code></td><td>정리된 분석층. Yes/No 시장만. 중계(relayer) 기록은 이미 빠졌다. 날짜마다 파일 하나</td><td>주 데이터. 1,248개 파일, 13.2 GB</td></tr>
+    <tr><td><code>CTF/resolutions.parquet</code></td><td>시장의 공식 결과 기록</td><td>결과가 빠진 시장의 예비 출처</td></tr>
+    <tr><td><code>OrderFilled/</code></td><td>원본 거래 기록. 중계 기록이 섞여 있다</td><td>쓰지 않음</td></tr>
+    <tr><td><code>daily_aligned_multi/</code></td><td>후보가 여럿인 시장 (예: 누가 우승하나)</td><td>쓰지 않음. Yes/No 시장과 섞지 않는다</td></tr>
+  </table></div>
+  <div class="chart">
+    <svg viewBox="0 0 760 290" role="img" aria-label="2025년 1월부터 2026년 4월까지 달마다 daily_aligned 파일 크기, MB. 2025년 9월까지 100 MB 아래, 2025년 10월 190, 11월 326, 12월 575, 2026년 1월 1566, 2월 2711, 3월 4215, 4월 2897. 2025년 6월은 파일럿 달로 강조.">
+      <g stroke="var(--rule)"><line x1="64" y1="44" x2="744" y2="44"/><line x1="64" y1="137" x2="744" y2="137"/></g>
+      <line x1="64" y1="230" x2="744" y2="230" stroke="var(--muted-foreground)"/>
+      <g font-size="10" fill="var(--muted-foreground)" text-anchor="end"><text x="58" y="234">0</text><text x="58" y="141">2,000</text><text x="58" y="48">4,000</text></g>
+      <text x="14" y="137" font-size="10" fill="var(--muted-foreground)" transform="rotate(-90 14 137)" text-anchor="middle">크기 (MB)</text>
+      <g fill="var(--quiet)">
+        <rect x="70" y="227.1" width="34" height="2.9"/><rect x="112" y="227.9" width="34" height="2.1"/><rect x="154" y="227.6" width="34" height="2.4"/><rect x="196" y="228.1" width="34" height="1.9"/><rect x="238" y="228" width="34" height="2"/>
+        <rect x="322" y="227" width="34" height="3"/><rect x="364" y="226.7" width="34" height="3.3"/><rect x="406" y="226.3" width="34" height="3.7"/><rect x="448" y="221.2" width="34" height="8.8"/><rect x="490" y="214.8" width="34" height="15.2"/><rect x="532" y="203.3" width="34" height="26.7"/><rect x="574" y="157.2" width="34" height="72.8"/><rect x="616" y="103.9" width="34" height="126.1"/><rect x="658" y="34" width="34" height="196"/><rect x="700" y="95.3" width="34" height="134.7"/>
+      </g>
+      <rect x="280" y="227.6" width="34" height="2.4" fill="var(--signal-plan)"/>
+      <g font-size="9.5" fill="var(--foreground)" text-anchor="middle">
+        <text x="87" y="222">62</text><text x="129" y="222">46</text><text x="171" y="222">52</text><text x="213" y="222">41</text><text x="255" y="222">42</text><text x="297" y="222" fill="var(--signal-plan)">52</text><text x="339" y="222">64</text><text x="381" y="222">71</text><text x="423" y="221">80</text><text x="465" y="216">190</text><text x="507" y="210">326</text><text x="549" y="198">575</text><text x="591" y="152">1,566</text><text x="633" y="99">2,711</text><text x="675" y="29">4,215</text><text x="717" y="90">2,897</text>
+      </g>
+      <g font-size="9.5" fill="var(--muted-foreground)" text-anchor="middle">
+        <text x="87" y="246">25-01</text><text x="129" y="246">02</text><text x="171" y="246">03</text><text x="213" y="246">04</text><text x="255" y="246">05</text><text x="297" y="246" fill="var(--signal-plan)">06</text><text x="339" y="246">07</text><text x="381" y="246">08</text><text x="423" y="246">09</text><text x="465" y="246">10</text><text x="507" y="246">11</text><text x="549" y="246">12</text><text x="591" y="246">26-01</text><text x="633" y="246">02</text><text x="675" y="246">03</text><text x="717" y="246">04*</text>
+        <text x="404" y="266">거래 달 (년-월)</text>
+      </g>
+      <text x="64" y="284" font-size="9.5" fill="var(--muted-foreground)">* 2026년 4월은 4월 28일까지. 파란 막대 = 파일럿 달 (2025년 6월).</text>
+    </svg>
+  </div>
+  <p class="note">그림 2. 달마다 <code>daily_aligned/</code> 파일 크기, Hugging Face 목록 (2026-10-19, <code>analysis/hf_daily_aligned_listing.txt</code>). 왜: 마지막 넉 달이 전체의 대부분이라, 파일럿은 작은 달로 먼저 돌린다.</p>
+  <p>파일럿은 <b>2025년 6월에 마감한 시장</b>이다. 그 시장들의 거래는 모든 날짜 파일에서 가져온다. 한 달치 날짜 파일만 쓰면 시장이 중간에 잘린다. 그러면 마감 시각 확인이 틀린다.</p>
+</section>
+
+<section id="wall">
+  <div class="eyebrow">Step 4 of 9</div>
+  <h2>결과를 보기 전에 기준을 정한다</h2>
+  <div class="flow">
+    <div class="stage"><div class="n">문제</div><div class="s">결과를 본 뒤 기준을 고르면, 원하는 결과가 나오는 기준을 고르게 된다.</div></div>
+    <div class="stage big"><div class="n">아이디어</div><div class="s">기준을 먼저 적고 커밋한다. 커밋 시각이 "결과를 보기 전"의 증거다.</div></div>
+    <div class="stage"><div class="n">이것이 지키는 것</div><div class="s">Q1의 답이 우리 선택이 아니라 데이터에서 나온다.</div></div>
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th>미리 정하는 것</th><th>Job A에서 보는 것</th><th>왜</th></tr>
+    <tr><td>마감 시각 T: 마지막 거래 또는 <code>close_at</code></td><td>마감 뒤에도 거래가 많은가</td><td>결과가 알려진 뒤의 거래로 T를 잡으면 가격에 답이 들어간다</td></tr>
+    <tr><td>최소 거래 수</td><td>시장마다 거래 수의 분포</td><td>거래 두 건짜리 가격은 군중의 의견이 아니다</td></tr>
+    <tr><td>구간 10개, 유의수준 0.05</td><td>(보지 않음)</td><td>계획에 이미 있다. 바꾸지 않는다</td></tr>
+  </table></div>
+  <div class="callout"><p>Job A는 가격과 결과를 한 표에 놓지 않는다. 그래서 Job A를 보고 정한 기준은 Q1의 답에 맞춰질 수 없다.</p></div>
+</section>
+
+<section id="pilot">
+  <div class="eyebrow">Step 5 of 9</div>
+  <h2>파일럿에서 본 것과 정한 것</h2>
+  <p>Job A는 2025년 6월에 마감한 시장을 살펴봤다. 시장 3,841개, 거래 3,065,179건이다. Up/Down 시장을 빼면 Yes/No 시장 2,063개가 남는다. CPU 8개로 약 2.5분 걸렸다.</p>
+  <div class="tablewrap"><table>
+    <tr><th>본 것</th><th>숫자</th><th>그래서 정한 것</th></tr>
+    <tr><td><code>close_at</code> 뒤에도 거래가 있는 시장</td><td class="num"><ul><li>51.3%</li><li>거래량으로는 34.0%</li></ul></td><td>T = <code>close_at</code>. 마지막 거래를 T로 잡으면 결과가 알려진 뒤의 가격이 섞인다</td></tr>
+    <tr><td>T − 1일 전 거래 수의 중앙값</td><td class="num"><ul><li>T = <code>close_at</code>: 200건</li><li>T = 마지막 거래: 18건</li></ul></td><td>같은 이유로 <code>close_at</code></td></tr>
+    <tr><td>같은 키(key)를 가진 행</td><td class="num">155,885 / 3,065,179 (5.1%)</td><td>남긴다. 행마다 고유 번호가 없어, 같은 블록의 반복 체결인지 복사본인지 가릴 수 없다</td></tr>
+    <tr><td>결과 라벨이 없는 시장</td><td class="num">14개</td><td>뺀다. 채우지 않는다</td></tr>
+  </table></div>
+  <div class="chart">
+    <svg viewBox="0 0 740 270" role="img" aria-label="최소 거래 수에 따라 남는 시장 수, T는 close_at. 전체 2,063. 최소 1건 1,709, 5건 1,629, 10건 1,563, 20건 1,475, 50건 1,314. 10건이 선택되어 강조된다.">
+      <g stroke="var(--rule)"><line x1="64" y1="40" x2="700" y2="40"/><line x1="64" y1="130" x2="700" y2="130"/></g>
+      <line x1="64" y1="220" x2="700" y2="220" stroke="var(--muted-foreground)"/>
+      <g font-size="10" fill="var(--muted-foreground)" text-anchor="end"><text x="58" y="224">0</text><text x="58" y="134">1,032</text><text x="58" y="44">2,063</text></g>
+      <text x="14" y="130" font-size="10" fill="var(--muted-foreground)" transform="rotate(-90 14 130)" text-anchor="middle">남는 시장 수</text>
+      <g fill="var(--quiet)"><rect x="80" y="40" width="60" height="180"/><rect x="180" y="70.9" width="60" height="149.1"/><rect x="280" y="77.9" width="60" height="142.1"/><rect x="480" y="91.3" width="60" height="128.7"/><rect x="580" y="105.4" width="60" height="114.6"/></g>
+      <rect x="380" y="83.6" width="60" height="136.4" fill="var(--signal-plan)"/>
+      <g font-size="10.5" fill="var(--foreground)" text-anchor="middle"><text x="110" y="34">2,063</text><text x="210" y="65">1,709</text><text x="310" y="72">1,629</text><text x="410" y="78" fill="var(--signal-plan)" font-weight="600">1,563</text><text x="510" y="86">1,475</text><text x="610" y="100">1,314</text></g>
+      <g font-size="10.5" fill="var(--muted-foreground)" text-anchor="middle"><text x="110" y="238">전체</text><text x="210" y="238">≥ 1</text><text x="310" y="238">≥ 5</text><text x="410" y="238" fill="var(--signal-plan)">≥ 10 (선택)</text><text x="510" y="238">≥ 20</text><text x="610" y="238">≥ 50</text><text x="360" y="260">T − 1일 전까지의 최소 거래 수</text></g>
+    </svg>
+  </div>
+  <p class="note">그림 3. 최소 거래 수에 따라 남는 Yes/No 시장 수, T = <code>close_at</code>, <code>runs/142041_pilotA_2025_06/activity_summary.json</code>. 왜: 10건은 76%를 남기면서 거의 빈 시장을 걸러 낸다.</p>
+  <div class="add"><b>정한 기준 (소유자, 2026-10-19):</b> T = <code>close_at</code>, 최소 거래 10건, 중복 행은 남김. 기록: <code>analysis/prereg_mvp1.json</code>, <code>analysis/prereg_mvp1.md</code>, <code>DECISIONS.md</code> D-007. Q1은 최소 거래 기준을 쓴 결과와 안 쓴 결과를 함께 보고한다.</div>
+  <div class="callout"><p>이 숫자들 중 어느 것도 가격과 결과를 함께 보지 않았다. 그래서 이 기준은 Q1의 답에 맞춰 고를 수 없었다.</p></div>
+</section>
+
+<section id="traps">
+  <div class="eyebrow">Step 6 of 9</div>
+  <h2>세 가지 함정과 대처</h2>
+  <div class="chart">
+    <svg viewBox="0 0 740 170" role="img" aria-label="시장 하나의 시간선. 열림, 거래들, 평가 시점 T 빼기 1일, close_at, 결과 확정. close_at 뒤의 거래 두 개는 빨간색으로 표시된다.">
+      <line x1="40" y1="80" x2="710" y2="80" stroke="var(--muted-foreground)" stroke-width="1.5"/>
+      <g fill="var(--foreground)"><circle cx="90" cy="80" r="3"/><circle cx="140" cy="80" r="3"/><circle cx="210" cy="80" r="3"/><circle cx="260" cy="80" r="3"/><circle cx="330" cy="80" r="3"/><circle cx="390" cy="80" r="3"/><circle cx="430" cy="80" r="3"/><circle cx="470" cy="80" r="3"/><circle cx="520" cy="80" r="3"/></g>
+      <g fill="var(--signal-instruction)"><circle cx="590" cy="80" r="4"/><circle cx="620" cy="80" r="4"/></g>
+      <g stroke="var(--foreground)"><line x1="40" y1="64" x2="40" y2="96"/><line x1="560" y1="56" x2="560" y2="104"/><line x1="680" y1="64" x2="680" y2="96"/></g>
+      <line x1="440" y1="56" x2="440" y2="104" stroke="var(--signal-plan)" stroke-width="2" stroke-dasharray="4 3"/>
+      <g font-size="11" fill="var(--foreground)" text-anchor="middle">
+        <text x="40" y="118">열림</text><text x="560" y="118">close_at</text><text x="680" y="118">결과 확정</text>
+        <text x="440" y="48" fill="var(--signal-plan)">평가 가격: T − 1일</text>
+        <text x="605" y="48" fill="var(--signal-instruction)">마감 뒤 거래</text>
+      </g>
+      <text x="40" y="150" font-size="10.5" fill="var(--muted-foreground)">T를 마지막 거래(빨간 점)로 잡으면, T − 1일이 close_at 뒤로 밀려 답을 아는 가격을 쓰게 된다.</text>
+    </svg>
+  </div>
+  <p class="note">그림 4. 시장 하나의 시간선. 설명용 그림. 왜: 마감 뒤 거래가 있으면 T를 잡는 규칙이 Q1 결과를 바꾼다.</p>
+  <div class="tablewrap"><table>
+    <tr><th>함정</th><th>무엇이 잘못되나</th><th>대처</th></tr>
+    <tr><td>답이 알려진 뒤의 거래</td><td>가격에 결과가 이미 들어 있다. 보정이 완벽해 보인다</td><td>Job A에서 마감 뒤 거래를 잰다. T 규칙을 커밋한다</td></tr>
+    <tr><td>거의 빈 시장</td><td>몇 건의 거래로 정해진 가격은 잡음이다</td><td><ul><li>최소 거래 수를 미리 정한다.</li><li>기준을 쓴 결과와 안 쓴 결과를 함께 보고한다.</li></ul></td></tr>
+    <tr><td>연결된 시장</td><td>한 사건에 걸린 시장들은 함께 움직인다. 검정은 독립을 가정한다</td><td>주제별로도 검정한다. 보고서에 한계로 적는다</td></tr>
+  </table></div>
+</section>
+
+<section id="mvp">
+  <div class="eyebrow">Step 7 of 9</div>
+  <h2>MVP1, 게이트, MVP2</h2>
+  <p>최소 기능 결과(minimum viable product, MVP)를 먼저 끝까지 만든다. 그다음에만 넓힌다. 그래서 어느 시점에 멈춰도 낼 수 있는 보고서가 있다.</p>
+  <div class="flow">
+    <div class="stage big"><div class="n">MVP1 (2주차까지)</div><div class="s">Q1, Q2, Q3. 그림 8개. 모든 검정에 효과 크기를 함께 적는다.</div></div>
+    <div class="stage"><div class="n">게이트(gate)</div><div class="s">MVP1 항목이 모두 끝났나? 전체 데이터 질의가 몇 분 안에 끝나나? 시간이 남았나?</div></div>
+    <div class="stage"><div class="n">MVP2 (3주차)</div><div class="s">Q1a 주제별, Q1b 마감이 가까울수록, Q1c 거래가 많을수록.</div></div>
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th>질문</th><th>주 방법</th><th>나오는 것</th></tr>
+    <tr><td>Q3 분포</td><td><ul><li>요약 통계, 히스토그램, ECDF</li><li>정규, 지수, 멱법칙 맞춤과 KS 검정</li><li>로그 변환 전후 QQ 그림</li></ul></td><td>그림 1–3</td></tr>
+    <tr><td>Q1 보정</td><td><ul><li>가격 구간마다 이항 검정과 95% 신뢰구간</li><li>카이제곱 적합도, Bonferroni와 BH 보정</li><li>Brier 점수, 로그 손실</li></ul></td><td>그림 4–5</td></tr>
+    <tr><td>Q2 집중도</td><td><ul><li>상위 1%, 5%, 10% 몫</li><li>로렌츠 곡선과 지니 계수</li><li>k-평균(k-means)은 곁가지 분석, 보고서의 1/10 미만</li></ul></td><td>그림 6–8</td></tr>
+  </table></div>
+  <p class="note">계획: <code>tips/polymarket_plan_detailed.md</code>. 게이트를 못 넘으면 3주차는 MVP1 다듬기에 쓴다.</p>
+</section>
+
+<section id="where">
+  <div class="eyebrow">Step 8 of 9</div>
+  <h2>어디서 계산하나</h2>
+  <div class="flow">
+    <div class="stage"><div class="n">노트북 (Mac)</div><div class="s">코드를 쓴다. 데이터는 돌리지 않는다.</div></div>
+    <div class="stage"><div class="n">로그인 노드</div><div class="s">코드를 올리고 작업(job)을 제출한다. 계산하지 않는다.</div></div>
+    <div class="stage big"><div class="n">계산 노드</div><div class="s">DuckDB와 SciPy로 계산한다. CPU 8개, 메모리 64 GB, GPU 없음.</div></div>
+    <div class="stage"><div class="n">다시 노트북</div><div class="s">저장된 결과(CSV, JSON, 그림)만 가져와 읽는다.</div></div>
+  </div>
+  <ul>
+    <li><b>왜 클러스터:</b> 데이터는 거래 12억 건이다. 노트북에서 돌리면 오래 걸리고 기계를 묶어 둔다.</li>
+    <li><b>왜 GPU 없이:</b> 표 질의와 통계 검정은 GPU를 쓰지 않는다. GPU를 요청하면 다른 사람이 기다린다.</li>
+    <li><b>왜 실행마다 폴더 하나:</b> 숫자마다 그것을 만든 코드와 설정이 남는다. 그래서 보고서의 숫자를 다시 만들 수 있다.</li>
+  </ul>
+  <div class="add"><b>이 연구가 중요한 이유:</b> 어느 쪽 결과든 쓸모가 있다. 가격이 맞으면 가격을 확률로 읽을 근거가 생긴다. 틀리면 어떤 가격과 주제를 조심해야 하는지 보인다.</div>
+</section>
+
+<section id="log">
+  <div class="eyebrow">Step 9 of 9</div>
+  <h2>진행 기록과 결정</h2>
+  <p>단계마다 한 일과 정한 것을 적는다. 최종 보고서는 이 기록의 제약과 기준을 그대로 따른다.</p>
+  <div class="tablewrap"><table>
+    <tr><th>파일</th><th>무엇을 적나</th></tr>
+    <tr><td><code>STATUS.md</code></td><td><ul><li>단계마다 한 줄: 날짜, 무엇을 했나, 근거 파일</li><li>최종판까지 지킬 제약 표</li></ul></td></tr>
+    <tr><td><code>DECISIONS.md</code></td><td>선택마다 한 행: 무엇을, 왜, 버린 대안, 누가, 근거</td></tr>
+    <tr><td><code>analysis/prereg_mvp1.md</code></td><td>결과를 보기 전에 정한 기준과 판정선</td></tr>
+  </table></div>
+  <h3>지금까지 (2026-10-19)</h3>
+  <div class="tablewrap"><table>
+    <tr><th>단계</th><th>상태</th><th>결정</th></tr>
+    <tr><td>1 데이터 받기</td><td>끝남. 파일 1,248개 크기가 목록과 같음</td><td>D-001 환경, D-002 CPU만, D-003 데이터 층</td></tr>
+    <tr><td>2 Job A 살펴보기</td><td>끝남. 작업 142041</td><td>D-004 파일럿 범위, D-006 파티션</td></tr>
+    <tr><td>3 기준 사전 등록</td><td>정함. 커밋함</td><td>D-005 두 작업 사이의 벽, D-007 T와 최소 거래</td></tr>
+    <tr><td>4–7 Job B: 표, Q3, Q1, Q2</td><td>다음 차례</td><td>첫 한 바퀴라 판정하지 않는다</td></tr>
+    <tr><td>8 게이트</td><td>MVP1 뒤</td><td></td></tr>
+  </table></div>
+  <h3>최종판까지 지킬 제약</h3>
+  <ul>
+    <li>강의에서 배운 방법만 쓴다. k-평균은 곁가지, 보고서의 1/10 미만.</li>
+    <li>게시글의 모든 사실에는 출처가 있다.</li>
+    <li>데이터 질의는 클러스터에서만 돌린다.</li>
+    <li>T, 최소 거래 수, Q1 판정 기준은 결과를 보기 전에 정했고 바꾸지 않는다.</li>
+    <li>"지갑" 또는 "주소"라고 쓴다. "사람"이라고 쓰지 않는다.</li>
+    <li>모든 검정은 p값 옆에 효과 크기를 적는다.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>데이터: Qin and Yang (2026). Polymarket-v1 Database. <a href="https://arxiv.org/abs/2606.04217">arXiv:2606.04217</a>. <a href="https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1">huggingface.co/datasets/TimeSeventeen/Polymarket-v1</a> (데이터 카드: 층 구조와 열).</p>
+  <p>계획: <code>tips/polymarket_plan_detailed.md</code>. 결정 기록: <code>DECISIONS.md</code>. 진행 기록: <code>STATUS.md</code>.</p>
+</footer>
+</main>

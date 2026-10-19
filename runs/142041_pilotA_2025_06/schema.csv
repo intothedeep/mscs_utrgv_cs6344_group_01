@@ -1,0 +1,25 @@
+column,type
+asset_id,VARCHAR
+block_timestamp,BIGINT
+price,DOUBLE
+maker,VARCHAR
+taker,VARCHAR
+taker_direction,VARCHAR
+usdc_amount,DOUBLE
+fee_usdc,DOUBLE
+condition_id,VARCHAR
+outcome_seq,BIGINT
+neg_risk,VARCHAR
+category,VARCHAR
+category_refined,VARCHAR
+outcome_label,VARCHAR
+winning_outcome_label,VARCHAR
+resolution_status,VARCHAR
+taker_base_fee,DOUBLE
+maker_base_fee,DOUBLE
+opens_at,TIMESTAMP WITH TIME ZONE
+close_at,TIMESTAMP WITH TIME ZONE
+resolved_at,TIMESTAMP WITH TIME ZONE
+market_slug,VARCHAR
+p_event,DOUBLE
+D,TINYINT
