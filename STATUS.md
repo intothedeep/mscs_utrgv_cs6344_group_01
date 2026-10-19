@@ -46,3 +46,4 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-10-19 prereg: MVP1 amendment records the tie rule change after the first full result; verdict unchanged (analysis/prereg_mvp1.md)
 2026-10-19 hygiene: individual-level CSVs untracked (stay on cluster; jobs/fetch_run.sh); proposal states 9.1% no usable winner label (owner)
 2026-10-19 plan: mission and vision set by the owner; PLAN.md and RQ.md created (D-012)
+2026-10-19 class: answers to 4 classmate questions (tips/polymarket_class_questions_tips.html); open next steps: split payouts in CTF/resolutions.parquet, price path in the last 24 h
