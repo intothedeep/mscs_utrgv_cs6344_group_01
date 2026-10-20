@@ -28,7 +28,11 @@ __all__ = ["main"]
 # | Quantity                                             | Helper   | Format                               |
 # | ---------------------------------------------------- | -------- | ------------------------------------ |
 # | Counts (markets, trades, wallets, n, df, permutations) | count  | integer, thousands separator {,}     |
-# | Shares and percent (also bin gaps, in points)        | pct      | 1 decimal + \%                       |
+# | Shares and percent                                   | pct      | 1 decimal + \%                       |
+# | Exception (a): gaps in percentage points (*Diff)     | pct2     | 2 decimals + \%                      |
+# | Exception (b): shares near 0 or 100 percent where 1  | pct2     | 2 decimals + \%                      |
+# |   decimal hides estimate vs CI (R1 classes, agreement, |        |                                      |
+# |   R2 crossing and delta shares)                      |          |                                      |
 # | Brier, w, V, d, d_z, rho, Gini, ARI, eta squared,    | est      | 3 decimals                           |
 # |   KS D, entropy, log loss, power-law exponent        |          |                                      |
 # | Test statistics (chi-square, t, F)                   | stat     | 1 decimal                            |
@@ -105,6 +109,11 @@ def level(x: float) -> str:
 def pct(x: float) -> str:
     """x is a fraction; output is a percent in text mode, one decimal."""
     return "\\ensuremath{" + _grouped(100 * x, 1) + "}\\%"
+
+
+def pct2(x: float) -> str:
+    """Percent with two decimals: gaps in points, and shares near 0 or 100 percent."""
+    return "\\ensuremath{" + _grouped(100 * x, 2) + "}\\%"
 
 
 def pval(p: float) -> str:
@@ -201,7 +210,7 @@ def add_q1(m: Macros, run: Path) -> None:
         m.add(f"Bin{lab}N", count(int(row["n"])), f"{s} n")
         m.add(f"Bin{lab}Price", pct(float(row["mean_price"])), f"{s} mean_price")
         m.add(f"Bin{lab}Obs", pct(float(row["observed_rate"])), f"{s} observed_rate")
-        m.add(f"Bin{lab}Diff", pct(float(row["diff_obs_minus_price"])),
+        m.add(f"Bin{lab}Diff", pct2(float(row["diff_obs_minus_price"])),
               f"{s} diff_obs_minus_price")
         m.add(f"Bin{lab}CiLow", pct(float(row["ci_low"])), f"{s} ci_low")
         m.add(f"Bin{lab}CiHigh", pct(float(row["ci_high"])), f"{s} ci_high")
@@ -321,7 +330,7 @@ def add_q1a(m: Macros, run: Path) -> None:
         m.add(f"Cat{k}Bin{lab}N", count(int(row["n"])), f"{s} n")
         m.add(f"Cat{k}Bin{lab}Price", pct(float(row["mean_price"])), f"{s} mean_price")
         m.add(f"Cat{k}Bin{lab}Obs", pct(float(row["observed_rate"])), f"{s} observed_rate")
-        m.add(f"Cat{k}Bin{lab}Diff", pct(float(row["diff_obs_minus_price"])),
+        m.add(f"Cat{k}Bin{lab}Diff", pct2(float(row["diff_obs_minus_price"])),
               f"{s} diff_obs_minus_price")
         m.add(f"Cat{k}Bin{lab}BhP", pval(float(row["p_bh"])), f"{s} p_bh")
 
@@ -459,7 +468,7 @@ def add_robust_r1(m: Macros, r: dict[str, Any]) -> None:
     m.add("RobROneNKept", count(r["n_kept"]), f"{src}: n_kept")
     for c, name in ROB_CLASS.items():
         m.add(f"RobROne{name}N", count(r["class_counts"][c]), f"{src}: class_counts.{c}")
-        m.add(f"RobROne{name}Share", pct(r["class_shares"][c]), f"{src}: class_shares.{c}")
+        m.add(f"RobROne{name}Share", pct2(r["class_shares"][c]), f"{src}: class_shares.{c}")
     d = r["duplicates"]
     m.add("RobROneDupIds", count(d["kept_ids_with_duplicate_rows"]), f"{src}: duplicates.kept_ids_with_duplicate_rows")
     m.add("RobROneDupConflicting", count(d["kept_duplicates_conflicting"]),
@@ -468,9 +477,9 @@ def add_robust_r1(m: Macros, r: dict[str, Any]) -> None:
     m.add("RobROneSplitYesZero", count(r["our_y_on_split_markets"]["y0"]), f"{src}: our_y_on_split_markets.y0")
     mp = r["mapping"]
     m.add("RobROneNClean", count(mp["n_clean"]), f"{src}: mapping.n_clean")
-    m.add("RobROneAgreement", pct(mp["agreement_index_primary"]), f"{src}: mapping.agreement_index_primary")
-    m.add("RobROneAgreementLow", pct(mp["agreement_ci95"][0]), f"{src}: mapping.agreement_ci95[0]")
-    m.add("RobROneAgreementHigh", pct(mp["agreement_ci95"][1]), f"{src}: mapping.agreement_ci95[1]")
+    m.add("RobROneAgreement", pct2(mp["agreement_index_primary"]), f"{src}: mapping.agreement_index_primary")
+    m.add("RobROneAgreementLow", pct2(mp["agreement_ci95"][0]), f"{src}: mapping.agreement_ci95[0]")
+    m.add("RobROneAgreementHigh", pct2(mp["agreement_ci95"][1]), f"{src}: mapping.agreement_ci95[1]")
     m.add("RobROneNMismatch", count(mp["n_mismatch"]), f"{src}: mapping.n_mismatch")
     m.add("RobROneMappingValidated", "yes" if mp["validated"] else "no", f"{src}: mapping.validated")
     s = r["sensitivity"]
@@ -495,9 +504,9 @@ def add_robust_r2(m: Macros, r: dict[str, Any]) -> None:
     m.add("RobRTwoN", count(o["n"]), f"{src}: overall.n")
     m.add("RobRTwoMedianAbsDelta", est(o["median_abs_delta"]), f"{src}: overall.median_abs_delta")
     m.add("RobRTwoShareNoTrade", pct(o["share_no_trade"]), f"{src}: overall.share_no_trade")
-    m.add("RobRTwoShareCrossing", pct(o["share_crossing"]), f"{src}: overall.share_crossing")
+    m.add("RobRTwoShareCrossing", pct2(o["share_crossing"]), f"{src}: overall.share_crossing")
     for t, name in ROB_THRESHOLD.items():
-        m.add(f"RobRTwoShareDeltaAtLeast{name}", pct(o[f"share_abs_delta_ge_{t}"]),
+        m.add(f"RobRTwoShareDeltaAtLeast{name}", pct2(o[f"share_abs_delta_ge_{t}"]),
               f"{src}: overall.share_abs_delta_ge_{t}")
     for k, name in ROB_QUANTILE.items():
         m.add(f"RobRTwoAbsDelta{name}", est(o["quantiles_abs_delta"][k]), f"{src}: overall.quantiles_abs_delta.{k}")

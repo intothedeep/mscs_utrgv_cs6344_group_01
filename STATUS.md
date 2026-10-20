@@ -52,3 +52,4 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-10-19 robustness: 142123 ran in about 42 min; n_kept 47,948 and q1_results.json equal to 142082; 7 split payouts, label agreement 0.9992; Q1 sensitivity rule result same (runs/142123_robust_full_v4/report_r1_split_payout.md, report_r2_price_path.md)
 2026-10-19 papers: reviewer gate PASS (0 blocker, 3 major, 17 minor); fixes applied; owner title, subtitle, authors; dataset paper and dataset cited (analysis/review_papers.md, papers/)
 2026-10-19 tips: robustness results added to the progress page and the class questions page (tips/)
+2026-10-19 papers: review F7 (one number format rule) and F9 (code v5, run 142140 saves BH p; q1 outputs equal 142083) fixed; papers rebuilt (analysis/review_papers.md)

@@ -82,3 +82,5 @@
 | Owner items | done | Title, subtitle, authors line verbatim, plus a "Version 1: MVP1" or "Version 2: MVP1 + MVP2" line under the title. Dataset and method references cited only where used (Brier, BH, Wilson, Cohen, Cramér, ARI, DuckDB). License sentence filled (CC-BY-4.0, dataset card). |
 | F19 | fixed | note on rule order appended to `analysis/prereg_robustness.md` (main session) |
 | F20 | fixed | M3 and M4 added to `PLAN.md` (product-manager) |
+| F7 | fixed | one number format rule in `code/make_paper_numbers.py` (two decimals for gaps and near-0/100 shares) (main session, developer) |
+| F9 | fixed | code v5 saves `p_bh`, `reject_bh`; run 142140; macro reads the saved column |
