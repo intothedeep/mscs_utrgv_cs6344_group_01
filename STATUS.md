@@ -47,3 +47,8 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-10-19 hygiene: individual-level CSVs untracked (stay on cluster; jobs/fetch_run.sh); proposal states 9.1% no usable winner label (owner)
 2026-10-19 plan: mission and vision set by the owner; PLAN.md and RQ.md created (D-012)
 2026-10-19 class: answers to 4 classmate questions (tips/polymarket_class_questions_tips.html); open next steps: split payouts in CTF/resolutions.parquet, price path in the last 24 h
+2026-10-19 robustness: prereg and code v4 committed (3182a89), job 142123 submitted (D-013, analysis/prereg_robustness.md)
+2026-10-19 papers: numbers.tex from runs 142082, 142083; LaTeX drafts in progress (D-014, papers/)
+2026-10-19 robustness: 142123 ran in about 42 min; n_kept 47,948 and q1_results.json equal to 142082; 7 split payouts, label agreement 0.9992; Q1 sensitivity rule result same (runs/142123_robust_full_v4/report_r1_split_payout.md, report_r2_price_path.md)
+2026-10-19 papers: reviewer gate PASS (0 blocker, 3 major, 17 minor); fixes applied; owner title, subtitle, authors; dataset paper and dataset cited (analysis/review_papers.md, papers/)
+2026-10-19 tips: robustness results added to the progress page and the class questions page (tips/)

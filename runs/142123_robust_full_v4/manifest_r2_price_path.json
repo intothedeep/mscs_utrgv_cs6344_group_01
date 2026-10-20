@@ -1,0 +1,98 @@
+{
+  "code_version": "v4",
+  "code_sha": "4bcaceda3b5a",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "full",
+    "updown_rule": "default",
+    "horizon_long_days": 7,
+    "min_category_n": 30,
+    "n_perm": 1000,
+    "seed": 42,
+    "robust_agree_min": 0.95,
+    "robust_delta_thresholds": [
+      0.1,
+      0.25,
+      0.5
+    ],
+    "robust_quantiles": [
+      0.5,
+      0.75,
+      0.9,
+      0.95,
+      0.99
+    ],
+    "robust_yes_payout_index": 0,
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "developer from the plan, main session, 2026-10-19 (MVP1 keys: owner, D-007; robustness keys: D-013)",
+    "mvp2_added_from": "tips/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19",
+    "robust_added_from": "DECISIONS.md D-013 and the developer task, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu012",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142123",
+    "slurm_cpus_per_task": "16",
+    "slurm_mem_per_node": "204800",
+    "duckdb_threads": "16",
+    "duckdb_mem": "160GB"
+  },
+  "metrics": {
+    "overall": {
+      "n": 47948,
+      "median_abs_delta": 0.015333333333333381,
+      "share_no_trade": 0.05914740969383499,
+      "share_crossing": 0.08019104029365146,
+      "share_abs_delta_ge_0.10": 0.1897889380161842,
+      "share_abs_delta_ge_0.25": 0.1097230332860599,
+      "share_abs_delta_ge_0.50": 0.046529573704846915,
+      "brier": {
+        "n": 47948,
+        "brier_1d": 0.10707126160833004,
+        "brier_T": 0.07489542661599373,
+        "mean_diff": -0.032175834992336304,
+        "ci_low": -0.0332930015201262,
+        "ci_high": -0.031058668464546406,
+        "t": -56.45091236654536,
+        "df": 47947,
+        "p": 0.0,
+        "cohens_dz": -0.2578016645328524
+      },
+      "quantiles_abs_delta": {
+        "q0.5": 0.015333333333333381,
+        "q0.75": 0.05999999999999994,
+        "q0.9": 0.27999989133404746,
+        "q0.95": 0.48249986205004225,
+        "q0.99": 0.789,
+        "max": 0.998
+      },
+      "n_window_trades": {
+        "median": 61.0,
+        "q0.9": 1147.300000000003,
+        "max": 40499
+      },
+      "brier_traded_only": {
+        "n": 45112,
+        "brier_1d": 0.1121635313437868,
+        "brier_T": 0.07796493814879343,
+        "mean_diff": -0.034198593194993375,
+        "ci_low": -0.03538351067806143,
+        "ci_high": -0.03301367571192532,
+        "t": -56.569179208901154,
+        "df": 45111,
+        "p": 0.0,
+        "cohens_dz": -0.266338430759831
+      }
+    },
+    "n_categories": 8
+  }
+}

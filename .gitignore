@@ -235,3 +235,12 @@ runs/**/q1c_scaled.csv
 runs/**/q2_kmeans_sample.csv
 runs/**/r1_markets.csv
 runs/**/r2_markets.csv
+
+# LaTeX build files (papers/); main.pdf is committed so the team can read it
+papers/**/*.aux
+papers/**/*.bbl
+papers/**/*.blg
+papers/**/*.fdb_latexmk
+papers/**/*.fls
+papers/**/*.log
+papers/**/*.out

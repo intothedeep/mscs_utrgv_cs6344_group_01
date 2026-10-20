@@ -1,0 +1,670 @@
+% Paper v1 (MVP1): Q1 calibration, Q2 wallet concentration, Q3 descriptive. Run 142082.
+% Every measured number is a macro from numbers.tex (generated, do not edit).
+%
+% Source key for the "% src:" comments (this key is the Sources table of this file):
+%   S-PAPER-1 proposal_md/polymarket_proposal_v3.md
+%   S-PAPER-2 tips/polymarket_plan_detailed.md
+%   S-PAPER-3 analysis/prereg_mvp1.md
+%   S-PAPER-4 analysis/prereg_mvp2.md
+%   S-PAPER-5 runs/142082_mvp1_full_v1r3 (reports, verdicts.json) via numbers.tex
+%   S-PAPER-6 analysis/review_mvp1_mvp2.md
+%   S-PAPER-7 tips/polymarket_class_questions_tips.html
+%   S-PAPER-8 PLAN.md, RQ.md, DECISIONS.md, STATUS.md
+%   S-PAPER-9 analysis/prereg_robustness.md, runs/142123_robust_full_v4 (reports r1, r2) via numbers.tex
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.9in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage[numbers]{natbib}
+\usepackage{figkit}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+
+\captionsetup{font=small,labelfont=bf}
+\setlength{\emergencystretch}{2em}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+
+% Visible placeholder for text or numbers the sources do not give.
+\DeclareRobustCommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+
+\input{numbers}
+
+% --- Design constants and literature facts. Not measured by our runs. ---
+% src: S-PAPER-3 (design constants)
+\newcommand{\NBins}{10}
+\newcommand{\CiLevel}{95\%}
+\newcommand{\DaysShort}{1}
+\newcommand{\DaysLong}{7}
+\newcommand{\MaxStaleHours}{24}
+\newcommand{\TopOneLabel}{1\%}
+\newcommand{\TopFiveLabel}{5\%}
+\newcommand{\TopTenLabel}{10\%}
+\newcommand{\HookPct}{70\%}
+\newcommand{\pT}{\ensuremath{p_{T}}}
+\newcommand{\DeltaA}{0.10}
+\newcommand{\DeltaB}{0.25}
+\newcommand{\DeltaC}{0.50}
+\newcommand{\PayoutDollar}{\$1}
+\newcommand{\HookPrice}{\$0.70}
+\newcommand{\FavoriteLine}{0.5}
+\newcommand{\pOne}{\ensuremath{p_{\DaysShort\mathrm{d}}}}
+% src: S-PAPER-1, S-PAPER-2 (facts about the dataset paper)
+\newcommand{\PaperTrades}{1.2 billion}
+\newcommand{\PaperMarkets}{1.3 million}
+\newcommand{\PaperVolume}{\$61 billion}
+\newcommand{\PaperPeriod}{November 2022 to April 2026}
+\newcommand{\PaperBrierMarkets}{1{,}019}
+\newcommand{\PaperTopShare}{84.1\%}
+\newcommand{\PaperGiniMaker}{0.970}
+\newcommand{\PaperGiniTaker}{0.943}
+\newcommand{\PaperCheapGap}{0.2 to 0.3 cents}
+\newcommand{\PaperCheapPrice}{30 cents}
+
+% --- Table row helpers: pull one row of macros by name ---
+\newcommand{\binrow}[2]{#1 & \csname Bin#2N\endcsname & \csname Bin#2Price\endcsname
+  & \csname Bin#2Obs\endcsname & [\csname Bin#2CiLow\endcsname, \csname Bin#2CiHigh\endcsname]
+  & \csname Bin#2Diff\endcsname & \csname Bin#2BhP\endcsname}
+\title{When Polymarket Says \HookPct, Does It Happen \HookPct{} of the Time?\\[2pt]
+\large Prediction Accuracy, Trading Concentration, and Statistical Distributions in Prediction Markets\\[4pt]
+\normalsize Version 1: MVP1}
+\author{Group 1 $|$ Team Brier: Taek Lim, Zhugang Liu (Tony), Francisco Cortez\\
+CS 6330 Introduction to Data Science}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+% src: S-PAPER-1, S-PAPER-3, S-PAPER-5
+A Polymarket YES share pays one dollar if the event happens.
+So a price of \HookPct{} is read as a \HookPct{} chance.
+We test this on resolved Yes/No markets from the Polymarket-v1 database.
+We keep \NMarketsKept{} of \NMarketsInScope{} markets in scope.
+We read each market's price \DaysShort{} day before its scheduled close.
+The pre-registered chi-square test says the prices are not calibrated as a whole
+($\chi^2=\QOneChiSq$, $p=\QOneP$, Cohen's $w=\QOneW$).
+The observed Yes rate lies below the mean price in every price bin except the top one.
+The top \TopOneLabel{} of maker wallets hold \MakerTopOneShare{} of maker volume
+(Gini coefficient \MakerGini).
+Mean volume is far above median volume.
+Trade sizes are strongly right skewed.
+We describe Q2 and Q3 without a verdict.
+A payout check leaves the Q1 verdict unchanged.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+% src: S-PAPER-1
+A Polymarket YES share pays \PayoutDollar{} if the event happens.
+At a price of \HookPrice, the price is read as a \HookPct{} chance.
+Is that chance right?
+If we collect every event priced at \HookPct, about \HookPct{} of them should have happened.
+The Polymarket-v1 database records every trade on Polymarket's first exchange.
+It holds \PaperTrades{} trades and \PaperMarkets{} markets from \PaperPeriod{} \citep{qin2026polymarketv1}.
+So we can check each price against what happened.
+
+This paper reports the first stage (MVP1) of a staged study.
+% src: S-PAPER-8
+It answers three questions.
+The first question is Q1: is the crowd right?
+% src: S-PAPER-1
+We test calibration one price range at a time.
+We use binomial and chi-square tests, confidence intervals, and the Brier score.
+We also ask whether cheap longshot bets are a trap.
+The second question is Q2: who is the crowd?
+We ask whether a small group of wallets does most of the trading.
+We use Lorenz curves and the Gini coefficient.
+We also group wallets by k-means, as a side analysis.
+The third question is Q3: what does betting look like?
+We describe trade sizes, wallet volumes, and prices with histograms and distribution fits.
+
+% src: S-PAPER-3, S-PAPER-5
+Our contributions are these.
+We fix the evaluation rules before we see any Q1 result.
+We report one rule change made afterwards.
+We score all \NMarketsKept{} kept markets, not a small panel.
+We report an effect size next to every p-value.
+The text uses the word wallet for an address on the exchange.
+
+\section{Related Work}\label{sec:related}
+% src: S-PAPER-1
+We build on two references.
+Snowberg and Wolfers study horse racing \citep{snowberg2010favorite}.
+They show that longshots win less often than their odds say.
+We test the same gap on Polymarket.
+
+The dataset paper reports Polymarket results on cheap tokens \citep[Table~3]{qin2026polymarketv1}.
+Tokens priced under \PaperCheapPrice{} pay out \PaperCheapGap{} less than their price.
+This is counted by trade.
+We count markets, not trades.
+We read this result as the same direction as the horse-racing bias.
+
+The dataset paper also scores \PaperBrierMarkets{} markets with the Brier score \citep{qin2026polymarketv1}.
+We score all resolved Yes/No markets that pass our filters.
+Finally, the paper reports that the top \TopOneLabel{} of maker addresses hold \PaperTopShare{}
+of maker volume \citep[Table~5]{qin2026polymarketv1}.
+We ask whether a few wallets dominate volume in our kept markets.
+% src: S-PAPER-2
+\todo{owner: related work beyond the two references in the proposal, if the course report needs it}
+
+\section{Data}\label{sec:data}
+\subsection{Source and scope}\label{sec:data-source}
+% src: S-PAPER-1, S-PAPER-2
+We use the \texttt{daily\_aligned/} layer of Polymarket-v1.
+This layer holds Standard Binary markets (\texttt{neg\_risk} is false).
+Its relayer records are already removed \citep{polymarketv1data}.
+We keep markets that have a winning outcome label.
+We drop Up/Down markets by the default rule in our code.
+We take the price from the \texttt{p\_event} column, which is on the YES scale.
+The data are at \url{https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1} \citep{polymarketv1data}.
+The dataset card states the license CC-BY-4.0.
+The paper that describes the data is \citep{qin2026polymarketv1}.
+
+\subsection{Filters and drop reasons}\label{sec:data-filters}
+% src: S-PAPER-5
+In the full run, \NMarketsInScope{} markets are in scope.
+We keep \NMarketsKept{} of them (\PctMarketsKept).
+\Cref{fig:drops} counts each dropped market once, by the first rule it fails.
+The rules apply in the order of the bars.
+Up/Down markets are \NUpdown{} (\PctUpdown).
+\NNoOutcome{} markets have no usable winner label (\PctNoOutcome).
+\NNoPrice{} have no price at or before $T-\DaysShort$ day (\PctNoPrice).
+\NStalePrice{} have a price older than \MaxStaleHours{} hours (\PctStalePrice).
+\NBelowMinTrades{} have fewer than \MinTrades{} trades before $T-\DaysShort$ day (\PctBelowMinTrades).
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/drop_reasons}{0.65\linewidth}
+\caption{Markets by first failing rule. Why: it shows which rule removes the most markets. Source: run \RunId.}
+\label{fig:drops}
+\end{figure}
+
+\subsection{Market and wallet tables}\label{sec:data-tables}
+% src: S-PAPER-2, S-PAPER-5
+We build one market table and one wallet table.
+The market table has one row per kept market.
+It holds the category, trade count, volume in USDC, the price \pOne, and the outcome $y\in\{0,1\}$.
+The wallet table has one row per wallet and role (maker or taker).
+It holds volume in USDC, trade count, market count, and mean trade price.
+A wallet is one address.
+The wallet table has \NWalletRoleRows{} wallet-role rows from the kept markets.
+The kept markets hold \NTradesKeptMarkets{} trades.
+We keep duplicate rows because no row identifier separates repeat fills from copies.
+
+\section{Methods}\label{sec:methods}
+\subsection{Evaluation price and pre-registration}\label{sec:methods-prereg}
+% src: S-PAPER-2, S-PAPER-3
+Each market has a scheduled close time $T$.
+We set $T$ to the \texttt{close\_at} field.
+Trades can continue after the close, often once the answer is known.
+A price taken after the close can then contain the answer.
+Then calibration looks better than it is.
+In a one-month pilot of \PilotNMarkets{} markets, \PilotShareMarketsAfterClose{} had a trade after \texttt{close\_at}.
+Those late trades are \PilotShareVolumeAfterClose{} of the pilot volume.
+So we use the scheduled close and not the last trade.
+
+\Cref{fig:timeline} shows where the evaluation price sits.
+The evaluation price \pOne{} is a mean price.
+It averages the trades at the last timestamp at or before $T-\DaysShort$ day.
+We drop a market if this price is older than \MaxStaleHours{} hours.
+We also drop a market with fewer than \MinTrades{} trades before that time.
+A price from a nearly empty market is not a crowd view.
+We report Q1 with and without this filter.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\small]
+\draw[thick,-{Stealth}] (0,0) -- (12.2,0);
+\draw[thick] (0.2,-0.12) -- (0.2,0.12) node[above] {market opens};
+\draw[thick,blue!60!black] (7.0,-0.2) -- (7.0,0.2) node[above] {$T-\DaysShort$ day};
+\draw[thick] (9.2,-0.12) -- (9.2,0.12) node[above] {$T$ = \texttt{close\_at}};
+\foreach \x in {10.0,10.5,11.0,11.5} \draw[red!70!black,thick] (\x,-0.15) -- (\x,0.15);
+\node[below=6pt,blue!60!black,align=center] at (7.0,0) {evaluation price \pOne};
+\node[below=6pt,red!70!black,align=center] at (10.75,0) {trades after the close};
+\end{tikzpicture}
+\caption{Where the evaluation price sits in a market's life (illustrative). Why: a price taken after the close can already contain the answer. Source: pre-registration, \texttt{analysis/prereg\_mvp1.md}.}
+\label{fig:timeline}
+\end{figure}
+
+The criteria were fixed before any Q1 result.
+\Cref{tab:prereg} lists them.
+The verdict applies to the full-data run with the same parameters.
+
+\begin{table}[H]
+\centering
+\caption{Pre-registered choices and Q1 criteria. Why: fixing the rules first keeps the result from choosing the rule. Source: \texttt{analysis/prereg\_mvp1.md}.}
+\label{tab:prereg}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+Item & Value \\
+\midrule
+Close time $T$ & \texttt{close\_at} \\
+\midrule
+Evaluation price & mean price at the last timestamp (after the amendment below) at or before $T-\DaysShort$ day, at most \MaxStaleHours{} hours old \\
+\midrule
+Minimum trades & \MinTrades{} before $T-\DaysShort$ day. Q1 is also reported without it \\
+\midrule
+Bins and level & \NBins{} equal-width bins, $\alpha=\Alpha$ \\
+\midrule
+Primary metric & chi-square goodness of fit over the \NBins{} bins. The line is $p<\Alpha$ \\
+\midrule
+Per-bin call & binomial test per bin, Benjamini-Hochberg (BH) corrected at \Alpha{} \\
+\midrule
+Effect size & observed rate minus mean price per bin with a \CiLevel{} Wilson interval, and the Brier score \\
+\midrule
+Failure condition & no bin off after BH and chi-square $p\ge\Alpha$: no evidence of miscalibration at this $n$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% src: S-PAPER-3
+One rule changed after we saw a full-data Q1 result.
+The original rule was the last price at or before $T-\DaysShort$ day.
+Many trades share one block timestamp, so this rule left their order undefined.
+The new rule is the mean price of the trades at the last timestamp.
+We made the change for determinism, not because of the result.
+It came after we saw a full-data Q1 result, so we report it as an amendment.
+The amendment in \texttt{analysis/prereg\_mvp1.md} records that the verdict did not change.
+All numbers in this paper come from the runs with the amended rule.
+
+\subsection{Q1: calibration}\label{sec:methods-q1}
+% src: S-PAPER-2, S-PAPER-3
+We treat each outcome as a Bernoulli trial with success probability equal to the price.
+So the Yes count in a bin is approximately binomial.
+We form \NBins{} equal-width price bins, and we use equal-frequency bins as a check.
+In bin $b$, $n_b$ is the market count, $\bar p_b$ the mean price, and $O_b$ the Yes count.
+The null hypothesis is that the Yes rate equals the mean price.
+The expected Yes count is $E_b=n_b\bar p_b$.
+We test each bin with a binomial test.
+We give a \CiLevel{} Wilson interval for the observed rate \citep{wilson1927probable}.
+We correct the \NBins{} tests with Bonferroni and with the Benjamini-Hochberg (BH) procedure \citep{benjamini1995controlling}.
+The overall test is chi-square goodness of fit on the bin by \{Yes, No\} table:
+\begin{equation}
+\chi^2=\sum_{b}\left[\frac{(O_b-E_b)^2}{E_b}+\frac{(O_b-E_b)^2}{n_b-E_b}\right],
+\qquad w=\sqrt{\chi^2/n}.
+\label{eq:chisq}
+\end{equation}
+Here $w$ is Cohen's effect size \citep{cohen1988statistical} and $n$ is the total market count.
+We also report the Brier score $\frac1n\sum(p-y)^2$ \citep{brier1950verification}.
+We add the log loss and the mean entropy $H(p)$ in bits.
+We treat the market as a classifier that says Yes when $p>\FavoriteLine$.
+We compare the price distributions of Yes- and No-resolved markets with a Kolmogorov-Smirnov (KS) test.
+The KS statistic $D$ is the effect size.
+For the longshot check we look at the two cheapest bins.
+
+\subsection{Q2: wallet concentration}\label{sec:methods-q2}
+% src: S-PAPER-2
+We work with wallet volume in USDC, by role.
+We report the share of role volume held by the top \TopOneLabel, \TopFiveLabel, and \TopTenLabel{} of wallets.
+We draw the Lorenz curve and compute the Gini coefficient.
+We compare our Gini with the dataset paper's as a check on our pipeline.
+We test the log volume of makers against takers with a Welch t-test and a KS test.
+We report Spearman's $\rho$ between trade count and volume.
+
+% src: S-PAPER-2, S-PAPER-6
+As a side analysis, we run k-means on wallet features.
+We take the logarithm of the heavy-tailed features, then z-score them.
+We choose $K$ with the elbow method.
+We check stability by repeating the clustering with robust scaling.
+We compare the two with the adjusted Rand index (ARI) \citep{hubert1985comparing}.
+This analysis is exploratory.
+
+\subsection{Q3: distributions}\label{sec:methods-q3}
+% src: S-PAPER-2, S-PAPER-5
+We summarise price, trade size, and wallet volume with their mean and median.
+We plot histograms of the price \pOne{} and of trade size.
+We fit a normal, an exponential, and a power law to trade size and wallet volume.
+The power law is fitted on the top \TopTenLabel{} of values only, above a lower bound $x_{\min}$.
+We measure each fit with the KS statistic $D$ against the data.
+Trade sizes come from a deterministic sample of \NTradeSizeSample{} trades from the kept markets.
+
+\subsection{Reproducibility}\label{sec:methods-repro}
+% src: S-PAPER-5, S-PAPER-6
+All data queries ran on the UTRGV Cradle cluster (SLURM, CPU only).
+We used Python and DuckDB \citep{raasveldt2019duckdb}.
+The MVP runs are \RunId{} (job \SlurmJobId), with code version \CodeVersion.
+The hash \CodeSha{} is that of the Q1 script.
+The hash of the whole script set is \CodeSetSha.
+The per-script hashes are in \texttt{\CodeShaFile}.
+The robustness run is \RobustRun, with code version \RobustCodeVersion{} (hash \RobustCodeSha).
+An earlier review found three sources of small differences between reruns.
+They were tie order inside one block, a random sample, and row order.
+Code version \CodeVersion{} fixes these.
+The pre-registered criteria did not change, and no verdict flipped.
+
+\section{Results}\label{sec:results}
+\subsection{Q1: is the crowd right?}\label{sec:res-q1}
+% src: S-PAPER-3, S-PAPER-5
+The pre-registered rule gives this verdict: \VerdictQOne{}
+The chi-square statistic is \QOneChiSq{} with \QOneDf{} degrees of freedom.
+The p-value is $p=\QOneP$, and the effect size is Cohen's $w=\QOneW$.
+\Cref{fig:calib} shows the observed Yes rate against the mean price in each bin.
+\Cref{tab:bins} gives the numbers.
+
+\begin{table}[H]
+\centering
+\caption{Calibration by price bin, with the gap as observed rate minus mean price in percent points. Why: the gap and its interval show where prices are off. Source: run \RunId.}
+\label{tab:bins}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrcrr}
+\toprule
+Bin & $n$ & Mean price & Observed & \CiLevel{} CI & Gap & BH $p$ \\
+\midrule
+\binrow{0--10\%}{ZeroTen}\\ \midrule
+\binrow{10--20\%}{TenTwenty}\\ \midrule
+\binrow{20--30\%}{TwentyThirty}\\ \midrule
+\binrow{30--40\%}{ThirtyForty}\\ \midrule
+\binrow{40--50\%}{FortyFifty}\\ \midrule
+\binrow{50--60\%}{FiftySixty}\\ \midrule
+\binrow{60--70\%}{SixtySeventy}\\ \midrule
+\binrow{70--80\%}{SeventyEighty}\\ \midrule
+\binrow{80--90\%}{EightyNinety}\\ \midrule
+\binrow{90--100\%}{NinetyHundred}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The observed rate is below the mean price in every bin except the top one.
+After BH correction, \QOneBinsBh{} of the \NBins{} bins are off ($p<\Alpha$).
+After Bonferroni correction, \QOneBinsBonferroni{} bins are off.
+For example, in the bin with mean price \BinSeventyEightyPrice{}, the observed Yes rate is \BinSeventyEightyObs.
+The gap is \BinSeventyEightyDiff{} (BH $p=\BinSeventyEightyBhP$).
+
+The two cheapest bins are the longshot check.
+In the cheapest bin the gap is \BinZeroTenDiff{} (BH $p=\BinZeroTenBhP$).
+In the next bin the gap is \BinTenTwentyDiff{} (BH $p=\BinTenTwentyBhP$).
+Cheap bets pay off less often than their price says.
+The direction matches the horse-racing result \citep{snowberg2010favorite}.
+Our gaps are per market and the dataset paper's are per trade.
+So we do not compare their sizes.
+
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{0.46\linewidth}\centering
+\figorbox{figures/fig4_calibration}{\linewidth}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.50\linewidth}\centering
+\figorbox{figures/fig5_ecdf_yes_no}{\linewidth}
+\end{minipage}
+\caption{Observed Yes rate against mean price per bin with \CiLevel{} Wilson intervals (left), and ECDFs of \pOne{} by outcome (right). Why: points on the diagonal mean the price matches the outcome rate, and the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
+\label{fig:calib}
+\end{figure}
+
+Next come the score measures.
+The Brier score is \QOneBrier, the log loss is \QOneLogLoss, and the mean entropy is \QOneEntropy{} bits.
+The Yes rate among kept markets is \QOneYesRate, and the mean price is \PriceOneDayMean.
+At the \FavoriteLine{} line, the classifier accuracy is \QOneAccuracy.
+Its precision is \QOnePrecision{} and its recall is \QOneRecall.
+The KS statistic between Yes and No prices is $D=\QOneKsD$.
+Without the minimum-trade filter there are \QOneNoMinN{} markets.
+The Brier score is then \QOneNoMinBrier{}, with $\chi^2=\QOneNoMinChiSq$, $p=\QOneNoMinP$, and $w=\QOneNoMinW$.
+The chi-square test also rejects without the filter.
+With \QOneEqFreqBins{} equal-frequency bins, BH marks \QOneEqFreqBinsBh{} bins as off.
+
+\subsection{Q2: who is the crowd?}\label{sec:res-q2}
+% src: S-PAPER-5
+In both roles, the top \TopOneLabel{} of wallets hold most of the volume.
+\Cref{tab:conc} gives the shares and the Gini coefficient by role.
+\Cref{fig:lorenz} shows the Lorenz curves.
+We describe these numbers without a verdict.
+
+\begin{table}[H]
+\centering
+\caption{Volume concentration by role, as the share of role volume held by the top wallets. Why: the top shares show how few wallets hold most of the volume. Source: run \RunId.}
+\label{tab:conc}
+\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+Role & Wallets & Mean (USDC) & Median (USDC) & Top \TopOneLabel{} & Top \TopFiveLabel{} & Top \TopTenLabel{} & Gini \\
+\midrule
+Maker & \MakerNWallets & \MakerMeanVolume & \MakerMedianVolume & \MakerTopOneShare & \MakerTopFiveShare & \MakerTopTenShare & \MakerGini \\
+\midrule
+Taker & \TakerNWallets & \TakerMeanVolume & \TakerMedianVolume & \TakerTopOneShare & \TakerTopFiveShare & \TakerTopTenShare & \TakerGini \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig7_lorenz}{0.5\linewidth}
+\caption{Lorenz curves of wallet volume for makers and takers. Why: a curve far below the equality line means few wallets hold most of the volume. Source: run \RunId.}
+\label{fig:lorenz}
+\end{figure}
+
+The mean volume is far above the median volume in both roles.
+The dataset paper reports a Gini of \PaperGiniMaker{} for makers and \PaperGiniTaker{} for takers \citep{qin2026polymarketv1}.
+Ours are \MakerGini{} and \TakerGini.
+We use the paper's values as a reference only.
+The paper covers the full data, and our wallets come from the kept markets.
+
+The Welch test on log volume gives $t=\RoleWelchT$ with $p\,\RoleWelchP$, a float-underflow bound.
+The effect size is Cohen's $d=\RoleCohenD$, and the KS statistic is $D=\RoleKsD$.
+Trade count and volume have a Spearman correlation of $\rho=\SpearmanTradesVolumeRho$.
+
+In the side analysis, the elbow method picks $K=\KmeansK$.
+The sample has \KmeansNSample{} wallet-role rows, and a wallet in both roles gives two rows.
+The \KmeansK{} clusters have \ClusterZeroN, \ClusterOneN, \ClusterTwoN, and \ClusterThreeN{} rows.
+Their median volumes run from \ClusterTwoMedianVolume{} to \ClusterOneMedianVolume{} USDC.
+Clusters from z-score and robust scaling agree (ARI $=\KmeansAri$).
+Cramér's $V$ \citep{cramer1946mathematical} between cluster and market category is \KmeansCategoryV.
+An ANOVA of mean trade price across clusters gives $\eta^2=\KmeansPriceEtaSq$.
+Its permutation $p$ is at the floor, $1/(\KmeansNPerm+1)$.
+
+\subsection{Q3: what does the data look like?}\label{sec:res-q3}
+% src: S-PAPER-5
+We describe the distributions without a verdict.
+\Cref{fig:hist} shows the price histogram and the trade-size histogram.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig1_fig2_hist}{\linewidth}
+\caption{Histogram of the price \pOne{} over kept markets (left) and of trade size on a log axis (right). Why: the price shape shows where the crowd is confident, and the trade-size shape shows how uneven bets are. Source: run \RunId.}
+\label{fig:hist}
+\end{figure}
+
+The price \pOne{} has a mean of \PriceOneDayMean{} and a median of \PriceOneDayMedian.
+Prices pile up near both ends of the scale.
+The trade size has a mean of \TradeSizeMean{} USDC and a median of \TradeSizeMedian{} USDC.
+So trade sizes are strongly right skewed.
+
+\Cref{tab:fits} gives the fit statistics.
+The KS statistic $D$ is the effect size.
+KS p-values are optimistic here because the parameters are fitted on the same data.
+So we do not rely on them.
+The normal fit is poor for both variables.
+The power-law fit covers the tail only, so its $D$ is not directly comparable.
+The exponential fit has $D=\TradeSizeExponentialKsD$ for trade size and $D=\WalletVolumeExponentialKsD$ for wallet volume.
+
+\begin{table}[H]
+\centering
+\caption{Distribution fits, with the power law fitted on the tail from $x_{\min}$. Why: a small $D$ means the fitted curve is close to the data. Source: run \RunId.}
+\label{tab:fits}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Variable & Power-law $\alpha$ & $x_{\min}$ (USDC) & KS $D$, power law & KS $D$, normal \\
+\midrule
+Trade size & \TradeSizePowerAlpha & \TradeSizePowerXmin & \TradeSizePowerKsD & \TradeSizeNormalKsD \\
+\midrule
+Wallet volume & \WalletVolumePowerAlpha & \WalletVolumePowerXmin & \WalletVolumePowerKsD & \WalletVolumeNormalKsD \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Robustness}\label{sec:res-robust}
+% src: S-PAPER-9, S-PAPER-8
+Two checks look at limits of the Q1 setup.
+Both are descriptive.
+They add no primary test and no verdict.
+The pre-registered Q1 verdict stays as it is.
+The sensitivity row below sits next to the original Q1 row and does not replace it.
+Both checks use the \QOneN{} kept markets.
+
+% src: S-PAPER-9
+Check R1 asks whether the Q1 result holds when markets without a clean payout are removed.
+The resolution file gives each market a payout vector.
+A market is clean when one outcome pays one and the other pays zero.
+Of the kept markets, \RobROneCleanN{} are clean (\RobROneCleanShare).
+\RobROneSplitN{} have a split payout (\RobROneSplitShare).
+\RobROneOtherN{} are of another kind.
+\RobROneMissingN{} is missing from the file.
+Our label marks Yes on \RobROneSplitYesOne{} of the split markets and No on \RobROneSplitYesZero.
+Our winner label agrees with the resolution file on \RobROneAgreement{} of the \RobROneNClean{} clean markets.
+The \CiLevel{} Wilson CI is [\RobROneAgreementLow, \RobROneAgreementHigh].
+\RobROneNMismatch{} clean markets disagree.
+\Cref{fig:r1} shows the payout classes and the calibration points with and without the unclear markets.
+\Cref{tab:r1} puts the sensitivity row next to the original row.
+We remove split, other, and mismatching markets, which is \RobROneNExcluded{} markets.
+The Q1 rule result is the same in both rows: \RobROneRuleOriginal{}
+The effect size changes by \RobROneDeltaW.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r1_split_payout}{0.9\linewidth}
+\caption{Kept markets by payout class (log scale), and the Q1 calibration points with and without the unclear markets. Why: points that overlap mean the unclear markets do not move the result. Source: run \RobustRun.}
+\label{fig:r1}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Q1 original row and R1 sensitivity row. Why: equal rows mean the unclear markets do not drive the Q1 result. Source: runs \RunId{} and \RobustRun.}
+\label{tab:r1}
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+Row & Markets & $\chi^2$ & $p$ & Cohen's $w$ & Brier & Bins off (BH) \\
+\midrule
+Q1 original & \QOneN & \QOneChiSq & \QOneP & \QOneW & \QOneBrier & \QOneBinsBh \\
+\midrule
+Sensitivity & \RobROneSensN & \RobROneSensChiSq & \RobROneSensP & \RobROneSensW & \RobROneSensBrier & \RobROneSensBinsBh \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% src: S-PAPER-9
+Check R2 asks how far the price moves from $T-\DaysShort$ day to the last trade before $T$.
+Call the mean price at the last timestamp before $T$ \pT.
+The median absolute change from \pOne{} to \pT{} is \RobRTwoMedianAbsDelta.
+The change is at least \DeltaA{} in \RobRTwoShareDeltaAtLeastTen{} of markets.
+It is at least \DeltaB{} in \RobRTwoShareDeltaAtLeastTwentyFive{} and at least \DeltaC{} in \RobRTwoShareDeltaAtLeastFifty.
+The price crosses \FavoriteLine{} in \RobRTwoShareCrossing{} of markets.
+This compares the two end points and not the path.
+\RobRTwoShareNoTrade{} of markets have no trade in the last day, and for them \pT{} equals \pOne.
+\Cref{fig:r2} shows the distribution of the absolute change.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r2_price_path}{0.7\linewidth}
+\caption{ECDF of the absolute price change from \pOne{} to \pT. Why: a curve near one at small values means \pOne{} is close to the last price. Source: run \RobustRun.}
+\label{fig:r2}
+\end{figure}
+
+The price \pT{} is the price just before the close.
+So its Brier score is not a one-day-ahead forecast.
+The mean Brier score is \RobRTwoAllBrierOneDay{} at \pOne{} and \RobRTwoAllBrierAtClose{} at \pT.
+The paired difference (\pT{} minus \pOne) is \RobRTwoAllMeanDiff{}
+(\CiLevel{} CI [\RobRTwoAllCiLow, \RobRTwoAllCiHigh], $p\,\RobRTwoAllP$, Cohen's $d_z=\RobRTwoAllDz$).
+A negative difference means \pT{} is closer to the outcome than \pOne.
+On the \RobRTwoTradedN{} markets with a trade in the last day, the difference is \RobRTwoTradedMeanDiff.
+The \CiLevel{} CI is [\RobRTwoTradedCiLow, \RobRTwoTradedCiHigh], and $d_z=\RobRTwoTradedDz$.
+
+\section{Discussion}\label{sec:discussion}
+% src: S-PAPER-5, S-PAPER-8
+The answer to Q1 is no.
+At this $n$, the price is not a calibrated probability as a whole.
+The observed Yes rate sits below the price in all but the top bin.
+The effect size is Cohen's $w=\QOneW$, and the largest bin gap is \BinSeventyEightyDiff{} (\Cref{tab:bins}).
+The longshot gap points the same way as the horse-racing bias.
+\todo{owner: interpretation of why prices run high, and what the gaps mean in practice for a reader of the price}
+
+The answer to Q2 is descriptive.
+Volume is concentrated in few wallets, in both roles.
+Our Gini values are \MakerGini{} and \TakerGini, against \PaperGiniMaker{} and \PaperGiniTaker{} in the dataset paper.
+The populations differ.
+We measure concentration of volume.
+We do not test who sets the prices.
+The k-means clusters are a side view and carry no claim.
+
+The answer to Q3 is descriptive too.
+Prices cluster near the ends, and trade sizes are strongly right skewed.
+\todo{owner: wider interpretation or policy implications, if the course report needs them}
+
+\section{Limitations}\label{sec:limits}
+% src: S-PAPER-1, S-PAPER-2, S-PAPER-3, S-PAPER-6
+Some markets have no usable winner label, and we drop them.
+In our full run this is \NNoOutcome{} of \NMarketsInScope{} markets (\PctNoOutcome).
+Our rule is wider than the dataset paper's.
+It also drops markets whose Yes-side label never traded.
+The paper says only a small subset lacks a winner.
+
+Markets keep trading after \texttt{close\_at}.
+We avoid this by pricing one day before the scheduled close.
+But the choice rests on a one-month pilot.
+
+Sports is the largest topic in scope and in the kept markets.
+It is \SportsShareInScope{} of the \NMarketsInScope{} markets in scope and \SportsShareKept{} of the kept markets.
+Its survival is \CatSportsSurvival{} against \PctKept{} overall.
+So Sports is slightly under-represented against its scope.
+Sports loses markets mainly to no price (\CatSportsDropNoPriceN) or a stale price (\CatSportsDropStalePriceN).
+Both are measured \DaysShort{} day before the close.
+It loses almost none to the Up/Down rule (\CatSportsDropUpdownN).
+The dataset paper notes that most Sports markets are Neg-Risk or Up/Down \citep{qin2026polymarketv1}.
+Neg-Risk markets are outside the layer we use.
+
+Our selection is narrow.
+Only \NMarketsKept{} of \NMarketsInScope{} markets pass the filters.
+\NNoPrice{} markets have no price \DaysShort{} day before the close (\PctNoPrice).
+The minimum-trade filter is a choice, and we show the result without it.
+Markets on one event move together.
+The binomial and chi-square tests assume independent markets, so the p-values are optimistic.
+The large $n$ also makes p-values underflow to zero in places.
+We therefore read the effect sizes and the intervals first.
+
+The k-means result is exploratory.
+The stability check gives ARI $=\KmeansAri$ between two scalings.
+This does not make the clusters real.
+A wallet is an address, and one owner may control many addresses.
+Volume concentration is not the same as the power to set prices.
+
+We changed one pre-registered rule after seeing a full Q1 result.
+This is the tie rule in \Cref{sec:methods-prereg}.
+We report it as an amendment.
+The amendment records that the verdict did not change.
+
+The two robustness checks in \Cref{sec:res-robust} speak to two limits.
+In R1, only \RobROneSplitN{} kept markets have a split payout and \RobROneMissingN{} is missing from the file.
+Our label agrees with the resolution file on \RobROneAgreement{} of clean markets.
+The Q1 rule result is the same without the unclear markets.
+In R2, the price moves by at least \DeltaA{} in \RobRTwoShareDeltaAtLeastTen{} of markets.
+This is the move between \pOne{} and the last trade.
+So \pOne{} is not the price at the close.
+Also \RobRTwoShareNoTrade{} of markets have no trade in the last day.
+
+\section{Conclusion}\label{sec:conclusion}
+% src: S-PAPER-5, S-PAPER-8
+We tested whether a Polymarket price can be read as a probability.
+On \NMarketsKept{} resolved Yes/No markets, the answer is not exactly.
+The prices are not calibrated as a whole.
+Cheap bets pay off less often than priced, which matches the horse-racing direction.
+The top wallets hold most of the volume, and trade sizes are strongly right skewed.
+We describe the last two results without a verdict.
+The payout check leaves the Q1 result in place.
+\todo{owner: closing sentence on the value of the study, and future work}
+
+\begingroup\raggedright
+\bibliographystyle{plainnat}
+\bibliography{references}
+\endgroup
+
+\end{document}

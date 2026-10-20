@@ -1,0 +1,34 @@
+{
+  "n_markets_in_scope": 688131,
+  "n_kept": 47948,
+  "n_kept_no_min_filter": 74474,
+  "drop_reasons": {
+    "stale_price": 80230,
+    "below_min_trades": 26526,
+    "no_outcome": 62718,
+    "no_price": 215289,
+    "updown": 255420,
+    "kept": 47948
+  },
+  "drop_reasons_no_min_filter": {
+    "stale_price": 80230,
+    "kept": 74474,
+    "no_price": 215289,
+    "no_outcome": 62718,
+    "updown": 255420
+  },
+  "reason_order": [
+    "updown",
+    "non_binary",
+    "no_outcome",
+    "no_price",
+    "stale_price",
+    "below_min_trades"
+  ],
+  "n_kept_open_ge_7d": 21816,
+  "n_kept_with_p_7d": 14169,
+  "n_wallet_role_rows": 2117412,
+  "n_trades_in_kept_markets": 63023987,
+  "trade_size_sample_rows": 1000000,
+  "trade_size_sample_rule": "ORDER BY hash(t.condition_id, t.asset_id, t.ts, t.maker, t.taker, t.usdc_amount, t.p_event), t.condition_id, t.ts LIMIT 1000000"
+}

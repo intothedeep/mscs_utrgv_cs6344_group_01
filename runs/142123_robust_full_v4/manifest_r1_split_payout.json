@@ -1,0 +1,91 @@
+{
+  "code_version": "v4",
+  "code_sha": "1232fa0fe1e2",
+  "params": {
+    "t_rule": "close_at",
+    "min_trades": 10,
+    "max_staleness_h": 24,
+    "n_bins": 10,
+    "alpha": 0.05,
+    "pilot_month": "2025-06",
+    "scope": "full",
+    "updown_rule": "default",
+    "horizon_long_days": 7,
+    "min_category_n": 30,
+    "n_perm": 1000,
+    "seed": 42,
+    "robust_agree_min": 0.95,
+    "robust_delta_thresholds": [
+      0.1,
+      0.25,
+      0.5
+    ],
+    "robust_quantiles": [
+      0.5,
+      0.75,
+      0.9,
+      0.95,
+      0.99
+    ],
+    "robust_yes_payout_index": 0,
+    "keep_duplicate_rows": true,
+    "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
+    "decided_by": "developer from the plan, main session, 2026-10-19 (MVP1 keys: owner, D-007; robustness keys: D-013)",
+    "mvp2_added_from": "tips/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19",
+    "robust_added_from": "DECISIONS.md D-013 and the developer task, 2026-10-19"
+  },
+  "env": {
+    "hostname": "gpu012",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "142123",
+    "slurm_cpus_per_task": "16",
+    "slurm_mem_per_node": "204800",
+    "duckdb_threads": "16",
+    "duckdb_mem": "160GB"
+  },
+  "metrics": {
+    "n_kept": 47948,
+    "class_counts": {
+      "clean": 47940,
+      "split": 7,
+      "other": 0,
+      "missing": 1
+    },
+    "class_shares": {
+      "clean": 0.9998331525819638,
+      "split": 0.00014599149078168015,
+      "other": 0.0,
+      "missing": 2.0855927254525735e-05
+    },
+    "duplicates": {
+      "resolutions_rows": 1313030,
+      "resolutions_distinct_ids": 1313030,
+      "kept_ids_with_rows": 47947,
+      "kept_ids_with_duplicate_rows": 0,
+      "kept_duplicates_identical": 0,
+      "kept_duplicates_conflicting": 0
+    },
+    "our_y_on_split_markets": {
+      "y1": 7,
+      "y0": 0
+    },
+    "mapping": {
+      "yes_index_primary": 0,
+      "n_clean": 47940,
+      "agreement_index_primary": 0.999165623696287,
+      "agreement_index_other": 0.0008343763037129692,
+      "agreement_ci95": [
+        0.9988640992957798,
+        0.9993871576692528
+      ],
+      "index_used": 0,
+      "validated": true,
+      "agree_min": 0.95,
+      "n_mismatch": 40
+    },
+    "sensitivity_rule_results_same": true
+  }
+}

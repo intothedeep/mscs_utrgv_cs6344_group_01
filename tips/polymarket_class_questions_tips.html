@@ -106,7 +106,7 @@ a{color:var(--signal-plan)}
   <div class="eyebrow">Question 2 of 4 · Luis Tapia</div>
   <h2>How do you deal with weird or ambiguous resolution criteria?</h2>
   <p class="q"><b>Asked:</b> "How are you planning to deal with weird or ambiguous resolution criteria?"</p>
-  <p class="ans"><b>Partly. We drop markets with no clear winner label. We have not yet checked split payouts.</b></p>
+  <p class="ans"><b>Yes. We drop markets with no clear winner label. We also checked split payouts: only 7 markets paid 50/50.</b></p>
   <div class="tablewrap"><table>
     <tr><th>What we do now</th><th>Effect in the full run</th></tr>
     <tr><td>The outcome is the market's <code>winning_outcome_label</code>. We do not read or judge the question text</td><td>One rule for every market, no hand labels</td></tr>
@@ -114,7 +114,14 @@ a{color:var(--signal-plan)}
     <tr><td>We never fill in a missing outcome</td><td>No guessed labels enter the tests</td></tr>
   </table></div>
   <p class="note">Source: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code> (<code>no_outcome</code>). Our rule is stricter than the dataset paper's count, because it also drops markets whose Yes-side label never traded.</p>
-  <div class="callout"><p><b>Not done yet:</b> a market can resolve 50/50 when its question turns out unclear. The resolution file (<code>CTF/resolutions.parquet</code>) holds the payout split for each market. Checking it for splits other than 1/0 is our next step. Until then, we cannot say how many ambiguous markets remain in the sample.</p></div>
+  <p>A market can resolve 50/50 when its question turns out unclear. The resolution file (<code>CTF/resolutions.parquet</code>) holds the payout split for each market. We checked all 47,948 kept markets against it.</p>
+  <div class="tablewrap"><table>
+    <tr><th>What we checked</th><th>Result</th></tr>
+    <tr><td>Kept markets that paid 50/50</td><td class="num">7 of 47,948 (0.015%)</td></tr>
+    <tr><td>Our winner label against the resolution file</td><td><ul><li>agree on 99.92% of 47,940 clean markets</li><li>95% CI [99.89%, 99.94%], 40 mismatches</li></ul></td></tr>
+    <tr><td>Q1 re-run without the 47 split and mismatching markets</td><td><ul><li>chi-square 68.0 → 64.3, effect size w 0.038 → 0.037</li><li>verdict unchanged: prices are not calibrated as a whole</li></ul></td></tr>
+  </table></div>
+  <p class="note">Source: <code>runs/142123_robust_full_v4/report_r1_split_payout.md</code>. The re-run is a sensitivity row next to the original Q1 result. It does not replace it.</p>
 </section>
 
 <section id="q3">
@@ -143,7 +150,17 @@ a{color:var(--signal-plan)}
     <tr><td>Brier at 7 days − Brier at 1 day, per market</td><td><ul><li>mean 0.0257, 95% CI [0.0232, 0.0282]</li><li>t = 19.96, p &lt; 0.0001, Cohen's d = 0.19 (small)</li></ul></td></tr>
   </table></div>
   <p class="note">Source: <code>runs/142083_mvp2_full_v2r3/verdicts.json</code>, <code>q1b_table.csv</code>. 11,005 markets were open at least 7 days with a fresh price at both times.</p>
-  <div class="callout"><p><b>Not done yet:</b> we do not measure the swings inside the final day itself. A next step is the price path in the last 24 hours (range and number of direction changes per market).</p></div>
+  <h3>The last 24 hours, measured</h3>
+  <div class="tablewrap"><table>
+    <tr><th>Price path from T − 1 day to the last trade before T (47,948 markets)</th><th>Value</th></tr>
+    <tr><td>Median absolute price change</td><td class="num">0.015</td></tr>
+    <tr><td>Markets whose price crosses 0.5</td><td class="num">8.0%</td></tr>
+    <tr><td>Markets with a change of 0.10 or more</td><td class="num">19.0%</td></tr>
+    <tr><td>Brier score at the price just before close</td><td class="num">0.075</td></tr>
+    <tr><td>Brier score at the price 1 day before (T − 1 day)</td><td class="num">0.107</td></tr>
+  </table></div>
+  <p>Most prices barely move in the final day, but a fifth move by 0.10 or more. The 0.075 is the score of the price just before close. It is not a one-day-ahead forecast.</p>
+  <p class="note">Source: <code>runs/142123_robust_full_v4/report_r2_price_path.md</code>. Descriptive only, no new test. We did not count direction changes.</p>
 </section>
 
 <section id="q4">

@@ -1,0 +1,145 @@
+{
+  "n_kept": 47948,
+  "class_counts": {
+    "clean": 47940,
+    "split": 7,
+    "other": 0,
+    "missing": 1
+  },
+  "class_shares": {
+    "clean": 0.9998331525819638,
+    "split": 0.00014599149078168015,
+    "other": 0.0,
+    "missing": 2.0855927254525735e-05
+  },
+  "duplicates": {
+    "resolutions_rows": 1313030,
+    "resolutions_distinct_ids": 1313030,
+    "kept_ids_with_rows": 47947,
+    "kept_ids_with_duplicate_rows": 0,
+    "kept_duplicates_identical": 0,
+    "kept_duplicates_conflicting": 0
+  },
+  "our_y_on_split_markets": {
+    "y1": 7,
+    "y0": 0
+  },
+  "mapping": {
+    "yes_index_primary": 0,
+    "n_clean": 47940,
+    "agreement_index_primary": 0.999165623696287,
+    "agreement_index_other": 0.0008343763037129692,
+    "agreement_ci95": [
+      0.9988640992957798,
+      0.9993871576692528
+    ],
+    "index_used": 0,
+    "validated": true,
+    "agree_min": 0.95,
+    "n_mismatch": 40
+  },
+  "sensitivity": {
+    "n_excluded": 47,
+    "n_markets": 47901,
+    "q1_original": {
+      "n_markets": 47948,
+      "class_balance_yes": 0.36583381997163594,
+      "brier": 0.10707126160833004,
+      "log_loss": 0.32336204404594615,
+      "mean_entropy_bits": 0.47510095751721093,
+      "chi2_gof": {
+        "chi2": 67.9867245888779,
+        "df": 10,
+        "p": 1.0834473799353825e-10,
+        "effect_w": 0.037655360605086674
+      },
+      "confusion_at_0.5": {
+        "tp": 13467,
+        "fp": 3870,
+        "fn": 4074,
+        "tn": 26537,
+        "accuracy": 0.8343205138900476,
+        "precision": 0.7767779892715002,
+        "recall": 0.7677441422951942
+      },
+      "ks_yes_vs_no": {
+        "D": 0.672933069153843,
+        "p": 0.0,
+        "n_yes": 17541,
+        "n_no": 30407
+      },
+      "longshot": {
+        "0.0-0.1": {
+          "n": 18209,
+          "mean_price": 0.018251099478840523,
+          "observed_rate": 0.013674556537975726,
+          "obs_minus_expected": -0.004576542940864797,
+          "ci_low_diff": -0.0061637371968133094,
+          "ci_high_diff": -0.0027841968233861484
+        },
+        "0.1-0.2": {
+          "n": 2703,
+          "mean_price": 0.14839858286189306,
+          "observed_rate": 0.12541620421753608,
+          "obs_minus_expected": -0.022982378644356982,
+          "ci_low_diff": -0.034938643429136204,
+          "ci_high_diff": -0.009962920282644366
+        }
+      },
+      "bins_reject_bonferroni": 4,
+      "bins_reject_bh": 5
+    },
+    "q1_sensitivity": {
+      "n_markets": 47901,
+      "class_balance_yes": 0.3660466378572472,
+      "brier": 0.10676296579444136,
+      "log_loss": 0.32232187590305816,
+      "mean_entropy_bits": 0.4747932154183337,
+      "chi2_gof": {
+        "chi2": 64.27965607603923,
+        "df": 10,
+        "p": 5.565499496037209e-10,
+        "effect_w": 0.03663232488511729
+      },
+      "confusion_at_0.5": {
+        "tp": 13464,
+        "fp": 3844,
+        "fn": 4070,
+        "tn": 26523,
+        "accuracy": 0.8347842425001566,
+        "precision": 0.7779061705569679,
+        "recall": 0.767879548306148
+      },
+      "ks_yes_vs_no": {
+        "D": 0.6737845448408973,
+        "p": 0.0,
+        "n_yes": 17534,
+        "n_no": 30367
+      },
+      "longshot": {
+        "0.0-0.1": {
+          "n": 18208,
+          "mean_price": 0.018247708172792566,
+          "observed_rate": 0.013620386643233744,
+          "obs_minus_expected": -0.004627321529558822,
+          "ci_low_diff": -0.006211254171850318,
+          "ci_high_diff": -0.0028382029086654534
+        },
+        "0.1-0.2": {
+          "n": 2703,
+          "mean_price": 0.14839858286189306,
+          "observed_rate": 0.12541620421753608,
+          "obs_minus_expected": -0.022982378644356982,
+          "ci_low_diff": -0.034938643429136204,
+          "ci_high_diff": -0.009962920282644366
+        }
+      },
+      "bins_reject_bonferroni": 3,
+      "bins_reject_bh": 4
+    },
+    "rule_result_original": "Prices are not calibrated as a whole at this n.",
+    "rule_result_sensitivity": "Prices are not calibrated as a whole at this n.",
+    "rule_results_same": true,
+    "delta_effect_w": -0.0010230357199693813
+  }
+}

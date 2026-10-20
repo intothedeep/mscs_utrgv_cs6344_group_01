@@ -13,10 +13,13 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import re
 from pathlib import Path
 from typing import Any
+
+import pandas as pd
 
 __all__ = ["main"]
 
@@ -137,6 +140,10 @@ def add_q1(m: Macros, run: Path) -> None:
           f"{src}: main_with_min_filter.class_balance_yes")
     m.add("QOneAccuracy", pct(main["confusion_at_0.5"]["accuracy"]),
           f"{src}: main_with_min_filter.confusion_at_0.5.accuracy")
+    m.add("QOnePrecision", pct(main["confusion_at_0.5"]["precision"]),
+          f"{src}: main_with_min_filter.confusion_at_0.5.precision")
+    m.add("QOneRecall", pct(main["confusion_at_0.5"]["recall"]),
+          f"{src}: main_with_min_filter.confusion_at_0.5.recall")
     m.add("QOneKsD", num(main["ks_yes_vs_no"]["D"], 3),
           f"{src}: main_with_min_filter.ks_yes_vs_no.D")
     m.add("QOneBinsBh", count(main["bins_reject_bh"]), f"{src}: main_with_min_filter.bins_reject_bh")
@@ -165,6 +172,62 @@ def add_q1(m: Macros, run: Path) -> None:
         m.add(f"Bin{lab}BhP", pval(float(row["p_bh"])), f"{s} p_bh")
 
 
+def bh_reject_count(p_values: list[float], alpha: float) -> int:
+    """Benjamini-Hochberg: number of rejections at level alpha (step-up on sorted p)."""
+    ps = sorted(p_values)
+    m = len(ps)
+    k = max((i for i, p in enumerate(ps, start=1) if p <= alpha * i / m), default=0)
+    return k
+
+
+def add_q1_eqfreq(m: Macros, run: Path, alpha: float) -> None:
+    rows = read_csv(run, "q1_bins_eqfreq.csv")
+    k = bh_reject_count([float(r["binom_p"]) for r in rows], alpha)
+    m.add("QOneEqFreqBins", count(len(rows)), "q1_bins_eqfreq.csv: row count")
+    m.add("QOneEqFreqBinsBh", count(k), "q1_bins_eqfreq.csv: COMPUTED by this script (BH on the saved binom_p at verdicts.json alpha); the file has no p_bh column")
+
+
+def add_pilot(m: Macros, pilot: Path) -> None:
+    r = load(pilot, "close_time_summary.json")
+    src = "close_time_summary.json (pilot run)"
+    m.add("PilotNMarkets", count(r["n_markets"]), f"{src}: n_markets")
+    m.add("PilotShareMarketsAfterClose", pct(r["share_markets_trade_after_close"]),
+          f"{src}: share_markets_trade_after_close")
+    m.add("PilotShareVolumeAfterClose", pct(r["share_volume_after_close"]),
+          f"{src}: share_volume_after_close")
+
+
+DROP_REASONS = ("updown", "no_outcome", "no_price", "stale_price", "below_min_trades")
+
+
+def add_categories(m: Macros, run: Path, markets_csv: Path) -> None:
+    """In-scope, kept and dropped-by-reason markets per category (individual-level markets.csv, 3 columns only)."""
+    df = pd.read_csv(markets_csv, usecols=["category_refined", "drop_reason", "kept"])
+    n_scope, n_kept = len(df), int(df["kept"].sum())
+    ts = load(run, "tables_summary.json")
+    if (n_scope, n_kept) != (ts["n_markets_in_scope"], ts["n_kept"]):
+        raise ValueError(f"{markets_csv} has {n_scope} in scope / {n_kept} kept, "
+                         f"{run.name} has {ts['n_markets_in_scope']} / {ts['n_kept']}")
+    src = f"{markets_csv.parent.name}/markets.csv"
+    for cat, g in df.groupby("category_refined"):
+        if cat not in CATEGORY_NAME:
+            continue
+        k, n, kept = CATEGORY_NAME[cat], len(g), int(g["kept"].sum())
+        s = f"{src}: category_refined={cat}"
+        m.add(f"Cat{k}NInScope", count(n), f"{s}, row count")
+        m.add(f"Cat{k}ShareInScope", pct(n / n_scope), f"{s}, row count / all rows")
+        m.add(f"Cat{k}NKept", count(kept), f"{s}, kept=True")
+        m.add(f"Cat{k}ShareKept", pct(kept / n_kept), f"{s}, kept=True / all kept")
+        m.add(f"Cat{k}Survival", pct(kept / n), f"{s}, kept=True / row count")
+        if cat == "Sports":  # names the reviewer asked for (F1)
+            m.add("SportsNInScope", count(n), f"{s}, row count")
+            m.add("SportsShareInScope", pct(n / n_scope), f"{s}, row count / all rows")
+            m.add("SportsShareKept", pct(kept / n_kept), f"{s}, kept=True / all kept")
+        by = g["drop_reason"].value_counts()
+        for r in DROP_REASONS:
+            m.add(f"Cat{k}Drop{DROP_NAME[r]}N", count(int(by.get(r, 0))), f"{s}, drop_reason={r}")
+
+
 def add_q1a(m: Macros, run: Path) -> None:
     r = load(run, "q1a_results.json", required=False)
     if r is None:
@@ -190,6 +253,9 @@ def add_q1a(m: Macros, run: Path) -> None:
     m.add("QOneAPermP", pval(bs["perm_p"]), f"{src}: brier_tests.perm_p")
     m.add("QOneANPerm", count(bs["n_perm"]), f"{src}: brier_tests.n_perm")
 
+    q1 = load(run, "q1_results.json")["main_with_min_filter"]["confusion_at_0.5"]
+    m.add("CatAllFavWin", pct(q1["accuracy"]),
+          "q1_results.json: main_with_min_filter.confusion_at_0.5.accuracy (share of kept markets whose p>0.5 side won)")
     cont = {c["category_group"]: c for c in read_csv(run, "q1a_contingency.csv")}
     for cat, c in cont.items():
         k = CATEGORY_NAME[cat]
@@ -272,10 +338,14 @@ def add_q2(m: Macros, run: Path) -> None:
     sp = r["spearman_n_trades_vs_volume"]
     m.add("SpearmanTradesVolumeRho", num(sp["rho"], 3), f"{src}: spearman_n_trades_vs_volume.rho")
     km = r["kmeans"]
+    an = km["anova_mean_trade_price"]
+    m.add("KmeansPriceEtaSq", num(an["eta_squared"], 3), f"{src}: kmeans.anova_mean_trade_price.eta_squared")
+    m.add("KmeansPricePermP", pval(an["perm_p"]), f"{src}: kmeans.anova_mean_trade_price.perm_p")
     m.add("KmeansK", count(km["k_chosen"]), f"{src}: kmeans.k_chosen")
     m.add("KmeansNSample", count(km["n_sample"]), f"{src}: kmeans.n_sample")
     m.add("KmeansAri", num(km["robust_scaling_check"]["adjusted_rand_index_vs_zscore"], 2),
           f"{src}: kmeans.robust_scaling_check.adjusted_rand_index_vs_zscore")
+    m.add("KmeansNPerm", count(an["n_perm"]), f"{src}: kmeans.anova_mean_trade_price.n_perm")
     cx = km["chi2_cluster_x_category"]
     m.add("KmeansCategoryV", num(cx["cramers_v"], 3), f"{src}: kmeans.chi2_cluster_x_category.cramers_v")
     for c in km["cluster_summary"]:
@@ -300,7 +370,17 @@ def add_q3(m: Macros, run: Path) -> None:
         m.add(f"{tag}PowerAlpha", num(pl["alpha"], 2), f"{src}: fits.{key}.power_law.alpha")
         m.add(f"{tag}PowerXmin", num(pl["xmin"], 1), f"{src}: fits.{key}.power_law.xmin")
         m.add(f"{tag}PowerKsD", num(pl["D"], 3), f"{src}: fits.{key}.power_law.D")
+        m.add(f"{tag}ExponentialKsD", num(r["fits"][key]["exponential"]["D"], 3),
+              f"{src}: fits.{key}.exponential.D")
         m.add(f"{tag}NormalKsD", num(r["fits"][key]["normal"]["D"], 3), f"{src}: fits.{key}.normal.D")
+
+
+def add_code_set(m: Macros, run: Path, sha_name: str, file_name: str) -> None:
+    """The run's code.sha256 lists every script of the code set. Its own hash names the set."""
+    f = run / "code.sha256"
+    m.add(sha_name, text(hashlib.sha256(f.read_bytes()).hexdigest()[:12]),
+          f"{f.name}: sha256 of the file that lists the hash of every script (first 12 hex)")
+    m.add(file_name, text(f"runs/{run.name}/code.sha256"), "path of the per-script hash list")
 
 
 def add_meta(m: Macros, run: Path) -> None:
@@ -308,7 +388,9 @@ def add_meta(m: Macros, run: Path) -> None:
     src = "manifest_q1_calibration.json"
     m.add("RunId", text(run.name), "run directory name")
     m.add("CodeVersion", text(man["code_version"]), f"{src}: code_version")
-    m.add("CodeSha", text(man["code_sha"]), f"{src}: code_sha")
+    m.add("CodeSha", text(man["code_sha"]),
+          f"{src}: code_sha (hash of the script q1_calibration.py alone, first 12 hex, not of the code set)")
+    add_code_set(m, run, "CodeSetSha", "CodeShaFile")
     m.add("SlurmJobId", text(man["env"]["slurm_job_id"]), f"{src}: env.slurm_job_id")
     v = load(run, "verdicts.json")
     for q, d in v["comparisons"].items():
@@ -317,14 +399,127 @@ def add_meta(m: Macros, run: Path) -> None:
     m.add("Alpha", num(v["alpha"], 2), "verdicts.json: alpha")
 
 
+ROB_CLASS = {"clean": "Clean", "split": "Split", "other": "Other", "missing": "Missing"}
+ROB_QUANTILE = {"q0.5": "Median", "q0.75": "SevenFive", "q0.9": "Ninety", "q0.95": "NinetyFive",
+                "q0.99": "NinetyNine", "max": "Max"}
+ROB_THRESHOLD = {"0.10": "Ten", "0.25": "TwentyFive", "0.50": "Fifty"}
+
+
+def add_robust_r1(m: Macros, r: dict[str, Any]) -> None:
+    src = "r1_results.json"
+    m.add("RobROneNKept", count(r["n_kept"]), f"{src}: n_kept")
+    for c, name in ROB_CLASS.items():
+        m.add(f"RobROne{name}N", count(r["class_counts"][c]), f"{src}: class_counts.{c}")
+        m.add(f"RobROne{name}Share", pct(r["class_shares"][c], 2), f"{src}: class_shares.{c}")
+    d = r["duplicates"]
+    m.add("RobROneDupIds", count(d["kept_ids_with_duplicate_rows"]), f"{src}: duplicates.kept_ids_with_duplicate_rows")
+    m.add("RobROneDupConflicting", count(d["kept_duplicates_conflicting"]),
+          f"{src}: duplicates.kept_duplicates_conflicting")
+    m.add("RobROneSplitYesOne", count(r["our_y_on_split_markets"]["y1"]), f"{src}: our_y_on_split_markets.y1")
+    m.add("RobROneSplitYesZero", count(r["our_y_on_split_markets"]["y0"]), f"{src}: our_y_on_split_markets.y0")
+    mp = r["mapping"]
+    m.add("RobROneNClean", count(mp["n_clean"]), f"{src}: mapping.n_clean")
+    m.add("RobROneAgreement", pct(mp["agreement_index_primary"], 2), f"{src}: mapping.agreement_index_primary")
+    m.add("RobROneAgreementLow", pct(mp["agreement_ci95"][0], 2), f"{src}: mapping.agreement_ci95[0]")
+    m.add("RobROneAgreementHigh", pct(mp["agreement_ci95"][1], 2), f"{src}: mapping.agreement_ci95[1]")
+    m.add("RobROneNMismatch", count(mp["n_mismatch"]), f"{src}: mapping.n_mismatch")
+    m.add("RobROneMappingValidated", "yes" if mp["validated"] else "no", f"{src}: mapping.validated")
+    s = r["sensitivity"]
+    m.add("RobROneNExcluded", count(s["n_excluded"]), f"{src}: sensitivity.n_excluded")
+    m.add("RobROneSensN", count(s["n_markets"]), f"{src}: sensitivity.n_markets")
+    q = s["q1_sensitivity"]
+    m.add("RobROneSensChiSq", num(q["chi2_gof"]["chi2"], 1), f"{src}: sensitivity.q1_sensitivity.chi2_gof.chi2")
+    m.add("RobROneSensDf", count(q["chi2_gof"]["df"]), f"{src}: sensitivity.q1_sensitivity.chi2_gof.df")
+    m.add("RobROneSensP", pval(q["chi2_gof"]["p"]), f"{src}: sensitivity.q1_sensitivity.chi2_gof.p")
+    m.add("RobROneSensW", num(q["chi2_gof"]["effect_w"], 3), f"{src}: sensitivity.q1_sensitivity.chi2_gof.effect_w")
+    m.add("RobROneSensBrier", num(q["brier"], 3), f"{src}: sensitivity.q1_sensitivity.brier")
+    m.add("RobROneSensBinsBh", count(q["bins_reject_bh"]), f"{src}: sensitivity.q1_sensitivity.bins_reject_bh")
+    m.add("RobROneDeltaW", num(s["delta_effect_w"], 4), f"{src}: sensitivity.delta_effect_w")
+    m.add("RobROneRuleSame", "yes" if s["rule_results_same"] else "no", f"{src}: sensitivity.rule_results_same")
+    m.add("RobROneRuleOriginal", text(s["rule_result_original"]), f"{src}: sensitivity.rule_result_original")
+    m.add("RobROneRuleSens", text(s["rule_result_sensitivity"]), f"{src}: sensitivity.rule_result_sensitivity")
+
+
+def add_robust_r2(m: Macros, r: dict[str, Any]) -> None:
+    src = "r2_results.json"
+    o = r["overall"]
+    m.add("RobRTwoN", count(o["n"]), f"{src}: overall.n")
+    m.add("RobRTwoMedianAbsDelta", num(o["median_abs_delta"], 4), f"{src}: overall.median_abs_delta")
+    m.add("RobRTwoShareNoTrade", pct(o["share_no_trade"]), f"{src}: overall.share_no_trade")
+    m.add("RobRTwoShareCrossing", pct(o["share_crossing"], 2), f"{src}: overall.share_crossing")
+    for t, name in ROB_THRESHOLD.items():
+        m.add(f"RobRTwoShareDeltaAtLeast{name}", pct(o[f"share_abs_delta_ge_{t}"], 2),
+              f"{src}: overall.share_abs_delta_ge_{t}")
+    for k, name in ROB_QUANTILE.items():
+        m.add(f"RobRTwoAbsDelta{name}", num(o["quantiles_abs_delta"][k], 3), f"{src}: overall.quantiles_abs_delta.{k}")
+    for k, name in (("median", "Median"), ("q0.9", "Ninety"), ("max", "Max")):
+        m.add(f"RobRTwoWindowTrades{name}", count(int(o["n_window_trades"][k])), f"{src}: overall.n_window_trades.{k}")
+    for tag, key in (("All", "brier"), ("Traded", "brier_traded_only")):
+        b = o[key]
+        s = f"{src}: overall.{key}"
+        m.add(f"RobRTwo{tag}N", count(b["n"]), f"{s}.n")
+        m.add(f"RobRTwo{tag}BrierOneDay", num(b["brier_1d"], 4), f"{s}.brier_1d")
+        m.add(f"RobRTwo{tag}BrierAtClose", num(b["brier_T"], 4), f"{s}.brier_T")
+        m.add(f"RobRTwo{tag}MeanDiff", num(b["mean_diff"], 4), f"{s}.mean_diff")
+        m.add(f"RobRTwo{tag}CiLow", num(b["ci_low"], 4), f"{s}.ci_low")
+        m.add(f"RobRTwo{tag}CiHigh", num(b["ci_high"], 4), f"{s}.ci_high")
+        m.add(f"RobRTwo{tag}T", num(b["t"], 1), f"{s}.t")
+        m.add(f"RobRTwo{tag}P", pval(b["p"]), f"{s}.p")
+        m.add(f"RobRTwo{tag}Dz", num(b["cohens_dz"], 2), f"{s}.cohens_dz")
+    for cat, c in r["by_category"].items():
+        k, s = CATEGORY_NAME.get(cat, text(cat)), f"{src}: by_category.{cat}"
+        if k not in CATEGORY_NAME.values():
+            continue  # Unknown or Merged groups have no fixed macro name
+        m.add(f"RobRTwoCat{k}N", count(c["n"]), f"{s}.n")
+        m.add(f"RobRTwoCat{k}MedianAbsDelta", num(c["median_abs_delta"], 4), f"{s}.median_abs_delta")
+        m.add(f"RobRTwoCat{k}MeanDiff", num(c["brier"]["mean_diff"], 4), f"{s}.brier.mean_diff")
+
+
+def add_robust_meta(m: Macros, robust: Path) -> None:
+    m.add("RobustRun", text(robust.name), "robustness run directory name")
+    versions = set()
+    for tag, stage in (("ROne", "r1_split_payout"), ("RTwo", "r2_price_path")):
+        man = load(robust, f"manifest_{stage}.json", required=False)
+        if man is None:
+            continue
+        versions.add(man["code_version"])
+        m.add(f"RobustCodeSha{tag}", text(man["code_sha"]),
+              f"manifest_{stage}.json: code_sha (hash of the script {stage}.py alone)")
+    if len(versions) > 1:
+        raise ValueError(f"r1 and r2 manifests disagree on code_version: {versions}")
+    if versions:
+        m.add("RobustCodeVersion", text(versions.pop()), "manifest_r1_split_payout.json, manifest_r2_price_path.json: code_version")
+    add_code_set(m, robust, "RobustCodeSha", "RobustCodeShaFile")
+
+
+def add_robust(m: Macros, robust: Path) -> None:
+    """Robustness macros (prefix Rob). Each stage is skipped when its result file is absent."""
+    add_robust_meta(m, robust)
+    r1 = load(robust, "r1_results.json", required=False)
+    if r1 is not None:
+        add_robust_r1(m, r1)
+    r2 = load(robust, "r2_results.json", required=False)
+    if r2 is not None:
+        add_robust_r2(m, r2)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--run", required=True, type=Path)
     ap.add_argument("--out", required=True, type=Path)
+    ap.add_argument("--pilot", type=Path, help="pilot run dir with close_time_summary.json")
+    ap.add_argument("--robust", type=Path, help="robustness run dir with r1_results.json, r2_results.json")
     a = ap.parse_args()
     m = Macros()
     for fn in (add_meta, add_data, add_q1, add_q1a, add_q1b, add_q1c, add_q2, add_q3):
         fn(m, a.run)
+    add_q1_eqfreq(m, a.run, load(a.run, "verdicts.json")["alpha"])
+    if a.pilot is not None:
+        add_pilot(m, a.pilot)
+    if a.robust is not None:
+        add_robust(m, a.robust)
+        if (a.robust / "markets.csv").exists():  # same build as the main runs, checked by row counts
+            add_categories(m, a.run, a.robust / "markets.csv")
     a.out.parent.mkdir(parents=True, exist_ok=True)
     header = f"% Generated by code/make_paper_numbers.py from {a.run}. Do not edit by hand.\n"
     a.out.write_text(header + "\n".join(m.lines) + "\n")

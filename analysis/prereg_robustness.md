@@ -94,3 +94,9 @@ Why: p_1d is a price 24 hours before T. R2 shows how far the price moves from p_
 - The overall paired t-test has one p-value. Its effect size (mean difference with CI and d_z) is printed next to it.
 - The sign of the difference is read as is. A negative mean difference means p_T is closer to the outcome than p_1d.
 - Many markets have no trade in the last day. That is a result, not a defect, and it is reported.
+
+## Note after the run (2026-10-19, review F19)
+
+- The class rules are applied in table order. The first match wins.
+- So a vector with 3 or more equal non-zero slots is "split", not "other". This is how `code/r1_split_payout.py` already works.
+- The rule did not change. Run 142123 has 0 "other" markets, so no number moves.
