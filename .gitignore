@@ -244,3 +244,6 @@ papers/**/*.fdb_latexmk
 papers/**/*.fls
 papers/**/*.log
 papers/**/*.out
+
+# Downloaded reference PDFs (copyright): owner keeps them locally
+papers/refs/
