@@ -148,6 +148,8 @@ If any condition fails, spend Week 3 polishing MVP1.
 
 **Caution for Q1a: Sports mostly drops out.** Sports is the largest category by market count. Most Sports markets are Neg-Risk (multi-outcome) or Up-Down, so they are not in the Standard Binary sample (paper, limitation 7). Report n per category, and state that Sports is under-represented.
 
+**Measured (2026-10-19, review F1):** the caution above did not hold. Sports is 49.7% of markets in scope and 40.0% of kept markets. Most Sports drops are no price or stale price, not Up-Down. Source: `papers/paper_mvp2/numbers.tex` (`SportsShareInScope`, `SportsShareKept`, `CatSportsDrop*`), from `runs/142123_robust_full_v4/markets.csv`.
+
 **Caution for Q1b:** it uses the same close time T as Q1 (section 0).
 
 | Sub-question | Method | Lecture | Output |
