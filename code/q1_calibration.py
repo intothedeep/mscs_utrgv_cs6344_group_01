@@ -47,6 +47,8 @@ def analyze(df: pd.DataFrame, n_bins: int, alpha: float) -> tuple[dict, pd.DataF
     # Equal-frequency check: same table on quantile bins (ties dropped).
     df["bin_eqf"] = pd.qcut(df["p_1d"], n_bins, duplicates="drop").astype(str)
     eqf = bin_table(df, "bin_eqf", alpha)
+    eqf["p_bh"] = multipletests(eqf["binom_p"], alpha=alpha, method="fdr_bh")[1]   # v5: same BH and alpha as q1_bins.csv
+    eqf["reject_bh"] = eqf["p_bh"] < alpha
 
     p, y = df["p_1d"].to_numpy(), df["y"].to_numpy()
     # Chi-square GoF on the bin x {Yes, No} table: expected Yes = n * mean price. No fitted parameters, so df = bins.

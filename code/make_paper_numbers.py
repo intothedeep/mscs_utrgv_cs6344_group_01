@@ -23,6 +23,23 @@ import pandas as pd
 
 __all__ = ["main"]
 
+# Number format, one rule per quantity type (F7). Every macro goes through exactly one helper.
+#
+# | Quantity                                             | Helper   | Format                               |
+# | ---------------------------------------------------- | -------- | ------------------------------------ |
+# | Counts (markets, trades, wallets, n, df, permutations) | count  | integer, thousands separator {,}     |
+# | Shares and percent (also bin gaps, in points)        | pct      | 1 decimal + \%                       |
+# | Brier, w, V, d, d_z, rho, Gini, ARI, eta squared,    | est      | 3 decimals                           |
+# |   KS D, entropy, log loss, power-law exponent        |          |                                      |
+# | Test statistics (chi-square, t, F)                   | stat     | 1 decimal                            |
+# | USDC amounts, expected counts, x_min                 | amount   | 1 decimal, thousands separator       |
+# | Confidence interval ends                             | as estimate | same helper and decimals as the estimate |
+# | p-value                                              | pval     | below 0.001: 2 significant digits    |
+# |                                                      |          |   in scientific form; else 3 decimals |
+# | Significance level alpha                             | level    | shortest exact form (0.05)           |
+#
+# A p-value of exactly 0 in the saved file is float underflow and prints as <10^{-300}.
+
 ONES = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
         "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
         "Seventeen", "Eighteen", "Nineteen"]
@@ -61,13 +78,33 @@ def count(n: int) -> str:
     return "\\ensuremath{" + f"{n:,}".replace(",", "{,}") + "}"
 
 
-def num(x: float, d: int = 3) -> str:
-    return "\\ensuremath{" + f"{x:.{d}f}" + "}"
+def _grouped(x: float, d: int) -> str:
+    """Fixed decimals with a thousands separator that also works in math mode."""
+    text_ = f"{x:,.{d}f}"
+    if float(text_.replace(",", "")) == 0:
+        text_ = text_.lstrip("-")  # no negative zero such as -0.0
+    return text_.replace(",", "{,}")
 
 
-def pct(x: float, d: int = 1) -> str:
-    """x is a fraction; output is a percent in text mode."""
-    return "\\ensuremath{" + f"{100 * x:.{d}f}" + "}\\%"
+def est(x: float) -> str:
+    return "\\ensuremath{" + _grouped(x, 3) + "}"
+
+
+def stat(x: float) -> str:
+    return "\\ensuremath{" + _grouped(x, 1) + "}"
+
+
+def amount(x: float) -> str:
+    return "\\ensuremath{" + _grouped(x, 1) + "}"
+
+
+def level(x: float) -> str:
+    return "\\ensuremath{" + f"{x:g}" + "}"
+
+
+def pct(x: float) -> str:
+    """x is a fraction; output is a percent in text mode, one decimal."""
+    return "\\ensuremath{" + _grouped(100 * x, 1) + "}\\%"
 
 
 def pval(p: float) -> str:
@@ -128,13 +165,13 @@ def add_q1(m: Macros, run: Path) -> None:
     main = r["main_with_min_filter"]
     chi = main["chi2_gof"]
     m.add("QOneN", count(main["n_markets"]), f"{src}: main_with_min_filter.n_markets")
-    m.add("QOneChiSq", num(chi["chi2"], 1), f"{src}: main_with_min_filter.chi2_gof.chi2")
+    m.add("QOneChiSq", stat(chi["chi2"]), f"{src}: main_with_min_filter.chi2_gof.chi2")
     m.add("QOneDf", count(chi["df"]), f"{src}: main_with_min_filter.chi2_gof.df")
     m.add("QOneP", pval(chi["p"]), f"{src}: main_with_min_filter.chi2_gof.p")
-    m.add("QOneW", num(chi["effect_w"], 3), f"{src}: main_with_min_filter.chi2_gof.effect_w")
-    m.add("QOneBrier", num(main["brier"], 3), f"{src}: main_with_min_filter.brier")
-    m.add("QOneLogLoss", num(main["log_loss"], 3), f"{src}: main_with_min_filter.log_loss")
-    m.add("QOneEntropy", num(main["mean_entropy_bits"], 3),
+    m.add("QOneW", est(chi["effect_w"]), f"{src}: main_with_min_filter.chi2_gof.effect_w")
+    m.add("QOneBrier", est(main["brier"]), f"{src}: main_with_min_filter.brier")
+    m.add("QOneLogLoss", est(main["log_loss"]), f"{src}: main_with_min_filter.log_loss")
+    m.add("QOneEntropy", est(main["mean_entropy_bits"]),
           f"{src}: main_with_min_filter.mean_entropy_bits")
     m.add("QOneYesRate", pct(main["class_balance_yes"]),
           f"{src}: main_with_min_filter.class_balance_yes")
@@ -144,17 +181,17 @@ def add_q1(m: Macros, run: Path) -> None:
           f"{src}: main_with_min_filter.confusion_at_0.5.precision")
     m.add("QOneRecall", pct(main["confusion_at_0.5"]["recall"]),
           f"{src}: main_with_min_filter.confusion_at_0.5.recall")
-    m.add("QOneKsD", num(main["ks_yes_vs_no"]["D"], 3),
+    m.add("QOneKsD", est(main["ks_yes_vs_no"]["D"]),
           f"{src}: main_with_min_filter.ks_yes_vs_no.D")
     m.add("QOneBinsBh", count(main["bins_reject_bh"]), f"{src}: main_with_min_filter.bins_reject_bh")
     m.add("QOneBinsBonferroni", count(main["bins_reject_bonferroni"]),
           f"{src}: main_with_min_filter.bins_reject_bonferroni")
     nm = r["no_min_filter"]
     m.add("QOneNoMinN", count(nm["n_markets"]), f"{src}: no_min_filter.n_markets")
-    m.add("QOneNoMinBrier", num(nm["brier"], 3), f"{src}: no_min_filter.brier")
-    m.add("QOneNoMinChiSq", num(nm["chi2_gof"]["chi2"], 1), f"{src}: no_min_filter.chi2_gof.chi2")
+    m.add("QOneNoMinBrier", est(nm["brier"]), f"{src}: no_min_filter.brier")
+    m.add("QOneNoMinChiSq", stat(nm["chi2_gof"]["chi2"]), f"{src}: no_min_filter.chi2_gof.chi2")
     m.add("QOneNoMinP", pval(nm["chi2_gof"]["p"]), f"{src}: no_min_filter.chi2_gof.p")
-    m.add("QOneNoMinW", num(nm["chi2_gof"]["effect_w"], 3), f"{src}: no_min_filter.chi2_gof.effect_w")
+    m.add("QOneNoMinW", est(nm["chi2_gof"]["effect_w"]), f"{src}: no_min_filter.chi2_gof.effect_w")
     m.add("MinTrades", count(r["min_trades"]), f"{src}: min_trades")
 
     for row in read_csv(run, "q1_bins.csv"):
@@ -164,7 +201,7 @@ def add_q1(m: Macros, run: Path) -> None:
         m.add(f"Bin{lab}N", count(int(row["n"])), f"{s} n")
         m.add(f"Bin{lab}Price", pct(float(row["mean_price"])), f"{s} mean_price")
         m.add(f"Bin{lab}Obs", pct(float(row["observed_rate"])), f"{s} observed_rate")
-        m.add(f"Bin{lab}Diff", pct(float(row["diff_obs_minus_price"]), 2),
+        m.add(f"Bin{lab}Diff", pct(float(row["diff_obs_minus_price"])),
               f"{s} diff_obs_minus_price")
         m.add(f"Bin{lab}CiLow", pct(float(row["ci_low"])), f"{s} ci_low")
         m.add(f"Bin{lab}CiHigh", pct(float(row["ci_high"])), f"{s} ci_high")
@@ -180,11 +217,23 @@ def bh_reject_count(p_values: list[float], alpha: float) -> int:
     return k
 
 
-def add_q1_eqfreq(m: Macros, run: Path, alpha: float) -> None:
+def add_q1_eqfreq(m: Macros, run: Path, alpha: float, q1eqfreq: Path | None) -> None:
     rows = read_csv(run, "q1_bins_eqfreq.csv")
-    k = bh_reject_count([float(r["binom_p"]) for r in rows], alpha)
     m.add("QOneEqFreqBins", count(len(rows)), "q1_bins_eqfreq.csv: row count")
-    m.add("QOneEqFreqBinsBh", count(k), "q1_bins_eqfreq.csv: COMPUTED by this script (BH on the saved binom_p at verdicts.json alpha); the file has no p_bh column")
+    if q1eqfreq is not None:
+        saved = read_csv(q1eqfreq, "q1_bins_eqfreq.csv")
+        same = len(saved) == len(rows) and all(
+            abs(float(a["binom_p"]) - float(b["binom_p"])) <= 1e-12 * max(1.0, abs(float(a["binom_p"])))
+            for a, b in zip(rows, saved))
+        if not same:
+            raise ValueError(f"{q1eqfreq.name}/q1_bins_eqfreq.csv binom_p differs from {run.name}")
+        k = sum(r["reject_bh"] == "True" for r in saved)
+        m.add("QOneEqFreqBinsBh", count(k), f"{q1eqfreq.name}/q1_bins_eqfreq.csv: reject_bh (saved run output, code v5)")
+        return
+    # Fallback when no --q1eqfreq run is given: the 142082/142083 file has no p_bh column.
+    k = bh_reject_count([float(r["binom_p"]) for r in rows], alpha)
+    m.add("QOneEqFreqBinsBh", count(k), "q1_bins_eqfreq.csv: COMPUTED by this script (BH on the saved binom_p at "
+          "verdicts.json alpha), not a saved run output; the file has no p_bh column")
 
 
 def add_pilot(m: Macros, pilot: Path) -> None:
@@ -235,11 +284,11 @@ def add_q1a(m: Macros, run: Path) -> None:
     src = "q1a_results.json"
     chi = r["chi_square_independence"]
     m.add("QOneAN", count(chi["n"]), f"{src}: chi_square_independence.n")
-    m.add("QOneAChiSq", num(chi["chi2"], 1), f"{src}: chi_square_independence.chi2")
+    m.add("QOneAChiSq", stat(chi["chi2"]), f"{src}: chi_square_independence.chi2")
     m.add("QOneADf", count(chi["df"]), f"{src}: chi_square_independence.df")
     m.add("QOneAP", pval(chi["p"]), f"{src}: chi_square_independence.p")
-    m.add("QOneAV", num(chi["cramers_v"], 3), f"{src}: chi_square_independence.cramers_v")
-    m.add("QOneAMinExpected", num(chi["min_expected_count"], 1),
+    m.add("QOneAV", est(chi["cramers_v"]), f"{src}: chi_square_independence.cramers_v")
+    m.add("QOneAMinExpected", amount(chi["min_expected_count"]),
           f"{src}: chi_square_independence.min_expected_count")
     m.add("QOneANCategories", count(chi["n_categories"]), f"{src}: chi_square_independence.n_categories")
     bt = r["bin_tests"]
@@ -247,9 +296,9 @@ def add_q1a(m: Macros, run: Path) -> None:
     m.add("QOneABinsBh", count(bt["reject_bh"]), f"{src}: bin_tests.reject_bh")
     m.add("QOneABinsBonferroni", count(bt["reject_bonferroni"]), f"{src}: bin_tests.reject_bonferroni")
     bs = r["brier_tests"]
-    m.add("QOneAAnovaF", num(bs["anova_F"], 1), f"{src}: brier_tests.anova_F")
+    m.add("QOneAAnovaF", stat(bs["anova_F"]), f"{src}: brier_tests.anova_F")
     m.add("QOneAAnovaP", pval(bs["anova_p"]), f"{src}: brier_tests.anova_p")
-    m.add("QOneAEtaSq", num(bs["eta_squared"], 3), f"{src}: brier_tests.eta_squared")
+    m.add("QOneAEtaSq", est(bs["eta_squared"]), f"{src}: brier_tests.eta_squared")
     m.add("QOneAPermP", pval(bs["perm_p"]), f"{src}: brier_tests.perm_p")
     m.add("QOneANPerm", count(bs["n_perm"]), f"{src}: brier_tests.n_perm")
 
@@ -262,7 +311,7 @@ def add_q1a(m: Macros, run: Path) -> None:
         s = f"q1a_contingency.csv: category_group={cat}"
         m.add(f"Cat{k}N", count(int(c["n"])), f"{s} n")
         m.add(f"Cat{k}FavWin", pct(float(c["favorite_win_rate"])), f"{s} favorite_win_rate")
-        m.add(f"Cat{k}Brier", num(float(c["mean_brier"]), 3), f"{s} mean_brier")
+        m.add(f"Cat{k}Brier", est(float(c["mean_brier"])), f"{s} mean_brier")
     for row in read_csv(run, "q1a_bins_by_category.csv"):
         i = int(row["bin"])
         if i not in LONGSHOT_BINS:
@@ -272,7 +321,7 @@ def add_q1a(m: Macros, run: Path) -> None:
         m.add(f"Cat{k}Bin{lab}N", count(int(row["n"])), f"{s} n")
         m.add(f"Cat{k}Bin{lab}Price", pct(float(row["mean_price"])), f"{s} mean_price")
         m.add(f"Cat{k}Bin{lab}Obs", pct(float(row["observed_rate"])), f"{s} observed_rate")
-        m.add(f"Cat{k}Bin{lab}Diff", pct(float(row["diff_obs_minus_price"]), 2),
+        m.add(f"Cat{k}Bin{lab}Diff", pct(float(row["diff_obs_minus_price"])),
               f"{s} diff_obs_minus_price")
         m.add(f"Cat{k}Bin{lab}BhP", pval(float(row["p_bh"])), f"{s} p_bh")
 
@@ -284,22 +333,22 @@ def add_q1b(m: Macros, run: Path) -> None:
     src = "q1b_results.json"
     d = r["brier_diff_7d_minus_1d"]
     m.add("QOneBN", count(d["n"]), f"{src}: brier_diff_7d_minus_1d.n")
-    m.add("QOneBMeanDiff", num(d["mean_diff"], 4), f"{src}: brier_diff_7d_minus_1d.mean_diff")
-    m.add("QOneBCiLow", num(d["ci_low"], 4), f"{src}: brier_diff_7d_minus_1d.ci_low")
-    m.add("QOneBCiHigh", num(d["ci_high"], 4), f"{src}: brier_diff_7d_minus_1d.ci_high")
-    m.add("QOneBT", num(d["t"], 1), f"{src}: brier_diff_7d_minus_1d.t")
+    m.add("QOneBMeanDiff", est(d["mean_diff"]), f"{src}: brier_diff_7d_minus_1d.mean_diff")
+    m.add("QOneBCiLow", est(d["ci_low"]), f"{src}: brier_diff_7d_minus_1d.ci_low")
+    m.add("QOneBCiHigh", est(d["ci_high"]), f"{src}: brier_diff_7d_minus_1d.ci_high")
+    m.add("QOneBT", stat(d["t"]), f"{src}: brier_diff_7d_minus_1d.t")
     m.add("QOneBDf", count(d["df"]), f"{src}: brier_diff_7d_minus_1d.df")
     m.add("QOneBP", pval(d["p"]), f"{src}: brier_diff_7d_minus_1d.p")
-    m.add("QOneBD", num(d["cohens_d"], 2), f"{src}: brier_diff_7d_minus_1d.cohens_d")
-    m.add("QOneBBrierSevenDays", num(r["brier"]["7d"], 3), f"{src}: brier.7d")
-    m.add("QOneBBrierOneDay", num(r["brier"]["1d"], 3), f"{src}: brier.1d")
+    m.add("QOneBD", est(d["cohens_d"]), f"{src}: brier_diff_7d_minus_1d.cohens_d")
+    m.add("QOneBBrierSevenDays", est(r["brier"]["7d"]), f"{src}: brier.7d")
+    m.add("QOneBBrierOneDay", est(r["brier"]["1d"]), f"{src}: brier.1d")
     a = r["abs_error_diff_7d_minus_1d"]
-    m.add("QOneBAbsMeanDiff", num(a["mean_diff"], 4), f"{src}: abs_error_diff_7d_minus_1d.mean_diff")
-    m.add("QOneBAbsD", num(a["cohens_d"], 2), f"{src}: abs_error_diff_7d_minus_1d.cohens_d")
-    m.add("QOneBEntropyDiff", num(r["mean_entropy_bits"]["diff_7d_minus_1d"], 3),
+    m.add("QOneBAbsMeanDiff", est(a["mean_diff"]), f"{src}: abs_error_diff_7d_minus_1d.mean_diff")
+    m.add("QOneBAbsD", est(a["cohens_d"]), f"{src}: abs_error_diff_7d_minus_1d.cohens_d")
+    m.add("QOneBEntropyDiff", est(r["mean_entropy_bits"]["diff_7d_minus_1d"]),
           f"{src}: mean_entropy_bits.diff_7d_minus_1d")
     for tag, key in (("SevenDays", "7d"), ("OneDay", "1d")):
-        m.add(f"QOneBKsD{tag}", num(r["ks_yes_vs_no"][key]["D"], 3), f"{src}: ks_yes_vs_no.{key}.D")
+        m.add(f"QOneBKsD{tag}", est(r["ks_yes_vs_no"][key]["D"]), f"{src}: ks_yes_vs_no.{key}.D")
     sel = r["selection"]
     m.add("QOneBMaxStaleHours", count(int(sel["max_staleness_h"])), f"{src}: selection.max_staleness_h")
 
@@ -312,9 +361,9 @@ def add_q1c(m: Macros, run: Path) -> None:
     for tag, key in (("Volume", "spearman_log_volume_vs_error"), ("Trades", "spearman_log_trades_vs_error")):
         d = r[key]
         m.add(f"QOneC{tag}N", count(d["n"]), f"{src}: {key}.n")
-        m.add(f"QOneC{tag}Rho", num(d["rho"], 3), f"{src}: {key}.rho")
-        m.add(f"QOneC{tag}CiLow", num(d["ci_low"], 3), f"{src}: {key}.ci_low")
-        m.add(f"QOneC{tag}CiHigh", num(d["ci_high"], 3), f"{src}: {key}.ci_high")
+        m.add(f"QOneC{tag}Rho", est(d["rho"]), f"{src}: {key}.rho")
+        m.add(f"QOneC{tag}CiLow", est(d["ci_low"]), f"{src}: {key}.ci_low")
+        m.add(f"QOneC{tag}CiHigh", est(d["ci_high"]), f"{src}: {key}.ci_high")
         m.add(f"QOneC{tag}P", pval(d["p"]), f"{src}: {key}.p")
 
 
@@ -324,55 +373,55 @@ def add_q2(m: Macros, run: Path) -> None:
     for role in ("maker", "taker"):
         c, R = r["concentration"][role], role.capitalize()
         m.add(f"{R}NWallets", count(c["n_wallets"]), f"{src}: concentration.{role}.n_wallets")
-        m.add(f"{R}Gini", num(c["gini"], 3), f"{src}: concentration.{role}.gini")
+        m.add(f"{R}Gini", est(c["gini"]), f"{src}: concentration.{role}.gini")
         m.add(f"{R}TopOneShare", pct(c["top1_share"]), f"{src}: concentration.{role}.top1_share")
         m.add(f"{R}TopFiveShare", pct(c["top5_share"]), f"{src}: concentration.{role}.top5_share")
         m.add(f"{R}TopTenShare", pct(c["top10_share"]), f"{src}: concentration.{role}.top10_share")
         m.add(f"{R}MeanVolume", count(round(c["mean"])), f"{src}: concentration.{role}.mean")
-        m.add(f"{R}MedianVolume", num(c["median"], 1), f"{src}: concentration.{role}.median")
+        m.add(f"{R}MedianVolume", amount(c["median"]), f"{src}: concentration.{role}.median")
     w = r["role_tests"]["welch_t"]
-    m.add("RoleWelchT", num(w["t"], 1), f"{src}: role_tests.welch_t.t")
+    m.add("RoleWelchT", stat(w["t"]), f"{src}: role_tests.welch_t.t")
     m.add("RoleWelchP", pval(w["p"]), f"{src}: role_tests.welch_t.p")
-    m.add("RoleCohenD", num(w["cohens_d"], 2), f"{src}: role_tests.welch_t.cohens_d")
-    m.add("RoleKsD", num(r["role_tests"]["ks"]["D"], 3), f"{src}: role_tests.ks.D")
+    m.add("RoleCohenD", est(w["cohens_d"]), f"{src}: role_tests.welch_t.cohens_d")
+    m.add("RoleKsD", est(r["role_tests"]["ks"]["D"]), f"{src}: role_tests.ks.D")
     sp = r["spearman_n_trades_vs_volume"]
-    m.add("SpearmanTradesVolumeRho", num(sp["rho"], 3), f"{src}: spearman_n_trades_vs_volume.rho")
+    m.add("SpearmanTradesVolumeRho", est(sp["rho"]), f"{src}: spearman_n_trades_vs_volume.rho")
     km = r["kmeans"]
     an = km["anova_mean_trade_price"]
-    m.add("KmeansPriceEtaSq", num(an["eta_squared"], 3), f"{src}: kmeans.anova_mean_trade_price.eta_squared")
+    m.add("KmeansPriceEtaSq", est(an["eta_squared"]), f"{src}: kmeans.anova_mean_trade_price.eta_squared")
     m.add("KmeansPricePermP", pval(an["perm_p"]), f"{src}: kmeans.anova_mean_trade_price.perm_p")
     m.add("KmeansK", count(km["k_chosen"]), f"{src}: kmeans.k_chosen")
     m.add("KmeansNSample", count(km["n_sample"]), f"{src}: kmeans.n_sample")
-    m.add("KmeansAri", num(km["robust_scaling_check"]["adjusted_rand_index_vs_zscore"], 2),
+    m.add("KmeansAri", est(km["robust_scaling_check"]["adjusted_rand_index_vs_zscore"]),
           f"{src}: kmeans.robust_scaling_check.adjusted_rand_index_vs_zscore")
     m.add("KmeansNPerm", count(an["n_perm"]), f"{src}: kmeans.anova_mean_trade_price.n_perm")
     cx = km["chi2_cluster_x_category"]
-    m.add("KmeansCategoryV", num(cx["cramers_v"], 3), f"{src}: kmeans.chi2_cluster_x_category.cramers_v")
+    m.add("KmeansCategoryV", est(cx["cramers_v"]), f"{src}: kmeans.chi2_cluster_x_category.cramers_v")
     for c in km["cluster_summary"]:
         i, s = word(c["cluster"]), f"{src}: kmeans.cluster_summary[cluster={c['cluster']}]"
         m.add(f"Cluster{i}N", count(c["n"]), f"{s}.n")
-        m.add(f"Cluster{i}MedianVolume", num(c["median_volume"], 1), f"{s}.median_volume")
-        m.add(f"Cluster{i}MedianTrades", num(c["median_n_trades"], 0), f"{s}.median_n_trades")
-        m.add(f"Cluster{i}MedianMarkets", num(c["median_n_markets"], 0), f"{s}.median_n_markets")
+        m.add(f"Cluster{i}MedianVolume", amount(c["median_volume"]), f"{s}.median_volume")
+        m.add(f"Cluster{i}MedianTrades", count(round(c["median_n_trades"])), f"{s}.median_n_trades")
+        m.add(f"Cluster{i}MedianMarkets", count(round(c["median_n_markets"])), f"{s}.median_n_markets")
 
 
 def add_q3(m: Macros, run: Path) -> None:
     r = load(run, "q3_results.json")
     src = "q3_results.json"
     p1 = r["summary"]["p_1d"]
-    m.add("PriceOneDayMean", num(p1["mean"], 3), f"{src}: summary.p_1d.mean")
-    m.add("PriceOneDayMedian", num(p1["median"], 3), f"{src}: summary.p_1d.median")
+    m.add("PriceOneDayMean", est(p1["mean"]), f"{src}: summary.p_1d.mean")
+    m.add("PriceOneDayMedian", est(p1["median"]), f"{src}: summary.p_1d.median")
     ts = r["summary"]["trade_size_usdc"]
-    m.add("TradeSizeMean", num(ts["mean"], 1), f"{src}: summary.trade_size_usdc.mean")
-    m.add("TradeSizeMedian", num(ts["median"], 2), f"{src}: summary.trade_size_usdc.median")
+    m.add("TradeSizeMean", amount(ts["mean"]), f"{src}: summary.trade_size_usdc.mean")
+    m.add("TradeSizeMedian", amount(ts["median"]), f"{src}: summary.trade_size_usdc.median")
     for tag, key in (("TradeSize", "trade_size_usdc"), ("WalletVolume", "wallet_volume_usdc")):
         pl = r["fits"][key]["power_law"]
-        m.add(f"{tag}PowerAlpha", num(pl["alpha"], 2), f"{src}: fits.{key}.power_law.alpha")
-        m.add(f"{tag}PowerXmin", num(pl["xmin"], 1), f"{src}: fits.{key}.power_law.xmin")
-        m.add(f"{tag}PowerKsD", num(pl["D"], 3), f"{src}: fits.{key}.power_law.D")
-        m.add(f"{tag}ExponentialKsD", num(r["fits"][key]["exponential"]["D"], 3),
+        m.add(f"{tag}PowerAlpha", est(pl["alpha"]), f"{src}: fits.{key}.power_law.alpha")
+        m.add(f"{tag}PowerXmin", amount(pl["xmin"]), f"{src}: fits.{key}.power_law.xmin")
+        m.add(f"{tag}PowerKsD", est(pl["D"]), f"{src}: fits.{key}.power_law.D")
+        m.add(f"{tag}ExponentialKsD", est(r["fits"][key]["exponential"]["D"]),
               f"{src}: fits.{key}.exponential.D")
-        m.add(f"{tag}NormalKsD", num(r["fits"][key]["normal"]["D"], 3), f"{src}: fits.{key}.normal.D")
+        m.add(f"{tag}NormalKsD", est(r["fits"][key]["normal"]["D"]), f"{src}: fits.{key}.normal.D")
 
 
 def add_code_set(m: Macros, run: Path, sha_name: str, file_name: str) -> None:
@@ -396,7 +445,7 @@ def add_meta(m: Macros, run: Path) -> None:
     for q, d in v["comparisons"].items():
         name = "QOne" + q[2:].upper()
         m.add(f"Verdict{name}", text(d["verdict"]), f"verdicts.json: comparisons.{q}.verdict")
-    m.add("Alpha", num(v["alpha"], 2), "verdicts.json: alpha")
+    m.add("Alpha", level(v["alpha"]), "verdicts.json: alpha")
 
 
 ROB_CLASS = {"clean": "Clean", "split": "Split", "other": "Other", "missing": "Missing"}
@@ -410,7 +459,7 @@ def add_robust_r1(m: Macros, r: dict[str, Any]) -> None:
     m.add("RobROneNKept", count(r["n_kept"]), f"{src}: n_kept")
     for c, name in ROB_CLASS.items():
         m.add(f"RobROne{name}N", count(r["class_counts"][c]), f"{src}: class_counts.{c}")
-        m.add(f"RobROne{name}Share", pct(r["class_shares"][c], 2), f"{src}: class_shares.{c}")
+        m.add(f"RobROne{name}Share", pct(r["class_shares"][c]), f"{src}: class_shares.{c}")
     d = r["duplicates"]
     m.add("RobROneDupIds", count(d["kept_ids_with_duplicate_rows"]), f"{src}: duplicates.kept_ids_with_duplicate_rows")
     m.add("RobROneDupConflicting", count(d["kept_duplicates_conflicting"]),
@@ -419,22 +468,22 @@ def add_robust_r1(m: Macros, r: dict[str, Any]) -> None:
     m.add("RobROneSplitYesZero", count(r["our_y_on_split_markets"]["y0"]), f"{src}: our_y_on_split_markets.y0")
     mp = r["mapping"]
     m.add("RobROneNClean", count(mp["n_clean"]), f"{src}: mapping.n_clean")
-    m.add("RobROneAgreement", pct(mp["agreement_index_primary"], 2), f"{src}: mapping.agreement_index_primary")
-    m.add("RobROneAgreementLow", pct(mp["agreement_ci95"][0], 2), f"{src}: mapping.agreement_ci95[0]")
-    m.add("RobROneAgreementHigh", pct(mp["agreement_ci95"][1], 2), f"{src}: mapping.agreement_ci95[1]")
+    m.add("RobROneAgreement", pct(mp["agreement_index_primary"]), f"{src}: mapping.agreement_index_primary")
+    m.add("RobROneAgreementLow", pct(mp["agreement_ci95"][0]), f"{src}: mapping.agreement_ci95[0]")
+    m.add("RobROneAgreementHigh", pct(mp["agreement_ci95"][1]), f"{src}: mapping.agreement_ci95[1]")
     m.add("RobROneNMismatch", count(mp["n_mismatch"]), f"{src}: mapping.n_mismatch")
     m.add("RobROneMappingValidated", "yes" if mp["validated"] else "no", f"{src}: mapping.validated")
     s = r["sensitivity"]
     m.add("RobROneNExcluded", count(s["n_excluded"]), f"{src}: sensitivity.n_excluded")
     m.add("RobROneSensN", count(s["n_markets"]), f"{src}: sensitivity.n_markets")
     q = s["q1_sensitivity"]
-    m.add("RobROneSensChiSq", num(q["chi2_gof"]["chi2"], 1), f"{src}: sensitivity.q1_sensitivity.chi2_gof.chi2")
+    m.add("RobROneSensChiSq", stat(q["chi2_gof"]["chi2"]), f"{src}: sensitivity.q1_sensitivity.chi2_gof.chi2")
     m.add("RobROneSensDf", count(q["chi2_gof"]["df"]), f"{src}: sensitivity.q1_sensitivity.chi2_gof.df")
     m.add("RobROneSensP", pval(q["chi2_gof"]["p"]), f"{src}: sensitivity.q1_sensitivity.chi2_gof.p")
-    m.add("RobROneSensW", num(q["chi2_gof"]["effect_w"], 3), f"{src}: sensitivity.q1_sensitivity.chi2_gof.effect_w")
-    m.add("RobROneSensBrier", num(q["brier"], 3), f"{src}: sensitivity.q1_sensitivity.brier")
+    m.add("RobROneSensW", est(q["chi2_gof"]["effect_w"]), f"{src}: sensitivity.q1_sensitivity.chi2_gof.effect_w")
+    m.add("RobROneSensBrier", est(q["brier"]), f"{src}: sensitivity.q1_sensitivity.brier")
     m.add("RobROneSensBinsBh", count(q["bins_reject_bh"]), f"{src}: sensitivity.q1_sensitivity.bins_reject_bh")
-    m.add("RobROneDeltaW", num(s["delta_effect_w"], 4), f"{src}: sensitivity.delta_effect_w")
+    m.add("RobROneDeltaW", est(s["delta_effect_w"]), f"{src}: sensitivity.delta_effect_w")
     m.add("RobROneRuleSame", "yes" if s["rule_results_same"] else "no", f"{src}: sensitivity.rule_results_same")
     m.add("RobROneRuleOriginal", text(s["rule_result_original"]), f"{src}: sensitivity.rule_result_original")
     m.add("RobROneRuleSens", text(s["rule_result_sensitivity"]), f"{src}: sensitivity.rule_result_sensitivity")
@@ -444,35 +493,35 @@ def add_robust_r2(m: Macros, r: dict[str, Any]) -> None:
     src = "r2_results.json"
     o = r["overall"]
     m.add("RobRTwoN", count(o["n"]), f"{src}: overall.n")
-    m.add("RobRTwoMedianAbsDelta", num(o["median_abs_delta"], 4), f"{src}: overall.median_abs_delta")
+    m.add("RobRTwoMedianAbsDelta", est(o["median_abs_delta"]), f"{src}: overall.median_abs_delta")
     m.add("RobRTwoShareNoTrade", pct(o["share_no_trade"]), f"{src}: overall.share_no_trade")
-    m.add("RobRTwoShareCrossing", pct(o["share_crossing"], 2), f"{src}: overall.share_crossing")
+    m.add("RobRTwoShareCrossing", pct(o["share_crossing"]), f"{src}: overall.share_crossing")
     for t, name in ROB_THRESHOLD.items():
-        m.add(f"RobRTwoShareDeltaAtLeast{name}", pct(o[f"share_abs_delta_ge_{t}"], 2),
+        m.add(f"RobRTwoShareDeltaAtLeast{name}", pct(o[f"share_abs_delta_ge_{t}"]),
               f"{src}: overall.share_abs_delta_ge_{t}")
     for k, name in ROB_QUANTILE.items():
-        m.add(f"RobRTwoAbsDelta{name}", num(o["quantiles_abs_delta"][k], 3), f"{src}: overall.quantiles_abs_delta.{k}")
+        m.add(f"RobRTwoAbsDelta{name}", est(o["quantiles_abs_delta"][k]), f"{src}: overall.quantiles_abs_delta.{k}")
     for k, name in (("median", "Median"), ("q0.9", "Ninety"), ("max", "Max")):
         m.add(f"RobRTwoWindowTrades{name}", count(int(o["n_window_trades"][k])), f"{src}: overall.n_window_trades.{k}")
     for tag, key in (("All", "brier"), ("Traded", "brier_traded_only")):
         b = o[key]
         s = f"{src}: overall.{key}"
         m.add(f"RobRTwo{tag}N", count(b["n"]), f"{s}.n")
-        m.add(f"RobRTwo{tag}BrierOneDay", num(b["brier_1d"], 4), f"{s}.brier_1d")
-        m.add(f"RobRTwo{tag}BrierAtClose", num(b["brier_T"], 4), f"{s}.brier_T")
-        m.add(f"RobRTwo{tag}MeanDiff", num(b["mean_diff"], 4), f"{s}.mean_diff")
-        m.add(f"RobRTwo{tag}CiLow", num(b["ci_low"], 4), f"{s}.ci_low")
-        m.add(f"RobRTwo{tag}CiHigh", num(b["ci_high"], 4), f"{s}.ci_high")
-        m.add(f"RobRTwo{tag}T", num(b["t"], 1), f"{s}.t")
+        m.add(f"RobRTwo{tag}BrierOneDay", est(b["brier_1d"]), f"{s}.brier_1d")
+        m.add(f"RobRTwo{tag}BrierAtClose", est(b["brier_T"]), f"{s}.brier_T")
+        m.add(f"RobRTwo{tag}MeanDiff", est(b["mean_diff"]), f"{s}.mean_diff")
+        m.add(f"RobRTwo{tag}CiLow", est(b["ci_low"]), f"{s}.ci_low")
+        m.add(f"RobRTwo{tag}CiHigh", est(b["ci_high"]), f"{s}.ci_high")
+        m.add(f"RobRTwo{tag}T", stat(b["t"]), f"{s}.t")
         m.add(f"RobRTwo{tag}P", pval(b["p"]), f"{s}.p")
-        m.add(f"RobRTwo{tag}Dz", num(b["cohens_dz"], 2), f"{s}.cohens_dz")
+        m.add(f"RobRTwo{tag}Dz", est(b["cohens_dz"]), f"{s}.cohens_dz")
     for cat, c in r["by_category"].items():
         k, s = CATEGORY_NAME.get(cat, text(cat)), f"{src}: by_category.{cat}"
         if k not in CATEGORY_NAME.values():
             continue  # Unknown or Merged groups have no fixed macro name
         m.add(f"RobRTwoCat{k}N", count(c["n"]), f"{s}.n")
-        m.add(f"RobRTwoCat{k}MedianAbsDelta", num(c["median_abs_delta"], 4), f"{s}.median_abs_delta")
-        m.add(f"RobRTwoCat{k}MeanDiff", num(c["brier"]["mean_diff"], 4), f"{s}.brier.mean_diff")
+        m.add(f"RobRTwoCat{k}MedianAbsDelta", est(c["median_abs_delta"]), f"{s}.median_abs_delta")
+        m.add(f"RobRTwoCat{k}MeanDiff", est(c["brier"]["mean_diff"]), f"{s}.brier.mean_diff")
 
 
 def add_robust_meta(m: Macros, robust: Path) -> None:
@@ -507,13 +556,14 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--run", required=True, type=Path)
     ap.add_argument("--out", required=True, type=Path)
+    ap.add_argument("--q1eqfreq", type=Path, help="run dir (code v5) whose q1_bins_eqfreq.csv has p_bh and reject_bh")
     ap.add_argument("--pilot", type=Path, help="pilot run dir with close_time_summary.json")
     ap.add_argument("--robust", type=Path, help="robustness run dir with r1_results.json, r2_results.json")
     a = ap.parse_args()
     m = Macros()
     for fn in (add_meta, add_data, add_q1, add_q1a, add_q1b, add_q1c, add_q2, add_q3):
         fn(m, a.run)
-    add_q1_eqfreq(m, a.run, load(a.run, "verdicts.json")["alpha"])
+    add_q1_eqfreq(m, a.run, load(a.run, "verdicts.json")["alpha"], a.q1eqfreq)
     if a.pilot is not None:
         add_pilot(m, a.pilot)
     if a.robust is not None:
