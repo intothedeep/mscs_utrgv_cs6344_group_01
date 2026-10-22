@@ -10,17 +10,17 @@
 - Constraints: `STATUS.md` "Constraints" table (lecture methods only; k-means under 1/10 of the report; sourced facts only; cluster for all data queries; criteria fixed before results; "wallet", never "person"; effect size next to every p-value).
 - Goals (question-type): [RQ.md](./RQ.md): 6 answered, 0 open.
 - S1 → RQ1–RQ6: MVP ladder. MVP1 answers RQ1–RQ3, MVP2 adds RQ4–RQ6 (picked by the owner, plan 2026-10-18; report v1 and v2, D-009); listed alternative: one full analysis without MVP stages.
-- M1 → S1: MVP1; exit: the four "MVP1 is done when" boxes in `tips/polymarket_plan_detailed.md`; done 2026-10-19 (run `142082_mvp1_full_v1r3`, `reports/report_v1.html`); cycle 1/2; recovery 0/2.
+- M1 → S1: MVP1; exit: the four "MVP1 is done when" boxes in `../tips/group_01/polymarket_plan_detailed.md`; done 2026-10-19 (run `142082_mvp1_full_v1r3`, `reports/report_v1.html`); cycle 1/2; recovery 0/2.
 - M2 → S1: MVP2; exit: Q1a, Q1b, Q1c each with a pre-registered verdict; done 2026-10-19 (run `142083_mvp2_full_v2r3`, `reports/report_v2.html`); cycle 1/2; recovery 0/2.
 - M3 → S1: robustness cycle (D-013); exit: R1 and R2 stage reports from run `142123_robust_full_v4` and the Q1 sensitivity row; done 2026-10-19 (`runs/142123_robust_full_v4/report_r1_split_payout.md`, `report_r2_price_path.md`, `r1_results.json` `q1_sensitivity`); cycle 1/2; recovery 0/2.
 - M4 → S1: papers v1 and v2 (D-014); exit: reviewer gate PASS (`analysis/review_papers.md`), both papers build clean, every measured number is a `numbers.tex` macro; gate PASS with 3 major and 17 minor findings, fixes in progress; cycle 1/2; recovery 0/2.
 
 ## Detail
 
-- Method plan: `tips/polymarket_plan_detailed.md`.
+- Method plan: `../tips/group_01/polymarket_plan_detailed.md`.
 - Criteria: `analysis/prereg_mvp1.md`, `analysis/prereg_mvp2.md`.
 - Decisions: `DECISIONS.md`. Progress: `STATUS.md`. Runs: `00.runs.md`.
-- Progress page for the owner (Korean): `tips/polymarket_research_flow_tips_ko.html`.
+- Progress page for the owner (Korean): `../tips/group_01/polymarket_research_flow_tips_ko.html`.
 
 ## Open tasks
 

@@ -14,5 +14,5 @@
   "seed": 42,
   "decided_from": "runs/142041_pilotA_2025_06 (Job A, no price-outcome output)",
   "decided_by": "developer from the plan, main session, 2026-10-19 (MVP1 keys: owner, D-007)",
-  "mvp2_added_from": "tips/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19"
+  "mvp2_added_from": "../tips/group_01/polymarket_plan_detailed.md section MVP2; values given in the developer task, 2026-10-19"
 }

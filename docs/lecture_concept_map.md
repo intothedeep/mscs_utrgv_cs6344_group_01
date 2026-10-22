@@ -1,8 +1,8 @@
 # Lecture Concept Map for the Polymarket Project
 
-This file maps each lecture deck in `mscs_utrgv_cs6330_intro_2_ds/notes/` (decks 1–17) to the three research questions in `proposal_md/polymarket_proposal_v3.md` (the class post). The step-by-step plan is in `tips/polymarket_plan_detailed.md`.
+This file maps each lecture deck in `mscs_utrgv_cs6330_intro_2_ds/notes/` (decks 1–17) to the three research questions in `proposal_md/polymarket_proposal_v3.md` (the class post). The step-by-step plan is in `../tips/group_01/polymarket_plan_detailed.md`.
 
-Sections 2–5 list every concept that could be used. Section 6 (**MVP1**) places each concept inside the current three questions. Section 7 (**MVP2**) adds three sub-questions under Q1. The schedule and the gate between them are in `tips/polymarket_plan_detailed.md`.
+Sections 2–5 list every concept that could be used. Section 6 (**MVP1**) places each concept inside the current three questions. Section 7 (**MVP2**) adds three sub-questions under Q1. The schedule and the gate between them are in `../tips/group_01/polymarket_plan_detailed.md`.
 
 - **Q1:** Prediction accuracy (calibration)
 - **Q2:** Wallet trading concentration
