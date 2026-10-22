@@ -16,6 +16,7 @@ They are copies. The originals stay in the course repo.
 | `hw2/` | `p1_distributions.pdf` | Distributions for HW2 Problem 1 |
 | `hw2/` | `hw2_worksheet.pdf` | HW2 worksheet |
 | `hw4/` | `hw4_explainer.html` | HW4 association explainer (연관성 해설서). Open it in a browser |
+| `hw4/` | `hw4_concepts.html` | HW4 concepts (개념 정리): contingency table, MI, Jaccard, chi-squared, plot, correlation, p-value, and Problem 2 (correlation, p-value, scatter, three rankings), with illustrative examples |
 
 ## Notes
 

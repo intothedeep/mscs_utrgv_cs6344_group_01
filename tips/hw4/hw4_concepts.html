@@ -1,0 +1,350 @@
+<title>HW4 개념 정리</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<style>
+/* html-theme — the one theme for HTML output (rules/answering.md §3).
+   Light tokens: ported from the owner's earlier web project's globals.css
+   (shadcn neutral, achromatic, radius 0, whole-UI IBM Plex Mono).
+   Dark tokens: added 2026-10-02 in the same achromatic family; the source had no dark theme. */
+
+:root {
+    --radius: 0;
+
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.55 0 0);
+    --rule: oklch(0.9 0 0);          /* hairlines and chart grid; the source --border is too strong for grids */
+    --ring: oklch(0.45 0 0);
+
+    /* signal colours carry meaning, not decoration */
+    --signal-instruction: #d40000;   /* an instruction / something the reader must act on */
+    --signal-plan: #0432ff;          /* a plan / a pre-registered line */
+    --signal-flag-fill: #fff3a0;     /* a highlighted cell or row */
+    --signal-flag-line: #e6d24a;
+    --signal-dead-fill: #e4e4e2;     /* retired, skipped, out of scope */
+    --signal-dead-ink: oklch(0.53 0.01 260);
+
+    /* Plex Mono has no Hangul; Korean falls through to Plex Sans KR */
+    --font: "IBM Plex Mono", "IBM Plex Sans KR", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --background: oklch(0.145 0 0);
+        --foreground: oklch(0.985 0 0);
+        --card: oklch(0.185 0 0);
+        --card-foreground: oklch(0.985 0 0);
+        --primary: oklch(0.922 0 0);
+        --primary-foreground: oklch(0.205 0 0);
+        --secondary: oklch(0.269 0 0);
+        --muted: oklch(0.269 0 0);
+        --muted-foreground: oklch(0.708 0 0);
+        --destructive: oklch(0.704 0.191 22.216);
+        --border: oklch(0.5 0 0);
+        --rule: oklch(0.3 0 0);
+        --ring: oklch(0.6 0 0);
+        --signal-instruction: #ff5a52;
+        --signal-plan: #6f8cff;
+        --signal-flag-fill: #4a4312;
+        --signal-flag-line: #c9b53a;
+        --signal-dead-fill: #2b2b2a;
+        --signal-dead-ink: oklch(0.68 0.01 260);
+    }
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.185 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(0.5 0 0);
+    --rule: oklch(0.3 0 0);
+    --ring: oklch(0.6 0 0);
+    --signal-instruction: #ff5a52;
+    --signal-plan: #6f8cff;
+    --signal-flag-fill: #4a4312;
+    --signal-flag-line: #c9b53a;
+    --signal-dead-fill: #2b2b2a;
+    --signal-dead-ink: oklch(0.68 0.01 260);
+}
+
+* { box-sizing: border-box; border-radius: var(--radius); }
+body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font);
+    font-feature-settings: "cv11", "ss01";
+    font-size: 14px;
+    line-height: 1.6;
+    padding-inline: 16px;
+    padding-block: 32px 64px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+h1 { font-size: 24px; line-height: 1.3; font-weight: 700; margin: 0; text-wrap: balance; }
+h2 { font-size: 17px; font-weight: 500; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.muted { color: var(--muted-foreground); }
+.label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-foreground); }
+.panel { background: var(--card); color: var(--card-foreground); border: 1px solid var(--border); padding: 16px; }
+.scroll-x { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+th { font-weight: 500; color: var(--muted-foreground); }
+th:first-child, td:first-child { text-align: left; }
+.flag { background: var(--signal-flag-fill); box-shadow: inset 2px 0 0 var(--signal-flag-line); }
+.instruction { color: var(--signal-instruction); }
+.plan { color: var(--signal-plan); }
+.dead { background: var(--signal-dead-fill); color: var(--signal-dead-ink); }
+button { font: inherit; padding: 4px 12px; border: 1px solid var(--border); background: var(--card); color: var(--foreground); cursor: pointer; }
+button[aria-pressed="true"] { background: var(--primary); color: var(--primary-foreground); }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+svg text { fill: var(--muted-foreground); font-family: var(--font); font-size: 11px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* Layout: one reading column of numbered step boxes, each opened by "Step k of N". */
+.wrap { max-width: 860px; }
+.stack { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.step { border-top: 3px solid var(--foreground); padding-top: 12px; margin-top: 28px; }
+.steps { display: grid; grid-template-columns: 5.5em 1fr; gap: 6px 12px; margin: 0; }
+.steps dt { color: var(--muted-foreground); }
+.steps dd { margin: 0; min-width: 0; }
+table.calc td { text-align: left; white-space: normal; }
+table.calc td:last-child { color: var(--muted-foreground); }
+table.ct, table.ct td { width: auto; }
+table.wrapcells td { white-space: normal; text-align: left; }
+svg { width: 100%; min-width: 560px; height: auto; }
+svg text { fill: var(--foreground); font-size: 13px; }
+svg text.lane { fill: var(--muted-foreground); }
+svg .grid { stroke: var(--border); }
+svg .frame { fill: none; stroke: var(--border); }
+svg .ref { stroke: var(--muted-foreground); stroke-dasharray: 4 4; }
+svg .pt { fill: var(--foreground); }
+svg .s1 { fill: var(--foreground); }
+svg .s2 { fill: var(--muted-foreground); }
+</style>
+<div class="wrap">
+<header class="stack">
+  <span class="label">CS 6330 · Homework 4 · 개념 정리</span>
+  <h1>HW4 개념 정리: 연관, 겹침, 검정</h1>
+  <p>두 변수(또는 두 버전 v1, v2)가 얼마나 비슷한지, 관련이 있는지, 차이가 유의한지 보는 도구 일곱 가지다. Step 9–13은 문제 2(상관, p값, 산점도, 순위)를 같은 방식으로 푼다.</p>
+  <p class="muted">이 페이지의 예시는 모두 설명용 값(Illustrative values)이다. HW4 실제 숫자는 <a href="hw4_explainer.html">해설서</a>에 있다.</p>
+  <ol><li><a href="#ct">Step 1 of 13: 분할표(contingency table)</a></li><li><a href="#mi">Step 2 of 13: 상호정보량(mutual information, MI)</a></li><li><a href="#jac">Step 3 of 13: 자카드 지수(Jaccard index, J)</a></li><li><a href="#chi">Step 4 of 13: 카이제곱 검정(chi-squared test, χ²)</a></li><li><a href="#plot">Step 5 of 13: 세트별 v1 대 v2 그림(plot)</a></li><li><a href="#corr">Step 6 of 13: 상관(correlation)</a></li><li><a href="#pval">Step 7 of 13: p값(p-value)</a></li><li><a href="#cmp">Step 8 of 13: 한눈에 비교</a></li><li><a href="#p2data">Step 9 of 13: 문제 2: 데이터와 피어슨 상관계수(Pearson r)</a></li><li><a href="#p2p">Step 10 of 13: 문제 2: p값(p-value)</a></li><li><a href="#p2scatter">Step 11 of 13: 문제 2: 산점도(scatter plot)</a></li><li><a href="#p2rank">Step 12 of 13: 문제 2: 세 가지 순위</a></li><li><a href="#p2why">Step 13 of 13: 문제 2: 순위가 다른 이유, 코드, 보고서에 쓸 것</a></li></ol>
+</header>
+<section class="step stack" id="ct"><span class="label">Step 1 of 13</span><h2>분할표(contingency table)</h2>
+  <dl class="steps"><dt>목적</dt><dd>두 범주형 변수(categorical variable) 사이의 관계를 파악한다.</dd><dt>예</dt><dd>두 버전의 시스템 v1, v2가 같은 사건(event)을 예측한다. 괄호 안은 독립일 때의 기대도수(expected count)다.</dd></dl>
+  <div class="scroll-x"><table class="ct"><tr><th></th><th>v2: Yes</th><th>v2: No</th><th>합계(total)</th></tr><tr><td>v1: Yes</td><td>40 (22.5)</td><td>10 (27.5)</td><td>50</td></tr><tr><td>v1: No</td><td>5 (22.5)</td><td>45 (27.5)</td><td>50</td></tr><tr><td>합계(total)</td><td>45</td><td>55</td><td>100</td></tr></table></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <dl class="steps"><dt>읽는 법</dt><dd>40개: 둘 다 Yes. 45개: 둘 다 No.</dd><dt></dt><dd>10개: v1만 Yes. 5개: v2만 Yes.</dd><dt>왜 중요</dt><dd>두 버전이 얼마나 일치하는지 본다. 여기서는 100개 중 85개(85%)가 일치한다.</dd><dt></dt><dd>카이제곱(χ²) 독립성 검정, 자카드 지수(Jaccard index) 같은 분석의 기초 자료다.</dd><dt>주의</dt><dd>v1과 v2가 같은 관측 대상에서 나왔다면 단순한 독립성 검정은 맞지 않을 수 있다.</dd><dt></dt><dd>그때는 목적에 따라 맥니마 검정(McNemar test: 짝지은 이진 결과의 불일치 검정)이 맞을 수 있다.</dd></dl></section><section class="step stack" id="mi"><span class="label">Step 2 of 13</span><h2>상호정보량(mutual information, MI)</h2>
+  <dl class="steps"><dt>목적</dt><dd>한 변수를 알 때 다른 변수의 불확실성이 얼마나 줄어드는지 잰다.</dd><dt>예</dt><dd>v1의 예측을 알면 v2의 예측을 얼마나 잘 맞히나?</dd><dt>어떻게</dt><dd>MI = H(v1) + H(v2) − H(v1, v2). H는 엔트로피(entropy), 곧 모름의 양이다.</dd></dl>
+  <div class="scroll-x"><table class="calc">
+    <tr><td>H(v1) = 1.0000 bits, H(v2) = 0.9928 bits</td><td>각 변수의 모름</td></tr>
+    <tr><td>H(v1, v2) = 1.5955 bits</td><td>네 칸 전체의 모름</td></tr>
+    <tr><td>MI = 1.0000 + 0.9928 − 1.5955 = 0.3973 bits</td><td>v2의 모름 중 40%가 줄어든다</td></tr>
+  </table></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <dl class="steps"><dt>특징</dt><dd>범주형 변수에 쓴다.</dd><dt></dt><dd>선형(linear)이 아닌 관계도 잡는다.</dd><dt></dt><dd>MI = 0이면 독립이다. 이것은 모집단(population) 기준이다.</dd><dt></dt><dd>표본(sample)에서 추정한 MI는 독립이어도 0보다 클 수 있다.</dd><dt>왜 중요</dt><dd>같은 결과를 내는지를 넘어, 두 결과가 정보를 얼마나 공유하는지 본다.</dd></dl></section><section class="step stack" id="jac"><span class="label">Step 3 of 13</span><h2>자카드 지수(Jaccard index, J)</h2>
+  <dl class="steps"><dt>목적</dt><dd>두 집합(set)이 얼마나 겹치는지 잰다.</dd><dt>예</dt><dd>v1이 Yes로 예측한 항목: {A, B, C, D}. v2: {B, C, D, E}.</dd></dl>
+  <div class="scroll-x"><table class="calc">
+    <tr><td>교집합(intersection) = {B, C, D}</td><td>크기 3</td></tr>
+    <tr><td>합집합(union) = {A, B, C, D, E}</td><td>크기 5</td></tr>
+    <tr><td>J(A, B) = |A ∩ B| ÷ |A ∪ B| = 3 ÷ 5 = 0.6</td><td>0과 1 사이</td></tr>
+  </table></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <dl class="steps"><dt>읽는 법</dt><dd>J = 1이면 두 집합이 같다. J = 0이면 교집합이 없다.</dd><dt>왜 중요</dt><dd>두 버전이 같은 항목을 얼마나 많이 골랐는지 비교한다.</dd><dt>쓰는 곳</dt><dd>두 모델이 탐지한 객체(object) 비교</dd><dt></dt><dd>두 버전이 고른 특징(feature) 비교</dd><dt></dt><dd>두 시스템이 찾은 사건(event) 비교</dd></dl></section><section class="step stack" id="chi"><span class="label">Step 4 of 13</span><h2>카이제곱 검정(chi-squared test, χ²)</h2>
+  <dl class="steps"><dt>목적</dt><dd>관측 빈도가 가설에서 기대하는 빈도와 얼마나 다른지 평가한다.</dd><dt>가정</dt><dd>Step 1의 분할표에서 v1과 v2가 독립이라고 둔다.</dd><dt>어떻게</dt><dd>기대도수(expected count) E<sub>ij</sub> = 행 합계 × 열 합계 ÷ N.</dd></dl>
+  <div class="scroll-x"><table class="calc">
+    <tr><td>E<sub>11</sub> = 50 × 45 ÷ 100 = 22.5</td><td>독립이면 둘 다 Yes는 22.5개</td></tr>
+    <tr><td>O<sub>11</sub> = 40</td><td>기대보다 훨씬 크다</td></tr>
+    <tr><td>χ² = Σ (O − E)² ÷ E = 49.49, 자유도(degrees of freedom, df) 1</td><td>p = 2.0e-12</td></tr>
+  </table></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <div class="scroll-x"><table class="wrapcells">
+    <tr><th>이름</th><th>무엇</th><th>이 예의 값</th></tr>
+    <tr><td>카이제곱 통계량(chi-squared statistic)</td><td>관측과 기대의 차이를 모은 숫자 하나</td><td>49.49</td></tr>
+    <tr><td>카이제곱 분포(chi-squared distribution)</td><td>H0가 맞을 때 그 숫자가 나오는 분포</td><td>자유도 1</td></tr>
+    <tr><td>카이제곱 검정(chi-squared test)</td><td>위 둘로 p값을 구하고 판정하는 절차</td><td>p = 2.0e-12, H0 기각</td></tr>
+  </table></div>
+  <dl class="steps"><dt>구분</dt><dd>같은 것의 두 부분이다. 통계량은 숫자 하나, 검정은 그 숫자로 결론까지 가는 절차다.</dd><dt>왜 중요</dt><dd>두 변수 사이에 통계적으로 유의한 연관이 있는지 검정한다.</dd><dt>주의</dt><dd>같은 대상의 v1과 v2를 비교하면 관측값이 짝지어져 있다.</dd><dt></dt><dd>이때는 일반 χ² 독립성 검정의 가정을 먼저 확인한다(Step 1의 맥니마 검정 참고).</dd></dl></section><section class="step stack" id="plot"><span class="label">Step 5 of 13</span><h2>세트별 v1 대 v2 그림(plot)</h2>
+  <dl class="steps"><dt>목적</dt><dd>세 데이터 집합에서 v1과 v2의 결과가 어떻게 다른지 눈으로 비교한다.</dd><dt>예</dt><dd>세 집합에서 모델의 정확도(accuracy)를 쟀다.</dd></dl>
+  <div class="scroll-x"><table class="ct">
+    <tr><th>데이터셋</th><th>v1 정확도</th><th>v2 정확도</th><th>읽는 법</th></tr><tr><td>Set 1</td><td>0.80</td><td>0.85</td><td>v2가 5%p 높다</td></tr><tr><td>Set 2</td><td>0.75</td><td>0.78</td><td>v2가 3%p 높다</td></tr><tr><td>Set 3</td><td>0.90</td><td>0.88</td><td>v1가 2%p 높다</td></tr>
+  </table></div>
+  <div class="scroll-x"><svg viewBox="0 0 600 250" role="img" aria-label="세트별 v1과 v2 정확도 막대그래프"><line x1="50" y1="200" x2="480" y2="200" class="grid"/><text x="42" y="204" text-anchor="end" class="lane">0.0</text><line x1="50" y1="120.0" x2="480" y2="120.0" class="grid"/><text x="42" y="124.0" text-anchor="end" class="lane">0.5</text><line x1="50" y1="40.0" x2="480" y2="40.0" class="grid"/><text x="42" y="44.0" text-anchor="end" class="lane">1.0</text><rect x="80" y="72.0" width="40" height="128.0" class="s1"/><text x="100" y="66.0" text-anchor="middle">0.80</text><rect x="124" y="64.0" width="40" height="136.0" class="s2"/><text x="144" y="58.0" text-anchor="middle">0.85</text><text x="122" y="220" text-anchor="middle">Set 1</text><rect x="220" y="80.0" width="40" height="120.0" class="s1"/><text x="240" y="74.0" text-anchor="middle">0.75</text><rect x="264" y="75.19999999999999" width="40" height="124.80000000000001" class="s2"/><text x="284" y="69.19999999999999" text-anchor="middle">0.78</text><text x="262" y="220" text-anchor="middle">Set 2</text><rect x="360" y="56.0" width="40" height="144.0" class="s1"/><text x="380" y="50.0" text-anchor="middle">0.90</text><rect x="404" y="59.19999999999999" width="40" height="140.8" class="s2"/><text x="424" y="53.19999999999999" text-anchor="middle">0.88</text><text x="402" y="220" text-anchor="middle">Set 3</text><rect x="500" y="30" width="14" height="14" class="s1"/><text x="520" y="42">v1</text><rect x="500" y="54" width="14" height="14" class="s2"/><text x="520" y="66">v2</text><text x="50" y="246" class="lane">정확도(accuracy), 축은 0부터</text></svg></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <dl class="steps"><dt>왜 중요</dt><dd>전체 평균만 보면 한 집합에서 생긴 성능 저하를 놓친다.</dd><dt>확인할 것</dt><dd>v2가 대부분의 집합에서 나아졌나?</dd><dt></dt><dd>어느 한 집합에서만 떨어지나?</dd><dt></dt><dd>개선이 일관적인가?</dd></dl></section><section class="step stack" id="corr"><span class="label">Step 6 of 13</span><h2>상관(correlation)</h2>
+  <dl class="steps"><dt>목적</dt><dd>두 수치형 변수(numeric variable) 사이의 관계를 잰다.</dd><dt>예</dt><dd>항목마다 v1 점수와 v2 점수를 비교한다.</dd></dl>
+  <div class="scroll-x"><table class="ct"><tr><th>표본</th><th>v1 점수</th><th>v2 점수</th></tr><tr><td>A</td><td>10</td><td>12</td></tr><tr><td>B</td><td>20</td><td>22</td></tr><tr><td>C</td><td>30</td><td>28</td></tr><tr><td>D</td><td>40</td><td>43</td></tr><tr><td>E</td><td>50</td><td>48</td></tr></table></div>
+  <div class="scroll-x"><svg viewBox="0 0 600 300" role="img" aria-label="v1 점수 대 v2 점수 산점도"><rect x="60" y="20" width="240" height="240" class="frame"/><line x1="60.0" y1="260.0" x2="300.0" y2="20.0" class="ref"/><text x="60.0" y="278" text-anchor="middle" class="lane">0</text><text x="52" y="264.0" text-anchor="end" class="lane">0</text><text x="180.0" y="278" text-anchor="middle" class="lane">30</text><text x="52" y="144.0" text-anchor="end" class="lane">30</text><text x="300.0" y="278" text-anchor="middle" class="lane">60</text><text x="52" y="24.0" text-anchor="end" class="lane">60</text><circle cx="100.0" cy="212.0" r="5" class="pt"/><text x="109.0" y="216.0">A</text><circle cx="140.0" cy="172.0" r="5" class="pt"/><text x="149.0" y="176.0">B</text><circle cx="180.0" cy="148.0" r="5" class="pt"/><text x="189.0" y="152.0">C</text><circle cx="220.0" cy="88.0" r="5" class="pt"/><text x="229.0" y="92.0">D</text><circle cx="260.0" cy="68.0" r="5" class="pt"/><text x="269.0" y="72.0">E</text><text x="180.0" y="296" text-anchor="middle">v1 점수</text><text x="330" y="34">세로축: v2 점수</text><text x="330" y="54" class="lane">점선: v2 = v1 (완전 일치)</text></svg></div>
+  <div class="scroll-x"><table class="calc">
+    <tr><td>피어슨 상관계수(Pearson correlation, r) = Cov(X, Y) ÷ (σ<sub>X</sub> σ<sub>Y</sub>)</td><td>공분산(covariance) ÷ 표준편차(standard deviation)의 곱</td></tr>
+    <tr><td>이 예: r = 0.9896</td><td>거의 완벽한 양의 선형 관계</td></tr>
+  </table></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <div class="scroll-x"><table class="ct">
+    <tr><th>r</th><th>뜻</th></tr>
+    <tr><td>r = 1</td><td>완벽한 양의 선형 관계</td></tr>
+    <tr><td>r ≈ 0</td><td>선형 관계가 약하거나 없다</td></tr>
+    <tr><td>r = −1</td><td>완벽한 음의 선형 관계</td></tr>
+  </table></div>
+  <dl class="steps"><dt>왜 중요</dt><dd>v1 점수가 높은 항목에서 v2 점수도 높은지 본다.</dd><dt>주의</dt><dd>상관이 높아도 두 값이 같다는 뜻은 아니다.</dd><dt>예</dt><dd>v2가 모든 항목에서 v1보다 10 높아도 r = 1이다. 점들은 점선 위로 10만큼 떠 있다.</dd><dt></dt><dd>그래서 일치도를 보려면 상관계수만으로 부족하다.</dd></dl></section><section class="step stack" id="pval"><span class="label">Step 7 of 13</span><h2>p값(p-value, 유의확률)</h2>
+  <dl class="steps"><dt>목적</dt><dd>H0가 참일 때, 관측 결과 또는 더 극단적인 결과가 나올 확률이다.</dd><dt>예: H0</dt><dd>귀무가설(null hypothesis, H0): v1과 v2의 평균 성능 차이는 0이다.</dd><dt>예: H1</dt><dd>대립가설(alternative hypothesis, H1): 평균 성능 차이는 0이 아니다.</dd><dt>뜻</dt><dd>p = 0.03이면, H0가 참일 때 이만큼 또는 더 극단적인 결과가 나올 확률이 3%다.</dd></dl>
+  <div class="scroll-x"><table class="calc">
+    <tr><td>p = 0.03 &lt; 유의수준(significance level) α = 0.05</td><td>귀무가설(H0)을 기각한다</td></tr>
+  </table></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <dl class="steps"><dt>왜 중요</dt><dd>관측된 차이가 우연한 표본 변동만으로 설명되기 어려운지 본다.</dd><dt>아닌 것</dt><dd>p &lt; 0.05는 "H0가 참일 확률이 5%"라는 뜻이 아니다.</dd><dt></dt><dd>"v2가 v1보다 실제로 낫다"는 뜻도 아니다.</dd><dt></dt><dd>"결과가 재현될 확률이 95%"라는 뜻도 아니다.</dd><dt>함께 볼 것</dt><dd>효과 크기(effect size), 신뢰구간(confidence interval), 표본 크기(sample size)</dd></dl></section><section class="step stack" id="cmp"><span class="label">Step 8 of 13</span><h2>한눈에 비교</h2>
+  <div class="scroll-x"><table class="wrapcells">
+    <tr><th>방법</th><th>데이터 유형</th><th>핵심 질문</th></tr>
+    <tr><td>분할표(contingency table)</td><td>범주형</td><td>범주 조합마다 관측값이 몇 개인가?</td></tr>
+    <tr><td>상호정보량(MI)</td><td>범주형 또는 이산화(discretized)한 데이터</td><td>두 변수가 정보를 얼마나 공유하나?</td></tr>
+    <tr><td>자카드 지수(Jaccard index)</td><td>집합 또는 이진(binary) 데이터</td><td>두 집합이 얼마나 겹치나?</td></tr>
+    <tr><td>카이제곱 검정(χ² test)</td><td>범주별 빈도</td><td>두 범주형 변수 사이에 연관이 있나?</td></tr>
+    <tr><td>v1 대 v2 그림(plot)</td><td>측정값 또는 범주별 요약값</td><td>어느 집합에서 차이가 생기나?</td></tr>
+    <tr><td>상관(correlation)</td><td>수치형</td><td>두 변수의 관계가 얼마나 강한가?</td></tr>
+    <tr><td>p값(p-value)</td><td>검정 방법에 따라 다르다</td><td>H0 아래에서 관측 결과가 얼마나 드문가?</td></tr>
+  </table></div>
+  <h3>핵심 구분: 서로 바꿔 쓰는 방법이 아니다</h3>
+  <p>예: v1과 v2의 모델 성능을 비교할 때</p>
+  <div class="scroll-x"><table class="calc">
+    <tr><td>1. 그림(plot)</td><td>성능 차이의 패턴을 본다</td></tr>
+    <tr><td>2. 상관(correlation)</td><td>두 버전의 점수가 함께 변하나</td></tr>
+    <tr><td>3. 분할표(contingency table)</td><td>분류 결과가 범주별로 어떻게 일치하나</td></tr>
+    <tr><td>4. 자카드 지수(Jaccard index)</td><td>고르거나 탐지한 항목이 얼마나 겹치나</td></tr>
+    <tr><td>5. 상호정보량(MI)</td><td>두 결과의 정보적 의존성</td></tr>
+    <tr><td>6. 카이제곱 검정(χ² test)</td><td>독립 가정이 맞을 때 범주형 연관의 검정</td></tr>
+    <tr><td>7. p값(p-value)</td><td>고른 검정의 결과를 해석한다</td></tr>
+  </table></div>
+  <p><strong>가장 중요한 것:</strong> 방법보다 연구 질문(research question)을 먼저 정한다.
+    일치도를 재나, 성능 차이를 검정하나, 변수 사이 관계를 보나에 따라 맞는 방법이 다르다.</p></section>
+<section class="step stack" id="p2data"><span class="label">Step 9 of 13</span><h2>문제 2: 데이터와 피어슨 상관계수(Pearson correlation, r)</h2>
+  <p><strong>핵심:</strong> 세 데이터셋에서 두 유전자의 상관을 잰다. 상관계수, p값(p-value), 산점도(scatter plot)가 같은 결론을 주는지 본다.
+    상관의 강도(strength)와 통계적 유의성(significance)은 다른 개념이다.</p>
+  <div class="scroll-x"><table class="ct"><tr><th>데이터셋</th><th>표본 수 n</th><th>변수 1</th><th>변수 2</th></tr><tr><td>p2a.csv</td><td>2,400</td><td>Gene 1</td><td>Gene 2</td></tr><tr><td>p2b.csv</td><td>110</td><td>Gene 1</td><td>Gene 2</td></tr><tr><td>p2c.csv</td><td>2,100</td><td>Gene 1</td><td>Gene 2</td></tr></table></div>
+  <p class="muted">n은 <code>results/p2_stats.csv</code>에서 읽었다. 행 하나 = 샘플 하나, 열 하나 = 유전자 하나.</p>
+  <dl class="steps"><dt>목적</dt><dd>두 변수 사이 선형(linear) 관계의 강도와 방향을 잰다.</dd><dt>공식</dt><dd>r = Cov(X, Y) ÷ (σ<sub>X</sub> σ<sub>Y</sub>). X, Y = 두 유전자의 발현량(expression).</dd><dt>예</dt><dd>아래 네 샘플은 두 유전자가 함께 늘어난다.</dd></dl>
+  <div class="scroll-x"><table class="ct"><tr><th>샘플</th><th>Gene 1</th><th>Gene 2</th></tr><tr><td>1</td><td>10</td><td>20</td></tr><tr><td>2</td><td>15</td><td>30</td></tr><tr><td>3</td><td>20</td><td>40</td></tr><tr><td>4</td><td>25</td><td>50</td></tr></table></div>
+  <div class="scroll-x"><table class="calc"><tr><td>이 예: r = 1</td><td>Gene 2 = 2 × Gene 1. 완벽한 양의 선형 관계</td></tr></table></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <div class="scroll-x"><table class="ct">
+    <tr><th>r</th><th>읽는 법</th></tr>
+    <tr><td>+1</td><td>완벽한 양의 선형 관계</td></tr>
+    <tr><td>+0.8</td><td>강한 양의 선형 관계</td></tr>
+    <tr><td>+0.3</td><td>비교적 약한 양의 선형 관계</td></tr>
+    <tr><td>0</td><td>선형 관계가 없다</td></tr>
+    <tr><td>−0.3</td><td>비교적 약한 음의 선형 관계</td></tr>
+    <tr><td>−0.8</td><td>강한 음의 선형 관계</td></tr>
+    <tr><td>−1</td><td>완벽한 음의 선형 관계</td></tr>
+  </table></div>
+  <dl class="steps"><dt>강도 비교</dt><dd>절댓값 |r|로 비교한다. 예: r = 0.8, -0.3, 0.1이면 강도 순서는 p2a &gt; p2b &gt; p2c다.</dd><dt>부호</dt><dd>부호는 방향만 뜻한다. +0.8과 −0.8은 강도가 같다.</dd></dl></section><section class="step stack" id="p2p"><span class="label">Step 10 of 13</span><h2>문제 2: p값(p-value)</h2>
+  <dl class="steps"><dt>목적</dt><dd>"선형 상관이 없다"는 귀무가설(null hypothesis, H0)을 검정한다.</dd><dt>가설</dt><dd>H0: ρ = 0. 대립가설(alternative hypothesis, H1): ρ ≠ 0. ρ(rho) = 모집단(population)의 피어슨 상관계수.</dd><dt>어떻게</dt><dd>t = r √(n − 2) ÷ √(1 − r²), 자유도(degrees of freedom, df) = n − 2. 양측(two-sided) p값을 구한다.</dd><dt>판정</dt><dd>α = 0.05. p &lt; 0.05면 H0 기각. p ≥ 0.05면 기각할 증거가 부족하다.</dd></dl>
+  <div class="scroll-x"><table class="ct">
+    <tr><th>데이터셋</th><th>r (예)</th><th>|r|</th><th>p (계산)</th><th>결론</th></tr><tr><td>p2a</td><td>+0.8</td><td>0.8</td><td>&lt; 0.001</td><td>유의함</td></tr><tr><td>p2b</td><td>-0.3</td><td>0.3</td><td>0.0015</td><td>유의함</td></tr><tr><td>p2c</td><td>+0.1</td><td>0.1</td><td>&lt; 0.001</td><td>유의함</td></tr>
+  </table></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <dl class="steps"><dt>읽는 법</dt><dd>p2b는 r이 음수지만 유의하다. 유의성은 방향과 관계없다.</dd><dt></dt><dd>p가 작다는 것만으로 상관이 강하다고 말할 수 없다.</dd><dt>고친 점</dt><dd>원래 예시는 p2c의 p를 0.15로 두었다. 그러나 n = 2,100이면 r = 0.1도 p = 4.4e-06로 유의하다. 표의 p는 r과 n에서 계산한 값이다.</dd><dt></dt><dd>곧 n이 크면 약한 상관도 유의하게 나온다. Step 12의 핵심과 같다.</dd></dl></section><section class="step stack" id="p2scatter"><span class="label">Step 11 of 13</span><h2>문제 2: 산점도(scatter plot)</h2>
+  <dl class="steps"><dt>무엇</dt><dd>x축 = Gene 1 발현량, y축 = Gene 2 발현량. 점 하나 = 샘플 하나. 데이터셋마다 하나씩 그린다.</dd><dt>왜</dt><dd>피어슨 r은 선형 관계만 잰다. 강한 곡선 관계도 r이 0에 가까울 수 있다.</dd><dt></dt><dd>그래서 산점도로 r을 해석하고 그 한계를 확인한다.</dd></dl>
+  <div class="scroll-x"><table class="ct">
+    <tr><th>패턴</th><th>뜻</th></tr>
+    <tr><td>점들이 오른쪽 위로 모인다</td><td>양의 상관</td></tr>
+    <tr><td>점들이 오른쪽 아래로 모인다</td><td>음의 상관</td></tr>
+    <tr><td>점들이 넓게 퍼져 있다</td><td>약한 선형 관계일 수 있다</td></tr>
+    <tr><td>극단적인 점이 있다</td><td>이상치(outlier)가 r을 흔들 수 있다</td></tr>
+    <tr><td>곡선 모양이다</td><td>비선형(nonlinear) 관계일 수 있다</td></tr>
+  </table></div>
+  <p class="muted">실제 세 산점도는 <a href="hw4_explainer.html">해설서</a> 7단계에 있다.</p></section><section class="step stack" id="p2rank"><span class="label">Step 12 of 13</span><h2>문제 2: 세 가지 순위 (Part e)</h2>
+  <dl class="steps"><dt>r 순위</dt><dd>|r|로 매긴다. 부호는 방향, 절댓값은 강도다.</dd><dt>p값 순위</dt><dd>작은 p부터 매긴다. 그러나 이것은 강도 순위가 아니다. p가 작을수록 H0 아래에서 드문 결과라는 뜻이다.</dd><dt>예</dt><dd>같은 r이라도 n이 크면 p가 작아진다. 아래 가상 예를 본다.</dd></dl>
+  <div class="scroll-x"><table class="ct">
+    <tr><th>데이터셋</th><th>표본 수</th><th>r (예)</th><th>p (계산)</th></tr><tr><td>p2a</td><td>2,400</td><td>0.10</td><td>&lt; 0.001</td></tr><tr><td>p2b</td><td>110</td><td>0.30</td><td>0.0015</td></tr><tr><td>p2c</td><td>2,100</td><td>0.05</td><td>0.0219</td></tr>
+  </table></div>
+  <p class="muted">설명용 값(Illustrative values): 예시 숫자다. HW4 데이터가 아니다.</p>
+  <dl class="steps"><dt>읽는 법</dt><dd>강도는 p2b가 가장 크다(|r| = 0.30). p는 p2a가 가장 작다. 표본 크기가 달라서다.</dd><dt>산점도 순위</dt><dd>점들이 직선 주변에 얼마나 모였나?</dd><dt></dt><dd>관계가 선형인가, 비선형인가?</dd><dt></dt><dd>이상치가 있나? 소수의 이상치가 전체 관계를 좌우하나?</dd><dt></dt><dd>관계가 특정 범위에서만 보이나?</dd><dt>주의</dt><dd>산점도 순위는 r 순위와 다를 수 있다. 곡선 관계는 r만으로 충분히 보이지 않는다.</dd></dl></section><section class="step stack" id="p2why"><span class="label">Step 13 of 13</span><h2>문제 2: 순위가 다른 이유, 코드, 보고서에 쓸 것</h2>
+  <div class="scroll-x"><table class="wrapcells">
+    <tr><th>기준</th><th>재는 것</th><th>한계</th></tr>
+    <tr><td>피어슨 상관(Pearson correlation)</td><td>선형 관계의 방향과 강도</td><td>비선형 관계를 잘 못 잡는다</td></tr>
+    <tr><td>p값(p-value)</td><td>H0 아래에서 관측 결과가 얼마나 드문가</td><td>n과 r 둘 다 영향을 준다</td></tr>
+    <tr><td>산점도(scatter plot)</td><td>분포 전체와 관계의 모양</td><td>눈으로 판단해서 주관이 들어간다</td></tr>
+  </table></div>
+  <dl class="steps"><dt>1 표본 수</dt><dd>p2a 2,400개, p2b 110개, p2c 2,100개. 같은 r이라도 p가 달라진다.</dd><dt>2 이상치</dt><dd>피어슨 r은 이상치에 민감하다. 극단값 몇 개가 r을 크게 바꾼다.</dd><dt>3 비선형</dt><dd>뚜렷한 곡선이 보여도 r이 낮을 수 있다.</dd><dt>4 방향</dt><dd>+0.8과 −0.8은 방향만 다르고 강도는 같다. 강도 순위는 절댓값으로 매긴다.</dd></dl>
+  <h3>보고서에 쓸 것 (데이터셋마다)</h3>
+  <div class="scroll-x"><table class="calc">
+    <tr><td>1. 표본 수 n</td><td>2. 피어슨 r</td></tr>
+    <tr><td>3. p값</td><td>4. α = 0.05에서 H0 기각 여부</td></tr>
+    <tr><td>5. 관계의 방향과 강도</td><td>6. 산점도에서 보이는 패턴</td></tr>
+  </table></div>
+  <p>Part (e): 세 순위(상관계수, p값, 산점도)를 비교한다. 다르면 그 원인을 쓴다.</p>
+  <p><strong>실제 결과:</strong> 이 과제의 실제 r, p, 순위는 <a href="hw4_explainer.html">해설서</a> 6–8단계에 있다.</p>
+  <details><summary>참고 코드: 상관계수, p값, 산점도 (붙여 준 예시 코드)</summary>
+    <div class="scroll-x"><pre><code>from pathlib import Path
+import matplotlib.pyplot as plt
+import pandas as pd
+from scipy.stats import pearsonr
+
+DATASETS = (&quot;p2a&quot;, &quot;p2b&quot;, &quot;p2c&quot;)
+ALPHA = 0.05
+
+
+def analyze_dataset(path: Path) -&gt; dict[str, float | int | str]:
+    data = pd.read_csv(path)
+    if data.shape[1] != 2:
+        raise ValueError(f&quot;{path}: expected exactly two columns&quot;)
+    if data.isna().any().any():
+        raise ValueError(f&quot;{path}: missing values found&quot;)
+    if not all(pd.api.types.is_numeric_dtype(data[c]) for c in data.columns):
+        raise ValueError(f&quot;{path}: both columns must be numeric&quot;)
+    if not data.map(lambda x: pd.notna(x) and abs(x) != float(&quot;inf&quot;)).all().all():
+        raise ValueError(f&quot;{path}: non-finite values found&quot;)
+    if len(data) &lt; 3:
+        raise ValueError(f&quot;{path}: at least three samples are required&quot;)
+    x, y = data.iloc[:, 0], data.iloc[:, 1]
+    if x.nunique() &lt; 2 or y.nunique() &lt; 2:
+        raise ValueError(f&quot;{path}: both variables must vary&quot;)
+    r, p = pearsonr(x, y)
+    return {&quot;dataset&quot;: path.stem, &quot;n&quot;: len(data), &quot;r&quot;: r, &quot;p_value&quot;: p, &quot;significant&quot;: p &lt; ALPHA}
+
+
+def plot_dataset(path: Path, ax: plt.Axes) -&gt; None:
+    data = pd.read_csv(path)
+    ax.scatter(data.iloc[:, 0], data.iloc[:, 1], alpha=0.6)
+    ax.set_xlabel(data.columns[0])
+    ax.set_ylabel(data.columns[1])
+    ax.set_title(path.stem)
+    ax.grid(True)
+
+
+def main() -&gt; None:
+    paths = [Path(f&quot;{name}.csv&quot;) for name in DATASETS]
+    results = pd.DataFrame([analyze_dataset(path) for path in paths])
+    print(results.to_string(index=False))
+    results[&quot;abs_r&quot;] = results[&quot;r&quot;].abs()
+    print(&quot;\nAssociation strength ranking:&quot;)
+    print(results.sort_values(&quot;abs_r&quot;, ascending=False)[[&quot;dataset&quot;, &quot;r&quot;, &quot;abs_r&quot;]].to_string(index=False))
+    print(&quot;\nP-value ranking:&quot;)
+    print(results.sort_values(&quot;p_value&quot;)[[&quot;dataset&quot;, &quot;p_value&quot;]].to_string(index=False))
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+    for path, ax in zip(paths, axes):
+        plot_dataset(path, ax)
+    fig.tight_layout()
+    plt.show()
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre></div>
+  </details>
+  <p class="muted">제출 코드는 따로 있다: <code>hw4_pair_association/code/p2_correlation.py</code>. 위 코드는 설명용이다.</p></section>
+<p class="muted">생성: hw4_pair_association/explainer/build_concepts.py</p>
+</div>
