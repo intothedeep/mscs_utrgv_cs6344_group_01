@@ -15,7 +15,7 @@ Each folder holds:
 
 ## Regenerate numbers.tex
 
-Run from `project_group_01/`. The script reads saved JSON and CSV only.
+Run from `cs6344_group_01/`. The script reads saved JSON and CSV only.
 
 ```bash
 OMP_NUM_THREADS=1 timeout 300 uv run python code/make_paper_numbers.py \

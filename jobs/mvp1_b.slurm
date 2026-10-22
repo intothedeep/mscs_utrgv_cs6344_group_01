@@ -1,6 +1,6 @@
 #!/bin/bash
 ### Job B: build tables, Q3, Q1, Q2, summary (CPU only). Usage on login001:
-###   cd ~/cs6330_polymarket && sbatch jobs/mvp1_b.slurm mvp1b_pilot_2025_06 analysis/prereg_mvp1.json
+###   cd ~/cs6344_polymarket && sbatch jobs/mvp1_b.slurm mvp1b_pilot_2025_06 analysis/prereg_mvp1.json
 ### Structure follows skills/cradle-cluster/templates/job.slurm. Only the main session submits.
 #SBATCH --job-name=pm_mvp1_b
 #SBATCH --output=logs/%x.out.%j
@@ -12,10 +12,10 @@
 #SBATCH --time=02:00:00
 
 set -euo pipefail
-RUN="${1:?give the run name}"; PREREG="${2:?give the prereg JSON path relative to ~/cs6330_polymarket}"
+RUN="${1:?give the run name}"; PREREG="${2:?give the prereg JSON path relative to ~/cs6344_polymarket}"
 
-PROJ=~/cs6330_polymarket
-ENV=~/myEnvs/cs6330
+PROJ=~/cs6344_polymarket
+ENV=~/myEnvs/cs6344
 
 RUN_DIR="$PROJ/runs/${SLURM_JOB_ID}_${RUN}"
 mkdir -p "$RUN_DIR" "$PROJ/logs"

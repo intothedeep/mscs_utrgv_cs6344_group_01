@@ -1,6 +1,6 @@
 #!/bin/bash
 ### Q1-only rerun (code v5): writes p_bh and reject_bh into q1_bins_eqfreq.csv. Reuses markets.parquet of an earlier run. CPU only. Usage on login001:
-###   cd ~/cs6330_polymarket && sbatch -p kimq -c 4 --mem=32G --time=00:30:00 jobs/q1_only.slurm q1eqfreq_v5 142083_mvp2_full_v2r3
+###   cd ~/cs6344_polymarket && sbatch -p kimq -c 4 --mem=32G --time=00:30:00 jobs/q1_only.slurm q1eqfreq_v5 142083_mvp2_full_v2r3
 ### Arg 1 = new run name. Arg 2 = source run folder name under runs/ that holds markets.parquet and prereg.json.
 ### No raw-data pass: q1_calibration.py reads only markets.parquet. Only the main session submits.
 #SBATCH --job-name=pm_q1only
@@ -14,8 +14,8 @@
 set -euo pipefail
 RUN="${1:?give the new run name}"; SRC="${2:?give the source run folder name under runs/}"
 
-PROJ=~/cs6330_polymarket
-ENV=~/myEnvs/cs6330
+PROJ=~/cs6344_polymarket
+ENV=~/myEnvs/cs6344
 
 SRC_DIR="$PROJ/runs/$SRC"
 RUN_DIR="$PROJ/runs/${SLURM_JOB_ID}_${RUN}"

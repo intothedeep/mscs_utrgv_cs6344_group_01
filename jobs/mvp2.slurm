@@ -1,6 +1,6 @@
 #!/bin/bash
 ### MVP2 job: build tables (v2), MVP1 stages again, then Q1a, Q1b, Q1c, summary (CPU only). Usage on login001:
-###   cd ~/cs6330_polymarket && sbatch -p gpul40q jobs/mvp2.slurm mvp2_<scope> analysis/prereg_mvp2.json
+###   cd ~/cs6344_polymarket && sbatch -p gpul40q jobs/mvp2.slurm mvp2_<scope> analysis/prereg_mvp2.json
 ### One run folder holds the whole v2 report. Structure follows jobs/mvp1_b.slurm. Only the main session submits.
 #SBATCH --job-name=pm_mvp2
 #SBATCH --output=logs/%x.out.%j
@@ -11,10 +11,10 @@
 #SBATCH --time=02:00:00
 
 set -euo pipefail
-RUN="${1:?give the run name}"; PREREG="${2:?give the prereg JSON path relative to ~/cs6330_polymarket}"
+RUN="${1:?give the run name}"; PREREG="${2:?give the prereg JSON path relative to ~/cs6344_polymarket}"
 
-PROJ=~/cs6330_polymarket
-ENV=~/myEnvs/cs6330
+PROJ=~/cs6344_polymarket
+ENV=~/myEnvs/cs6344
 
 RUN_DIR="$PROJ/runs/${SLURM_JOB_ID}_${RUN}"
 mkdir -p "$RUN_DIR" "$PROJ/logs"

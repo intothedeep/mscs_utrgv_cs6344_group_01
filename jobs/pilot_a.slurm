@@ -1,6 +1,6 @@
 #!/bin/bash
 ### Job A: inspect the pilot set (CPU only). Usage on login001:
-###   cd ~/cs6330_polymarket && sbatch jobs/pilot_a.slurm pilotA_2025_06
+###   cd ~/cs6344_polymarket && sbatch jobs/pilot_a.slurm pilotA_2025_06
 ### Structure follows skills/cradle-cluster/templates/job.slurm. Only the main session submits.
 #SBATCH --job-name=pm_pilot_a
 #SBATCH --output=logs/%x.out.%j
@@ -14,8 +14,8 @@
 set -euo pipefail
 RUN="${1:?give the run name, e.g. sbatch jobs/pilot_a.slurm pilotA_2025_06}"; shift || true
 
-PROJ=~/cs6330_polymarket
-ENV=~/myEnvs/cs6330
+PROJ=~/cs6344_polymarket
+ENV=~/myEnvs/cs6344
 
 RUN_DIR="$PROJ/runs/${SLURM_JOB_ID}_${RUN}"
 mkdir -p "$RUN_DIR" "$PROJ/logs"

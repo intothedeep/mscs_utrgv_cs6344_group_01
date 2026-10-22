@@ -1,7 +1,7 @@
 # When Polymarket Says 70%, Does It Happen 70% of the Time?
 
 **Group 1 | Team Brier**: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
-CS 6330 Introduction to Data Science, UTRGV
+CS 6344 Introduction to Data Science, UTRGV
 
 Do Polymarket prices behave like real probabilities? Who does the trading? What does the trading data look like? We answer these questions with statistics on Polymarket-v1: about 1.2 billion trades across 1.3 million markets, 2022–2026.
 
