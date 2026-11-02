@@ -594,7 +594,7 @@ def main() -> None:
             f'<title>Polymarket calibration report {a.version}</title>'
             '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&amp;family=IBM+Plex+Sans+KR:wght@400;500&amp;display=swap">'
             f"<style>{CSS}</style></head><body><main><header>"
-            f'<div class="eyebrow">CS 6330 Intro to Data Science · Group 1 project · {"MVP1 and MVP2" if v2 else "MVP1"} · scope {scope}</div>'
+            f'<div class="eyebrow">CS 6344 Intro to Data Science · Group 1 project · {"MVP1 and MVP2" if v2 else "MVP1"} · scope {scope}</div>'
             "<h1>When Polymarket says 70%, does it happen 70% of the time?</h1>"
             f'<p class="lede">Report {a.version} from the saved run <code>{html.escape(run.name)}</code>. {n} steps.</p>'
             f'<ol class="steps-nav">{nav}</ol></header>{boxes}'

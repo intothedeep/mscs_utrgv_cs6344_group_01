@@ -1,6 +1,6 @@
 #!/bin/bash
 ### MVP2 job: build tables (v2), MVP1 stages again, then Q1a, Q1b, Q1c, summary (CPU only). Usage on login001:
-###   cd ~/cs6344_polymarket && sbatch -p gpul40q jobs/mvp2.slurm mvp2_<scope> analysis/prereg_mvp2.json
+###   cd ~/cs6344_polymarket && sbatch -p gpul40q future_work/jobs/mvp2.slurm mvp2_<scope> future_work/analysis/prereg_mvp2.json
 ### One run folder holds the whole v2 report. Structure follows jobs/mvp1_b.slurm. Only the main session submits.
 #SBATCH --job-name=pm_mvp2
 #SBATCH --output=logs/%x.out.%j
@@ -32,18 +32,20 @@ print("python", platform.python_version(), "duckdb", duckdb.__version__, "pandas
       "scipy", scipy.__version__, "statsmodels", statsmodels.__version__)
 PY
 
-mkdir -p code_snapshot && cp "$PROJ"/code/*.py code_snapshot/   # code snapshot (measurement.md §2)
+mkdir -p code_snapshot && cp "$PROJ"/code/*.py "$PROJ"/future_work/code/*.py code_snapshot/   # code snapshot (measurement.md §2)
 sha256sum code_snapshot/*.py > code.sha256
 
 # A failing stage must not stop the later stages: each one is guarded.
 C="$PROJ/code"
+F="$PROJ/future_work/code"
+export PYTHONPATH="$C"  # q1a, q1b, q1c import shared modules from code/
 python "$C/build_tables.py"       --params prereg.json --out "$RUN_DIR" || echo "STAGE build_tables FAILED"
 python "$C/q3_describe.py"        --params prereg.json --out "$RUN_DIR" || echo "STAGE q3_describe FAILED"
 python "$C/q1_calibration.py"     --params prereg.json --out "$RUN_DIR" || echo "STAGE q1_calibration FAILED"
 python "$C/q2_concentration.py"   --params prereg.json --out "$RUN_DIR" || echo "STAGE q2_concentration FAILED"
-python "$C/q1a_category.py"       --params prereg.json --out "$RUN_DIR" || echo "STAGE q1a_category FAILED"
-python "$C/q1b_deadline.py"       --params prereg.json --out "$RUN_DIR" || echo "STAGE q1b_deadline FAILED"
-python "$C/q1c_volume.py"         --params prereg.json --out "$RUN_DIR" || echo "STAGE q1c_volume FAILED"
+python "$F/q1a_category.py"       --params prereg.json --out "$RUN_DIR" || echo "STAGE q1a_category FAILED"
+python "$F/q1b_deadline.py"       --params prereg.json --out "$RUN_DIR" || echo "STAGE q1b_deadline FAILED"
+python "$F/q1c_volume.py"         --params prereg.json --out "$RUN_DIR" || echo "STAGE q1c_volume FAILED"
 python "$C/verdicts.py"           --out "$RUN_DIR"                      || echo "STAGE verdicts FAILED"
 python "$C/make_summary.py"       --out "$RUN_DIR"                      || echo "STAGE make_summary FAILED"
 

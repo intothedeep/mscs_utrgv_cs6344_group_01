@@ -14,8 +14,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from common import connect, load_params, md_table, raw_glob, run_stage, write_json, write_manifest
-from q1a_category import group_categories
+from common import connect, group_categories, load_params, md_table, raw_glob, run_stage, write_json, write_manifest
 
 STAGE = "r2_price_path"
 

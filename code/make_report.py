@@ -80,7 +80,15 @@ PLAN_FIG = {"drop_reasons.png": "no plan figure", "fig1_fig2_hist.png": "plan Fi
             "fig3_qq.png": "plan Fig. 3", "fig_violin_p1d_by_category.png": "plan Q3 violin, no number",
             "fig4_calibration.png": "plan Fig. 4", "fig5_ecdf_yes_no.png": "plan Fig. 5", "fig6_ccdf.png": "plan Fig. 6",
             "fig7_lorenz.png": "plan Fig. 7", "fig8_elbow.png": "plan Fig. 8", "fig9_calibration_by_category.png": "plan Fig. 9",
-            "fig10_ecdf_7d_vs_1d.png": "plan Fig. 10", "fig11_volume_vs_error.png": "plan Fig. 11"}
+            "fig10_ecdf_7d_vs_1d.png": "plan Fig. 10", "fig11_volume_vs_error.png": "plan Fig. 11",
+            "box_p1d_by_category_group.png": "plan Q3 box plot, no number"}
+BOX_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "box_p1d_by_category_group.png"
+LORENZ_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "lorenz_top_shares.png"   # v1 only: code/lecture_numbers.py
+LN_PATH = Path(__file__).resolve().parent.parent / "reports" / "lecture_numbers.json"   # v1 only: written by code/lecture_numbers.py
+Z_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "fig4_calibration_z.png"
+# Dataset paper (main.tex line 66): share of maker volume held by the top 1% of makers. Quoted, not computed here.
+PAPER_TOP1_MAKER = 0.841
+BRIER_NAME = "mean squared residual of the price"
 DROP_LABEL = {"updown": "Up/Down market", "non_binary": "Not binary", "no_outcome": "No outcome",
               "no_price": "No price at T - 1 day", "stale_price": "Price older than the limit",
               "below_min_trades": "Fewer trades than the minimum", "kept": "Kept"}
@@ -111,6 +119,15 @@ def fp(p) -> str:
 
 def ci(lo, hi, dec: int = 4) -> str:
     return f"[{lo:.{dec}g}, {hi:.{dec}g}]"
+
+
+def zci(lo, hi, dec: int = 4) -> str:
+    """z interval of a proportion, ends cut at 0 and 1."""
+    return ci(max(lo, 0.0), min(hi, 1.0), dec)
+
+
+def bin_label(b: int, nb: int) -> str:
+    return f"{b / nb:.1f} to {(b + 1) / nb:.1f}"
 
 
 def g(d, *keys):
@@ -169,15 +186,15 @@ class Page:
         return (f'<div class="{cls}"><table><tr>{th}</tr>{body}</table></div>'
                 f'<p class="note">Table {self.tab_n}. {html.escape(caption)}</p>')
 
-    def figure(self, png: str, what: str, why: str) -> str:
-        f = self.run / png
+    def figure(self, png: str, what: str, why: str, path: Path | None = None, source: str | None = None) -> str:
+        f = path or self.run / png
         if not f.exists():
             return skipped(png)
         self.fig_n += 1
         b64 = base64.b64encode(f.read_bytes()).decode()
         return (f'<figure><img alt="{html.escape(what)}" src="data:image/png;base64,{b64}">'
                 f'<figcaption>Figure {self.fig_n} ({html.escape(PLAN_FIG.get(png, "no plan figure"))}). {html.escape(what)} Why: {html.escape(why)} '
-                f'Source: {html.escape(str(self.run))}/{html.escape(png)}</figcaption></figure>')
+                f'Source: {html.escape(source or f"{self.run}/{png}")}</figcaption></figure>')
 
 
 def bullets(items: list[str]) -> str:
@@ -193,27 +210,42 @@ def skipped(what: str) -> str:
 
 
 # ---------- verdicts: read from verdicts.json, never recomputed here ----------
-def numbers(e: dict) -> str:
-    """The numbers of one verdicts.json entry, in one line."""
+def numbers(e: dict, ln: dict | None = None) -> str:
+    """The numbers of one verdicts.json entry, in one line. With ln (v1): per-bin gap instead of Cohen's w, renamed Brier."""
     st, ef = e["statistic"], e["effect_size"]
     out = f"{st['name']} {fmt(st['value'])}" + (f" (df {st['df']})" if st.get("df") else "")
-    out += f", p {fp(e['p'])}, {ef['name']} {fmt(ef['value'])}"
+    if ln:
+        gap = ln["largest_gap"]
+        out += f", p {fp(e['p'])}, largest per-bin gap {gap['diff_obs_minus_price']:+.4f} (bin {gap['bin']})"
+    else:
+        out += f", p {fp(e['p'])}, {ef['name']} {fmt(ef['value'])}"
     if ef.get("mean_diff") is not None:
         out += f", mean difference {fmt(ef['mean_diff'])}"
     if ef.get("ci"):
         out += f", 95% CI {ci(*ef['ci'])}"
     out += f", n {fmt(e['n'])}."
-    extra = ", ".join(f"{k.replace('_', ' ')} {fmt(v)}" for k, v in (e.get("extra") or {}).items())
+    extra = ", ".join(f"{BRIER_NAME if ln and k == 'brier' else k.replace('_', ' ')} {fmt(v)}" for k, v in (e.get("extra") or {}).items())
     return out + (f" {extra}." if extra else "")
 
 
-def verdict_row(V: dict | None, key: str) -> str:
+def verdict_row(V: dict | None, key: str, ln: dict | None = None) -> str:
     if V is None:
         return "Skipped: verdicts.json not found in the run folder."
     e = V["comparisons"].get(key)
     if e is None:
         return f"Skipped: no {key} entry in verdicts.json (its results file was missing when the verdicts were written)."
-    return f"{e['verdict']} {numbers(e)}"
+    return f"{e['verdict']} {numbers(e, ln)}"
+
+
+def q2_answer(D: dict) -> str:
+    """v1 Q2 answer: the 80/20 reference and the power-law tail, read from lecture_numbers.json (D-024, D-025)."""
+    ln = D["ln"]
+    t20, pl = ln["top20_share"], ln["power_law_wallet_volume"]
+    return (f"Yes, far beyond the 80/20 reference. The top 20% of wallets hold {t20['maker']:.1%} of maker volume and "
+            f"{t20['taker']:.1%} of taker volume, against {t20['reference']:.0%} for the 80/20 rule. "
+            "The 80/20 rule and the power law come from Lecture 6. "
+            f"The top 10% tail of wallet volume is close to a power law with alpha {pl['alpha']:.3f}, "
+            f"but the KS test rejects an exact power law (KS p {fp(pl['ks_p'])}). No pre-registered verdict for this.")
 
 
 def summary_rows(D: dict, v2: bool) -> list[tuple[str, str]]:
@@ -221,20 +253,29 @@ def summary_rows(D: dict, v2: bool) -> list[tuple[str, str]]:
     q3 = D["q3"]
     if q3:
         s, f = q3["summary"], q3["fits"]
-        best = min(f["trade_size_usdc"], key=lambda k: f["trade_size_usdc"][k]["D"])
+        if v2:
+            best = min(f["trade_size_usdc"], key=lambda k: f["trade_size_usdc"][k]["D"])
+            fit_txt = f"Closest of the three fits for trade size: {best.replace('_', ' ')} (KS D {fmt(f['trade_size_usdc'][best]['D'])})."
+        else:
+            d = {k: fmt(v["D"]) for k, v in f["trade_size_usdc"].items()}
+            fit_txt = (f"Trade size fits, KS D: normal {d['normal']} and exponential {d['exponential']} (both fitted on all data), "
+                       f"power law {d['power_law']} (fitted on the top 10% tail only). The fits are not ranked. Lognormal was not compared.")
         rows.append(("Q3: how are price, trade size and wallet volume distributed?",
                      f"Descriptive, no pre-registered criterion. Median trade size {fmt(s['trade_size_usdc']['median'])} USDC, "
-                     f"mean {fmt(s['trade_size_usdc']['mean'])} USDC. Closest of the three fits for trade size: {best.replace('_', ' ')} "
-                     f"(KS D {fmt(f['trade_size_usdc'][best]['D'])}). Mean price p_1d {fmt(s['p_1d']['mean'])}."))
+                     f"mean {fmt(s['trade_size_usdc']['mean'])} USDC. {fit_txt} Mean price p_1d {fmt(s['p_1d']['mean'])}."))
     V = D["verdicts"]
-    rows.append(("Q1: do prices match how often events happen?", verdict_row(V, "Q1")))
+    rows.append(("Q1: do prices match how often events happen?", verdict_row(V, "Q1", None if v2 else D["ln"])))
     q2 = g(D["q2"], "concentration")
     if q2:
         m, t = q2["maker"], q2["taker"]
-        rows.append(("Q2: is wallet volume concentrated?",
-                     f"Descriptive, no pre-registered criterion. Gini maker {fmt(m['gini'])}, taker {fmt(t['gini'])}. "
-                     f"The top 1% of maker wallets hold {m['top1_share']:.1%} of maker volume. "
-                     f"A wallet is an address, not a person."))
+        if v2:
+            q2_txt = (f"Descriptive, no pre-registered criterion. Gini maker {fmt(m['gini'])}, taker {fmt(t['gini'])}. "
+                      f"The top 1% of maker wallets hold {m['top1_share']:.1%} of maker volume. "
+                      f"A wallet is an address, not a person.")
+        else:
+            q2_txt = (f"{q2_answer(D)} "
+                      f"The top 1% of maker wallets hold {m['top1_share']:.1%} of maker volume. A wallet is an address, not a person.")
+        rows.append(("Q2: is wallet volume concentrated?" if v2 else "Q2: who is the crowd? Do a few wallets do most of the trading?", q2_txt))
     if v2:
         rows += [("Q1a: does accuracy depend on the topic?", verdict_row(V, "Q1a")),
                  ("Q1b: is the price better near the deadline?", verdict_row(V, "Q1b")),
@@ -250,7 +291,10 @@ def sec_summary(P: Page, D: dict, full: bool, v2: bool) -> str:
             if full else
             f"Scope is <b>{html.escape(str(scope))}</b>. This is a first cycle, so there is no verdict. Numbers only.")
     rows = [[Raw(f"<b>{html.escape(q)}</b>"), a] for q, a in summary_rows(D, v2)]
-    return (f'<div class="callout"><p>{note}</p></div>'
+    departure = ("" if v2 else '<div class="callout"><p>Departure from <code>analysis/prereg_mvp1.md</code>: this report changes the effect size and '
+                 "interval names, and drops Gini named in the class post, to keep all analysis within lecture contents "
+                 "(D-025, D-026). Lorenz is kept as a labeled figure (D-028). The verdict rule and the verdict sentence are unchanged.</p></div>")
+    return (f'<div class="callout"><p>{note}</p></div>' + departure
             + ask("the question each analysis answers, in one line each.")
             + P.table("Questions and answers. Verdicts come from verdicts.json, numbers from the saved results.", ["Question", "Answer"], rows)
             + bullets(["Each answer repeats numbers from the sections below. Check the p-value together with the effect size.",
@@ -258,7 +302,7 @@ def sec_summary(P: Page, D: dict, full: bool, v2: bool) -> str:
                        "Tests assume independent markets. Markets on one event are not independent."]))
 
 
-def sec_data(P: Page, D: dict) -> str:
+def sec_data(P: Page, D: dict, v2: bool) -> str:
     t, pr = D["tables"], D["prereg"]
     drops = t["drop_reasons"]
     scope_n = t["n_markets_in_scope"]
@@ -281,7 +325,7 @@ def sec_data(P: Page, D: dict) -> str:
             + '<div class="callout"><ul>'
               "<li>Duplicate rows are kept. No row id tells a repeat fill from a copy.</li>"
               "<li><code>no_outcome</code> includes markets whose outcome_seq=1 label never traded.</li>"
-              "<li>Volume and trade counts include trades after T - 1 day (used in Q1c).</li></ul></div>"
+              f"<li>Volume and trade counts include trades after T - 1 day{' (used in Q1c)' if v2 else ''}.</li></ul></div>"
             + bullets(["Only the kept markets enter Q1 and the price part of Q3.",
                        "A market is counted once, at the first rule it fails."]))
 
@@ -292,7 +336,7 @@ def dist_rows(s: dict) -> list[list]:
             for k, v in s.items()]
 
 
-def sec_q3(P: Page, D: dict) -> str:
+def sec_q3(P: Page, D: dict, v2: bool) -> str:
     q = D["q3"]
     if not q:
         return skipped("q3_results.json")
@@ -307,7 +351,8 @@ def sec_q3(P: Page, D: dict) -> str:
             + P.table("Summary statistics from q3_results.json.",
                       ["Variable", "n", "Mean", "Median", "Q25", "Q75", "Q95", "Q99", "Max"], dist_rows(q["summary"]))
             + P.table("Fitted models with KS distance D (the effect size) next to p. "
-                      "Power law is fitted to the top 10% (xmin quantile 0.9).",
+                      "Power law is fitted to the top 10% (xmin quantile 0.9)."
+                      + ("" if v2 else " Normal and exponential are fitted on all data, so the three D values are not ranked."),
                       ["Variable", "Model", "Parameters", "KS D", "KS p"], fits)
             + P.figure("fig1_fig2_hist.png", "Histograms of price and trade size.",
                        "the shape shows whether a normal model could fit.")
@@ -316,26 +361,41 @@ def sec_q3(P: Page, D: dict) -> str:
                        "a straight line after log means the log values are close to normal.")
             + P.figure("fig_violin_p1d_by_category.png", "Violin of p_1d by category_refined over the kept markets (bar = median).",
                        "a wide body at both ends means the price is near 0 or 1 in that topic.")
-            + bullets(["A smaller KS D means a closer fit. D is the size of the gap, p only says if the gap is zero.",
+            + (P.figure("box_p1d_by_category_group.png",
+                        "Box plot of p_1d by topic group (category_group) over the 47,948 kept markets (line = median, box = middle half).",
+                        "the box shows how wide the middle half of prices is in each topic.", BOX_PNG,
+                        "runs/142123_robust_full_v4/r2_markets.csv (run 142123), drawn after the run by code/q3_box_p1d.py "
+                        "from this saved file. It is not a Q3 stage output of run 142082.") if not v2 else "")
+            + bullets([("A smaller KS D means a closer fit. D is the size of the gap, p only says if the gap is zero." if v2 else
+                        "D is the size of the gap between the data and one fit, p only says if the gap is zero. The power law D covers the tail only, so do not compare it with the others. Lognormal was not compared."),
                        "KS p-values are optimistic for fitted parameters. The fit used the same data as the test.",
                        "Mean far above median means a long right tail: a few large trades and wallets.",
                        "Wallet volume pools maker and taker rows, so one address can appear twice."]))
 
 
-def bins_table(P: Page, rows: list[dict] | None, caption: str, nb: int | None) -> str:
+def bins_table(P: Page, rows: list[dict] | None, caption: str, nb: int | None, z: list[dict] | None = None) -> str:
+    """z (v1): the z-interval rows of lecture_numbers.json, same order as rows. Without z: the saved Wilson interval (v2)."""
     if rows is None:
         return skipped("a bin table")
     out = []
-    for r in rows:
+    for i, r in enumerate(rows):
         b = r["bin"]
         label = f"{int(b) / nb:.1f} to {(int(b) + 1) / nb:.1f}" if nb and b.isdigit() else b
         diff = float(r["diff_obs_minus_price"])
-        row = [label, int(float(r["n"])), float(r["mean_price"]), float(r["observed_rate"]), f"{diff:+.4f}",
-               ci(float(r["ci_low"]), float(r["ci_high"]))]
+        if z is None:
+            interval = ci(float(r["ci_low"]), float(r["ci_high"]))
+        else:
+            assert z[i]["n"] == int(float(r["n"])), "lecture_numbers.json does not match the bin table"
+            interval = zci(z[i]["z_low"], z[i]["z_high"])
+        row = [label, int(float(r["n"])), float(r["mean_price"]), float(r["observed_rate"]), f"{diff:+.4f}", interval]
+        if z is not None:
+            row.append("yes" if z[i]["price_outside"] else "no")
         if "p_bh" in r:
             row += [fp(float(r["p_bh"])), "off" if r["reject_bh"] == "True" else "ok"]
         out.append(row)
-    head = ["Bin", "n", "Mean price", "Observed Yes rate", "Observed minus price", "95% Wilson CI"]
+    head = ["Bin", "n", "Mean price", "Observed Yes rate", "Observed minus price", "95% Wilson CI" if z is None else "95% z interval"]
+    if z is not None:
+        head.append("Mean price outside it")
     if rows and "p_bh" in rows[0]:
         head += ["BH p", "Call"]
     return P.table(caption, head, out)
@@ -351,68 +411,136 @@ def confusion_block(P: Page, m: dict) -> str:
                   f"class balance (Yes share) {fmt(m['class_balance_yes'])}.</p>")
 
 
+def long_ci(v: dict) -> str:
+    """Interval of the longshot gap: z interval (v1, keys z_*_diff) or the saved Wilson one (v2)."""
+    return ci(v["z_low_diff"], v["z_high_diff"]) if "z_low_diff" in v else ci(v["ci_low_diff"], v["ci_high_diff"])
+
+
 def paper_longshot_block(P: Page, long_main: dict) -> str:
-    rows = [[b, f"{PAPER_LONGSHOT[b]:+.4f}", f"{v['obs_minus_expected']:+.4f}" if v else "n/a", ci(v["ci_low_diff"], v["ci_high_diff"]) if v else "n/a",
+    rows = [[b, f"{PAPER_LONGSHOT[b]:+.4f}", f"{v['obs_minus_expected']:+.4f}" if v else "n/a", long_ci(v) if v else "n/a",
              v["n"] if v else None] for b in PAPER_LONGSHOT for v in [long_main.get(b)]]
     return (P.table("Longshot bins against the dataset paper, Table 3 (main set).",
                     ["Bin", "Paper: mean return per token (per trade)", "Ours: observed minus mean price (per market)",
-                     "95% CI of ours", "Our n"], rows)
+                     "95% CI of ours" if "z_low_diff" not in next(iter(long_main.values()), {}) else "95% z interval of ours", "Our n"], rows)
             + '<p class="note">The units differ. The paper counts every trade and takes payout minus price per token. '
               "We count every market once and take the observed Yes rate minus the mean price. Compare the sign and the size, not the digits.</p>")
 
 
-def sec_q1(P: Page, D: dict) -> str:
+def q1_bullets_v2() -> list[str]:
+    return ["Pre-registered line: chi-square p < 0.05 means prices are not calibrated as a whole.",
+            "A bin is off when its BH-corrected p < 0.05. A negative difference means the event happened less often than priced.",
+            "Effect w is Cohen's w. About 0.1 is small. A tiny p with a small w is a real but small gap.",
+            "Brier is the mean squared error of the price. 0.25 is a coin flip at 0.5, 0 is perfect."]
+
+
+def q1_bullets_v1(ln: dict, nb: int) -> list[str]:
+    z, gap = ln["z_interval_95"], ln["largest_gap"]
+    same = z["bins_outside"] == z["bins_bh_off"]
+    out_txt = (f"In {z['n_outside']} of {len(z['bins'])} bins the mean price is outside the z interval: bins {', '.join(map(str, z['bins_outside']))}. "
+               + (f"These are the same bins as the BH bins off." if same else
+                  f"The BH bins off are {', '.join(map(str, z['bins_bh_off']))}."))
+    return ["Pre-registered line: chi-square p < 0.05 means prices are not calibrated as a whole.",
+            "A bin is off when its BH-corrected p < 0.05. A negative difference means the event happened less often than priced.",
+            f"The effect is small. The largest per-bin gap is {gap['diff_obs_minus_price']:+.4f}, in bin {gap['bin']} "
+            f"(price {bin_label(gap['bin'], nb)}). A tiny p with gaps of a few points is a real but small gap.",
+            out_txt,
+            f"Mean squared residual of the price is the mean of (price minus outcome) squared. 0.25 is a coin flip at 0.5, 0 is perfect. "
+            "The pre-registration calls it the Brier score."]
+
+
+def sec_q1(P: Page, D: dict, v2: bool) -> str:
     q = D["q1"]
     if not q:
         return skipped("q1_results.json")
     nb = g(D["prereg"], "n_bins") or 10
+    ln = None if v2 else D["ln"]
+    zb = ln["z_interval_95"] if ln else {}
     rows = []
     for key, label in [("main_with_min_filter", "Main (min trades filter)"), ("no_min_filter", "Without min trades filter")]:
         r = q[key]
         c, k = r["chi2_gof"], r["ks_yes_vs_no"]
         rows.append([label, r["n_markets"], r["class_balance_yes"], r["brier"], r["log_loss"], r["mean_entropy_bits"],
-                     f"{fmt(c['chi2'])} (df {c['df']})", fp(c["p"]), c["effect_w"],
+                     f"{fmt(c['chi2'])} (df {c['df']})", fp(c["p"])] + ([c["effect_w"]] if v2 else []) + [
                      f"{r['bins_reject_bh']} / {r['bins_reject_bonferroni']}", r["confusion_at_0.5"]["accuracy"],
                      k["D"], fp(k["p"])])
     long = []
     for key, label in [("main_with_min_filter", "Main"), ("no_min_filter", "No min filter")]:
-        for bin_, v in q[key]["longshot"].items():
-            long.append([label, bin_, v["n"], v["mean_price"], v["observed_rate"], f"{v['obs_minus_expected']:+.4f}",
-                         ci(v["ci_low_diff"], v["ci_high_diff"])])
+        for bin_, v in (zb["longshot"][key] if ln else q[key]["longshot"]).items():
+            long.append([label, bin_, v["n"], v["mean_price"], v["observed_rate"], f"{v['obs_minus_expected']:+.4f}", long_ci(v)])
     main = q["main_with_min_filter"]
-    return (ask("when the price is p, does the event happen about p of the time? (price at T - 1 day, 10 equal-width bins)")
-            + "<p><b>Model:</b> each market's outcome is Bernoulli(p), where p is its price. If prices are calibrated, "
-              "the Yes count in a bin is binomial(n, mean p).</p>"
-            + P.table("Calibration metrics. Chi-square p sits next to effect size w. Bins off: BH / Bonferroni.",
-                      ["Set", "Markets", "Yes share", "Brier", "Log loss", "Mean H(p) bits", "Chi-square", "p", "Effect w",
-                       "Bins off (BH / Bonf.)", "Accuracy at 0.5", "KS D Yes vs No", "KS p"], rows)
-            + bins_table(P, D["q1_bins"], "Per bin, main set. BH p is the corrected binomial p. Observed minus price is the effect.", nb)
-            + P.figure("fig4_calibration.png", "Observed Yes rate against mean price per bin, with 95% Wilson CI.",
+    if v2:
+        head = ["Set", "Markets", "Yes share", "Brier", "Log loss", "Mean H(p) bits", "Chi-square", "p", "Effect w",
+                "Bins off (BH / Bonf.)", "Accuracy at 0.5", "KS D Yes vs No", "KS p"]
+        cap = "Calibration metrics. Chi-square p sits next to effect size w. Bins off: BH / Bonferroni."
+        model = ("<p><b>Model:</b> each market's outcome is Bernoulli(p), where p is its price. If prices are calibrated, "
+                 "the Yes count in a bin is binomial(n, mean p).</p>")
+        fig = P.figure("fig4_calibration.png", "Observed Yes rate against mean price per bin, with 95% Wilson CI.",
                        "points on the diagonal mean the price matches the outcome rate.")
+        bin_cap = "Per bin, main set. BH p is the corrected binomial p. Observed minus price is the effect."
+    else:
+        head = ["Set", "Markets", "Yes share", "Mean squared residual of the price", "Log loss", "Mean H(p) bits", "Chi-square", "p",
+                "Bins off (BH / Bonf.)", "Accuracy at 0.5", "KS D Yes vs No", "KS p"]
+        cap = ("Calibration metrics. The per-bin gaps (next table) are the effect size. Bins off: BH / Bonferroni. "
+               "Mean squared residual of the price: Lecture 20.")
+        model = ("<p><b>Model:</b> each market's outcome is Bernoulli(p), where p is its price. If prices are calibrated, "
+                 "the Yes count in a bin is binomial(n, mean p). The chi-square test used here is the goodness-of-fit form of the "
+                 "chi-square test in Lecture 12: observed against expected counts, expected from the prices.</p>")
+        fig = P.figure("fig4_calibration.png", "Observed Yes rate against mean price per bin, with 95% z interval.",
+                       "points on the diagonal mean the price matches the outcome rate.", Z_PNG,
+                       f"reports/figures/fig4_calibration_z.png, drawn by code/lecture_numbers.py from q1_bins.csv and "
+                       f"q1_bins_no_min.csv of {P.run}")
+        bin_cap = ("Per bin, main set. BH p is the corrected binomial p. Observed minus price is the effect size. "
+                   "The z interval is the observed rate plus or minus 1.96 Bernoulli SD / sqrt(n), ends cut at 0 and 1.")
+    return (ask("when the price is p, does the event happen about p of the time? (price at T - 1 day, 10 equal-width bins)")
+            + model
+            + P.table(cap, head, rows)
+            + bins_table(P, D["q1_bins"], bin_cap, nb, zb.get("bins"))
+            + fig
             + P.figure("fig5_ecdf_yes_no.png", "ECDFs of p_1d for Yes-resolved and No-resolved markets.",
                        "the further apart the curves, the better the price separates the outcomes.")
             + confusion_block(P, main)
             + P.table("Longshot bins (price below 0.2): observed rate against mean price.",
-                      ["Set", "Bin", "n", "Mean price", "Observed rate", "Observed minus price", "95% CI of the difference"], long)
-            + paper_longshot_block(P, main["longshot"])
-            + bins_table(P, D["q1_bins_no_min"], "Robustness: the same bins without the min trades filter.", nb)
-            + bins_table(P, D["q1_bins_eqfreq"], "Robustness: equal-frequency bins, main set.", None)
-            + bullets(["Pre-registered line: chi-square p < 0.05 means prices are not calibrated as a whole.",
-                       "A bin is off when its BH-corrected p < 0.05. A negative difference means the event happened less often than priced.",
-                       "Effect w is Cohen's w. About 0.1 is small. A tiny p with a small w is a real but small gap.",
-                       "Brier is the mean squared error of the price. 0.25 is a coin flip at 0.5, 0 is perfect."]))
+                      ["Set", "Bin", "n", "Mean price", "Observed rate", "Observed minus price", "95% CI of the difference" if v2 else "95% z interval of the difference"], long)
+            + paper_longshot_block(P, zb["longshot"]["main_with_min_filter"] if ln else main["longshot"])
+            + bins_table(P, D["q1_bins_no_min"], "Robustness: the same bins without the min trades filter.", nb, zb.get("bins_no_min_filter"))
+            + bins_table(P, D["q1_bins_eqfreq"], "Robustness: equal-frequency bins, main set.", None, zb.get("bins_equal_frequency"))
+            + bullets(q1_bullets_v2() if v2 else q1_bullets_v1(ln, nb)))
 
 
-def sec_q2(P: Page, D: dict) -> str:
+def robust_block(P: Page, rb: dict | None, scal: list[dict] | None, v2: bool) -> str:
+    """Scaling table (v2 only, report-size limit G2) and the stability line. Called in print order, so table numbers follow the page (G9)."""
+    if not (scal and rb):
+        return skipped("q2_kmeans_scaling.csv")
+    table = P.table("k-means feature scaling: z-score (mean, sd) and robust (median, IQR). A zero IQR falls back to the sd.",
+                    ["Feature", "Mean", "SD", "Median", "IQR", "Scale used (robust)", "IQR was zero"],
+                    [[r["feature"], float(r["mean"]), float(r["sd"]), float(r["median"]), float(r["iqr"]),
+                      float(r["robust_scale_used"]), r["iqr_was_zero"]] for r in scal]) if v2 else ""
+    return (table + f"<p>Stability check: k-means on the robust-scaled features (same K {rb['k']}, seed {rb['seed']}) against the z-score clusters, "
+                    f"adjusted Rand index {fmt(rb['adjusted_rand_index_vs_zscore'])}. 1 means the same clusters.</p>")
+
+
+def pipeline_check(P: Page, q: dict) -> str:
+    """v1 pipeline check: the top 1% maker share against the dataset paper (main.tex line 66). Replaces the Gini check."""
+    ours = q["concentration"]["maker"]["top1_share"]
+    return (P.table("Pipeline check: share of maker volume held by the top 1% of makers, ours against the dataset paper.",
+                    ["Source", "Top 1% maker share"], [["Ours (kept markets of this run)", f"{ours:.1%}"],
+                                                       [f"Dataset paper ({PAPER}, full data)", f"{PAPER_TOP1_MAKER:.1%}"]])
+            + '<p class="note">The populations differ. The paper covers the full data, and our wallets come from the kept markets. '
+              "We read the paper's value as a reference only, not as a target.</p>")
+
+
+def sec_q2(P: Page, D: dict, v2: bool) -> str:
     q = D["q2"]
     if not q:
         return skipped("q2_results.json")
     ref = q.get("paper_gini_full_data_reference", {})
     conc = [[role.title(), v["n_wallets"], v["mean"], v["median"], v["mean_over_median"], f"{v['top1_share']:.1%}",
-             f"{v['top5_share']:.1%}", f"{v['top10_share']:.1%}", f"{v['top20_share']:.1%}", v["gini"], ref.get(role)]
+             f"{v['top5_share']:.1%}", f"{v['top10_share']:.1%}", f"{v['top20_share']:.1%}"] + ([v["gini"], ref.get(role)] if v2 else [])
             for role, v in q["concentration"].items()]
     w, ks, sp, km = q["role_tests"]["welch_t"], q["role_tests"]["ks"], q["spearman_n_trades_vs_volume"], q["kmeans"]
-    tests = [["Welch t, log10 volume maker vs taker", f"t {fmt(w['t'])}", fp(w["p"]), f"Cohen's d {fmt(w['cohens_d'])}"],
+    d_log = None if v2 else D["ln"]["log10_mean_difference_maker_minus_taker"]["difference"]
+    tests = [["Welch t, log10 volume maker vs taker", f"t {fmt(w['t'])}", fp(w["p"]),
+              f"Cohen's d {fmt(w['cohens_d'])}" if v2 else f"log10 mean difference (maker minus taker) {fmt(d_log)}"],
              ["KS, volume maker vs taker", f"D {fmt(ks['D'])}", fp(ks["p"]), f"D {fmt(ks['D'])}"],
              ["Spearman, n_trades vs volume (n " + fmt(sp["n"]) + ")", f"rho {fmt(sp['rho'])}", fp(sp["p"]), f"rho {fmt(sp['rho'])}"]]
     cl = [[c["cluster"], c["n"], c["median_volume"], c["median_n_trades"], c["median_n_markets"], c["mean_trade_price"]]
@@ -420,37 +548,39 @@ def sec_q2(P: Page, D: dict) -> str:
     ch, an_new, an_old = km["chi2_cluster_x_category"], km.get("anova_mean_trade_price"), km["anova_log_median_trade_size"]
     mx = ch.get("min_expected_count")
     ctest = [[f"Chi-square, cluster x category ({ch['n_categories']} categories" + (f", min expected count {fmt(mx)})" if mx is not None else ")"),
-              f"{fmt(ch['chi2'])} (df {ch['df']})", fp(ch["p"]), f"Cramer's V {fmt(ch['cramers_v'])}"]]
+              f"{fmt(ch['chi2'])} (df {ch['df']})", fp(ch["p"]), f"Cramer's V {fmt(ch['cramers_v'])}"]] if v2 else []
     for label, an in ([("ANOVA of mean trade price", an_new), ("Secondary: ANOVA of log median trade size", an_old)] if an_new
                       else [("ANOVA of log median trade size", an_old)]):
         ctest.append([f"{label} ({fmt(an['n_perm'])} permutations)", f"F {fmt(an['F'])}", fp(an["perm_p"]),
-                      f"eta squared {fmt(an['eta_squared'])}"])
+                      (f"eta squared {fmt(an['eta_squared'])}" if v2 else f"SSB / (SSB + SSW) {fmt(an['eta_squared'])}")])
     rb, scal = km.get("robust_scaling_check"), D["q2_scaling"]
-    robust = (P.table("k-means feature scaling: z-score (mean, sd) and robust (median, IQR). A zero IQR falls back to the sd.",
-                      ["Feature", "Mean", "SD", "Median", "IQR", "Scale used (robust)", "IQR was zero"],
-                      [[r["feature"], float(r["mean"]), float(r["sd"]), float(r["median"]), float(r["iqr"]),
-                        float(r["robust_scale_used"]), r["iqr_was_zero"]] for r in scal])
-              + f"<p>Stability check: k-means on the robust-scaled features (same K {rb['k']}, seed {rb['seed']}) against the z-score clusters, "
-                f"adjusted Rand index {fmt(rb['adjusted_rand_index_vs_zscore'])}. 1 means the same clusters.</p>"
-              if scal and rb else skipped("q2_kmeans_scaling.csv"))
     return (ask("do a few wallets hold most of the volume, and do makers differ from takers?")
-            + P.table("Volume concentration per role. The last column is the paper's Gini on the full data, for reference.",
+            + ("" if v2 else f"<p>{html.escape(q2_answer(D))}</p>")
+            + P.table("Volume concentration per role. The last column is the paper's Gini on the full data, for reference."
+                      if v2 else "Volume concentration per role: share of volume held by the top wallets. The 80/20 reference is a top 20% share of 80%.",
                       ["Role", "Wallets", "Mean (USDC)", "Median (USDC)", "Mean / median", "Top 1%", "Top 5%", "Top 10%",
-                       "Top 20%", "Gini", "Paper Gini"], conc)
+                       "Top 20%"] + (["Gini", "Paper Gini"] if v2 else []), conc)
+            + ("" if v2 else pipeline_check(P, q))
             + P.table("Role and activity tests, each with p and an effect size.", ["Test", "Statistic", "p", "Effect size"], tests)
             + P.figure("fig6_ccdf.png", "Wallet volume CCDF on log-log axes.",
                        "a long straight tail means a few wallets trade very large volumes.")
-            + P.figure("fig7_lorenz.png", "Lorenz curves of wallet volume against the equality line.",
-                       "a curve far below the line means few wallets hold most of the volume.")
+            + (P.figure("fig7_lorenz.png", "Lorenz curves of wallet volume against the equality line.",
+                        "a curve far below the line means few wallets hold most of the volume.") if v2 else
+               P.figure("fig7_lorenz.png",
+                        "Lorenz picture of wallet volume, drawn from four saved top shares per role with straight lines between them, "
+                        "so it is a coarse picture. The Lorenz curve is outside the lectures. Below 80% of wallets nothing was measured.",
+                        "it shows how far the curve sits from the 80/20 reference.", LORENZ_PNG,
+                        f"reports/figures/lorenz_top_shares.png, drawn by code/lecture_numbers.py from q2_concentration.csv of {P.run}"))
             + P.table(f"Side analysis: k-means clusters (K = {km['k_chosen']}, {fmt(km['n_sample'])} sampled wallets, "
                       f"seed {km['sample_seed']}). K rule: {km['k_rule']}.",
                       ["Cluster", "Wallets", "Median volume", "Median trades", "Median markets", "Mean trade price"], cl)
             + P.figure("fig8_elbow.png", "K-means inertia against K, with the chosen K dashed.",
                        "the bend in the curve is the rule used to pick K.")
             + P.table("Cluster tests with effect sizes.", ["Test", "Statistic", "p", "Effect size"], ctest)
-            + robust
-            + bullets(["Gini 0 means equal volume. Gini 1 means one wallet holds everything.",
-                       "Top 1% share is the share of total volume held by the top 1% of wallets.",
+            + (robust_block(P, rb, scal, v2) if v2 else "")
+            + bullets((["Gini 0 means equal volume. Gini 1 means one wallet holds everything."] if v2 else
+                       ["The top 20% share is the share of total volume held by the top 20% of wallets. The 80/20 reference is 80%."])
+                      + ["Top 1% share is the share of total volume held by the top 1% of wallets.",
                        "A wallet is an address. One person may use many addresses.",
                        "K-means is a side analysis. The clusters describe the sample and are not groups of people."]))
 
@@ -695,13 +825,18 @@ def main() -> None:
     a = ap.parse_args()
     run, v2 = Path(a.run), a.version == "v2"
     D = load_run(run)
+    if not v2:
+        ln = json.loads(LN_PATH.read_text()) if LN_PATH.exists() else None
+        if ln is None or ln["source_run"] != run.name:
+            raise SystemExit(f"{LN_PATH} missing or not from {run.name}: run code/lecture_numbers.py first")
+        D["ln"] = ln
     if not D["tables"]:
         raise SystemExit(f"{run}/tables_summary.json not found: not a run folder")
     full = D["prereg"].get("scope") == "full"
     P = Page(run)
-    steps = [("summary", "Summary", sec_summary(P, D, full, v2)), ("data", "Data and filters", sec_data(P, D)),
-             ("q3", "Q3: distributions", sec_q3(P, D)), ("q1", "Q1: calibration", sec_q1(P, D)),
-             ("q2", "Q2: wallet concentration", sec_q2(P, D))]
+    steps = [("summary", "Summary", sec_summary(P, D, full, v2)), ("data", "Data and filters", sec_data(P, D, v2)),
+             ("q3", "Q3: distributions", sec_q3(P, D, v2)), ("q1", "Q1: calibration", sec_q1(P, D, v2)),
+             ("q2", "Q2: wallet concentration", sec_q2(P, D, v2))]
     if v2:
         steps += [("q1a", "Q1a: topic", sec_q1a(P, D)), ("q1b", "Q1b: deadline", sec_q1b(P, D)),
                   ("q1c", "Q1c: volume", sec_q1c(P, D))]

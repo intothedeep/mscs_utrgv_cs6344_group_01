@@ -361,6 +361,10 @@
 \newcommand{\TradeSizeExponentialKsD}{\ensuremath{0.534}}
 % q3_results.json: fits.trade_size_usdc.normal.D
 \newcommand{\TradeSizeNormalKsD}{\ensuremath{0.469}}
+% q3_results.json: fits.trade_size_usdc.power_law.p
+\newcommand{\TradeSizePowerKsP}{\ensuremath{1.5\times10^{-131}}}
+% q3_results.json: fits.trade_size_usdc.power_law.n_tail
+\newcommand{\TradeSizePowerNTail}{\ensuremath{100{,}090}}
 % q3_results.json: fits.wallet_volume_usdc.power_law.alpha
 \newcommand{\WalletVolumePowerAlpha}{\ensuremath{1.788}}
 % q3_results.json: fits.wallet_volume_usdc.power_law.xmin
@@ -371,6 +375,120 @@
 \newcommand{\WalletVolumeExponentialKsD}{\ensuremath{0.675}}
 % q3_results.json: fits.wallet_volume_usdc.normal.D
 \newcommand{\WalletVolumeNormalKsD}{\ensuremath{0.488}}
+% q3_results.json: fits.wallet_volume_usdc.power_law.p
+\newcommand{\WalletVolumePowerKsP}{\ensuremath{1.2\times10^{-105}}}
+% q3_results.json: fits.wallet_volume_usdc.power_law.n_tail
+\newcommand{\WalletVolumePowerNTail}{\ensuremath{211{,}742}}
+% lecture_numbers.json: z_interval_95.n_outside
+\newcommand{\ZIntervalBinsOutsideN}{\ensuremath{5}}
+% lecture_numbers.json: z_interval_95.bins_outside
+\newcommand{\ZIntervalBinsOutsideList}{0, 1, 6, 7, 8}
+% lecture_numbers.json: z_interval_95.bins_bh_off
+\newcommand{\ZIntervalBinsBhOffList}{0, 1, 6, 7, 8}
+% lecture_numbers.json: z_interval_95.same_bins
+\newcommand{\ZIntervalSameAsBh}{yes}
+% lecture_numbers.json: z_interval_95.bins[bin=0].bernoulli_sd
+\newcommand{\BinZeroTenZSd}{\ensuremath{0.116}}
+% lecture_numbers.json: z_interval_95.bins[bin=0].z_low
+\newcommand{\BinZeroTenZLow}{\ensuremath{1.2}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=0].z_high
+\newcommand{\BinZeroTenZHigh}{\ensuremath{1.5}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=0].price_outside
+\newcommand{\BinZeroTenZOutside}{yes}
+% lecture_numbers.json: z_interval_95.bins[bin=1].bernoulli_sd
+\newcommand{\BinTenTwentyZSd}{\ensuremath{0.331}}
+% lecture_numbers.json: z_interval_95.bins[bin=1].z_low
+\newcommand{\BinTenTwentyZLow}{\ensuremath{11.3}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=1].z_high
+\newcommand{\BinTenTwentyZHigh}{\ensuremath{13.8}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=1].price_outside
+\newcommand{\BinTenTwentyZOutside}{yes}
+% lecture_numbers.json: z_interval_95.bins[bin=2].bernoulli_sd
+\newcommand{\BinTwentyThirtyZSd}{\ensuremath{0.427}}
+% lecture_numbers.json: z_interval_95.bins[bin=2].z_low
+\newcommand{\BinTwentyThirtyZLow}{\ensuremath{22.3}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=2].z_high
+\newcommand{\BinTwentyThirtyZHigh}{\ensuremath{25.6}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=2].price_outside
+\newcommand{\BinTwentyThirtyZOutside}{no}
+% lecture_numbers.json: z_interval_95.bins[bin=3].bernoulli_sd
+\newcommand{\BinThirtyFortyZSd}{\ensuremath{0.471}}
+% lecture_numbers.json: z_interval_95.bins[bin=3].z_low
+\newcommand{\BinThirtyFortyZLow}{\ensuremath{31.4}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=3].z_high
+\newcommand{\BinThirtyFortyZHigh}{\ensuremath{34.9}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=3].price_outside
+\newcommand{\BinThirtyFortyZOutside}{no}
+% lecture_numbers.json: z_interval_95.bins[bin=4].bernoulli_sd
+\newcommand{\BinFortyFiftyZSd}{\ensuremath{0.496}}
+% lecture_numbers.json: z_interval_95.bins[bin=4].z_low
+\newcommand{\BinFortyFiftyZLow}{\ensuremath{42.3}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=4].z_high
+\newcommand{\BinFortyFiftyZHigh}{\ensuremath{45.4}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=4].price_outside
+\newcommand{\BinFortyFiftyZOutside}{no}
+% lecture_numbers.json: z_interval_95.bins[bin=5].bernoulli_sd
+\newcommand{\BinFiftySixtyZSd}{\ensuremath{0.499}}
+% lecture_numbers.json: z_interval_95.bins[bin=5].z_low
+\newcommand{\BinFiftySixtyZLow}{\ensuremath{52.0}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=5].z_high
+\newcommand{\BinFiftySixtyZHigh}{\ensuremath{55.0}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=5].price_outside
+\newcommand{\BinFiftySixtyZOutside}{no}
+% lecture_numbers.json: z_interval_95.bins[bin=6].bernoulli_sd
+\newcommand{\BinSixtySeventyZSd}{\ensuremath{0.486}}
+% lecture_numbers.json: z_interval_95.bins[bin=6].z_low
+\newcommand{\BinSixtySeventyZLow}{\ensuremath{59.8}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=6].z_high
+\newcommand{\BinSixtySeventyZHigh}{\ensuremath{63.5}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=6].price_outside
+\newcommand{\BinSixtySeventyZOutside}{yes}
+% lecture_numbers.json: z_interval_95.bins[bin=7].bernoulli_sd
+\newcommand{\BinSeventyEightyZSd}{\ensuremath{0.452}}
+% lecture_numbers.json: z_interval_95.bins[bin=7].z_low
+\newcommand{\BinSeventyEightyZLow}{\ensuremath{69.4}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=7].z_high
+\newcommand{\BinSeventyEightyZHigh}{\ensuremath{73.1}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=7].price_outside
+\newcommand{\BinSeventyEightyZOutside}{yes}
+% lecture_numbers.json: z_interval_95.bins[bin=8].bernoulli_sd
+\newcommand{\BinEightyNinetyZSd}{\ensuremath{0.379}}
+% lecture_numbers.json: z_interval_95.bins[bin=8].z_low
+\newcommand{\BinEightyNinetyZLow}{\ensuremath{81.0}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=8].z_high
+\newcommand{\BinEightyNinetyZHigh}{\ensuremath{84.3}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=8].price_outside
+\newcommand{\BinEightyNinetyZOutside}{yes}
+% lecture_numbers.json: z_interval_95.bins[bin=9].bernoulli_sd
+\newcommand{\BinNinetyHundredZSd}{\ensuremath{0.148}}
+% lecture_numbers.json: z_interval_95.bins[bin=9].z_low
+\newcommand{\BinNinetyHundredZLow}{\ensuremath{97.4}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=9].z_high
+\newcommand{\BinNinetyHundredZHigh}{\ensuremath{98.1}\%}
+% lecture_numbers.json: z_interval_95.bins[bin=9].price_outside
+\newcommand{\BinNinetyHundredZOutside}{no}
+% lecture_numbers.json: largest_gap.bin
+\newcommand{\LargestGapBin}{\ensuremath{7}}
+% lecture_numbers.json: largest_gap.diff_obs_minus_price
+\newcommand{\LargestGapDiff}{\ensuremath{-3.29}\%}
+% lecture_numbers.json: largest_gap.abs
+\newcommand{\LargestGapAbs}{\ensuremath{3.29}\%}
+% lecture_numbers.json: log10_mean_difference_maker_minus_taker.difference
+\newcommand{\RoleLogTenDiff}{\ensuremath{0.219}}
+% lecture_numbers.json: log10_mean_difference_maker_minus_taker.mean_log10_maker
+\newcommand{\RoleLogTenMaker}{\ensuremath{2.104}}
+% lecture_numbers.json: log10_mean_difference_maker_minus_taker.mean_log10_taker
+\newcommand{\RoleLogTenTaker}{\ensuremath{1.885}}
+% lecture_numbers.json: top20_share.maker
+\newcommand{\MakerTopTwentyShare}{\ensuremath{98.9}\%}
+% lecture_numbers.json: top20_share.taker
+\newcommand{\TakerTopTwentyShare}{\ensuremath{98.0}\%}
+% lecture_numbers.json: top20_share.reference
+\newcommand{\TopTwentyReference}{\ensuremath{80.0}\%}
+% lecture_numbers.json: ssb_ratio.mean_trade_price
+\newcommand{\KmeansPriceSsbRatio}{\ensuremath{0.008}}
+% lecture_numbers.json: ssb_ratio.log_median_trade_size
+\newcommand{\KmeansTradeSizeSsbRatio}{\ensuremath{0.224}}
 % q1_bins_eqfreq.csv: row count
 \newcommand{\QOneEqFreqBins}{\ensuremath{10}}
 % 142140_q1eqfreq_v5/q1_bins_eqfreq.csv: reject_bh (saved run output, code v5)

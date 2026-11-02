@@ -5,7 +5,6 @@
 %   S-PAPER-1 proposal_md/polymarket_proposal_v3.md
 %   S-PAPER-2 ../tips/group_01/polymarket_plan_detailed.md
 %   S-PAPER-3 analysis/prereg_mvp1.md
-%   S-PAPER-4 analysis/prereg_mvp2.md
 %   S-PAPER-5 runs/142082_mvp1_full_v1r3 (reports, verdicts.json) via numbers.tex
 %   S-PAPER-6 analysis/review_mvp1_mvp2.md
 %   S-PAPER-7 ../tips/group_01/polymarket_class_questions_tips.html
@@ -15,7 +14,6 @@
 
 \usepackage[margin=0.9in]{geometry}
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{microtype}
 \usepackage{amsmath}
@@ -48,6 +46,7 @@
 \newcommand{\TopOneLabel}{1\%}
 \newcommand{\TopFiveLabel}{5\%}
 \newcommand{\TopTenLabel}{10\%}
+\newcommand{\TopTwentyLabel}{20\%}
 \newcommand{\HookPct}{70\%}
 \newcommand{\pT}{\ensuremath{p_{T}}}
 \newcommand{\DeltaA}{0.10}
@@ -64,14 +63,12 @@
 \newcommand{\PaperPeriod}{November 2022 to April 2026}
 \newcommand{\PaperBrierMarkets}{1{,}019}
 \newcommand{\PaperTopShare}{84.1\%}
-\newcommand{\PaperGiniMaker}{0.970}
-\newcommand{\PaperGiniTaker}{0.943}
 \newcommand{\PaperCheapGap}{0.2 to 0.3 cents}
 \newcommand{\PaperCheapPrice}{30 cents}
 
 % --- Table row helpers: pull one row of macros by name ---
 \newcommand{\binrow}[2]{#1 & \csname Bin#2N\endcsname & \csname Bin#2Price\endcsname
-  & \csname Bin#2Obs\endcsname & [\csname Bin#2CiLow\endcsname, \csname Bin#2CiHigh\endcsname]
+  & \csname Bin#2Obs\endcsname & [\csname Bin#2ZLow\endcsname, \csname Bin#2ZHigh\endcsname]
   & \csname Bin#2Diff\endcsname & \csname Bin#2BhP\endcsname}
 \title{When Polymarket Says \HookPct, Does It Happen \HookPct{} of the Time?\\[2pt]
 \large Prediction Accuracy, Trading Concentration, and Statistical Distributions in Prediction Markets\\[4pt]
@@ -91,10 +88,11 @@ We test this on resolved Yes/No markets from the Polymarket-v1 database.
 We keep \NMarketsKept{} of \NMarketsInScope{} markets in scope.
 We read each market's price \DaysShort{} day before its scheduled close.
 The pre-registered chi-square test says the prices are not calibrated as a whole
-($\chi^2=\QOneChiSq$, $p=\QOneP$, Cohen's $w=\QOneW$).
+($\chi^2=\QOneChiSq$, $p=\QOneP$).
+The largest per-bin gap is only \LargestGapAbs.
 The observed Yes rate lies below the mean price in every price bin except the top one.
-The top \TopOneLabel{} of maker wallets hold \MakerTopOneShare{} of maker volume
-(Gini coefficient \MakerGini).
+The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker volume,
+far above the 80/20 reference of \TopTwentyReference.
 Mean volume is far above median volume.
 Trade sizes are strongly right skewed.
 We describe Q2 and Q3 without a verdict.
@@ -117,11 +115,11 @@ It answers three questions.
 The first question is Q1: is the crowd right?
 % src: S-PAPER-1
 We test calibration one price range at a time.
-We use binomial and chi-square tests, confidence intervals, and the Brier score.
+We use binomial and chi-square tests, confidence intervals, and the mean squared residual of the price.
 We also ask whether cheap longshot bets are a trap.
 The second question is Q2: who is the crowd?
 We ask whether a small group of wallets does most of the trading.
-We use Lorenz curves and the Gini coefficient.
+We use top shares of wallet volume, the 80/20 rule, and a power-law check.
 We also group wallets by k-means, as a side analysis.
 The third question is Q3: what does betting look like?
 We describe trade sizes, wallet volumes, and prices with histograms and distribution fits.
@@ -131,7 +129,7 @@ Our contributions are these.
 We fix the evaluation rules before we see any Q1 result.
 We report one rule change made afterwards.
 We score all \NMarketsKept{} kept markets, not a small panel.
-We report an effect size next to every p-value.
+We report an effect size next to every p-value, such as the per-bin gap.
 The text uses the word wallet for an address on the exchange.
 
 \section{Related Work}\label{sec:related}
@@ -147,7 +145,7 @@ This is counted by trade.
 We count markets, not trades.
 We read this result as the same direction as the horse-racing bias.
 
-The dataset paper also scores \PaperBrierMarkets{} markets with the Brier score \citep{qin2026polymarketv1}.
+The dataset paper also scores \PaperBrierMarkets{} markets with a squared-error score \citep{qin2026polymarketv1}.
 We score all resolved Yes/No markets that pass our filters.
 Finally, the paper reports that the top \TopOneLabel{} of maker addresses hold \PaperTopShare{}
 of maker volume \citep[Table~5]{qin2026polymarketv1}.
@@ -163,6 +161,7 @@ This layer holds Standard Binary markets (\texttt{neg\_risk} is false).
 Its relayer records are already removed \citep{polymarketv1data}.
 We keep markets that have a winning outcome label.
 We drop Up/Down markets by the default rule in our code.
+The dataset paper says they settle by a fundamentally different mechanism and should not be pooled with other markets \citep{qin2026polymarketv1}.
 We take the price from the \texttt{p\_event} column, which is on the YES scale.
 The data are at \url{https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1} \citep{polymarketv1data}.
 The dataset card states the license CC-BY-4.0.
@@ -259,7 +258,7 @@ Primary metric & chi-square goodness of fit over the \NBins{} bins. The line is 
 \midrule
 Per-bin call & binomial test per bin, Benjamini-Hochberg (BH) corrected at \Alpha{} \\
 \midrule
-Effect size & observed rate minus mean price per bin with a \CiLevel{} Wilson interval, and the Brier score \\
+Effect size & observed rate minus mean price per bin with a \CiLevel{} interval (a z interval here), and the mean squared residual of the price \\
 \midrule
 Failure condition & no bin off after BH and chi-square $p\ge\Alpha$: no evidence of miscalibration at this $n$ \\
 \bottomrule
@@ -275,6 +274,8 @@ We made the change for determinism, not because of the result.
 It came after we saw a full-data Q1 result, so we report it as an amendment.
 The amendment in \texttt{analysis/prereg\_mvp1.md} records that the verdict did not change.
 All numbers in this paper come from the runs with the amended rule.
+This paper uses effect-size and interval names that differ from the pre-registration, and it drops the Gini coefficient named in the class post, to keep the analysis within the lecture contents.
+The verdict rule and the verdict sentence are unchanged.
 
 \subsection{Q1: calibration}\label{sec:methods-q1}
 % src: S-PAPER-2, S-PAPER-3
@@ -283,18 +284,19 @@ So the Yes count in a bin is approximately binomial.
 We form \NBins{} equal-width price bins, and we use equal-frequency bins as a check.
 In bin $b$, $n_b$ is the market count, $\bar p_b$ the mean price, and $O_b$ the Yes count.
 The null hypothesis is that the Yes rate equals the mean price.
+The effect size is the per-bin gap, the observed rate minus the mean price.
 The expected Yes count is $E_b=n_b\bar p_b$.
 We test each bin with a binomial test.
-We give a \CiLevel{} Wilson interval for the observed rate \citep{wilson1927probable}.
+We give a \CiLevel{} z interval for the observed rate $\hat r_b=O_b/n_b$, which is $\hat r_b\pm1.96\sqrt{\hat r_b(1-\hat r_b)/n_b}$ (Lecture 5).
 We correct the \NBins{} tests with Bonferroni and with the Benjamini-Hochberg (BH) procedure \citep{benjamini1995controlling}.
-The overall test is chi-square goodness of fit on the bin by \{Yes, No\} table:
+The overall test is the goodness-of-fit form of the Lecture 12 chi-square test: observed against expected counts, with the expected counts taken from the prices.
+It runs on the bin by \{Yes, No\} table:
 \begin{equation}
-\chi^2=\sum_{b}\left[\frac{(O_b-E_b)^2}{E_b}+\frac{(O_b-E_b)^2}{n_b-E_b}\right],
-\qquad w=\sqrt{\chi^2/n}.
+\chi^2=\sum_{b}\left[\frac{(O_b-E_b)^2}{E_b}+\frac{(O_b-E_b)^2}{n_b-E_b}\right].
 \label{eq:chisq}
 \end{equation}
-Here $w$ is Cohen's effect size \citep{cohen1988statistical} and $n$ is the total market count.
-We also report the Brier score $\frac1n\sum(p-y)^2$ \citep{brier1950verification}.
+We also report the mean squared residual of the price, $\frac1n\sum(p-y)^2$, where $n$ is the total market count (Lecture 20).
+The pre-registration calls it the Brier score \citep{brier1950verification}.
 We add the log loss and the mean entropy $H(p)$ in bits.
 We treat the market as a classifier that says Yes when $p>\FavoriteLine$.
 We compare the price distributions of Yes- and No-resolved markets with a Kolmogorov-Smirnov (KS) test.
@@ -304,18 +306,22 @@ For the longshot check we look at the two cheapest bins.
 \subsection{Q2: wallet concentration}\label{sec:methods-q2}
 % src: S-PAPER-2
 We work with wallet volume in USDC, by role.
-We report the share of role volume held by the top \TopOneLabel, \TopFiveLabel, and \TopTenLabel{} of wallets.
-We draw the Lorenz curve and compute the Gini coefficient.
-We compare our Gini with the dataset paper's as a check on our pipeline.
+We report the share of role volume held by the top \TopOneLabel, \TopFiveLabel, \TopTenLabel, and \TopTwentyLabel{} of wallets.
+We compare the top \TopTwentyLabel{} share with the 80/20 reference from Lecture 6.
+This is descriptive, with no pre-registered verdict line.
+We draw the complementary CDF (CCDF) of wallet volume on log-log axes.
+We also draw a Lorenz picture from the four saved top shares of each role.
+The Lorenz picture is outside the lectures, and we use it only to show the top shares.
+As a pipeline check, we compare our top \TopOneLabel{} maker share with the dataset paper's.
 We test the log volume of makers against takers with a Welch t-test and a KS test.
+The effect size is the difference of the mean log10 volume.
 We report Spearman's $\rho$ between trade count and volume.
 
 % src: S-PAPER-2, S-PAPER-6
 As a side analysis, we run k-means on wallet features.
 We take the logarithm of the heavy-tailed features, then z-score them.
 We choose $K$ with the elbow method.
-We check stability by repeating the clustering with robust scaling.
-We compare the two with the adjusted Rand index (ARI) \citep{hubert1985comparing}.
+We repeat the clustering with robust scaling as a stability check.
 This analysis is exploratory.
 
 \subsection{Q3: distributions}\label{sec:methods-q3}
@@ -346,7 +352,8 @@ The pre-registered criteria did not change, and no verdict flipped.
 % src: S-PAPER-3, S-PAPER-5
 The pre-registered rule gives this verdict: \VerdictQOne{}
 The chi-square statistic is \QOneChiSq{} with \QOneDf{} degrees of freedom.
-The p-value is $p=\QOneP$, and the effect size is Cohen's $w=\QOneW$.
+The p-value is $p=\QOneP$.
+The effect is small: the largest per-bin gap is \LargestGapAbs{} (bin \LargestGapBin, counting from 0).
 \Cref{fig:calib} shows the observed Yes rate against the mean price in each bin.
 \Cref{tab:bins} gives the numbers.
 
@@ -377,6 +384,8 @@ Bin & $n$ & Mean price & Observed & \CiLevel{} CI & Gap & BH $p$ \\
 The observed rate is below the mean price in every bin except the top one.
 After BH correction, \QOneBinsBh{} of the \NBins{} bins are off ($p<\Alpha$).
 After Bonferroni correction, \QOneBinsBonferroni{} bins are off.
+The \CiLevel{} z interval leaves the mean price outside in \ZIntervalBinsOutsideN{} bins: \ZIntervalBinsOutsideList.
+BH marks the bins \ZIntervalBinsBhOffList{} as off, which are the same bins.
 For example, in the bin with mean price \BinSeventyEightyPrice{}, the observed Yes rate is \BinSeventyEightyObs.
 The gap is \BinSeventyEightyDiff{} (BH $p=\BinSeventyEightyBhP$).
 
@@ -392,73 +401,84 @@ So we do not compare their sizes.
 \begin{figure}[H]
 \centering
 \begin{minipage}[b]{0.46\linewidth}\centering
-\figorbox{figures/fig4_calibration}{\linewidth}
+\figorbox{figures/fig4_calibration_z}{\linewidth}
 \end{minipage}\hfill
 \begin{minipage}[b]{0.50\linewidth}\centering
 \figorbox{figures/fig5_ecdf_yes_no}{\linewidth}
 \end{minipage}
-\caption{Observed Yes rate against mean price per bin with \CiLevel{} Wilson intervals (left), and ECDFs of \pOne{} by outcome (right). Why: points on the diagonal mean the price matches the outcome rate, and the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
+\caption{Observed Yes rate against mean price per bin with \CiLevel{} z intervals (left), and ECDFs of \pOne{} by outcome (right). Why: points on the diagonal mean the price matches the outcome rate, and the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
 \label{fig:calib}
 \end{figure}
 
 Next come the score measures.
-The Brier score is \QOneBrier, the log loss is \QOneLogLoss, and the mean entropy is \QOneEntropy{} bits.
+The mean squared residual of the price is \QOneBrier, the log loss is \QOneLogLoss, and the mean entropy is \QOneEntropy{} bits.
 The Yes rate among kept markets is \QOneYesRate, and the mean price is \PriceOneDayMean.
 At the \FavoriteLine{} line, the classifier accuracy is \QOneAccuracy.
 Its precision is \QOnePrecision{} and its recall is \QOneRecall.
 The KS statistic between Yes and No prices is $D=\QOneKsD$.
 Without the minimum-trade filter there are \QOneNoMinN{} markets.
-The Brier score is then \QOneNoMinBrier{}, with $\chi^2=\QOneNoMinChiSq$, $p=\QOneNoMinP$, and $w=\QOneNoMinW$.
+The mean squared residual is then \QOneNoMinBrier{}, with $\chi^2=\QOneNoMinChiSq$ and $p=\QOneNoMinP$.
 The chi-square test also rejects without the filter.
 With \QOneEqFreqBins{} equal-frequency bins, BH marks \QOneEqFreqBinsBh{} bins as off.
 
-\subsection{Q2: who is the crowd?}\label{sec:res-q2}
+\subsection{Q2: who is the crowd? Do a few wallets do most of the trading?}\label{sec:res-q2}
 % src: S-PAPER-5
-In both roles, the top \TopOneLabel{} of wallets hold most of the volume.
-\Cref{tab:conc} gives the shares and the Gini coefficient by role.
-\Cref{fig:lorenz} shows the Lorenz curves.
-We describe these numbers without a verdict.
+Yes, a few wallets do most of the trading, far beyond the 80/20 reference.
+The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker volume and \TakerTopTwentyShare{} of taker volume.
+The 80/20 rule says \TopTwentyReference.
+The 80/20 rule and the power law come from Lecture 6.
+We describe these numbers without a pre-registered verdict.
+\Cref{tab:conc} gives the top shares by role.
+\Cref{fig:lorenz} shows the CCDF and the Lorenz picture.
 
 \begin{table}[H]
 \centering
 \caption{Volume concentration by role, as the share of role volume held by the top wallets. Why: the top shares show how few wallets hold most of the volume. Source: run \RunId.}
 \label{tab:conc}
 \small
-\begin{tabular}{lrrrrrrr}
+\begin{tabular}{lrrrrrrrr}
 \toprule
-Role & Wallets & Mean (USDC) & Median (USDC) & Top \TopOneLabel{} & Top \TopFiveLabel{} & Top \TopTenLabel{} & Gini \\
+Role & Wallets & Mean (USDC) & Median (USDC) & Top \TopOneLabel{} & Top \TopFiveLabel{} & Top \TopTenLabel{} & Top \TopTwentyLabel \\
 \midrule
-Maker & \MakerNWallets & \MakerMeanVolume & \MakerMedianVolume & \MakerTopOneShare & \MakerTopFiveShare & \MakerTopTenShare & \MakerGini \\
+Maker & \MakerNWallets & \MakerMeanVolume & \MakerMedianVolume & \MakerTopOneShare & \MakerTopFiveShare & \MakerTopTenShare & \MakerTopTwentyShare \\
 \midrule
-Taker & \TakerNWallets & \TakerMeanVolume & \TakerMedianVolume & \TakerTopOneShare & \TakerTopFiveShare & \TakerTopTenShare & \TakerGini \\
+Taker & \TakerNWallets & \TakerMeanVolume & \TakerMedianVolume & \TakerTopOneShare & \TakerTopFiveShare & \TakerTopTenShare & \TakerTopTwentyShare \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{figure}[H]
 \centering
-\figorbox{figures/fig7_lorenz}{0.5\linewidth}
-\caption{Lorenz curves of wallet volume for makers and takers. Why: a curve far below the equality line means few wallets hold most of the volume. Source: run \RunId.}
+\begin{minipage}[b]{0.50\linewidth}\centering
+\figorbox{figures/fig6_ccdf}{\linewidth}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.46\linewidth}\centering
+\figorbox{figures/lorenz_top_shares}{\linewidth}
+\end{minipage}
+\caption{CCDF of wallet volume on log-log axes (left), and a Lorenz picture drawn from four saved top shares per role with straight lines (right). The Lorenz picture is coarse, nothing was measured below 80\% of wallets, and it is outside the lectures. Why: a long straight CCDF tail means a few wallets trade very large volumes, and the Lorenz picture shows the distance from the 80/20 reference. Source: run \RunId{} and \texttt{reports/figures}.}
 \label{fig:lorenz}
 \end{figure}
 
 The mean volume is far above the median volume in both roles.
-The dataset paper reports a Gini of \PaperGiniMaker{} for makers and \PaperGiniTaker{} for takers \citep{qin2026polymarketv1}.
-Ours are \MakerGini{} and \TakerGini.
-We use the paper's values as a reference only.
+As a pipeline check, the dataset paper reports that the top \TopOneLabel{} of makers hold \PaperTopShare{} of maker volume \citep{qin2026polymarketv1}.
+Ours is \MakerTopOneShare.
+The populations differ.
 The paper covers the full data, and our wallets come from the kept markets.
+We use the paper's value as a reference only.
+
+The top \TopTenLabel{} tail of wallet volume is close to a power law with $\alpha=\WalletVolumePowerAlpha$.
+The KS test rejects an exact power law ($p=\WalletVolumePowerKsP$).
 
 The Welch test on log volume gives $t=\RoleWelchT$ with $p\,\RoleWelchP$, a float-underflow bound.
-The effect size is Cohen's $d=\RoleCohenD$, and the KS statistic is $D=\RoleKsD$.
+The effect size is the difference of mean log10 volume, makers minus takers: \RoleLogTenDiff{} (\RoleLogTenMaker{} against \RoleLogTenTaker).
+The KS statistic is $D=\RoleKsD$.
 Trade count and volume have a Spearman correlation of $\rho=\SpearmanTradesVolumeRho$.
 
 In the side analysis, the elbow method picks $K=\KmeansK$.
 The sample has \KmeansNSample{} wallet-role rows, and a wallet in both roles gives two rows.
 The \KmeansK{} clusters have \ClusterZeroN, \ClusterOneN, \ClusterTwoN, and \ClusterThreeN{} rows.
 Their median volumes run from \ClusterTwoMedianVolume{} to \ClusterOneMedianVolume{} USDC.
-Clusters from z-score and robust scaling agree (ARI $=\KmeansAri$).
-Cramér's $V$ \citep{cramer1946mathematical} between cluster and market category is \KmeansCategoryV.
-An ANOVA of mean trade price across clusters gives $\eta^2=\KmeansPriceEtaSq$.
+An ANOVA of mean trade price across clusters gives $\mathrm{SSB}/(\mathrm{SSB}+\mathrm{SSW})=\KmeansPriceSsbRatio$.
 Its permutation $p$ is at the floor, $1/(\KmeansNPerm+1)$.
 
 \subsection{Q3: what does the data look like?}\label{sec:res-q3}
@@ -484,6 +504,8 @@ KS p-values are optimistic here because the parameters are fitted on the same da
 So we do not rely on them.
 The normal fit is poor for both variables.
 The power-law fit covers the tail only, so its $D$ is not directly comparable.
+We do not rank the three fits: the normal and exponential fits use all data, and the power law uses the tail.
+We did not compare a lognormal.
 The exponential fit has $D=\TradeSizeExponentialKsD$ for trade size and $D=\WalletVolumeExponentialKsD$ for wallet volume.
 
 \begin{table}[H]
@@ -521,13 +543,12 @@ Of the kept markets, \RobROneCleanN{} are clean (\RobROneCleanShare).
 \RobROneMissingN{} is missing from the file.
 Our label marks Yes on \RobROneSplitYesOne{} of the split markets and No on \RobROneSplitYesZero.
 Our winner label agrees with the resolution file on \RobROneAgreement{} of the \RobROneNClean{} clean markets.
-The \CiLevel{} Wilson CI is [\RobROneAgreementLow, \RobROneAgreementHigh].
 \RobROneNMismatch{} clean markets disagree.
 \Cref{fig:r1} shows the payout classes and the calibration points with and without the unclear markets.
 \Cref{tab:r1} puts the sensitivity row next to the original row.
 We remove split, other, and mismatching markets, which is \RobROneNExcluded{} markets.
 The Q1 rule result is the same in both rows: \RobROneRuleOriginal{}
-The effect size changes by \RobROneDeltaW.
+The chi-square statistic moves from \QOneChiSq{} to \RobROneSensChiSq.
 
 \begin{figure}[H]
 \centering
@@ -541,13 +562,13 @@ The effect size changes by \RobROneDeltaW.
 \caption{Q1 original row and R1 sensitivity row. Why: equal rows mean the unclear markets do not drive the Q1 result. Source: runs \RunId{} and \RobustRun.}
 \label{tab:r1}
 \small
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrrr}
 \toprule
-Row & Markets & $\chi^2$ & $p$ & Cohen's $w$ & Brier & Bins off (BH) \\
+Row & Markets & $\chi^2$ & $p$ & Mean sq. residual & Bins off (BH) \\
 \midrule
-Q1 original & \QOneN & \QOneChiSq & \QOneP & \QOneW & \QOneBrier & \QOneBinsBh \\
+Q1 original & \QOneN & \QOneChiSq & \QOneP & \QOneBrier & \QOneBinsBh \\
 \midrule
-Sensitivity & \RobROneSensN & \RobROneSensChiSq & \RobROneSensP & \RobROneSensW & \RobROneSensBrier & \RobROneSensBinsBh \\
+Sensitivity & \RobROneSensN & \RobROneSensChiSq & \RobROneSensP & \RobROneSensBrier & \RobROneSensBinsBh \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -571,26 +592,26 @@ This compares the two end points and not the path.
 \end{figure}
 
 The price \pT{} is the price just before the close.
-So its Brier score is not a one-day-ahead forecast.
-The mean Brier score is \RobRTwoAllBrierOneDay{} at \pOne{} and \RobRTwoAllBrierAtClose{} at \pT.
+So its mean squared residual is not a one-day-ahead forecast.
+The mean squared residual is \RobRTwoAllBrierOneDay{} at \pOne{} and \RobRTwoAllBrierAtClose{} at \pT.
 The paired difference (\pT{} minus \pOne) is \RobRTwoAllMeanDiff{}
-(\CiLevel{} CI [\RobRTwoAllCiLow, \RobRTwoAllCiHigh], $p\,\RobRTwoAllP$, Cohen's $d_z=\RobRTwoAllDz$).
+(\CiLevel{} CI [\RobRTwoAllCiLow, \RobRTwoAllCiHigh], $p\,\RobRTwoAllP$).
 A negative difference means \pT{} is closer to the outcome than \pOne.
 On the \RobRTwoTradedN{} markets with a trade in the last day, the difference is \RobRTwoTradedMeanDiff.
-The \CiLevel{} CI is [\RobRTwoTradedCiLow, \RobRTwoTradedCiHigh], and $d_z=\RobRTwoTradedDz$.
+The \CiLevel{} CI is [\RobRTwoTradedCiLow, \RobRTwoTradedCiHigh].
 
 \section{Discussion}\label{sec:discussion}
 % src: S-PAPER-5, S-PAPER-8
 The answer to Q1 is no.
 At this $n$, the price is not a calibrated probability as a whole.
 The observed Yes rate sits below the price in all but the top bin.
-The effect size is Cohen's $w=\QOneW$, and the largest bin gap is \BinSeventyEightyDiff{} (\Cref{tab:bins}).
+The effect is small: the largest per-bin gap is \LargestGapAbs{} below the price, in bin \LargestGapBin{} counting from 0 (\Cref{tab:bins}).
 The longshot gap points the same way as the horse-racing bias.
 \todo{owner: interpretation of why prices run high, and what the gaps mean in practice for a reader of the price}
 
 The answer to Q2 is descriptive.
-Volume is concentrated in few wallets, in both roles.
-Our Gini values are \MakerGini{} and \TakerGini, against \PaperGiniMaker{} and \PaperGiniTaker{} in the dataset paper.
+Yes, a few wallets do most of the trading, far beyond the 80/20 reference, in both roles.
+Our top \TopOneLabel{} maker share is \MakerTopOneShare, against \PaperTopShare{} in the dataset paper.
 The populations differ.
 We measure concentration of volume.
 We do not test who sets the prices.
@@ -632,7 +653,7 @@ The large $n$ also makes p-values underflow to zero in places.
 We therefore read the effect sizes and the intervals first.
 
 The k-means result is exploratory.
-The stability check gives ARI $=\KmeansAri$ between two scalings.
+We report no agreement score between the two scalings.
 This does not make the clusters real.
 A wallet is an address, and one owner may control many addresses.
 Volume concentration is not the same as the power to set prices.

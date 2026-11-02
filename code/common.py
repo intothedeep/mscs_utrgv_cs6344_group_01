@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Callable
 
 import duckdb
+import pandas as pd
 
 CODE_VERSION = "v5"
 
@@ -178,3 +179,16 @@ def md_table(df) -> str:
     rows = ["| " + " | ".join(f"{v:.4g}" if isinstance(v, float) else str(v) for v in r) + " |"
             for r in df.itertuples(index=False)]
     return "\n".join([head, sep, *rows])
+
+
+OTHER, UNKNOWN = "Merged", "Unknown"
+
+
+def group_categories(df: pd.DataFrame, min_n: int) -> tuple[pd.DataFrame, pd.Series]:
+    """Add category_group: categories with >= min_n kept markets stay, the rest merge into 'Merged'."""
+    cat = df["category_refined"].fillna(UNKNOWN).astype(str)
+    counts = cat.value_counts()
+    big = counts[counts >= min_n].index
+    out = df.copy()
+    out["category_group"] = cat.where(cat.isin(big), OTHER)
+    return out, counts

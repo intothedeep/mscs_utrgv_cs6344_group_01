@@ -3,7 +3,7 @@
 ###   cd ~/cs6344_polymarket && sbatch -p gpul40q -c 16 --mem=200G --time=04:00:00 --export=ALL,DUCKDB_MEM=160GB jobs/robustness.slurm robust_full_v4 analysis/prereg_robustness.json
 ### Self-contained: it rebuilds markets.parquet with the unchanged v4 build_tables.py (no reuse of an older run).
 ### R2 reads the raw trades of the kept markets once more (build_tables.py does not keep the trade table), so this job makes two passes over the raw data.
-### Structure follows jobs/mvp2.slurm. Only the main session submits.
+### Structure follows future_work/jobs/mvp2.slurm. Only the main session submits.
 #SBATCH --job-name=pm_robust
 #SBATCH --output=logs/%x.out.%j
 #SBATCH --error=logs/%x.err.%j

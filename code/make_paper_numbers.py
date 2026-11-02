@@ -431,6 +431,43 @@ def add_q3(m: Macros, run: Path) -> None:
         m.add(f"{tag}ExponentialKsD", est(r["fits"][key]["exponential"]["D"]),
               f"{src}: fits.{key}.exponential.D")
         m.add(f"{tag}NormalKsD", est(r["fits"][key]["normal"]["D"]), f"{src}: fits.{key}.normal.D")
+        m.add(f"{tag}PowerKsP", pval(pl["p"]), f"{src}: fits.{key}.power_law.p")
+        m.add(f"{tag}PowerNTail", count(pl["n_tail"]), f"{src}: fits.{key}.power_law.n_tail")
+
+
+def add_lecture(m: Macros, run: Path, path: Path) -> None:
+    """Lecture-method numbers (D-026) from reports/lecture_numbers.json. Skipped when it is absent or from another run."""
+    if not path.exists():
+        return
+    r = json.loads(path.read_text())
+    if r["source_run"] != run.name:
+        return
+    src = "lecture_numbers.json"
+    z = r["z_interval_95"]
+    m.add("ZIntervalBinsOutsideN", count(z["n_outside"]), f"{src}: z_interval_95.n_outside")
+    m.add("ZIntervalBinsOutsideList", text(", ".join(map(str, z["bins_outside"]))), f"{src}: z_interval_95.bins_outside")
+    m.add("ZIntervalBinsBhOffList", text(", ".join(map(str, z["bins_bh_off"]))), f"{src}: z_interval_95.bins_bh_off")
+    m.add("ZIntervalSameAsBh", "yes" if z["same_bins"] else "no", f"{src}: z_interval_95.same_bins")
+    for b in z["bins"]:
+        lab, s = bin_label(b["bin"]), f"{src}: z_interval_95.bins[bin={b['bin']}]"
+        m.add(f"Bin{lab}ZSd", est(b["bernoulli_sd"]), f"{s}.bernoulli_sd")
+        m.add(f"Bin{lab}ZLow", pct(b["z_low"]), f"{s}.z_low")
+        m.add(f"Bin{lab}ZHigh", pct(b["z_high"]), f"{s}.z_high")
+        m.add(f"Bin{lab}ZOutside", "yes" if b["price_outside"] else "no", f"{s}.price_outside")
+    gap = r["largest_gap"]
+    m.add("LargestGapBin", count(gap["bin"]), f"{src}: largest_gap.bin")
+    m.add("LargestGapDiff", pct2(gap["diff_obs_minus_price"]), f"{src}: largest_gap.diff_obs_minus_price")
+    m.add("LargestGapAbs", pct2(gap["abs"]), f"{src}: largest_gap.abs")
+    d = r["log10_mean_difference_maker_minus_taker"]
+    m.add("RoleLogTenDiff", est(d["difference"]), f"{src}: log10_mean_difference_maker_minus_taker.difference")
+    m.add("RoleLogTenMaker", est(d["mean_log10_maker"]), f"{src}: log10_mean_difference_maker_minus_taker.mean_log10_maker")
+    m.add("RoleLogTenTaker", est(d["mean_log10_taker"]), f"{src}: log10_mean_difference_maker_minus_taker.mean_log10_taker")
+    t20 = r["top20_share"]
+    m.add("MakerTopTwentyShare", pct(t20["maker"]), f"{src}: top20_share.maker")
+    m.add("TakerTopTwentyShare", pct(t20["taker"]), f"{src}: top20_share.taker")
+    m.add("TopTwentyReference", pct(t20["reference"]), f"{src}: top20_share.reference")
+    m.add("KmeansPriceSsbRatio", est(r["ssb_ratio"]["mean_trade_price"]), f"{src}: ssb_ratio.mean_trade_price")
+    m.add("KmeansTradeSizeSsbRatio", est(r["ssb_ratio"]["log_median_trade_size"]), f"{src}: ssb_ratio.log_median_trade_size")
 
 
 def add_code_set(m: Macros, run: Path, sha_name: str, file_name: str) -> None:
@@ -568,10 +605,13 @@ def main() -> None:
     ap.add_argument("--q1eqfreq", type=Path, help="run dir (code v5) whose q1_bins_eqfreq.csv has p_bh and reject_bh")
     ap.add_argument("--pilot", type=Path, help="pilot run dir with close_time_summary.json")
     ap.add_argument("--robust", type=Path, help="robustness run dir with r1_results.json, r2_results.json")
+    ap.add_argument("--lecture", type=Path, default=Path(__file__).resolve().parent.parent / "reports" / "lecture_numbers.json",
+                    help="lecture_numbers.json (code/lecture_numbers.py); used only when it is from --run")
     a = ap.parse_args()
     m = Macros()
     for fn in (add_meta, add_data, add_q1, add_q1a, add_q1b, add_q1c, add_q2, add_q3):
         fn(m, a.run)
+    add_lecture(m, a.run, a.lecture)
     add_q1_eqfreq(m, a.run, load(a.run, "verdicts.json")["alpha"], a.q1eqfreq)
     if a.pilot is not None:
         add_pilot(m, a.pilot)
