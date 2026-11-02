@@ -74,3 +74,4 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-11-02 runs: 145892 ccdf, 145893 wallet figures, 145897 split Q3 figures; report v1 regenerated (reports/report_v1.html, 00.runs.md)
 2026-11-02 scope: D-032, D-033, figure layout; pairs redrawn for half width (DECISIONS.md)
 2026-11-02 review: final review PASS, 0 blocker, 0 major, 14 minor; tips index and bilingual pages added (analysis/review_final_2026_11_02.md, ../tips/group_01/index.html)
+2026-11-02 paper: D-034, independence caveat after the Q1 p-value; departure wording fixed; paper builds, 17 pages (papers/paper_mvp1/main.tex)

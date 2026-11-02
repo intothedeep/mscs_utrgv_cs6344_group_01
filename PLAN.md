@@ -128,5 +128,5 @@ A kept mention sits in the departure note (cites a D-id), a rename sentence ("kn
 
 ### Final review 2026-11-02: open minor items (`analysis/review_final_2026_11_02.md`)
 
-- [ ] → M4 Owner decides whether the paper states the independence limit beside the p-value in results, not only in limitations (finding 2). AC: owner decides, and `main.tex` matches.
-- [ ] → M4 Replace "names" in the departure sentence: the z interval is a different formula (finding 6, A12). AC: `main.tex` and report v1 say the interval changed, not just its name.
+- [x] → M4 Owner decides whether the paper states the independence limit beside the p-value in results, not only in limitations (finding 2). AC: owner decides, and `main.tex` matches. Closed 2026-11-02: one sentence after the p-value in results (owner, D-034).
+- [x] → M4 Replace "names" in the departure sentence: the z interval is a different formula (finding 6, A12). AC: `main.tex` and report v1 say the interval changed, not just its name. Closed 2026-11-02.

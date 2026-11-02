@@ -337,7 +337,7 @@ def sec_summary(P: Page, D: dict, full: bool, v2: bool) -> str:
             f"Scope is <b>{html.escape(str(scope))}</b>. This is a first cycle, so there is no verdict. Numbers only.")
     rows = [[Raw(f"<b>{html.escape(q)}</b>"), a] for q, a in summary_rows(D, v2)]
     departure = ("" if v2 else '<div class="callout"><p>Departure from <code>analysis/prereg_mvp1.md</code>: this report changes the effect size and '
-                 "interval names, and drops Gini named in the class post, to keep all analysis within lecture contents "
+                 "intervals, and drops Gini named in the class post, to keep all analysis within lecture contents "
                  "(D-025, D-026). The Lorenz curve is kept as a labeled figure, drawn with the wallet and volume distributions (D-028, D-031). The verdict rule and the verdict sentence are unchanged.</p></div>")
     return (f'<div class="callout"><p>{note}</p></div>' + departure
             + ask("the question each analysis answers, in one line each.")
