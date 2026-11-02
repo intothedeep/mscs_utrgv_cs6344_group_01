@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-CODE_VERSION = "lecture-v1"   # own label, like make_report.py; bumped by hand
+CODE_VERSION = "lecture-v3"   # own label, like make_report.py; bumped by hand
 Z95 = 1.959963984540054       # two-sided 95% normal quantile
 REFERENCE_SHARE = 0.8         # the 80/20 reference of L6 (D-024)
 
@@ -45,6 +45,54 @@ def z_longshot(q1: dict) -> dict:
                            "obs_minus_expected": v["obs_minus_expected"],
                            "z_low_diff": v["obs_minus_expected"] - half, "z_high_diff": v["obs_minus_expected"] + half}
     return out
+
+
+def gap_direction(bins: pd.DataFrame) -> dict:
+    """Direction of the gaps (observed rate minus mean price): bins below price, and the n-weighted net gap over all markets."""
+    n, d = bins["n"], bins["diff_obs_minus_price"]
+    return {"n_bins": len(bins), "n_negative": int((d < 0).sum()),
+            "net_gap": float((n * d).sum() / n.sum()),                 # = (Yes count - expected Yes count) / markets
+            "n_yes_minus_expected": float((n * d).sum())}
+
+
+def chi2_contributions(bins: pd.DataFrame, saved_chi2: float) -> dict:
+    """Per-bin share of the chi-square (n * gap^2 / (p * (1 - p)) equals the Yes term plus the No term). Checked against the saved total."""
+    p = bins["mean_price"]
+    contrib = bins["n"] * bins["diff_obs_minus_price"] ** 2 / (p * (1 - p))
+    top = contrib.idxmax()
+    return {"bin": int(bins.loc[top, "bin"]), "contribution": float(contrib[top]), "share": float(contrib[top] / contrib.sum()),
+            "total_recomputed": float(contrib.sum()), "total_saved": saved_chi2,
+            "matches_saved": bool(np.isclose(contrib.sum(), saved_chi2, rtol=1e-6))}
+
+
+def no_min_longshot_bh(bins_raw: pd.DataFrame) -> dict:
+    """Bins 0 and 1 without the minimum-trade filter: gap and the saved BH call (p_bh below alpha)."""
+    out = {}
+    for b in (0, 1):
+        r = bins_raw[bins_raw["bin"] == b].iloc[0]
+        out[str(b)] = {"n": int(r["n"]), "diff_obs_minus_price": float(r["diff_obs_minus_price"]),
+                       "p_bh": float(r["p_bh"]), "reject_bh": bool(r["reject_bh"])}
+    return out
+
+
+def cluster_category_gap(ccdf_run: Path | None) -> dict | None:
+    """Effect size of the cluster x category chi-square (D-030): the cell with the largest |observed share - expected share|.
+
+    Reads cluster_category_crosstab.csv and cluster_category_expected.csv of the code/ccdf_redraw.py run. Shares are cells over the sample total.
+    Returns None when the run is absent (the report then prints a pending marker).
+    """
+    if ccdf_run is None or not (ccdf_run / "cluster_category_crosstab.csv").exists():
+        return None
+    obs = pd.read_csv(ccdf_run / "cluster_category_crosstab.csv", index_col=0)
+    exp = pd.read_csv(ccdf_run / "cluster_category_expected.csv", index_col=0)
+    assert obs.shape == exp.shape and (obs.index == exp.index).all() and (obs.columns == exp.columns).all(), "crosstab and expected differ in shape"
+    total = obs.to_numpy().sum()
+    gap = (obs - exp) / total
+    flat = gap.stack()
+    cluster, category = flat.abs().idxmax()
+    return {"source_run": ccdf_run.name, "n_sample": int(total), "cluster": int(cluster), "category": str(category),
+            "observed_share": float(obs.loc[cluster, category] / total), "expected_share": float(exp.loc[cluster, category] / total),
+            "diff": float(gap.loc[cluster, category]), "abs": float(abs(gap.loc[cluster, category]))}
 
 
 def draw_calibration(main: pd.DataFrame, nomin: pd.DataFrame, png: Path) -> None:
@@ -85,12 +133,14 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
     ap.add_argument("--out", default="reports/lecture_numbers.json")
+    ap.add_argument("--ccdf-run", help="run folder of code/ccdf_redraw.py (cluster x category crosstab); omitted = effect pending")
     ap.add_argument("--fig", default="reports/figures/fig4_calibration_z.png")
     ap.add_argument("--lorenz-fig", default="reports/figures/lorenz_top_shares.png")
     a = ap.parse_args()
     run, out, fig = Path(a.run), Path(a.out), Path(a.fig)
+    nomin_raw = pd.read_csv(run / "q1_bins_no_min.csv")
     main_b = z_bins(pd.read_csv(run / "q1_bins.csv"))
-    nomin_b = z_bins(pd.read_csv(run / "q1_bins_no_min.csv"))
+    nomin_b = z_bins(nomin_raw)
     eqf_b = z_bins(pd.read_csv(run / "q1_bins_eqfreq.csv"))
     q1 = json.loads((run / "q1_results.json").read_text())
     q2 = json.loads((run / "q2_results.json").read_text())
@@ -119,6 +169,12 @@ def main() -> None:
         },
         "largest_gap": {"bin": int(gap["bin"]), "diff_obs_minus_price": float(gap["diff_obs_minus_price"]),
                         "abs": float(abs(gap["diff_obs_minus_price"]))},
+        "gap_direction": {"rule": "gap = observed rate - mean price; net gap is n-weighted (Yes count minus expected, per market)",
+                          "main": gap_direction(main_b), "no_min_filter": gap_direction(nomin_b),
+                          "equal_frequency": gap_direction(eqf_b)},
+        "chi2_largest_contributor": chi2_contributions(main_b, q1["main_with_min_filter"]["chi2_gof"]["chi2"]),
+        "no_min_filter_longshot_bh": no_min_longshot_bh(nomin_raw),
+        "cluster_category_gap": cluster_category_gap(Path(a.ccdf_run) if a.ccdf_run else None),
         "log10_mean_difference_maker_minus_taker": {
             "mean_log10_maker": w["mean_log10_maker"], "mean_log10_taker": w["mean_log10_taker"],
             "difference": w["mean_log10_maker"] - w["mean_log10_taker"], "welch_t": w["t"]},

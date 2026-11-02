@@ -267,3 +267,7 @@ future_work/papers/**/*.fls
 future_work/papers/**/*.log
 future_work/papers/**/*.out
 future_work/papers/refs/
+
+# LaTeX build products
+papers/**/*.xdv
+papers/**/*.synctex.gz

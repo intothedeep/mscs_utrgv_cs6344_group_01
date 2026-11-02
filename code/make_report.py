@@ -67,6 +67,9 @@ a{color:var(--signal-plan)}
 figure{margin:6px 0;display:flex;flex-direction:column;gap:4px}
 figure img{max-width:100%;height:auto;border:1px solid var(--rule);background:#fff}
 figcaption{font-size:12.5px;color:var(--muted-foreground)}
+.pair{display:flex;gap:12px;align-items:flex-start}
+.pair figure{flex:1 1 0;min-width:0}
+.pair figcaption{font-size:11.5px}
 .scroll{max-height:360px;overflow-y:auto}
 .how{font-size:13.5px}
 .verdict td:first-child{white-space:nowrap;font-weight:600}
@@ -76,15 +79,45 @@ PAPER = "Qin and Yang 2026, Polymarket-v1, arXiv:2606.04217"
 # Dataset paper Table 3, mean return (payout minus price) per token, counted per trade. Quoted from the plan, not computed here.
 PAPER_LONGSHOT = {"0.0-0.1": -0.0023, "0.1-0.2": -0.0019}
 # Plan figure ids of the saved PNGs (../tips/group_01/polymarket_plan_detailed.md). The report numbers its figures in page order.
+# v1 only: six single figures of code/wallet_figs_single.py, in print order: file, what it compares, why (owner, 2026-11-02).
+WALLET_RUN = "145893_walletdist_v7"
+_DIST = "{r} wallets: share of wallets in each volume decade, the bottom 80% of wallets against the top 20%."
+_VOL = "{r} wallets: share of volume in each volume decade, the bottom 80% of wallets against the top 20%."
+_LOR = ("{r} wallets: Lorenz curve of wallet volume against the equality line and the 80/20 reference point. "
+        "The Lorenz curve is outside the lectures.")
+_WHY_DIST = "the area under a bar is the share of wallets, so it shows where most wallets sit."
+_WHY_VOL = "the area under a bar is the share of volume, so it shows which wallets carry the volume."
+_WHY_LOR = "a curve far below the equality line means few wallets hold most of the volume."
+WALLET_SINGLES = [(f"wallet_dist_{r}_count.png", _DIST.format(r=r.title()), _WHY_DIST) if k == "c" else
+                  (f"wallet_dist_{r}_volume.png", _VOL.format(r=r.title()), _WHY_VOL) if k == "v" else
+                  (f"wallet_lorenz_{r}.png", _LOR.format(r=r.title()), _WHY_LOR)
+                  for r in ("maker", "taker") for k in "cvl"]
 PLAN_FIG = {"drop_reasons.png": "no plan figure", "fig1_fig2_hist.png": "plan Fig. 1 and 2", "ecdf.png": "plan Q3 ECDF, no number",
-            "fig3_qq.png": "plan Fig. 3", "fig_violin_p1d_by_category.png": "plan Q3 violin, no number",
+            "fig3_qq.png": "plan Fig. 3",
+            "hist_price_p1d.png": "plan Fig. 1, redrawn", "hist_trade_size.png": "plan Fig. 2, redrawn",
+            "qq_trade_size_raw_log.png": "plan Fig. 3, redrawn", "qq_wallet_volume_raw_log.png": "plan Fig. 3, redrawn", "fig_violin_p1d_by_category.png": "plan Q3 violin, no number",
             "fig4_calibration.png": "plan Fig. 4", "fig5_ecdf_yes_no.png": "plan Fig. 5", "fig6_ccdf.png": "plan Fig. 6",
-            "fig7_lorenz.png": "plan Fig. 7", "fig8_elbow.png": "plan Fig. 8", "fig9_calibration_by_category.png": "plan Fig. 9",
+            "fig6_ccdf_top_sampled.png": "plan Fig. 6, redrawn",
+            "fig7_lorenz.png": "plan Fig. 7", "wallet_dist_panels.png": "plan Fig. 7, redrawn",
+            **{f: "plan Fig. 7, redrawn" for f, _, _ in WALLET_SINGLES}, "fig8_elbow.png": "plan Fig. 8", "fig9_calibration_by_category.png": "plan Fig. 9",
             "fig10_ecdf_7d_vs_1d.png": "plan Fig. 10", "fig11_volume_vs_error.png": "plan Fig. 11",
             "box_p1d_by_category_group.png": "plan Q3 box plot, no number"}
+# v1 only: four single Q3 figures of code/q3_figs_single.py replace fig1_fig2_hist.png and fig3_qq.png (owner, 2026-11-02, D-032).
+Q3_RUN = "145897_q3figs_v8"   # the run folder name has the job ID in front; set the full name after the fetch
+Q3_DIR = Path(__file__).resolve().parent.parent / "reports" / "figures"
+Q3_SINGLES = [("hist_price_p1d.png", "Histogram of the price one day before T (p_1d) over the kept markets.",
+               "the shape shows whether a normal model could fit the price."),
+              ("hist_trade_size.png", "Histogram of trade size on a log axis over the sampled trades.",
+               "the shape shows whether a normal model could fit the trade size."),
+              ("qq_trade_size_raw_log.png", "QQ plot of trade size, raw beside log, against the normal.",
+               "a straight line after log means the log trade sizes are close to normal."),
+              ("qq_wallet_volume_raw_log.png", "QQ plot of wallet volume, raw beside log, against the normal.",
+               "a straight line after log means the log wallet volumes are close to normal.")]
 BOX_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "box_p1d_by_category_group.png"
 LORENZ_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "lorenz_top_shares.png"   # v1 only: code/lecture_numbers.py
 LN_PATH = Path(__file__).resolve().parent.parent / "reports" / "lecture_numbers.json"   # v1 only: written by code/lecture_numbers.py
+WALLET_DIST_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "wallet_dist_panels.png"   # v1 only: code/wallet_dist_figs.py, copied from its run
+CCDF_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "fig6_ccdf_top_sampled.png"   # v1 only: code/ccdf_redraw.py, copied from its run
 Z_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "fig4_calibration_z.png"
 # Dataset paper (main.tex line 66): share of maker volume held by the top 1% of makers. Quoted, not computed here.
 PAPER_TOP1_MAKER = 0.841
@@ -197,6 +230,13 @@ class Page:
                 f'Source: {html.escape(source or f"{self.run}/{png}")}</figcaption></figure>')
 
 
+def pair(a: str, b: str) -> str:
+    """Two figures in one row (D-033). Each keeps its own number and caption. A skipped figure is a note, so it stays outside the row."""
+    if a.startswith("<figure") and b.startswith("<figure"):
+        return f'<div class="pair">{a}{b}</div>'
+    return a + b
+
+
 def bullets(items: list[str]) -> str:
     return '<h3>How to read</h3><ul class="how">' + "".join(f"<li>{html.escape(i)}</li>" for i in items) + "</ul>"
 
@@ -241,11 +281,16 @@ def q2_answer(D: dict) -> str:
     """v1 Q2 answer: the 80/20 reference and the power-law tail, read from lecture_numbers.json (D-024, D-025)."""
     ln = D["ln"]
     t20, pl = ln["top20_share"], ln["power_law_wallet_volume"]
-    return (f"Yes, far beyond the 80/20 reference. The top 20% of wallets hold {t20['maker']:.1%} of maker volume and "
+    return (f"Yes by USDC volume, far beyond the 80/20 reference. The top 20% of wallets hold {t20['maker']:.1%} of maker volume and "
             f"{t20['taker']:.1%} of taker volume, against {t20['reference']:.0%} for the 80/20 rule. "
+            f"Volume is the USDC sum over every trade in the {fmt(D['tables']['n_kept'])} kept markets, including trades after T - 1 day. "
+            "Trade counts were not measured. "
             "The 80/20 rule and the power law come from Lecture 6. "
-            f"The top 10% tail of wallet volume is close to a power law with alpha {pl['alpha']:.3f}, "
-            f"but the KS test rejects an exact power law (KS p {fp(pl['ks_p'])}). No pre-registered verdict for this.")
+            f"For the top 10% of wallet-role rows, the fitted power-law exponent alpha is {pl['alpha']:.3f}. "
+            f"The KS test rejects an exact power law (KS D {pl['ks_D']:.3f}, p {fp(pl['ks_p'])}). "
+            "The redrawn CCDF tail bends downward at the largest wallets, so it is not a straight line on log-log axes. "
+            "We do not say wallet volume follows a power law, and we set no line for how close. "
+            "There is no pre-registered verdict for this.")
 
 
 def summary_rows(D: dict, v2: bool) -> list[tuple[str, str]]:
@@ -293,13 +338,14 @@ def sec_summary(P: Page, D: dict, full: bool, v2: bool) -> str:
     rows = [[Raw(f"<b>{html.escape(q)}</b>"), a] for q, a in summary_rows(D, v2)]
     departure = ("" if v2 else '<div class="callout"><p>Departure from <code>analysis/prereg_mvp1.md</code>: this report changes the effect size and '
                  "interval names, and drops Gini named in the class post, to keep all analysis within lecture contents "
-                 "(D-025, D-026). Lorenz is kept as a labeled figure (D-028). The verdict rule and the verdict sentence are unchanged.</p></div>")
+                 "(D-025, D-026). The Lorenz curve is kept as a labeled figure, drawn with the wallet and volume distributions (D-028, D-031). The verdict rule and the verdict sentence are unchanged.</p></div>")
     return (f'<div class="callout"><p>{note}</p></div>' + departure
             + ask("the question each analysis answers, in one line each.")
             + P.table("Questions and answers. Verdicts come from verdicts.json, numbers from the saved results.", ["Question", "Answer"], rows)
             + bullets(["Each answer repeats numbers from the sections below. Check the p-value together with the effect size.",
                        "With tens of thousands of markets, a small effect can give a tiny p. Read the effect size first.",
-                       "Tests assume independent markets. Markets on one event are not independent."]))
+                       "Tests assume independent markets. Markets on one event are not independent."]
+                      + ([] if v2 else ["The z intervals assume the same independence, so they may be too narrow."])))
 
 
 def sec_data(P: Page, D: dict, v2: bool) -> str:
@@ -336,6 +382,15 @@ def dist_rows(s: dict) -> list[list]:
             for k, v in s.items()]
 
 
+def q3_figures(P: Page, v2: bool, singles: list[tuple[str, str, str]], old_png: str, old_what: str, old_why: str) -> str:
+    """v1: the single figures of code/q3_figs_single.py when all four Q3 PNGs are in reports/figures, else the saved combined figure."""
+    if not v2 and all((Q3_DIR / f).exists() for f, _, _ in Q3_SINGLES):
+        figs = [P.figure(f, what, why, Q3_DIR / f, f"reports/figures/{f}, drawn by code/q3_figs_single.py from run {Q3_RUN}")
+                for f, what, why in singles]
+        return pair(*figs) if singles[0][0].startswith("hist_") else "".join(figs)   # histograms: half width pair; QQ: full width
+    return P.figure(old_png, old_what, old_why)
+
+
 def sec_q3(P: Page, D: dict, v2: bool) -> str:
     q = D["q3"]
     if not q:
@@ -354,11 +409,11 @@ def sec_q3(P: Page, D: dict, v2: bool) -> str:
                       "Power law is fitted to the top 10% (xmin quantile 0.9)."
                       + ("" if v2 else " Normal and exponential are fitted on all data, so the three D values are not ranked."),
                       ["Variable", "Model", "Parameters", "KS D", "KS p"], fits)
-            + P.figure("fig1_fig2_hist.png", "Histograms of price and trade size.",
-                       "the shape shows whether a normal model could fit.")
+            + q3_figures(P, v2, Q3_SINGLES[:2], "fig1_fig2_hist.png", "Histograms of price and trade size.",
+                         "the shape shows whether a normal model could fit.")
             + P.figure("ecdf.png", "ECDFs of price and trade size.", "the curve shows where most values sit.")
-            + P.figure("fig3_qq.png", "QQ plots before and after a log transform.",
-                       "a straight line after log means the log values are close to normal.")
+            + q3_figures(P, v2, Q3_SINGLES[2:], "fig3_qq.png", "QQ plots before and after a log transform.",
+                         "a straight line after log means the log values are close to normal.")
             + P.figure("fig_violin_p1d_by_category.png", "Violin of p_1d by category_refined over the kept markets (bar = median).",
                        "a wide body at both ends means the price is near 0 or 1 in that topic.")
             + (P.figure("box_p1d_by_category_group.png",
@@ -416,14 +471,28 @@ def long_ci(v: dict) -> str:
     return ci(v["z_low_diff"], v["z_high_diff"]) if "z_low_diff" in v else ci(v["ci_low_diff"], v["ci_high_diff"])
 
 
-def paper_longshot_block(P: Page, long_main: dict) -> str:
+def paper_longshot_block(P: Page, long_main: dict, v2: bool) -> str:
     rows = [[b, f"{PAPER_LONGSHOT[b]:+.4f}", f"{v['obs_minus_expected']:+.4f}" if v else "n/a", long_ci(v) if v else "n/a",
              v["n"] if v else None] for b in PAPER_LONGSHOT for v in [long_main.get(b)]]
     return (P.table("Longshot bins against the dataset paper, Table 3 (main set).",
                     ["Bin", "Paper: mean return per token (per trade)", "Ours: observed minus mean price (per market)",
                      "95% CI of ours" if "z_low_diff" not in next(iter(long_main.values()), {}) else "95% z interval of ours", "Our n"], rows)
             + '<p class="note">The units differ. The paper counts every trade and takes payout minus price per token. '
-              "We count every market once and take the observed Yes rate minus the mean price. Compare the sign and the size, not the digits.</p>")
+              "We count every market once and take the observed Yes rate minus the mean price. "
+              + ("Compare the sign and the size, not the digits." if v2 else
+                 "So we do not compare their sizes. We read only the direction, the sign.") + "</p>")
+
+
+def eqfreq_note(z: list[dict], rows: list[dict]) -> str:
+    """Why the z interval marks more equal-frequency bins than BH does. Both counts are read from the saved rows."""
+    off = [r["reject_bh"] == "True" for r in rows]
+    n_z, n_bh = sum(b["price_outside"] for b in z), sum(off)
+    diff = [(r["bin"], b["n_yes"], b["n"]) for r, b, o in zip(rows, z, off) if b["price_outside"] != o]
+    why = ("The z interval has no correction for ten bins. Its spread comes from the observed rate, "
+           "which is unreliable when a bin has very few Yes outcomes.")
+    where = ("They differ in " + ", ".join(f"bin {b} ({fmt(y)} Yes in {fmt(n)})" for b, y, n in diff) + ". ") if diff else "They mark the same bins. "
+    return (f'<p class="note">In equal-frequency bins the z interval puts the price outside {n_z} bins, and BH marks {n_bh}. '
+            + html.escape(where + why) + "</p>")
 
 
 def q1_bullets_v2() -> list[str]:
@@ -439,11 +508,26 @@ def q1_bullets_v1(ln: dict, nb: int) -> list[str]:
     out_txt = (f"In {z['n_outside']} of {len(z['bins'])} bins the mean price is outside the z interval: bins {', '.join(map(str, z['bins_outside']))}. "
                + (f"These are the same bins as the BH bins off." if same else
                   f"The BH bins off are {', '.join(map(str, z['bins_bh_off']))}."))
+    gd, c2, nm = ln["gap_direction"], ln["chi2_largest_contributor"], ln["no_min_filter_longshot_bh"]
+    n_all = sum(b["n"] for b in z["bins"])
+    small_txt = (f"The effect is small, and it runs one way. In {gd['main']['n_negative']} of {gd['main']['n_bins']} bins the observed Yes rate "
+                 f"is below the mean price, so Yes is priced too high. The same holds without the minimum-trade filter "
+                 f"({gd['no_min_filter']['n_negative']} of {gd['no_min_filter']['n_bins']}) and in equal-frequency bins "
+                 f"({gd['equal_frequency']['n_negative']} of {gd['equal_frequency']['n_bins']}). "
+                 f"Over all {fmt(n_all)} markets the net gap is {100 * gd['main']['net_gap']:+.2f} percentage points, "
+                 f"{fmt(abs(gd['main']['n_yes_minus_expected']), 0)} fewer Yes outcomes than the prices imply. "
+                 f"The largest per-bin gap is {gap['diff_obs_minus_price']:+.4f}, in bin {gap['bin']} (price {bin_label(gap['bin'], nb)}). "
+                 f"The largest chi-square contributor is bin {c2['bin']} ({c2['share']:.1%} of the chi-square). "
+                 "We set no size line before the results, so small is our reading. The p-values assume independent markets, so they are optimistic.")
+    longshot_txt = ("The longshot statement holds only with the minimum-trade filter. Without it, "
+                    f"bin 0 changes sign ({nm['0']['diff_obs_minus_price']:+.4f}, BH p {fp(nm['0']['p_bh'])}) and "
+                    f"bin 1 is {nm['1']['diff_obs_minus_price']:+.4f} (BH p {fp(nm['1']['p_bh'])}). "
+                    + ("Neither passes BH." if not (nm['0']['reject_bh'] or nm['1']['reject_bh']) else "See the BH calls in the table."))
     return ["Pre-registered line: chi-square p < 0.05 means prices are not calibrated as a whole.",
             "A bin is off when its BH-corrected p < 0.05. A negative difference means the event happened less often than priced.",
-            f"The effect is small. The largest per-bin gap is {gap['diff_obs_minus_price']:+.4f}, in bin {gap['bin']} "
-            f"(price {bin_label(gap['bin'], nb)}). A tiny p with gaps of a few points is a real but small gap.",
-            out_txt,
+            small_txt,
+            out_txt + " The z interval assumes independent markets, like the tests. Markets on one event move together, so it may be too narrow.",
+            longshot_txt,
             f"Mean squared residual of the price is the mean of (price minus outcome) squared. 0.25 is a coin flip at 0.5, 0 is perfect. "
             "The pre-registration calls it the Brier score."]
 
@@ -501,9 +585,12 @@ def sec_q1(P: Page, D: dict, v2: bool) -> str:
             + confusion_block(P, main)
             + P.table("Longshot bins (price below 0.2): observed rate against mean price.",
                       ["Set", "Bin", "n", "Mean price", "Observed rate", "Observed minus price", "95% CI of the difference" if v2 else "95% z interval of the difference"], long)
-            + paper_longshot_block(P, zb["longshot"]["main_with_min_filter"] if ln else main["longshot"])
+            + paper_longshot_block(P, zb["longshot"]["main_with_min_filter"] if ln else main["longshot"], v2)
             + bins_table(P, D["q1_bins_no_min"], "Robustness: the same bins without the min trades filter.", nb, zb.get("bins_no_min_filter"))
-            + bins_table(P, D["q1_bins_eqfreq"], "Robustness: equal-frequency bins, main set.", None, zb.get("bins_equal_frequency"))
+            + bins_table(P, D["q1_bins_eqfreq"], "Robustness: equal-frequency bins, main set."
+                         + (f" BH p and call are from run {D['eqf_src']} (code v5), on the same markets." if D.get("eqf_src") else ""),
+                         None, zb.get("bins_equal_frequency"))
+            + (eqfreq_note(zb["bins_equal_frequency"], D["q1_bins_eqfreq"]) if ln and D.get("eqf_src") else "")
             + bullets(q1_bullets_v2() if v2 else q1_bullets_v1(ln, nb)))
 
 
@@ -529,6 +616,45 @@ def pipeline_check(P: Page, q: dict) -> str:
               "We read the paper's value as a reference only, not as a target.</p>")
 
 
+def lorenz_figure(P: Page) -> str:
+    """v1 Lorenz: six single figures (code/wallet_figs_single.py) when all six PNGs are in reports/figures,
+    else the three linked panels (code/wallet_dist_figs.py, visualization.md §7) when that PNG is there, else the coarse picture."""
+    single_dir = WALLET_DIST_PNG.parent
+    if all((single_dir / f).exists() for f, _, _ in WALLET_SINGLES):
+        rows = []
+        for i, j in ((0, 1), (3, 4), (2, 5)):   # D-033 pairs: maker count + volume, taker count + volume, Lorenz maker + taker
+            rows.append(pair(*[P.figure(f, what, why, single_dir / f,       # called in print order, so figure numbers have no gaps
+                                        f"reports/figures/{f}, drawn by code/wallet_figs_single.py from run {WALLET_RUN}")
+                               for f, what, why in (WALLET_SINGLES[i], WALLET_SINGLES[j])]))
+        return "".join(rows)
+    if WALLET_DIST_PNG.exists():
+        return P.figure("wallet_dist_panels.png",
+                        "Wallet distribution, volume distribution and Lorenz curve for each role, split at the top 20% of wallets.",
+                        "area and height show the share of wallets against the share of volume, and the Lorenz panel is outside the lectures.",
+                        WALLET_DIST_PNG,
+                        f"reports/figures/wallet_dist_panels.png, drawn by code/wallet_dist_figs.py from wallets.parquet of {P.run}")
+    return P.figure("fig7_lorenz.png",
+                    "Lorenz picture of wallet volume, drawn from four saved top shares per role with straight lines between them, "
+                    "so it is a coarse picture. The Lorenz curve is outside the lectures. Values below 80% of wallets were not saved. "
+                    "Straight lines lie above the true curve, so they understate concentration.",
+                    "it shows how far the curve sits from the 80/20 reference.", LORENZ_PNG,
+                    f"reports/figures/lorenz_top_shares.png, drawn by code/lecture_numbers.py from q2_concentration.csv of {P.run}")
+
+
+def ccdf_figure(P: Page) -> str:
+    """v1 CCDF: the top-sampled redraw (code/ccdf_redraw.py) when its PNG is in reports/figures, else the saved figure with an honest caption."""
+    if CCDF_PNG.exists():
+        return P.figure("fig6_ccdf_top_sampled.png",
+                        "Wallet volume CCDF on log-log axes, one line per role. Ranks are sampled from the top: "
+                        "every wallet in the top 1,000 by rank, plus log-spaced ranks, so the tail has points.",
+                        "it shows how fast the share of wallets falls as volume grows, and the tail bends instead of staying straight.", CCDF_PNG,
+                        f"reports/figures/fig6_ccdf_top_sampled.png, drawn by code/ccdf_redraw.py from wallets.parquet of {P.run}")
+    return P.figure("fig6_ccdf.png",
+                    "Wallet volume CCDF on log-log axes, one line per role. Ranks were sampled from the smallest wallet, "
+                    "so the top wallets have no points and the last segment is one straight chord, not data.",
+                    "it shows how fast the share of wallets falls as volume grows, up to the last plotted point.")
+
+
 def sec_q2(P: Page, D: dict, v2: bool) -> str:
     q = D["q2"]
     if not q:
@@ -549,6 +675,13 @@ def sec_q2(P: Page, D: dict, v2: bool) -> str:
     mx = ch.get("min_expected_count")
     ctest = [[f"Chi-square, cluster x category ({ch['n_categories']} categories" + (f", min expected count {fmt(mx)})" if mx is not None else ")"),
               f"{fmt(ch['chi2'])} (df {ch['df']})", fp(ch["p"]), f"Cramer's V {fmt(ch['cramers_v'])}"]] if v2 else []
+    if not v2:   # D-030: the test is back, its effect size is the largest observed-minus-expected cell share
+        cg = D["ln"].get("cluster_category_gap")
+        effect = (f"largest cell gap {cg['diff']:+.4f} of the sample (observed {cg['observed_share']:.4f}, expected {cg['expected_share']:.4f}), "
+                  f"cluster {cg['cluster']}, {cg['category']}" if cg else
+                  "PENDING: observed minus expected share, from the ccdf_v6 run (not fetched yet)")
+        ctest.append([f"Chi-square, cluster x category ({ch['n_categories']} categories" + (f", min expected count {fmt(mx)})" if mx is not None else ")"),
+                      f"{fmt(ch['chi2'])} (df {ch['df']})", fp(ch["p"]), effect])
     for label, an in ([("ANOVA of mean trade price", an_new), ("Secondary: ANOVA of log median trade size", an_old)] if an_new
                       else [("ANOVA of log median trade size", an_old)]):
         ctest.append([f"{label} ({fmt(an['n_perm'])} permutations)", f"F {fmt(an['F'])}", fp(an["perm_p"]),
@@ -562,15 +695,11 @@ def sec_q2(P: Page, D: dict, v2: bool) -> str:
                        "Top 20%"] + (["Gini", "Paper Gini"] if v2 else []), conc)
             + ("" if v2 else pipeline_check(P, q))
             + P.table("Role and activity tests, each with p and an effect size.", ["Test", "Statistic", "p", "Effect size"], tests)
-            + P.figure("fig6_ccdf.png", "Wallet volume CCDF on log-log axes.",
-                       "a long straight tail means a few wallets trade very large volumes.")
+            + (P.figure("fig6_ccdf.png", "Wallet volume CCDF on log-log axes.",
+                        "a long straight tail means a few wallets trade very large volumes.") if v2 else ccdf_figure(P))
             + (P.figure("fig7_lorenz.png", "Lorenz curves of wallet volume against the equality line.",
                         "a curve far below the line means few wallets hold most of the volume.") if v2 else
-               P.figure("fig7_lorenz.png",
-                        "Lorenz picture of wallet volume, drawn from four saved top shares per role with straight lines between them, "
-                        "so it is a coarse picture. The Lorenz curve is outside the lectures. Below 80% of wallets nothing was measured.",
-                        "it shows how far the curve sits from the 80/20 reference.", LORENZ_PNG,
-                        f"reports/figures/lorenz_top_shares.png, drawn by code/lecture_numbers.py from q2_concentration.csv of {P.run}"))
+               lorenz_figure(P))
             + P.table(f"Side analysis: k-means clusters (K = {km['k_chosen']}, {fmt(km['n_sample'])} sampled wallets, "
                       f"seed {km['sample_seed']}). K rule: {km['k_rule']}.",
                       ["Cluster", "Wallets", "Median volume", "Median trades", "Median markets", "Mean trade price"], cl)
@@ -816,12 +945,22 @@ def load_run(run: Path) -> dict:
             "q2_scaling": cload(run, "q2_kmeans_scaling.csv")}
 
 
+def eqfreq_with_bh(run: Path, src: Path, own: list[dict] | None) -> tuple[list[dict], str]:
+    """Equal-frequency rows with BH columns from a code v5 run. Stops unless the same bins and counts as the main run."""
+    saved = cload(src, "q1_bins_eqfreq.csv")
+    key = ("bin", "n", "n_yes", "binom_p")
+    if not saved or not own or [[r[k] for k in key] for r in saved] != [[r[k] for k in key] for r in own]:
+        raise SystemExit(f"{src}/q1_bins_eqfreq.csv does not match {run.name}/q1_bins_eqfreq.csv on {key}")
+    return saved, src.name
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
     ap.add_argument("--version", required=True, choices=["v1", "v2"])
     ap.add_argument("--out", required=True)
     ap.add_argument("--compare", help="v1 run folder for the consistency table (v2 only)")
+    ap.add_argument("--q1eqfreq", help="run folder (code v5) whose q1_bins_eqfreq.csv has p_bh and reject_bh (v1 only)")
     a = ap.parse_args()
     run, v2 = Path(a.run), a.version == "v2"
     D = load_run(run)
@@ -830,6 +969,8 @@ def main() -> None:
         if ln is None or ln["source_run"] != run.name:
             raise SystemExit(f"{LN_PATH} missing or not from {run.name}: run code/lecture_numbers.py first")
         D["ln"] = ln
+        if a.q1eqfreq:
+            D["q1_bins_eqfreq"], D["eqf_src"] = eqfreq_with_bh(run, Path(a.q1eqfreq), D["q1_bins_eqfreq"])
     if not D["tables"]:
         raise SystemExit(f"{run}/tables_summary.json not found: not a run folder")
     full = D["prereg"].get("scope") == "full"

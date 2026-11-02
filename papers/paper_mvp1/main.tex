@@ -10,6 +10,7 @@
 %   S-PAPER-7 ../tips/group_01/polymarket_class_questions_tips.html
 %   S-PAPER-8 PLAN.md, RQ.md, DECISIONS.md, STATUS.md
 %   S-PAPER-9 analysis/prereg_robustness.md, runs/142123_robust_full_v4 (reports r1, r2) via numbers.tex
+%   S-PAPER-10 reports/lecture_numbers.json, runs/145892_ccdf_v6, runs/145893_walletdist_v7 via numbers.tex; analysis/review_project_end_analyst.md
 \documentclass[11pt]{article}
 
 \usepackage[margin=0.9in]{geometry}
@@ -21,6 +22,7 @@
 \usepackage{tabularx}
 \usepackage[numbers]{natbib}
 \usepackage{figkit}
+\usepackage{subcaption}
 \usepackage[hidelinks]{hyperref}
 \usepackage[capitalise,noabbrev]{cleveref}
 
@@ -65,6 +67,10 @@
 \newcommand{\PaperTopShare}{84.1\%}
 \newcommand{\PaperCheapGap}{0.2 to 0.3 cents}
 \newcommand{\PaperCheapPrice}{30 cents}
+% Run folder names are identifiers, not measured numbers.
+\newcommand{\CcdfRun}{145892\_ccdf\_v6}
+\newcommand{\WalletDistRun}{145893\_walletdist\_v7}
+\newcommand{\QqRun}{145897\_q3figs\_v8}
 
 % --- Table row helpers: pull one row of macros by name ---
 \newcommand{\binrow}[2]{#1 & \csname Bin#2N\endcsname & \csname Bin#2Price\endcsname
@@ -81,7 +87,7 @@ CS 6344 Introduction to Data Science}
 \maketitle
 
 \begin{abstract}
-% src: S-PAPER-1, S-PAPER-3, S-PAPER-5
+% src: S-PAPER-1, S-PAPER-3, S-PAPER-5, S-PAPER-10
 A Polymarket YES share pays one dollar if the event happens.
 So a price of \HookPct{} is read as a \HookPct{} chance.
 We test this on resolved Yes/No markets from the Polymarket-v1 database.
@@ -89,9 +95,12 @@ We keep \NMarketsKept{} of \NMarketsInScope{} markets in scope.
 We read each market's price \DaysShort{} day before its scheduled close.
 The pre-registered chi-square test says the prices are not calibrated as a whole
 ($\chi^2=\QOneChiSq$, $p=\QOneP$).
-The largest per-bin gap is only \LargestGapAbs.
-The observed Yes rate lies below the mean price in every price bin except the top one.
-The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker volume,
+The effect is small and runs one way.
+The observed Yes rate lies below the mean price in \GapNegBinsMain{} of \GapBinsTotal{} bins.
+The net gap is \GapNetDiffMain.
+The largest per-bin gap is \LargestGapAbs.
+We set no size line before the results.
+In the kept markets, the top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker USDC volume,
 far above the 80/20 reference of \TopTwentyReference.
 Mean volume is far above median volume.
 Trade sizes are strongly right skewed.
@@ -181,7 +190,7 @@ Up/Down markets are \NUpdown{} (\PctUpdown).
 
 \begin{figure}[H]
 \centering
-\figorbox{figures/drop_reasons}{0.65\linewidth}
+\figorbox{figures/drop_reasons}{\linewidth}
 \caption{Markets by first failing rule. Why: it shows which rule removes the most markets. Source: run \RunId.}
 \label{fig:drops}
 \end{figure}
@@ -258,7 +267,7 @@ Primary metric & chi-square goodness of fit over the \NBins{} bins. The line is 
 \midrule
 Per-bin call & binomial test per bin, Benjamini-Hochberg (BH) corrected at \Alpha{} \\
 \midrule
-Effect size & observed rate minus mean price per bin with a \CiLevel{} interval (a z interval here), and the mean squared residual of the price \\
+Effect size & observed rate minus mean price per bin, with a \CiLevel{} z interval here. Also the mean squared residual of the price \\
 \midrule
 Failure condition & no bin off after BH and chi-square $p\ge\Alpha$: no evidence of miscalibration at this $n$ \\
 \bottomrule
@@ -274,7 +283,9 @@ We made the change for determinism, not because of the result.
 It came after we saw a full-data Q1 result, so we report it as an amendment.
 The amendment in \texttt{analysis/prereg\_mvp1.md} records that the verdict did not change.
 All numbers in this paper come from the runs with the amended rule.
-This paper uses effect-size and interval names that differ from the pre-registration, and it drops the Gini coefficient named in the class post, to keep the analysis within the lecture contents.
+This paper uses effect-size and interval names that differ from the pre-registration.
+It drops the Gini coefficient named in the class post.
+Both changes keep the analysis within the lecture contents.
 The verdict rule and the verdict sentence are unchanged.
 
 \subsection{Q1: calibration}\label{sec:methods-q1}
@@ -304,14 +315,20 @@ The KS statistic $D$ is the effect size.
 For the longshot check we look at the two cheapest bins.
 
 \subsection{Q2: wallet concentration}\label{sec:methods-q2}
-% src: S-PAPER-2
+% src: S-PAPER-2, S-PAPER-10
 We work with wallet volume in USDC, by role.
+Volume is the USDC sum over every trade in the kept markets.
+It includes trades after $T-\DaysShort$ day.
+We did not measure trade-count shares.
 We report the share of role volume held by the top \TopOneLabel, \TopFiveLabel, \TopTenLabel, and \TopTwentyLabel{} of wallets.
 We compare the top \TopTwentyLabel{} share with the 80/20 reference from Lecture 6.
 This is descriptive, with no pre-registered verdict line.
 We draw the complementary CDF (CCDF) of wallet volume on log-log axes.
-We also draw a Lorenz picture from the four saved top shares of each role.
-The Lorenz picture is outside the lectures, and we use it only to show the top shares.
+We sample its ranks from the top, so the largest wallets get points.
+We also draw the wallet distribution, the volume distribution, and the Lorenz curve of each role.
+Each is split at the top \TopTwentyLabel{} of wallets.
+The Lorenz curve is outside the lectures.
+We use it only to show how the top shares build up.
 As a pipeline check, we compare our top \TopOneLabel{} maker share with the dataset paper's.
 We test the log volume of makers against takers with a Welch t-test and a KS test.
 The effect size is the difference of the mean log10 volume.
@@ -320,14 +337,17 @@ We report Spearman's $\rho$ between trade count and volume.
 % src: S-PAPER-2, S-PAPER-6
 As a side analysis, we run k-means on wallet features.
 We take the logarithm of the heavy-tailed features, then z-score them.
-We choose $K$ with the elbow method.
-We repeat the clustering with robust scaling as a stability check.
+We choose $K$ by a fixed rule on the elbow curve.
+The rule takes the point farthest from the line between the first and last points.
+We test cluster against topic category with the chi-square test of independence (Lecture 12).
+Its effect size is the largest observed minus expected share in one cell.
 This analysis is exploratory.
 
 \subsection{Q3: distributions}\label{sec:methods-q3}
 % src: S-PAPER-2, S-PAPER-5
 We summarise price, trade size, and wallet volume with their mean and median.
 We plot histograms of the price \pOne{} and of trade size.
+We draw QQ plots of trade size and of wallet volume, before and after a log transform.
 We fit a normal, an exponential, and a power law to trade size and wallet volume.
 The power law is fitted on the top \TopTenLabel{} of values only, above a lower bound $x_{\min}$.
 We measure each fit with the KS statistic $D$ against the data.
@@ -349,11 +369,18 @@ The pre-registered criteria did not change, and no verdict flipped.
 
 \section{Results}\label{sec:results}
 \subsection{Q1: is the crowd right?}\label{sec:res-q1}
-% src: S-PAPER-3, S-PAPER-5
+% src: S-PAPER-3, S-PAPER-5, S-PAPER-10
 The pre-registered rule gives this verdict: \VerdictQOne{}
 The chi-square statistic is \QOneChiSq{} with \QOneDf{} degrees of freedom.
 The p-value is $p=\QOneP$.
-The effect is small: the largest per-bin gap is \LargestGapAbs{} (bin \LargestGapBin, counting from 0).
+The effect is small and runs one way.
+In \GapNegBinsMain{} of \GapBinsTotal{} bins the observed Yes rate is below the mean price.
+So Yes is priced too high.
+Over all \NMarketsKept{} markets the net gap is \GapNetDiffMain.
+That is \GapNetYesShort{} fewer Yes outcomes than the prices imply.
+The largest per-bin gap is \LargestGapAbs{} (bin \LargestGapBin, counting from 0).
+The largest chi-square contributor is bin \ChiTopBin{}, with \ChiTopShare{} of the chi-square.
+We set no size line before the results, so small is our reading.
 \Cref{fig:calib} shows the observed Yes rate against the mean price in each bin.
 \Cref{tab:bins} gives the numbers.
 
@@ -382,6 +409,8 @@ Bin & $n$ & Mean price & Observed & \CiLevel{} CI & Gap & BH $p$ \\
 \end{table}
 
 The observed rate is below the mean price in every bin except the top one.
+Without the minimum-trade filter the count is \GapNegBinsNoMin{} of \GapBinsTotal.
+In equal-frequency bins it is \GapNegBinsEqFreq{} of \GapBinsTotal.
 After BH correction, \QOneBinsBh{} of the \NBins{} bins are off ($p<\Alpha$).
 After Bonferroni correction, \QOneBinsBonferroni{} bins are off.
 The \CiLevel{} z interval leaves the mean price outside in \ZIntervalBinsOutsideN{} bins: \ZIntervalBinsOutsideList.
@@ -392,22 +421,29 @@ The gap is \BinSeventyEightyDiff{} (BH $p=\BinSeventyEightyBhP$).
 The two cheapest bins are the longshot check.
 In the cheapest bin the gap is \BinZeroTenDiff{} (BH $p=\BinZeroTenBhP$).
 In the next bin the gap is \BinTenTwentyDiff{} (BH $p=\BinTenTwentyBhP$).
-Cheap bets pay off less often than their price says.
+With the minimum-trade filter, cheap bets pay off less often than their price says.
 The direction matches the horse-racing result \citep{snowberg2010favorite}.
+Without the filter, the cheapest bin flips above the price.
+Its gap is \NoMinBinZeroDiff{} (BH $p=\NoMinBinZeroPBh$).
+The next bin has a gap of \NoMinBinOneDiff{} (BH $p=\NoMinBinOnePBh$).
+Neither bin is off after BH.
+So the longshot statement holds only with the filter.
 Our gaps are per market and the dataset paper's are per trade.
-So we do not compare their sizes.
+So we compare the direction only, not the size.
 
 
 \begin{figure}[H]
 \centering
-\begin{minipage}[b]{0.46\linewidth}\centering
 \figorbox{figures/fig4_calibration_z}{\linewidth}
-\end{minipage}\hfill
-\begin{minipage}[b]{0.50\linewidth}\centering
-\figorbox{figures/fig5_ecdf_yes_no}{\linewidth}
-\end{minipage}
-\caption{Observed Yes rate against mean price per bin with \CiLevel{} z intervals (left), and ECDFs of \pOne{} by outcome (right). Why: points on the diagonal mean the price matches the outcome rate, and the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
+\caption{Observed Yes rate against mean price per bin with \CiLevel{} z intervals. Why: points on the diagonal mean the price matches the outcome rate. Source: run \RunId.}
 \label{fig:calib}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig5_ecdf_yes_no}{\linewidth}
+\caption{ECDFs of \pOne{} for Yes- and No-resolved markets. Why: the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
+\label{fig:ecdf}
 \end{figure}
 
 Next come the score measures.
@@ -415,21 +451,32 @@ The mean squared residual of the price is \QOneBrier, the log loss is \QOneLogLo
 The Yes rate among kept markets is \QOneYesRate, and the mean price is \PriceOneDayMean.
 At the \FavoriteLine{} line, the classifier accuracy is \QOneAccuracy.
 Its precision is \QOnePrecision{} and its recall is \QOneRecall.
-The KS statistic between Yes and No prices is $D=\QOneKsD$.
+The KS statistic between Yes and No prices is $D=\QOneKsD$ (\Cref{fig:ecdf}).
 Without the minimum-trade filter there are \QOneNoMinN{} markets.
 The mean squared residual is then \QOneNoMinBrier{}, with $\chi^2=\QOneNoMinChiSq$ and $p=\QOneNoMinP$.
 The chi-square test also rejects without the filter.
 With \QOneEqFreqBins{} equal-frequency bins, BH marks \QOneEqFreqBinsBh{} bins as off.
+The z interval leaves the price outside \ZIntervalEqFreqOutsideN{} bins, and BH marks \QOneEqFreqBinsBh.
+They differ in the lowest bin, which has very few Yes outcomes.
+The z interval has no correction for the \QOneEqFreqBins{} bins.
+Its spread comes from the observed rate, which is unreliable near zero.
 
 \subsection{Q2: who is the crowd? Do a few wallets do most of the trading?}\label{sec:res-q2}
-% src: S-PAPER-5
-Yes, a few wallets do most of the trading, far beyond the 80/20 reference.
+% src: S-PAPER-5, S-PAPER-10
+Yes, by USDC volume, the top wallets do most of the trading.
+This holds in the kept markets only, and far beyond the 80/20 reference.
 The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker volume and \TakerTopTwentyShare{} of taker volume.
 The 80/20 rule says \TopTwentyReference.
 The 80/20 rule and the power law come from Lecture 6.
 We describe these numbers without a pre-registered verdict.
+Each row is one wallet and role.
+Volume sums every trade in the kept markets, including trades after $T-\DaysShort$ day.
+Trade-count shares were not measured.
 \Cref{tab:conc} gives the top shares by role.
-\Cref{fig:lorenz} shows the CCDF and the Lorenz picture.
+\Cref{fig:ccdf} shows the CCDF.
+\Cref{fig:wd-maker,fig:wd-taker} show the wallet and volume distributions.
+\Cref{fig:lorenz} shows the Lorenz curves.
+The Lorenz curves are outside the lectures.
 
 \begin{table}[H]
 \centering
@@ -449,13 +496,56 @@ Taker & \TakerNWallets & \TakerMeanVolume & \TakerMedianVolume & \TakerTopOneSha
 
 \begin{figure}[H]
 \centering
-\begin{minipage}[b]{0.50\linewidth}\centering
-\figorbox{figures/fig6_ccdf}{\linewidth}
-\end{minipage}\hfill
-\begin{minipage}[b]{0.46\linewidth}\centering
-\figorbox{figures/lorenz_top_shares}{\linewidth}
-\end{minipage}
-\caption{CCDF of wallet volume on log-log axes (left), and a Lorenz picture drawn from four saved top shares per role with straight lines (right). The Lorenz picture is coarse, nothing was measured below 80\% of wallets, and it is outside the lectures. Why: a long straight CCDF tail means a few wallets trade very large volumes, and the Lorenz picture shows the distance from the 80/20 reference. Source: run \RunId{} and \texttt{reports/figures}.}
+\figorbox{figures/fig6_ccdf_top_sampled}{\linewidth}
+\caption{CCDF of wallet volume on log-log axes, one line per role. Why: the tail bends downward, so it is not a straight line. Source: run \CcdfRun.}
+\label{fig:ccdf}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_dist_maker_count}{\linewidth}
+\caption{Share of maker wallets per decade of volume.}
+\label{fig:wd-maker-count}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_dist_maker_volume}{\linewidth}
+\caption{Share of maker volume per decade of wallet volume.}
+\label{fig:wd-maker-volume}
+\end{subfigure}
+\caption{Wallet and volume distributions of makers, split at the top \TopTwentyLabel{} of wallets. Why: the area is the share of wallets in (a) and the share of volume in (b). Source: run \WalletDistRun.}
+\label{fig:wd-maker}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_dist_taker_count}{\linewidth}
+\caption{Share of taker wallets per decade of volume.}
+\label{fig:wd-taker-count}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_dist_taker_volume}{\linewidth}
+\caption{Share of taker volume per decade of wallet volume.}
+\label{fig:wd-taker-volume}
+\end{subfigure}
+\caption{Wallet and volume distributions of takers, split at the top \TopTwentyLabel{} of wallets. Why: the area is the share of wallets in (a) and the share of volume in (b). Source: run \WalletDistRun.}
+\label{fig:wd-taker}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_lorenz_maker}{\linewidth}
+\caption{Makers.}
+\label{fig:lorenz-maker}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_lorenz_taker}{\linewidth}
+\caption{Takers.}
+\label{fig:lorenz-taker}
+\end{subfigure}
+\caption{Lorenz curves of volume, with the 80/20 point. Why: the height is the volume share of the lowest wallets.  Source: run \WalletDistRun.}
 \label{fig:lorenz}
 \end{figure}
 
@@ -466,20 +556,32 @@ The populations differ.
 The paper covers the full data, and our wallets come from the kept markets.
 We use the paper's value as a reference only.
 
-The top \TopTenLabel{} tail of wallet volume is close to a power law with $\alpha=\WalletVolumePowerAlpha$.
-The KS test rejects an exact power law ($p=\WalletVolumePowerKsP$).
+The top \TopTenLabel{} tail of wallet volume has a fitted power-law exponent $\alpha=\WalletVolumePowerAlpha$.
+The fit uses \WalletVolumePowerNTail{} wallet-role rows, with both roles pooled.
+The KS test rejects an exact power law ($D=\WalletVolumePowerKsD$, $p=\WalletVolumePowerKsP$).
+The fit uses the same data, so the KS $p$ is too large, not too small.
+So the rejection stands.
+The CCDF tail in \Cref{fig:ccdf} bends downward at the largest wallets.
+So it is not a straight line on log-log axes.
+We do not say wallet volume follows a power law.
+We set no line for how close it is.
 
 The Welch test on log volume gives $t=\RoleWelchT$ with $p\,\RoleWelchP$, a float-underflow bound.
 The effect size is the difference of mean log10 volume, makers minus takers: \RoleLogTenDiff{} (\RoleLogTenMaker{} against \RoleLogTenTaker).
 The KS statistic is $D=\RoleKsD$.
 Trade count and volume have a Spearman correlation of $\rho=\SpearmanTradesVolumeRho$.
 
-In the side analysis, the elbow method picks $K=\KmeansK$.
+In the side analysis, the fixed elbow-curve rule picks $K=\KmeansK$.
 The sample has \KmeansNSample{} wallet-role rows, and a wallet in both roles gives two rows.
 The \KmeansK{} clusters have \ClusterZeroN, \ClusterOneN, \ClusterTwoN, and \ClusterThreeN{} rows.
 Their median volumes run from \ClusterTwoMedianVolume{} to \ClusterOneMedianVolume{} USDC.
 An ANOVA of mean trade price across clusters gives $\mathrm{SSB}/(\mathrm{SSB}+\mathrm{SSW})=\KmeansPriceSsbRatio$.
 Its permutation $p$ is at the floor, $1/(\KmeansNPerm+1)$.
+The cluster by category test gives $\chi^2=\KmeansCategoryChi$ with \KmeansCategoryDf{} degrees of freedom.
+Its $p\,\KmeansCategoryP$ is a float-underflow bound, on \KmeansNSample{} rows.
+The largest cell gap is in cluster \ClusterCategoryGapCluster, category \ClusterCategoryGapCategory.
+Its observed share is \ClusterCategoryGapObs{} of the sample, against \ClusterCategoryGapExp{} expected.
+The gap is \ClusterCategoryGapDiff.
 
 \subsection{Q3: what does the data look like?}\label{sec:res-q3}
 % src: S-PAPER-5
@@ -488,8 +590,17 @@ We describe the distributions without a verdict.
 
 \begin{figure}[H]
 \centering
-\figorbox{figures/fig1_fig2_hist}{\linewidth}
-\caption{Histogram of the price \pOne{} over kept markets (left) and of trade size on a log axis (right). Why: the price shape shows where the crowd is confident, and the trade-size shape shows how uneven bets are. Source: run \RunId.}
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/hist_price_p1d}{\linewidth}
+\caption{Price \pOne{} over the kept markets.}
+\label{fig:hist-price}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/hist_trade_size}{\linewidth}
+\caption{Trade size on a log axis. The largest sampled trade falls past the last bin edge by float rounding, so it is not plotted.}
+\label{fig:hist-size}
+\end{subfigure}
+\caption{Histograms of the price and of trade size. Why: the price shape shows where the crowd is confident, and the trade-size shape shows how uneven bets are. Source: run \QqRun.}
 \label{fig:hist}
 \end{figure}
 
@@ -497,11 +608,27 @@ The price \pOne{} has a mean of \PriceOneDayMean{} and a median of \PriceOneDayM
 Prices pile up near both ends of the scale.
 The trade size has a mean of \TradeSizeMean{} USDC and a median of \TradeSizeMedian{} USDC.
 So trade sizes are strongly right skewed.
+\Cref{fig:qq-size,fig:qq-wallet} show the QQ plots.
+Points on the straight line mean the values are close to normal.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/qq_trade_size_raw_log}{\linewidth}
+\caption{QQ plot of trade size against the normal, raw (left) and after a log transform (right). Why: the raw points bend away from the line and the log points follow it, so the log values are closer to normal. Source: run \QqRun.}
+\label{fig:qq-size}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/qq_wallet_volume_raw_log}{\linewidth}
+\caption{QQ plot of wallet volume against the normal, raw (left) and after a log transform (right). Why: the comparison shows whether the log values are closer to normal than the raw values. Source: run \QqRun.}
+\label{fig:qq-wallet}
+\end{figure}
 
 \Cref{tab:fits} gives the fit statistics.
 The KS statistic $D$ is the effect size.
-KS p-values are optimistic here because the parameters are fitted on the same data.
-So we do not rely on them.
+KS p-values are too large here because the parameters are fitted on the same data.
+So a rejection stands, and a pass would not.
 The normal fit is poor for both variables.
 The power-law fit covers the tail only, so its $D$ is not directly comparable.
 We do not rank the three fits: the normal and exponential fits use all data, and the power law uses the tail.
@@ -552,14 +679,14 @@ The chi-square statistic moves from \QOneChiSq{} to \RobROneSensChiSq.
 
 \begin{figure}[H]
 \centering
-\figorbox{figures/fig_r1_split_payout}{0.9\linewidth}
+\figorbox{figures/fig_r1_split_payout}{\linewidth}
 \caption{Kept markets by payout class (log scale), and the Q1 calibration points with and without the unclear markets. Why: points that overlap mean the unclear markets do not move the result. Source: run \RobustRun.}
 \label{fig:r1}
 \end{figure}
 
 \begin{table}[H]
 \centering
-\caption{Q1 original row and R1 sensitivity row. Why: equal rows mean the unclear markets do not drive the Q1 result. Source: runs \RunId{} and \RobustRun.}
+\caption{Q1 original row and R1 sensitivity row. Why: close rows mean the unclear markets do not drive the Q1 result. Source: runs \RunId{} and \RobustRun.}
 \label{tab:r1}
 \small
 \begin{tabular}{lrrrrr}
@@ -586,7 +713,7 @@ This compares the two end points and not the path.
 
 \begin{figure}[H]
 \centering
-\figorbox{figures/fig_r2_price_path}{0.7\linewidth}
+\figorbox{figures/fig_r2_price_path}{\linewidth}
 \caption{ECDF of the absolute price change from \pOne{} to \pT. Why: a curve near one at small values means \pOne{} is close to the last price. Source: run \RobustRun.}
 \label{fig:r2}
 \end{figure}
@@ -601,28 +728,34 @@ On the \RobRTwoTradedN{} markets with a trade in the last day, the difference is
 The \CiLevel{} CI is [\RobRTwoTradedCiLow, \RobRTwoTradedCiHigh].
 
 \section{Discussion}\label{sec:discussion}
-% src: S-PAPER-5, S-PAPER-8
+% src: S-PAPER-5, S-PAPER-8, S-PAPER-10
 The answer to Q1 is no.
 At this $n$, the price is not a calibrated probability as a whole.
-The observed Yes rate sits below the price in all but the top bin.
-The effect is small: the largest per-bin gap is \LargestGapAbs{} below the price, in bin \LargestGapBin{} counting from 0 (\Cref{tab:bins}).
-The longshot gap points the same way as the horse-racing bias.
+The observed Yes rate sits below the price in \GapNegBinsMain{} of \GapBinsTotal{} bins.
+The effect is small and runs one way.
+The net gap is \GapNetDiffMain.
+The largest per-bin gap is \LargestGapAbs{} below the price, in bin \LargestGapBin{} (\Cref{tab:bins}).
+We set no size line before the results.
+With the minimum-trade filter, the longshot gap points the same way as the horse-racing bias.
+Without the filter, the cheapest bin does not.
 \todo{owner: interpretation of why prices run high, and what the gaps mean in practice for a reader of the price}
 
 The answer to Q2 is descriptive.
-Yes, a few wallets do most of the trading, far beyond the 80/20 reference, in both roles.
+Yes, by USDC volume, the top wallets do most of the trading.
+This holds in the kept markets, in both roles, far beyond the 80/20 reference.
 Our top \TopOneLabel{} maker share is \MakerTopOneShare, against \PaperTopShare{} in the dataset paper.
 The populations differ.
 We measure concentration of volume.
 We do not test who sets the prices.
 The k-means clusters are a side view and carry no claim.
+The wallet volume includes trades after $T-\DaysShort$ day.
 
 The answer to Q3 is descriptive too.
 Prices cluster near the ends, and trade sizes are strongly right skewed.
 \todo{owner: wider interpretation or policy implications, if the course report needs them}
 
 \section{Limitations}\label{sec:limits}
-% src: S-PAPER-1, S-PAPER-2, S-PAPER-3, S-PAPER-6
+% src: S-PAPER-1, S-PAPER-2, S-PAPER-3, S-PAPER-6, S-PAPER-10
 Some markets have no usable winner label, and we drop them.
 In our full run this is \NNoOutcome{} of \NMarketsInScope{} markets (\PctNoOutcome).
 Our rule is wider than the dataset paper's.
@@ -649,12 +782,15 @@ Only \NMarketsKept{} of \NMarketsInScope{} markets pass the filters.
 The minimum-trade filter is a choice, and we show the result without it.
 Markets on one event move together.
 The binomial and chi-square tests assume independent markets, so the p-values are optimistic.
-The large $n$ also makes p-values underflow to zero in places.
-We therefore read the effect sizes and the intervals first.
+The z intervals use the same assumption, so they may be too narrow.
+The role tests compare groups that share addresses and trades.
+No event-level count is saved, so we cannot size this dependence.
+With this many rows, a tiny gap can give a tiny p-value.
+So we read the effect sizes first.
+The intervals do not escape the independence assumption.
 
 The k-means result is exploratory.
-We report no agreement score between the two scalings.
-This does not make the clusters real.
+The clusters describe the sample.
 A wallet is an address, and one owner may control many addresses.
 Volume concentration is not the same as the power to set prices.
 
@@ -673,12 +809,14 @@ So \pOne{} is not the price at the close.
 Also \RobRTwoShareNoTrade{} of markets have no trade in the last day.
 
 \section{Conclusion}\label{sec:conclusion}
-% src: S-PAPER-5, S-PAPER-8
+% src: S-PAPER-5, S-PAPER-8, S-PAPER-10
 We tested whether a Polymarket price can be read as a probability.
 On \NMarketsKept{} resolved Yes/No markets, the answer is not exactly.
 The prices are not calibrated as a whole.
-Cheap bets pay off less often than priced, which matches the horse-racing direction.
-The top wallets hold most of the volume, and trade sizes are strongly right skewed.
+With the minimum-trade filter, cheap bets pay off less often than priced.
+That matches the horse-racing direction.
+By USDC volume, the top wallets in the kept markets hold most of the volume.
+Trade sizes are strongly right skewed.
 We describe the last two results without a verdict.
 The payout check leaves the Q1 result in place.
 \todo{owner: closing sentence on the value of the study, and future work}

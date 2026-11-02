@@ -69,3 +69,8 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-11-01 scope: D-026, D-027, audit picks and future-work line (DECISIONS.md)
 2026-11-01 plan: 7 rows for D-024 to D-028 added, method plan rows struck (PLAN.md "Lecture scope 2026-11-01", ../tips/group_01/polymarket_plan_detailed.md)
 2026-11-01 close: lecture-scope rows closed against AC, project-end review dispatched (PLAN.md, analysis/review_project_end.md)
+2026-11-02 scope: D-029, D-030; CCDF job prepared, cluster chi-square returns, plan wording updated (DECISIONS.md, ../tips/group_01/polymarket_plan_detailed.md)
+2026-11-02 scope: D-031, G7 closed by ledger line; wallet distribution figures job prepared (00.runs.md, DECISIONS.md)
+2026-11-02 runs: 145892 ccdf, 145893 wallet figures, 145897 split Q3 figures; report v1 regenerated (reports/report_v1.html, 00.runs.md)
+2026-11-02 scope: D-032, D-033, figure layout; pairs redrawn for half width (DECISIONS.md)
+2026-11-02 review: final review PASS, 0 blocker, 0 major, 14 minor; tips index and bilingual pages added (analysis/review_final_2026_11_02.md, ../tips/group_01/index.html)

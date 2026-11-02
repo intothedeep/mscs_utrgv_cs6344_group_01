@@ -1,0 +1,69 @@
+{
+  "code_version": "walletdist-v1",
+  "code_sha": "10fc5af00bdf",
+  "params": {
+    "source_run": "142082_mvp1_full_v1r3",
+    "top_frac": 0.2,
+    "bins_per_decade": 20,
+    "x_axis_start_usdc": 0.001,
+    "left_quantile": 0.001,
+    "n_lorenz_linear": 1500,
+    "n_lorenz_top": 500,
+    "share_tolerance": 1e-09
+  },
+  "env": {
+    "hostname": "sxm003",
+    "python": "3.13.12",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "145893",
+    "slurm_cpus_per_task": "4"
+  },
+  "metrics": {
+    "source_sha256": {
+      "wallets.parquet": "24c4c29d2be49f9a46075e7f306f9aa71bb55a638779750679b8887a78741f37",
+      "q2_results.json": "744973f0551c414e144a97885fe4f05a3ba4c41122138f02388d313b7a6bced7"
+    },
+    "n_wallet_role_rows": {
+      "maker": 581435,
+      "taker": 1535977
+    },
+    "per_role": {
+      "maker": {
+        "n_wallets": 581435,
+        "top_k": 116287,
+        "cutoff_usdc": 1617.0511200000012,
+        "top1_share": 0.8611518500106068,
+        "top5_share": 0.9464505358633978,
+        "top10_share": 0.9690841927610345,
+        "top20_share": 0.9886040605254106,
+        "lorenz_x_at_80": 0.8,
+        "lorenz_y_at_80": 0.011395939474589311,
+        "clipped_wallet_share": 1.0319296223997524e-05,
+        "clipped_volume_share": 2.626846918441049e-13,
+        "bin_wallet_share_sum": 0.9999999999999999,
+        "bin_volume_share_sum": 1.0,
+        "n_lorenz_points": 1901
+      },
+      "taker": {
+        "n_wallets": 1535977,
+        "top_k": 307196,
+        "cutoff_usdc": 928.042997,
+        "top1_share": 0.7589867137528125,
+        "top5_share": 0.9039612339541389,
+        "top10_share": 0.947762358581628,
+        "top20_share": 0.9800783385233666,
+        "lorenz_x_at_80": 0.7999996093691507,
+        "lorenz_y_at_80": 0.019921661476633774,
+        "clipped_wallet_share": 0.00012890818026572014,
+        "clipped_volume_share": 1.0382874642021936e-11,
+        "bin_wallet_share_sum": 1.0,
+        "bin_volume_share_sum": 0.9999999999999998,
+        "n_lorenz_points": 1910
+      }
+    },
+    "shares_match_q2_results": true,
+    "mismatches": [],
+    "wall_time_s": 2.3
+  }
+}

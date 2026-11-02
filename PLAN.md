@@ -58,9 +58,9 @@ Scope: MVP1 only (D-016). No MVP2 task (D-017). Dispatches that may touch code c
   - AC G9: table captions in print order run 1 to N with no gap. Today they run 13, 15, 16, 17, 18, 14, 19.
   - AC G10: `grep -c 'used in Q1c' reports/report_v1.html` returns 0.
   - AC scope: `git status --short future_work/reports/` is empty.
-- [ ] → M1 Fill the null `criteria_sha256_12` for Q1 (G7). `code/verdicts.py` hashes `analysis/prereg_mvp1.md`, and that path may be missing on the cluster. Bump `CODE_VERSION`, add a `CHANGELOG.md` row, then re-issue verdicts for run 142082 only. The developer hands the run back, and the main session decides where it goes ("No local execution").
-  - AC: `comparisons.Q1.criteria_sha256_12` is the first 12 of `git show f78de3e:./analysis/prereg_mvp1.md | shasum -a 256`, the version before the 2026-11-01 note, or a prereg commit SHA that `git cat-file -e` finds. The working file hash no longer applies.
-  - AC: the verdict sentence, p, w and `bins_off_bh` equal the committed `verdicts.json`.
+- [x] → M1 Fill the null `criteria_sha256_12` for Q1 (G7). Closed 2026-11-02 by a ledger line, not by a re-issue (owner, D-031). `verdicts.json` keeps its null (D-026). `code/verdicts.py` hashes `analysis/prereg_mvp1.md`, and that path may be missing on the cluster. Bump `CODE_VERSION`, add a `CHANGELOG.md` row, then re-issue verdicts for run 142082 only. The developer hands the run back, and the main session decides where it goes ("No local execution").
+  - AC: the `142082_mvp1_full_v1r3` row of `00.runs.md` names both prereg commits and their hashes.
+  - AC: `git diff --quiet -- runs/142082_mvp1_full_v1r3/verdicts.json` exits 0.
 - [x] → M1 Update `00.runs.md` (G11, G12). Closed 2026-11-01. Pilots 142056 and 142077 have no recorded CPU count, and the ledger says so. AC G12: the ledger names partition, CPU count and env for each run, and cites D-015. AC G11: row `142140_q1eqfreq_v5` says the 142083 table matches by construction. That sentence cites the `build_tables.py` sha from `code.sha256`. Main session writes it.
 - [ ] → M1 Compare the `markets.parquet` hash of run 142082 with `runs/142140_q1eqfreq_v5/input.sha256` (G11 optional, design page W1). Main session runs it on the cluster. AC: row `142140_q1eqfreq_v5` records equal or not equal. Not equal: stop and report to the owner.
 - [ ] → M4 Owner writes or removes the 4 `\todo{owner: ...}` in `papers/paper_mvp1/main.tex`: related work, interpretation, wider implications, closing. AC: `grep -c 'todo{owner' papers/paper_mvp1/main.tex` returns 0.
@@ -120,8 +120,13 @@ A kept mention sits in the departure note (cites a D-id), a rename sentence ("kn
   - AC N3: `grep -c D-019 docs/team_split_design.html` returns at least 1.
   - AC MVP2: `grep paper_mvp2 docs/team_split_design.html | grep -vc 'not a target'` returns 0.
 - [x] → M1 Add the G17 note: the box plot input comes from `bash jobs/fetch_run.sh 142123_robust_full_v4`. Main session writes it. AC: `grep -c fetch_run CHANGELOG.md` returns at least 1, or `grep -c fetch_run code/q3_box_p1d.py` does. Closed 2026-11-01.
-- [ ] → M4 Project-end review: `reviewer`, `system-architect` and `data-analyst` together, dispatched after every row above in this section is `[x]`.
+- [x] → M4 Project-end review: `reviewer`, `system-architect` and `data-analyst` together, dispatched after every row above in this section is `[x]`. Closed 2026-11-02: `analysis/review_project_end.md`, then final review PASS with 14 minor findings (`analysis/review_final_2026_11_02.md`).
   - AC: `analysis/review_project_end.md` exists, with a verdict line and a list of open items.
   - AC: the file has one section per role.
   - AC: it re-checks "MVP1 is done when" boxes 3 and 4 under the new names, since `analysis/review_mvp1_rq_r3.md` Check 3 cites w, d and V.
   - AC: the verdict and open items reach the owner.
+
+### Final review 2026-11-02: open minor items (`analysis/review_final_2026_11_02.md`)
+
+- [ ] → M4 Owner decides whether the paper states the independence limit beside the p-value in results, not only in limitations (finding 2). AC: owner decides, and `main.tex` matches.
+- [ ] → M4 Replace "names" in the departure sentence: the z interval is a different formula (finding 6, A12). AC: `main.tex` and report v1 say the interval changed, not just its name.

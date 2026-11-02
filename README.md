@@ -11,11 +11,11 @@ This README is a step-by-step guide to MVP1 (minimum viable product 1: the small
 
 ## Current status
 
-As of 2026-11-01: **the analysis is done. Closing work and writing remain.**
+As of 2026-11-02: **the analysis is done. The project-end fixes are applied. The owner parts remain.**
 
 ```
  data --> runs --> Q1 --> Q2 --> Q3 --> robustness --> report v1 --> paper v1
- done     done     done   done   done   done           done          4 parts open
+ done     done     done   done   done   done           done          4 owner parts open
 ```
 
 | Part | State | Detail |
@@ -28,26 +28,27 @@ As of 2026-11-01: **the analysis is done. Closing work and writing remain.**
 | Robustness | Done | Run `142123_robust_full_v4` and run `142140_q1eqfreq_v5` |
 | Lecture-method picks | Applied 2026-11-01 | D-026 to D-028. Report v1 and the paper text use them. See step 14 |
 | MVP1 gate review | Passed 2026-11-01 | Third review: 0 blocker, 0 major, 4 minor (`analysis/review_mvp1_rq_r3.md`) |
-| Report v1 | Built, gate fixes done | File: `reports/report_v1.html`. Owner review is open |
-| Paper v1 | Built, text open | 4 `\todo{owner: ...}` parts remain |
+| Project-end fixes | Applied 2026-11-02 | D-029 to D-031. Report v1 and the paper match. See step 15 |
+| Report v1 | Built, project-end fixes done | File: `reports/report_v1.html`. Owner review is open |
+| Paper v1 | Built, owner text open | 4 `\todo{owner: ...}` parts remain. The new text is in |
 | Course deadline | 2026-11-15 | D-021 |
 
 MVP2 is out of scope until the owner goes for it (D-016, D-020). Its files are in `future_work/`.
 
 Terms: RQ means research question. The RQ list and its status are in `RQ.md`.
 
-Source: `PLAN.md`, `STATUS.md`, `00.runs.md`, `DECISIONS.md` D-016, D-017, D-020 to D-028, `analysis/review_mvp1_rq_r3.md`.
+Source: `PLAN.md`, `STATUS.md`, `00.runs.md`, `DECISIONS.md` D-016, D-017, D-020 to D-031, `analysis/review_mvp1_rq_r3.md`, `analysis/review_project_end_analyst.md`, `analysis/review_project_end_reviewer.md`.
 
 ## Results so far
 
-**Q1 says prices are not calibrated as a whole. The effect is small. Q2 says a few wallets do most of the trading, far beyond the 80/20 reference. Q2 and Q3 have no pre-registered verdict.**
+**Q1 says prices are not calibrated as a whole. The effect is small and runs one way: Yes is priced too high. Q2 says the top wallets do most of the trading by USDC volume, far beyond the 80/20 reference. Q2 and Q3 have no pre-registered verdict.**
 
-These results apply to the 47,948 kept markets only. They do not cover the other markets in scope. The kept markets are resolved Yes/No markets with a fresh price one day before the close and at least 10 trades.
+These results apply to the 47,948 kept markets only. For Q2, volume is in USDC. It sums every trade in those markets, including trades after T - 1 day. Rows are wallet and role. Trade counts were not measured. They do not cover the other markets in scope. The kept markets are resolved Yes/No markets with a fresh price one day before the close and at least 10 trades.
 
 | Question | Answer | Key numbers | File |
 | --- | --- | --- | --- |
 | RQ1 / Q1: is the crowd right? | Verdict: "Prices are not calibrated as a whole at this n." | See the Q1 table below | `runs/142082_mvp1_full_v1r3/verdicts.json` |
-| RQ2 / Q2: who is the crowd? | Yes, far beyond the 80/20 reference. The top 20% of wallets hold 98.9% (makers) and 98.0% (takers) of volume. No pre-registered verdict | See the Q2 table below | `runs/142082_mvp1_full_v1r3/q2_results.json` |
+| RQ2 / Q2: who is the crowd? | Yes by USDC volume, far beyond the 80/20 reference. The top 20% of wallets hold 98.9% (makers) and 98.0% (takers) of volume. No pre-registered verdict | See the Q2 table below | `runs/142082_mvp1_full_v1r3/q2_results.json` |
 | RQ3 / Q3: what does the data look like? | Described, no verdict. Prices are U-shaped. Sizes are right skewed | See the Q3 table below | `runs/142082_mvp1_full_v1r3/q3_results.json` |
 
 Q1 numbers. Chi-square is the goodness-of-fit form of the Lecture 12 test: observed counts against the counts the prices predict. The effect size is the per-bin gap, the observed rate minus the mean price. The z interval (Lecture 5) is the 95% range around each observed rate. BH (Benjamini-Hochberg) is a correction for many tests at once. The mean squared residual of the price is the mean squared gap between price and outcome. The pre-registration calls it the Brier score.
@@ -62,8 +63,20 @@ Q1 numbers. Chi-square is the goodness-of-fit form of the Lecture 12 test: obser
 | Bins off after BH correction | 5 of 10 | `verdicts.json` `comparisons.Q1.extra.bins_off_bh` |
 | Bins off after Bonferroni correction | 4 of 10 | `verdicts.json` `comparisons.Q1.extra.bins_off_bonferroni` |
 | Mean squared residual of the price | 0.1071 | `verdicts.json` `comparisons.Q1.extra.brier` |
+| Bins with the observed rate below the price | 9 of 10 (the same count without the minimum-trade filter and in equal-frequency bins) | `reports/lecture_numbers.json` `gap_direction.*.n_negative` |
+| Net gap, all kept markets | -0.99 percent points, 475 fewer Yes outcomes than the prices imply | `gap_direction.main.net_gap`, `n_yes_minus_expected` |
+| Largest chi-square contributor | bin 0, 31.3% of the chi-square | `chi2_largest_contributor` |
 
-The largest per-bin gap is 3.29 percent points, so the effect is small. Read the gaps before the p-value.
+How to read the effect:
+
+- The effect is small, and it runs one way. In 9 of 10 bins the Yes rate is below the price, so Yes is priced too high.
+- The largest per-bin gap is 3.29 percent points (bin 7). It is only one number, so read the direction and the net gap with it.
+- We set no size line before the results. So "small" is our reading.
+- Read the gaps before the p-value.
+
+Longshot statement. With the minimum-trade filter, the two cheapest bins pay off less than their price. Without the filter it holds only in part. Bin 0 flips to +0.0005 (BH p 0.6006). Bin 1 is -0.0093 (BH p 0.1362). Neither bin is off. File: `reports/lecture_numbers.json` `no_min_filter_longshot_bh`.
+
+Limit. The tests assume independent markets. Markets on one event are not independent, so the p-values are optimistic. The z intervals use the same assumption, so they may be too narrow. No event-level count is saved, so the size of this effect is unknown.
 
 Q2 numbers. A maker places a resting order. A taker fills it. A wallet is one address.
 
@@ -75,17 +88,40 @@ Q2 numbers. A maker places a resting order. A taker fills it. A wallet is one ad
 
 There is no pre-registered test for Q2, so it has no verdict line. The 80/20 rule (Pareto principle: 20% of the units hold 80% of the total) is a descriptive reference (D-024). Both the 80/20 rule and the power law are lecture content (`notes/6_DataDistribution.pptx`, slide 19). The class post named 80/20 before any result (`proposal_md/polymarket_proposal_v3.md` line 12).
 
-Pipeline check against the dataset paper: our top 1% maker share is 86.1%, and the paper's is 84.1% (`papers/paper_mvp1/main.tex` line 66). The populations differ. The paper covers the full data, and our wallets come from the kept markets. We read the paper's value as a reference only.
+Pipeline check against the dataset paper: our top 1% maker share is 86.1%, and the paper's is 84.1% (Qin and Yang 2026, Table 5). The populations differ. The paper covers the full data, and our wallets come from the kept markets. We read the paper's value as a reference only.
 
-The Lorenz picture is a labeled figure outside the lectures (D-028). It sits beside the CCDF (complementary cumulative distribution function, the share of wallets above a volume) in report v1 and the paper. It is drawn from four saved top shares per role with straight lines, so it is coarse. Below 80% of wallets nothing was measured. Its use: the distance from the 80/20 reference. File: `reports/figures/lorenz_top_shares.png`. The Gini coefficient is removed (D-026).
+The Lorenz curve is now a full curve, drawn from all wallets (D-031). It is labeled as outside the lectures. Its use: area and height show the share of wallets against the share of volume, against the 80/20 reference. The Gini coefficient is removed (D-026).
+
+Figures for Q2 (cluster runs `145892_ccdf_v6` and `145893_walletdist_v7`, drawn from `wallets.parquet` of run 142082). Pairs share a row in the paper when both stay readable at half width (D-033):
+
+| Figure | Layout in the paper | File |
+| --- | --- | --- |
+| CCDF (complementary cumulative distribution function, the share of wallets above a volume), ranks sampled from the top | full width | `reports/figures/fig6_ccdf_top_sampled.png` |
+| Maker: wallet distribution, top 20% split | pair (a) | `reports/figures/wallet_dist_maker_count.png` |
+| Maker: volume distribution, top 20% split | pair (b) | `reports/figures/wallet_dist_maker_volume.png` |
+| Taker: wallet distribution, top 20% split | pair (a) | `reports/figures/wallet_dist_taker_count.png` |
+| Taker: volume distribution, top 20% split | pair (b) | `reports/figures/wallet_dist_taker_volume.png` |
+| Lorenz curve, maker | pair (a) | `reports/figures/wallet_lorenz_maker.png` |
+| Lorenz curve, taker | pair (b) | `reports/figures/wallet_lorenz_taker.png` |
+
+Figures for Q3 (run `145897_q3figs_v8`, redrawn from saved points):
+
+| Figure | Layout in the paper | File |
+| --- | --- | --- |
+| Histogram of the price p_1d | pair (a) | `reports/figures/hist_price_p1d.png` |
+| Histogram of trade size. One sampled trade falls past the last bin edge by float rounding, so the plot holds one trade fewer than the sample | pair (b) | `reports/figures/hist_trade_size.png` |
+| QQ plot of trade size, raw and log side by side (a comparison) | full width | `reports/figures/qq_trade_size_raw_log.png` |
+| QQ plot of wallet volume, raw and log side by side (a comparison) | full width | `reports/figures/qq_wallet_volume_raw_log.png` |
+
+The CCDF tail bends downward at the largest wallets. So it is not a straight line on log-log axes. The earlier "long straight tail" was a plotting artifact of the old sampling (`analysis/review_project_end_analyst.md` A1).
 
 Power law on the top 10% tail of wallet volume (D-025). No new run. The numbers come from the saved fit.
 
 | Item | Value | File and key |
 | --- | --- | --- |
-| alpha (tail slope) | 1.788 | `runs/142082_mvp1_full_v1r3/q3_results.json` `fits.wallet_volume_usdc.power_law.alpha` |
+| alpha (power-law exponent of the density, not the CCDF slope) | 1.788 | `runs/142082_mvp1_full_v1r3/q3_results.json` `fits.wallet_volume_usdc.power_law.alpha` |
 | xmin (tail starts at) | 3,450 USDC | `fits.wallet_volume_usdc.power_law.xmin` |
-| n_tail (wallets in the tail) | 211,742 | `fits.wallet_volume_usdc.power_law.n_tail` |
+| n_tail (wallet-role rows in the tail, both roles pooled) | 211,742 | `fits.wallet_volume_usdc.power_law.n_tail` |
 | D (KS distance) | 0.0239 | `fits.wallet_volume_usdc.power_law.D` |
 | p (KS) | 1.15e-105 | `fits.wallet_volume_usdc.power_law.p` |
 
@@ -93,9 +129,12 @@ Limits:
 
 - We ran no p-value test for the 80/20 comparison.
 - The KS test rejects an exact power law. Large samples also reject small gaps.
-- So we do not say wallet volume follows a power law.
+- Fitted parameters make the KS p too large. So the rejection stands.
+- So we do not say wallet volume follows a power law, and we set no line for how close it is.
 - We do not say the power law fits best. Normal and exponential were fit on all data. The power law was fit on the tail only. Lognormal was not compared.
 - Future work could compare the power law and lognormal on the same data, with the tail start estimated (D-027). No such analysis runs now.
+
+Side analysis: k-means clusters against topic category (D-030, Lecture 12 chi-square of independence). It runs on the 200,000 sampled wallet-role rows. Chi-square 6,653.0 (df 21), p below 0.0001. The effect size is the largest observed minus expected share in one cell. That cell is cluster 2, Sports. It has 6.7% observed and 8.2% expected, a gap of -1.49%. No Cramér's V. Files: `reports/lecture_numbers.json` `cluster_category_gap`, `runs/145892_ccdf_v6/cluster_category_crosstab.csv`. k-means stays a short side analysis.
 
 Q3 numbers. USDC is a dollar-pegged token. The price column is the price one day before the close.
 
@@ -119,7 +158,7 @@ Robustness checks leave the Q1 verdict unchanged:
 | --- | --- | --- |
 | No minimum-trade filter (74,474 markets) | Same verdict. Chi-square 214.2 | `runs/142082_mvp1_full_v1r3/q1_results.json` `no_min_filter` |
 | Drop the markets with unclear payouts (47,901 left) | Same verdict. 4 bins off after BH | `runs/142123_robust_full_v4/r1_results.json` `q1_sensitivity` |
-| Equal-frequency bins | 7 of 10 bins off after BH | `runs/142140_q1eqfreq_v5/q1_bins_eqfreq.csv` `reject_bh` |
+| Equal-frequency bins | 7 of 10 bins off after BH. The z interval marks 8, because it also marks the lowest bin (1 Yes in 4,795). It has no correction for ten bins. It is unreliable when a bin has very few Yes outcomes | `runs/142140_q1eqfreq_v5/q1_bins_eqfreq.csv` `reject_bh`. `reports/lecture_numbers.json` `z_interval_95.bins_equal_frequency` |
 
 The reviewer's reading is in `analysis/review_mvp1_rq.md`. It recomputed the Q1 verdict from saved files. The numbers above come from the run files.
 
@@ -141,9 +180,11 @@ Why this section exists: it shows what was done in what order, and why. The Q1 c
                                           13 third gate review: PASS
                                                             |
                                           14 audit picks applied
+                                                            |
+                                          15 project-end fixes
 ```
 
-Steps 1 to 10 happened on 2026-10-19. Steps 11 to 14 happened on 2026-11-01.
+Steps 1 to 10 happened on 2026-10-19. Steps 11 to 14 happened on 2026-11-01. Step 15 happened on 2026-11-02.
 
 ### Step 1. Download data (D-003)
 
@@ -232,7 +273,7 @@ Steps 1 to 10 happened on 2026-10-19. Steps 11 to 14 happened on 2026-11-01.
 - What: the owner chose MVP1 only. MVP2 files moved to `future_work/`. The box plot was drawn locally from saved files. The Mission now names the markets actually tested. The Vision line stays.
 - Why: these picks close or explain G1 and G3 and set the scope.
 - Output file: `DECISIONS.md`, `PLAN.md`.
-- Status: decided. The box plot and the report fixes are done. The k-means share is below the 0.100 limit: 0.0974 by the widest measure and 0.0824 by a narrower one (`analysis/review_mvp1_rq_r3.md` G14).
+- Status: decided. The box plot and the report fixes are done. The k-means share is below the 0.100 limit, not remeasured after D-026. The limit is 1/10 of the report text. The earlier measure counted characters of the extracted report text (`analysis/review_mvp1_rq_r3.md` G14).
 
 ### Step 13. Third gate review, 2026-11-01 (D-022)
 
@@ -244,21 +285,51 @@ Steps 1 to 10 happened on 2026-10-19. Steps 11 to 14 happened on 2026-11-01.
 
 ### Step 14. Lecture-method picks applied (D-026, D-027, D-028)
 
-- What: the owner picked from the lecture-method audit, and the picks went into report v1 and the paper text. Chi-square goodness of fit stays, labeled as a form of the Lecture 12 test. The Brier score is now the mean squared residual of the price. Eta squared is now SSB/(SSB+SSW). Per-bin gaps replace Cohen's w. The z interval replaces the Wilson interval. The log10 mean difference replaces Cohen's d. Gini, Cramér's V, the adjusted Rand index, Cohen's d_z and the cluster chi-square are removed. Lorenz stays as a labeled figure beside the CCDF.
+- What: the owner picked from the lecture-method audit, and the picks went into report v1 and the paper text. Chi-square goodness of fit stays, labeled as a form of the Lecture 12 test. The Brier score is now the mean squared residual of the price. Eta squared is now SSB/(SSB+SSW). Per-bin gaps replace Cohen's w. The z interval replaces the Wilson interval. The log10 mean difference replaces Cohen's d. Gini, Cramér's V, the adjusted Rand index and Cohen's d_z are removed. The cluster chi-square was removed here and returned in step 15 (D-030). Lorenz stays as a labeled figure, now a full curve (D-031).
 - Why: the owner rule (D-025) says all analysis stays within lecture contents. Owner, with Claude Code, applied the picks.
 - Output file: `reports/lecture_numbers.json`, `reports/report_v1.html`, `papers/paper_mvp1/main.tex`, `papers/paper_mvp1/numbers.tex`. The audit is `analysis/lecture_method_audit.md`.
 - Status: done for report v1 and the paper text. The prereg files and `runs/` stay as committed. A dated note in `analysis/prereg_mvp1.md` records the departure. It adds lines and changes no rule. No numbers changed. Only names, intervals and the removed methods changed.
 - The paper text says the departure in one sentence. The verdict rule and the verdict sentence are unchanged.
+- Two picks changed on 2026-11-02: the cluster chi-square returned (D-030) and Lorenz became a full curve (D-031). See step 15.
+
+### Step 15. Project-end fixes (D-029, D-030, D-031)
+
+- What: the project-end review (`analysis/review_project_end_analyst.md` A1 to A7, `analysis/review_project_end_reviewer.md` G18 to G28) found readings that went further than the numbers. Two cluster jobs redrew the figures. The main session submitted them. Report v1 and the paper then took the fixes.
+- Why: the owner asked for the CCDF redraw (D-029), the cluster chi-square back with an effect size (D-030), and the full wallet distributions and Lorenz curve (D-031).
+- Runs: `145892_ccdf_v6` (CCDF with ranks sampled from the top, cluster by category crosstab) and `145893_walletdist_v7` (wallet and volume distributions, full Lorenz curve, no Gini).
+- Fixes now in the report, the paper and this README:
+  - A3: the effect is small, runs one way, and has no size line set in advance.
+  - A2: the longshot statement holds with the minimum-trade filter only.
+  - A4: the independence limit covers the p-values and the z intervals.
+  - A1, A5: the CCDF tail bends. The exponent is reported with the KS rejection. We do not say it follows a power law.
+  - A6: the Q2 answer is by USDC volume, in the kept markets, in wallet-role rows, with trades after T - 1 day.
+  - A7: the size comparison with the dataset paper is direction only.
+  - Equal-frequency bins: the z interval marks 8, BH marks 7, and the extra bin has 1 Yes in 4,795.
+- G7 closes by a ledger line. `verdicts.json` stays as committed (D-031).
+- Output file: `reports/report_v1.html`, `papers/paper_mvp1/main.tex`, `papers/paper_mvp1/numbers.tex`, `reports/lecture_numbers.json`.
+- Status: done. The paper builds with 0 errors. The paper puts pairs in one row where both stay readable (D-032, D-033). One older PNG still holds two panels: `fig_r1_split_payout.png`. Its right panel compares calibration with and without the unclear markets.
+
+Rebuild after fetching the two new runs (`bash jobs/fetch_run.sh 145892_ccdf_v6` and `bash jobs/fetch_run.sh 145893_walletdist_v7`, from `cs6344_group_01/`):
+
+```bash
+OMP_NUM_THREADS=1 timeout 300 uv run python code/lecture_numbers.py --run runs/142082_mvp1_full_v1r3 --ccdf-run runs/145892_ccdf_v6
+OMP_NUM_THREADS=1 timeout 300 uv run python code/make_report.py --run runs/142082_mvp1_full_v1r3 --version v1 --out reports/report_v1.html --q1eqfreq runs/142140_q1eqfreq_v5
+```
+
+Then regenerate `papers/paper_mvp1/numbers.tex` with the command in `papers/README.md`.
 
 Source: `STATUS.md` log, `00.runs.md`, `DECISIONS.md`, `analysis/review_mvp1_mvp2.md`, `analysis/review_mvp1_rq.md`, `analysis/review_mvp1_rq_r3.md`, `analysis/review_papers.md`.
 
 ## What is left
 
-State as read from `PLAN.md` on 2026-11-01. Rows under "MVP1 gate 2026-11-01" are the open work.
+State as read from `PLAN.md` on 2026-11-01, updated on 2026-11-02 for the project-end fixes. Rows under "MVP1 gate 2026-11-01" are the open work.
 
 | Work | Who | State |
 | --- | --- | --- |
-| Fill the null `criteria_sha256_12` in `verdicts.json` (G7) | Owner, by cluster job | Open |
+| Fill the null `criteria_sha256_12` in `verdicts.json` (G7) | Owner | Done 2026-11-02 by a ledger line. `verdicts.json` stays as committed (D-031) |
+| Redraw the CCDF with the top tail sampled (A1) | Main session, cluster job | Done 2026-11-02. Run `145892_ccdf_v6` (D-029) |
+| Draw the wallet and volume distributions and a full Lorenz curve | Main session, cluster job | Done 2026-11-02. Run `145893_walletdist_v7` (D-031) |
+| Apply the project-end text fixes A1 to A7 to report v1, the paper and this README | Owner, with Claude Code | Done 2026-11-02 (D-029, D-030, D-031) |
 | Add a citation note to the Up/Down row of `analysis/prereg_mvp1.md` (G5) | Owner, with Claude Code | Done 2026-11-01 |
 | Edit `papers/paper_mvp1/main.tex` for the Up/Down reason and build warnings (G5, G13) | Owner, with Claude Code | Done 2026-11-01 |
 | Update `00.runs.md` with partition, CPU count and env (G11, G12) | Owner, with Claude Code | Done 2026-11-01 |
@@ -269,7 +340,7 @@ State as read from `PLAN.md` on 2026-11-01. Rows under "MVP1 gate 2026-11-01" ar
 | Add a note in `analysis/prereg_mvp1.md` for the 80/20 reference, the Up/Down citation and the departures (D-026, D-028) | Owner, with Claude Code | Done 2026-11-01 |
 | Fix the report wording "Closest of the three fits" | Owner, with Claude Code | Done 2026-11-01. The fits are not ranked |
 | Update `docs/team_split_design.html`: deadline, Mission wording, `paper_mvp2` (review G16) | Owner, with Claude Code | Done 2026-11-01. The 3-person split stays "Not yet" |
-| Note that the box plot's input comes from `jobs/fetch_run.sh` (review G17) | Owner, with Claude Code | Open |
+| Note that the box plot's input comes from `jobs/fetch_run.sh` (review G17) | Owner, with Claude Code | Done 2026-11-02 |
 | Lecture-method audit: `analysis/lecture_method_audit.md`. Owner rule (D-025): all analysis stays within lecture contents. Of 52 methods, 35 are in lecture, 7 partly, 10 not found. None of the 10 feeds the Q1 verdict. The owner's picks are applied to MVP1 (D-026 to D-028) | Owner, with Claude Code | Done 2026-11-01 |
 
 The audit picks are applied. The paper's 4 `\todo{owner: ...}` parts and the 3-person work split are "Not yet" (owner, 2026-11-01).
@@ -298,7 +369,7 @@ The paper has 4 `\todo{owner: ...}` parts in `papers/paper_mvp1/main.tex`:
 | Wider implications | Open |
 | Closing | Open |
 
-After that text is in, the paper still needs a pass to shorten sentences over 15 words (F5).
+The new lines of 2026-11-02 keep sentences to 15 words or fewer. After the owner text is in, the paper still needs a pass on the older long sentences (F5).
 
 Source: `PLAN.md` "Open tasks" and "MVP1 gate 2026-11-01", `analysis/review_mvp1_rq.md`, `analysis/review_mvp1_rq_r3.md`, `DECISIONS.md` D-021 to D-028, `docs/team_split_design.html`.
 
@@ -485,7 +556,7 @@ Source: `analysis/prereg_mvp1.md`, `analysis/prereg_robustness.md`, `DECISIONS.m
 | Constraint | Source |
 | --- | --- |
 | All analysis stays within lecture contents. k-means is a side analysis, under 1/10 of the report | owner, 2026-10-18; D-025, D-026 (2026-11-01); plan Q2 |
-| A method outside the lectures is renamed or replaced. Lorenz is the one exception: a labeled figure, not an analysis (D-028) | D-026, D-028 |
+| A method outside the lectures is renamed or replaced. Lorenz is a labeled figure, now a full curve (D-028, D-031). The cluster chi-square test returned with a share-gap effect size (D-030) | D-026, D-028 |
 | Every fact in a class post has a source. No source, no claim | owner, 2026-10-18; plan "Facts in the class post" |
 | All data queries run on the cluster. The laptop only draws figures from saved outputs | root `CLAUDE.md`, 2026-10-18 |
 | T, the minimum-trade cutoff and the Q1 criteria are fixed before any Q1 result | D-005, D-007 |

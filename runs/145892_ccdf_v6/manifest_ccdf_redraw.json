@@ -1,0 +1,47 @@
+{
+  "code_version": "ccdf-v1",
+  "code_sha": "613bb2118eeb",
+  "params": {
+    "source_run": "142082_mvp1_full_v1r3",
+    "seed": 42,
+    "kmeans_sample": 200000,
+    "n_log_ranks": 3000,
+    "top_all": 1000
+  },
+  "env": {
+    "hostname": "sxm003",
+    "python": "3.13.12",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "145892",
+    "slurm_cpus_per_task": "4"
+  },
+  "metrics": {
+    "source_sha256": {
+      "wallets.parquet": "24c4c29d2be49f9a46075e7f306f9aa71bb55a638779750679b8887a78741f37",
+      "q2_kmeans_sample.csv": "76020970847f929d124de2785c3503a96d95fa5a2a3fa699923b57b2aba20c4b",
+      "q2_results.json": "744973f0551c414e144a97885fe4f05a3ba4c41122138f02388d313b7a6bced7"
+    },
+    "n_wallet_role_rows": {
+      "maker": 581435,
+      "taker": 1535977
+    },
+    "n_points": {
+      "maker": 4435,
+      "taker": 4626
+    },
+    "n_sample_rows_without_saved_label": 0,
+    "chi2_reproduced": true,
+    "chi2_recomputed": {
+      "chi2": 6652.956494691396,
+      "df": 21,
+      "p": 0.0
+    },
+    "chi2_saved": {
+      "chi2": 6652.956494691396,
+      "df": 21,
+      "p": 0.0
+    },
+    "wall_time_s": 6.6
+  }
+}

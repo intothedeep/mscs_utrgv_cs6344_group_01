@@ -406,6 +406,9 @@ def add_q2(m: Macros, run: Path) -> None:
     m.add("KmeansNPerm", count(an["n_perm"]), f"{src}: kmeans.anova_mean_trade_price.n_perm")
     cx = km["chi2_cluster_x_category"]
     m.add("KmeansCategoryV", est(cx["cramers_v"]), f"{src}: kmeans.chi2_cluster_x_category.cramers_v")
+    m.add("KmeansCategoryChi", stat(cx["chi2"]), f"{src}: kmeans.chi2_cluster_x_category.chi2")
+    m.add("KmeansCategoryDf", count(cx["df"]), f"{src}: kmeans.chi2_cluster_x_category.df")
+    m.add("KmeansCategoryP", pval(cx["p"]), f"{src}: kmeans.chi2_cluster_x_category.p")
     for c in km["cluster_summary"]:
         i, s = word(c["cluster"]), f"{src}: kmeans.cluster_summary[cluster={c['cluster']}]"
         m.add(f"Cluster{i}N", count(c["n"]), f"{s}.n")
@@ -448,6 +451,8 @@ def add_lecture(m: Macros, run: Path, path: Path) -> None:
     m.add("ZIntervalBinsOutsideList", text(", ".join(map(str, z["bins_outside"]))), f"{src}: z_interval_95.bins_outside")
     m.add("ZIntervalBinsBhOffList", text(", ".join(map(str, z["bins_bh_off"]))), f"{src}: z_interval_95.bins_bh_off")
     m.add("ZIntervalSameAsBh", "yes" if z["same_bins"] else "no", f"{src}: z_interval_95.same_bins")
+    m.add("ZIntervalEqFreqOutsideN", count(sum(1 for b in z["bins_equal_frequency"] if b["price_outside"])),
+          f"{src}: z_interval_95.bins_equal_frequency[price_outside]")
     for b in z["bins"]:
         lab, s = bin_label(b["bin"]), f"{src}: z_interval_95.bins[bin={b['bin']}]"
         m.add(f"Bin{lab}ZSd", est(b["bernoulli_sd"]), f"{s}.bernoulli_sd")
@@ -466,6 +471,31 @@ def add_lecture(m: Macros, run: Path, path: Path) -> None:
     m.add("MakerTopTwentyShare", pct(t20["maker"]), f"{src}: top20_share.maker")
     m.add("TakerTopTwentyShare", pct(t20["taker"]), f"{src}: top20_share.taker")
     m.add("TopTwentyReference", pct(t20["reference"]), f"{src}: top20_share.reference")
+    for key, name in (("main", "Main"), ("no_min_filter", "NoMin"), ("equal_frequency", "EqFreq")):
+        g = r["gap_direction"][key]
+        m.add(f"GapNegBins{name}", count(g["n_negative"]), f"{src}: gap_direction.{key}.n_negative")
+        m.add(f"GapNetDiff{name}", pct2(g["net_gap"]), f"{src}: gap_direction.{key}.net_gap (n-weighted)")
+    m.add("GapBinsTotal", count(r["gap_direction"]["main"]["n_bins"]), f"{src}: gap_direction.main.n_bins")
+    m.add("GapNetYesShort", amount(abs(r["gap_direction"]["main"]["n_yes_minus_expected"])),
+          f"{src}: gap_direction.main.n_yes_minus_expected (absolute value)")
+    c = r["chi2_largest_contributor"]
+    m.add("ChiTopBin", count(c["bin"]), f"{src}: chi2_largest_contributor.bin")
+    m.add("ChiTopContribution", stat(c["contribution"]), f"{src}: chi2_largest_contributor.contribution")
+    m.add("ChiTopShare", pct(c["share"]), f"{src}: chi2_largest_contributor.share")
+    for b, name in (("0", "Zero"), ("1", "One")):
+        v = r["no_min_filter_longshot_bh"][b]
+        s = f"{src}: no_min_filter_longshot_bh.{b}"
+        m.add(f"NoMinBin{name}Diff", pct2(v["diff_obs_minus_price"]), f"{s}.diff_obs_minus_price")
+        m.add(f"NoMinBin{name}PBh", pval(v["p_bh"]), f"{s}.p_bh")
+        m.add(f"NoMinBin{name}BhOff", "yes" if v["reject_bh"] else "no", f"{s}.reject_bh")
+    cg = r.get("cluster_category_gap")
+    if cg:   # D-030: effect size of the cluster x category chi-square; absent until the ccdf_redraw run is fetched
+        s = f"{src}: cluster_category_gap"
+        m.add("ClusterCategoryGapCluster", count(cg["cluster"]), f"{s}.cluster")
+        m.add("ClusterCategoryGapCategory", text(cg["category"]), f"{s}.category")
+        m.add("ClusterCategoryGapObs", pct(cg["observed_share"]), f"{s}.observed_share")
+        m.add("ClusterCategoryGapExp", pct(cg["expected_share"]), f"{s}.expected_share")
+        m.add("ClusterCategoryGapDiff", pct2(cg["diff"]), f"{s}.diff")
     m.add("KmeansPriceSsbRatio", est(r["ssb_ratio"]["mean_trade_price"]), f"{src}: ssb_ratio.mean_trade_price")
     m.add("KmeansTradeSizeSsbRatio", est(r["ssb_ratio"]["log_median_trade_size"]), f"{src}: ssb_ratio.log_median_trade_size")
 

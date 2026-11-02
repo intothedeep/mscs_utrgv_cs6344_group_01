@@ -1,6 +1,6 @@
 {
-  "code_version": "lecture-v1",
-  "code_sha": "d553342cb0d7",
+  "code_version": "lecture-v3",
+  "code_sha": "a99f3b51abfd",
   "source_run": "142082_mvp1_full_v1r3",
   "z_interval_95": {
     "rule": "rate +- 1.96 * sqrt(rate * (1 - rate)) / sqrt(n), rate = n_yes / n (L5 s24, Bernoulli SD L6 s25)",
@@ -451,6 +451,59 @@
     "bin": 7,
     "diff_obs_minus_price": -0.0328619780250267,
     "abs": 0.0328619780250267
+  },
+  "gap_direction": {
+    "rule": "gap = observed rate - mean price; net gap is n-weighted (Yes count minus expected, per market)",
+    "main": {
+      "n_bins": 10,
+      "n_negative": 9,
+      "net_gap": -0.009911514254075162,
+      "n_yes_minus_expected": -475.2372854543959
+    },
+    "no_min_filter": {
+      "n_bins": 10,
+      "n_negative": 9,
+      "net_gap": -0.010309190832125954,
+      "n_yes_minus_expected": -767.7666780317484
+    },
+    "equal_frequency": {
+      "n_bins": 10,
+      "n_negative": 9,
+      "net_gap": -0.009911514254075193,
+      "n_yes_minus_expected": -475.23728545439735
+    }
+  },
+  "chi2_largest_contributor": {
+    "bin": 0,
+    "contribution": 21.284905351970476,
+    "share": 0.3130744344676501,
+    "total_recomputed": 67.98672458887677,
+    "total_saved": 67.9867245888779,
+    "matches_saved": true
+  },
+  "no_min_filter_longshot_bh": {
+    "0": {
+      "n": 23053,
+      "diff_obs_minus_price": 0.0005227271403365,
+      "p_bh": 0.6005548438130479,
+      "reject_bh": false
+    },
+    "1": {
+      "n": 4946,
+      "diff_obs_minus_price": -0.0092500029624871,
+      "p_bh": 0.136164819541674,
+      "reject_bh": false
+    }
+  },
+  "cluster_category_gap": {
+    "source_run": "145892_ccdf_v6",
+    "n_sample": 200000,
+    "cluster": 2,
+    "category": "Sports",
+    "observed_share": 0.06741,
+    "expected_share": 0.08226909789999999,
+    "diff": -0.014859097899999996,
+    "abs": 0.014859097899999996
   },
   "log10_mean_difference_maker_minus_taker": {
     "mean_log10_maker": 2.1041520382581305,

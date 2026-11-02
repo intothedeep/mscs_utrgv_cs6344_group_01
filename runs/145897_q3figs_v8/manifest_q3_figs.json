@@ -1,0 +1,70 @@
+{
+  "code_version": "q3figs-v1",
+  "code_sha": "fdf7401c62b5",
+  "params": {
+    "source_run": "142082_mvp1_full_v1r3",
+    "qq_points": 5000,
+    "seed": 42,
+    "price_bins": 50,
+    "size_bins": 59,
+    "dpi": 300,
+    "font": 9
+  },
+  "env": {
+    "hostname": "sxm003",
+    "python": "3.13.12",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "145897",
+    "slurm_cpus_per_task": "4"
+  },
+  "metrics": {
+    "source_sha256": {
+      "markets.parquet": "37e6b10e4f667cc3b7e2bb503ffc2dbfb862164ea4dd6dda4eaf0bbeaac87a87",
+      "trade_sizes_sample.parquet": "7adf936f85013d76b7a6862e3e61c3571fcdb5c972978dd5b62a1013df73928a",
+      "wallets.parquet": "24c4c29d2be49f9a46075e7f306f9aa71bb55a638779750679b8887a78741f37",
+      "q3_results.json": "352a215045e93d822916961d21c5457aa000aa2524ee21e9055923c7e767bdde",
+      "tables_summary.json": "29ee00643a937a3109de06fed9e773f819e123c37a975876e840e298c97dc771"
+    },
+    "counts": {
+      "n_price": 47948,
+      "n_size": 1000000,
+      "n_wallet_rows": 2117412,
+      "hist_price_total": 47948,
+      "hist_size_total": 999999,
+      "qq_size_rows": 10000,
+      "qq_wallet_rows": 10000
+    },
+    "qq_line": {
+      "Trade size": {
+        "raw": {
+          "slope": 261.7679681755669,
+          "intercept": 117.39082369679998,
+          "r": 0.28466065954898734
+        },
+        "log": {
+          "slope": 2.6267158500650347,
+          "intercept": 1.8351957366423621,
+          "r": 0.9940417916169421
+        }
+      },
+      "Wallet volume": {
+        "raw": {
+          "slope": 34183.62453239278,
+          "intercept": 11114.171812828798,
+          "r": 0.11114418881942159
+        },
+        "log": {
+          "slope": 2.906322522248303,
+          "intercept": 4.453738814732693,
+          "r": 0.9977124999139922
+        }
+      }
+    },
+    "counts_match": false,
+    "mismatches": [
+      "hist_size_total 999999 vs 1000000"
+    ],
+    "wall_time_s": 4.7
+  }
+}
