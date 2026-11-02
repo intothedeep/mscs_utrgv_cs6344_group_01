@@ -247,3 +247,23 @@ papers/**/*.out
 
 # Downloaded reference PDFs (copyright): owner keeps them locally
 papers/refs/
+
+# Same rules for MVP2 files moved to future_work/ (D-017)
+future_work/runs/**/*.parquet
+future_work/runs/*_full_*/markets.csv
+future_work/runs/**/markets.csv
+future_work/runs/**/q1_markets.csv
+future_work/runs/**/q1a_markets.csv
+future_work/runs/**/q1b_markets.csv
+future_work/runs/**/q1c_scaled.csv
+future_work/runs/**/q2_kmeans_sample.csv
+future_work/runs/**/r1_markets.csv
+future_work/runs/**/r2_markets.csv
+future_work/papers/**/*.aux
+future_work/papers/**/*.bbl
+future_work/papers/**/*.blg
+future_work/papers/**/*.fdb_latexmk
+future_work/papers/**/*.fls
+future_work/papers/**/*.log
+future_work/papers/**/*.out
+future_work/papers/refs/
