@@ -12,7 +12,7 @@ from typing import Callable
 import duckdb
 import pandas as pd
 
-CODE_VERSION = "v5"
+CODE_VERSION = "v6"
 
 # Pilot = Standard Binary markets whose close_at falls in this month (UTC), with ALL their trades.
 # Why: one month of trade partitions would cut markets mid-life and break the close-time check.
