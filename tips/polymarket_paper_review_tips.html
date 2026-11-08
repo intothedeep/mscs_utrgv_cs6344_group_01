@@ -84,14 +84,14 @@ html.js .langbar{display:flex}
   <h1><span lang="ko">두 심사자는 논문에 무엇을 물을까</span><span lang="en">What two reviewers will ask about our paper</span></h1>
   <p class="lede"><span lang="ko">상위 학회 심사자와 수업 담당 교수가 같은 논문을 읽는다. 각자 무엇을 묻는지, 우리가 무엇을 고쳤는지, 무엇이 남았는지 본다. 4단계다.</span><span lang="en">A top-conference reviewer and the course professor read the same paper. We see what each will ask, what we changed, and what is still open. 4 steps.</span></p>
   <div class="verdict"><b><span lang="ko">결론:</span><span lang="en">Result:</span></b>
-    <span lang="ko">학회 심사에서는 reject다. 수업 심사에서는 내용은 충분하지만 제출할 2쪽 보고서가 아직 없다.</span><span lang="en">At a conference the verdict is reject. In the course the content is enough, but the 2-page report to submit does not exist yet.</span></div>
+    <span lang="ko">학회 심사에서는 reject다. 수업 심사에서는 내용은 충분하다. 심사 요구 중 M1부터 M5와 중복 행, 동료 요청은 run 150310으로 끝냈다. M3은 대리 키만 썼다.</span><span lang="en">At a conference the verdict is reject. In the course the content is enough. Of the review asks, M1 to M5, duplicate rows and the peer asks are done with run 150310. M3 used proxy keys only.</span></div>
   <ol class="steps-nav">
     <li><a href="#s1"><span lang="ko">학회 심사자</span><span lang="en">Conference reviewer</span></a></li>
     <li><a href="#s2"><span lang="ko">담당 교수</span><span lang="en">Course professor</span></a></li>
     <li><a href="#s3"><span lang="ko">지금까지 한 일</span><span lang="en">What we did so far</span></a></li>
     <li><a href="#s4"><span lang="ko">결정</span><span lang="en">Decisions</span></a></li>
   </ol>
-  <p class="note"><span lang="ko">상태 색: 노란 칸은 아직 열려 있다. 회색 칸은 결과 대기(pending)다.</span><span lang="en">Cell colors: yellow means still open. Grey means pending (no result yet).</span></p>
+  <p class="note"><span lang="ko">상태 색: 노란 칸은 아직 열려 있다. 칸 안 회색 글은 끝냈다는 뜻이다.</span><span lang="en">Cell colors: yellow means still open. Grey text inside a cell means done.</span></p>
 </header>
 
 <section id="s1">
@@ -106,7 +106,7 @@ html.js .langbar{display:flex}
       <tr><td><span lang="ko">타당성(soundness)</span><span lang="en">Soundness</span></td><td><span lang="ko">보통</span><span lang="en">Fair</span></td><td><span lang="ko">사전 등록(pre-registration)은 좋다. 독립성 가정과 가격 정의가 약하다.</span><span lang="en">Pre-registration is good. The independence assumption and the price definition are weak.</span></td></tr>
       <tr><td><span lang="ko">재현성(reproducibility)</span><span lang="en">Reproducibility</span></td><td><span lang="ko">강함</span><span lang="en">Strong</span></td><td><span lang="ko">모든 숫자가 생성된 macro다.</span><span lang="en">Every number is a generated macro.</span></td></tr>
       <tr><td><span lang="ko">관련 연구(related work)</span><span lang="en">Related work</span></td><td><span lang="ko">매우 약함</span><span lang="en">Very weak</span></td><td><span lang="ko">참고문헌이 2편이다.</span><span lang="en">Only 2 references.</span></td></tr>
-      <tr><td><span lang="ko">글과 형식</span><span lang="en">Writing and format</span></td><td><span lang="ko">약함</span><span lang="en">Weak</span></td><td><span lang="ko">내부 용어가 남았고 <code>\todo</code> 4개, 17쪽이다.</span><span lang="en">Internal jargon remains, 4 <code>\todo</code> slots, 17 pages.</span></td></tr>
+      <tr><td><span lang="ko">글과 형식</span><span lang="en">Writing and format</span></td><td><span lang="ko">약함</span><span lang="en">Weak</span></td><td><span lang="ko">심사 때: 내부 용어가 남았고 <code>\todo</code> 4개, 17쪽이었다.</span><span lang="en">At review time: internal jargon remained, 4 <code>\todo</code> slots, 17 pages.</span></td></tr>
     </tbody>
   </table></div>
 
@@ -116,28 +116,28 @@ html.js .langbar{display:flex}
     <tbody>
       <tr>
         <td><b>M1</b> <span lang="ko">가격 정의: −0.99%p는 호가 차이(bid-ask spread) 절반으로도 설명되나? 지금 가격은 마지막 timestamp의 체결가 평균이다.</span><span lang="en">Price definition: can half the bid-ask spread explain the −0.99 point gap? Our price is the mean trade price at the last timestamp.</span></td>
-        <td><span lang="ko">없음. 논문 글은 아직 같다.</span><span lang="en">None yet. The paper text is unchanged on this.</span></td>
-        <td class="pend"><span lang="ko">robustness v3 job의 결과 대기(pending): 중간 가격(midpoint), 거래량 가중 평균 가격(volume-weighted average price, VWAP), 매수와 매도 분리.</span><span lang="en">Result pending from the robustness v3 job: midpoint, volume-weighted average price (VWAP), buy and sell split.</span></td>
+        <td><span lang="ko">run 150310에서 거래량 가중 평균 가격(volume-weighted average price, VWAP)과 체결가 기반 중간 가격(midpoint)으로 다시 계산했다. 순 차이는 −1.20%와 −1.13%이고 구간은 모두 0 아래다. 차이는 평균 호가 차이 절반(1.57%) 안에 있다.</span><span lang="en">Run 150310 recomputed with the volume-weighted average price (VWAP) and a trade-based midpoint. The net gaps are −1.20% and −1.13%, both intervals below 0. The gap is within the mean half spread (1.57%).</span></td>
+        <td><span class="note"><span lang="ko">끝냈다. 중간 가격은 호가가 아니라 체결가 기반 대용값이다.</span><span lang="en">Done. The midpoint is a trade-based proxy, not a quote midpoint.</span></span></td>
       </tr>
       <tr>
         <td><b>M2</b> <span lang="ko">"outcome 1" 편향인가 "Yes" 편향인가? 남긴 시장에서 outcome 1의 63.9%가 Yes다.</span><span lang="en">Is the bias about "outcome 1" or about "Yes"? In the kept markets 63.9% of outcome 1 is Yes.</span></td>
-        <td><span lang="ko">그림 4를 차이 패널과 함께 다시 그렸다 (3단계).</span><span lang="en">Figure 4 redrawn with a gap panel (Step 3).</span></td>
-        <td class="pend"><span lang="ko">Yes/No 기준 보정 표와 검정: 결과 대기(pending). 결과가 D-037 문구를 바꾸면 소유자에게 먼저 묻는다.</span><span lang="en">Yes-oriented calibration table and test: pending. If the result would change the D-037 wording, we ask the owner first.</span></td>
+        <td><span lang="ko">그림 4를 차이 패널과 함께 다시 그렸다. Yes/No 시장 30,112개에서 Yes가 관측 비율보다 비싸다(순 차이 −1.32%). D-040: 주 결과는 "outcome 1"로 두고 이 문장을 더한다.</span><span lang="en">Figure 4 redrawn with a gap panel. In the 30,112 Yes/No markets Yes is priced above its observed rate (net gap −1.32%). D-040: the main result stays "outcome 1" and this sentence is added.</span></td>
+        <td><span class="note"><span lang="ko">끝냈다. 소유자가 "둘 다 쓰기"를 골랐다.</span><span lang="en">Done. The owner picked "write both".</span></span></td>
       </tr>
       <tr>
         <td><b>M3</b> <span lang="ko">독립성: 한 사건의 시장들은 함께 움직인다.</span><span lang="en">Independence: markets on one event move together.</span></td>
-        <td><span lang="ko">사전 등록에 군집 부트스트랩(cluster bootstrap) 계획을 적었다. 사건 ID가 저장되지 않아서 대리 키(proxy key)를 쓴다.</span><span lang="en">The pre-registration plans a cluster bootstrap. Event ID was not saved, so we use proxy keys.</span></td>
-        <td class="pend"><span lang="ko">더 넓은 신뢰구간(confidence interval): 결과 대기(pending).</span><span lang="en">Wider confidence interval: pending.</span></td>
+        <td><span lang="ko">사건 ID가 없어서 대리 키(proxy key)로 군집 부트스트랩(cluster bootstrap)을 했다. k1(slug 앞 3단어)의 구간 [−1.41%, −0.58%]은 여전히 0 아래다.</span><span lang="en">Event ID is missing, so we ran a cluster bootstrap with proxy keys. The k1 (first 3 slug words) interval [−1.41%, −0.58%] is still below 0.</span></td>
+        <td><span class="note"><span lang="ko">일부 끝냈다. 진짜 사건 ID는 없다.</span><span lang="en">Partly done. No real event ID yet.</span></span></td>
       </tr>
       <tr>
         <td><b>M4</b> <span lang="ko">선택 편향: 688,131개 중 47,948개(7.0%)만 남았다.</span><span lang="en">Selection bias: only 47,948 of 688,131 markets (7.0%) were kept.</span></td>
-        <td><span lang="ko">없음.</span><span lang="en">None yet.</span></td>
-        <td class="pend"><span lang="ko">남긴 시장 대 뺀 시장 표: 결과 대기(pending).</span><span lang="en">Kept versus dropped table: pending.</span></td>
+        <td><span lang="ko">남긴 시장과 뺀 시장을 비교했다. 거래량 중앙값은 1,790.0 대 69.0, 거래 수 중앙값은 292 대 17이다.</span><span lang="en">Kept and dropped markets compared. Median volume 1,790.0 versus 69.0, median trades 292 versus 17.</span></td>
+        <td><span class="note"><span lang="ko">끝냈다. 설명만 하고 판정하지 않는다.</span><span lang="en">Done. Descriptive, no verdict.</span></span></td>
       </tr>
       <tr>
         <td><b>M5</b> <span lang="ko">실제로 중요한 크기인가? 카이제곱의 31.3%가 bin 0에서 나온다.</span><span lang="en">Does the size matter in practice? 31.3% of the chi-square comes from bin 0.</span></td>
-        <td><span lang="ko">없음.</span><span lang="en">None yet.</span></td>
-        <td class="pend"><span lang="ko">보정 회귀와 Brier score 기준선: 결과 대기(pending).</span><span lang="en">Calibration regression and a Brier score baseline: pending.</span></td>
+        <td><span lang="ko">보정 회귀의 기울기는 1.028, 절편은 −0.089다. Brier skill score는 0.538이다. accuracy는 다수 클래스 63.4%, 0.5 기준 83.4%다. 격자 가격 7개 모두 실용적 크기가 아니다.</span><span lang="en">Calibration fit slope 1.028, intercept −0.089. Brier skill score 0.538. Accuracy is 63.4% for the majority class and 83.4% for the model at 0.5. None of the 7 grid prices is practically sized.</span></td>
+        <td><span class="note"><span lang="ko">끝냈다.</span><span lang="en">Done.</span></span></td>
       </tr>
       <tr>
         <td><b>M6</b> <span lang="ko">관련 연구가 2편이다.</span><span lang="en">Related work has 2 references.</span></td>
@@ -152,7 +152,12 @@ html.js .langbar{display:flex}
       <tr>
         <td><b><span lang="ko">글</span><span lang="en">Writing</span></b> <span lang="ko">내부 용어, 초록 순서, 안 쓰인 <code>\DaysLong</code>.</span><span lang="en">Internal jargon, abstract order, an unused <code>\DaysLong</code>.</span></td>
         <td><span lang="ko">내부 용어를 지웠다. 초록을 문제, 방법, 핵심 숫자, 의미 순서로 다시 썼다. <code>\DaysLong</code>을 지웠다.</span><span lang="en">Internal jargon removed. Abstract reordered: problem, method, key numbers, meaning. <code>\DaysLong</code> removed.</span></td>
-        <td class="open"><span lang="ko"><code>\todo</code> 4개는 저자가 직접 쓴다. 학회 template과 쪽 제한은 열려 있다.</span><span lang="en">The 4 <code>\todo</code> slots are for the authors to write. The conference template and page limit are open.</span></td>
+        <td class="open"><span lang="ko">해석과 결론의 <code>\todo</code> 줄은 저자가 직접 쓴다. 학회 template과 쪽 제한은 열려 있다. 논문은 이제 22쪽이다.</span><span lang="en">The <code>\todo</code> interpretation and conclusion lines are for the authors to write. The conference template and page limit are open. The paper is now 22 pages.</span></td>
+      </tr>
+      <tr>
+        <td><b><span lang="ko">중복 행</span><span lang="en">Duplicate rows</span></b> <span lang="ko">Q2 거래량이 부풀 수 있다.</span><span lang="en">Q2 volume may be inflated.</span></td>
+        <td><span lang="ko">정확히 같은 행이 3.1%다. 지운 뒤에도 순 차이는 −0.99%로 같다. Q2 상위 1% 몫은 maker −0.16%p, taker −0.26%p 바뀐다.</span><span lang="en">3.1% of rows are exact duplicates. After removing them the net gap stays −0.99%. The Q2 top 1% share moves by −0.16 pp (maker) and −0.26 pp (taker).</span></td>
+        <td><span class="note"><span lang="ko">끝냈다.</span><span lang="en">Done.</span></span></td>
       </tr>
     </tbody>
   </table></div>
@@ -163,11 +168,11 @@ html.js .langbar{display:flex}
   <div class="eyebrow"><span lang="ko">2단계 / 4</span><span lang="en">Step 2 of 4</span></div>
   <h2><span lang="ko">담당 교수 (CS 6344 최종 프로젝트)</span><span lang="en">Course professor (CS 6344 final project)</span></h2>
   <p><span lang="ko"><b>왜 이 심사자를 상상하나:</b> 수업 점수는 이 교수의 네 기준으로 매겨진다. 학회와 요구가 다르다.</span><span lang="en"><b>Why we imagine this reviewer:</b> Our course grade comes from this professor's four criteria. They differ from a conference's.</span></p>
-  <p><span lang="ko">판정: 내용은 A 수준에 가깝다. 제출물은 아직 없다. 강의계획서(syllabus)는 2쪽 보고서와 발표를 요구한다. 지금 있는 것은 17쪽 논문과 긴 HTML 보고서다. 둘 다 2쪽 보고서의 재료일 뿐이다.</span><span lang="en">Verdict: content is close to A level. There is nothing to submit yet. The syllabus asks for a 2-page report and a presentation. We have a 17-page paper and a long HTML report. Both are only material for the 2-page report.</span></p>
+  <p><span lang="ko">판정(심사 때): 내용은 A 수준에 가깝다. 제출물은 아직 없었다. 강의계획서(syllabus)는 2쪽 보고서와 발표를 요구한다. 그때 있던 것은 17쪽 논문과 긴 HTML 보고서였다. 지금은 별도의 2쪽 보고서가 <code>papers/course_report_mvp1/</code>에 있다.</span><span lang="en">Verdict (at review time): content is close to A level. There was nothing to submit yet. The syllabus asks for a 2-page report and a presentation. We had a 17-page paper and a long HTML report. Now a separate 2-page report exists at <code>papers/course_report_mvp1/</code>.</span></p>
   <div class="flow" aria-label="pages">
     <div class="stage"><div class="n"><span lang="ko">수업 보고서</span><span lang="en">Course report</span></div><div class="s"><span lang="ko">2쪽 (강의계획서)</span><span lang="en">2 pages (syllabus)</span></div></div>
     <div class="stage"><div class="n"><span lang="ko">학회 원고</span><span lang="en">Conference paper</span></div><div class="s"><span lang="ko">약 9쪽 (흔한 제한)</span><span lang="en">about 9 pages (usual limit)</span></div></div>
-    <div class="stage"><div class="n"><span lang="ko">지금 논문</span><span lang="en">Paper today</span></div><div class="s"><span lang="ko">17쪽</span><span lang="en">17 pages</span></div></div>
+    <div class="stage"><div class="n"><span lang="ko">지금 논문</span><span lang="en">Paper today</span></div><div class="s"><span lang="ko">22쪽</span><span lang="en">22 pages</span></div></div>
   </div>
   <p class="note"><span lang="ko">왜: 한 파일로 두 제출물을 맞출 수 없다.</span><span lang="en">Why: one file cannot fit both submissions.</span></p>
 
@@ -178,13 +183,13 @@ html.js .langbar{display:flex}
       <tr>
         <td><b>(i)</b> <span lang="ko">일관성과 완결성: 보통</span><span lang="en">Coherence and completeness: fair</span></td>
         <td><span lang="ko">그림 4는 "Yes", 본문은 "outcome 1"인 이유는? 2쪽 보고서는 어디 있나?</span><span lang="en">Why does Figure 4 say "Yes" while the text says "outcome 1"? Where is the 2-page report?</span></td>
-        <td><span lang="ko">그림 4를 다시 그렸다. 내부 용어를 지웠다.</span><span lang="en">Figure 4 redrawn. Internal jargon removed.</span></td>
-        <td class="open"><span lang="ko">2쪽 보고서 없음. <code>\todo</code> 4개.</span><span lang="en">No 2-page report. 4 <code>\todo</code> slots.</span></td>
+        <td><span lang="ko">그림 4를 다시 그렸다. 내부 용어를 지웠다. 2쪽 수업 보고서가 생겼다.</span><span lang="en">Figure 4 redrawn. Internal jargon removed. A 2-page course report now exists.</span></td>
+        <td class="open"><span lang="ko">해석과 결론의 <code>\todo</code> 줄. 2쪽 보고서의 그림은 반쪽 폭으로 다시 그렸다(글자 7.5 pt).</span><span lang="en">The <code>\todo</code> interpretation and conclusion lines. The 2-page report figures are redrawn for half width (text 7.5 pt).</span></td>
       </tr>
       <tr>
         <td><b>(ii)</b> <span lang="ko">비전과 비판적 사고: 지금은 약함</span><span lang="en">Vision and critical thinking: weak today</span></td>
         <td><span lang="ko">"그래서 70% 가격을 보는 사람에게 무슨 뜻인가"? 차이가 1%p인데 중요한가? 7%만 남겼는데 대표성이 있나?</span><span lang="en">"What does this mean for someone looking at a 70% price?" The gap is 1 point, does it matter? Only 7% was kept, is it representative?</span></td>
-        <td><span lang="ko">없음. 해석 칸은 아직 <code>\todo</code>다.</span><span lang="en">None yet. The interpretation slots are still <code>\todo</code>.</span></td>
+        <td><span lang="ko">M4 표(남긴 시장 대 뺀 시장)를 논문에 더했다. 해석 칸은 아직 <code>\todo</code>다.</span><span lang="en">The M4 table (kept versus dropped) is in the paper. The interpretation slots are still <code>\todo</code>.</span></td>
         <td class="open"><span lang="ko">저자가 해석을 쓴다. 교수는 빈 해석을 (ii) 실패로 읽는다.</span><span lang="en">The authors write the interpretation. The professor reads an empty one as a failure on (ii).</span></td>
       </tr>
       <tr>
@@ -195,9 +200,9 @@ html.js .langbar{display:flex}
       </tr>
       <tr>
         <td><b>(iv)</b> <span lang="ko">피드백 반영: 보통</span><span lang="en">Responsiveness to feedback: fair</span></td>
-        <td><span lang="ko">동료 질문 18개 중 논문은 6개에 답했다. 3개는 안 했다: 서로 의존하는 시장(Yusuf Oraby), 거래량 × 확률(Hameem Gorabi), 기간 비교(Robert Molina). 반영은 어디에 보이나?</span><span lang="en">The paper answers 6 of 18 peer questions. 3 are not done: dependent markets (Yusuf Oraby), volume × probability (Hameem Gorabi), period comparison (Robert Molina). Where is the response visible?</span></td>
-        <td><span lang="ko">robustness v3의 M3(서로 의존하는 시장)과 사전 등록의 "동료 요청: 거래량과 기간"이 이 질문들을 받는다.</span><span lang="en">Robustness v3 M3 (dependent markets) and the pre-registered peer asks, volume and period, cover these questions.</span></td>
-        <td class="open"><span lang="ko">"피드백 → 우리 답" 표(5–6줄)를 2쪽 보고서 끝에 둔다. 발표에 한 장을 둔다. 결과는 대기(pending)다.</span><span lang="en">Put a "feedback → our answer" table (5–6 rows) at the end of the 2-page report and one slide in the presentation. Results are pending.</span></td>
+        <td><span lang="ko">동료 질문 18개: 논문이 8개에 답했고 4개는 일부, 논문 밖(MVP2)이 6개, 안 한 것이 0개다. 거래량 × 확률(Hameem Gorabi)과 기간 비교(Robert Molina)는 이제 했다. 서로 의존하는 시장(Yusuf Oraby)은 일부다(대리 키만).</span><span lang="en">18 peer questions: the paper answers 8, partly 4, outside the paper (MVP2) 6, not done 0. Volume × odds (Hameem Gorabi) and periods (Robert Molina) are now done. Dependent markets (Yusuf Oraby) are partly done (proxy keys only).</span></td>
+        <td><span lang="ko">robustness v3의 M3, 거래량, 기간 행과 논문의 "Checks requested in review" 절이 이 질문들을 받는다.</span><span lang="en">Robustness v3 rows M3, volume and period, and the paper section "Checks requested in review" cover these questions.</span></td>
+        <td class="open"><span lang="ko">진짜 사건 ID는 없다(Oraby). "피드백 → 우리 답" 표가 2쪽 보고서에 있는지 확인한다. 발표 슬라이드 한 장이 남았다.</span><span lang="en">No real event ID yet (Oraby). Check that the "feedback → our answer" table is in the 2-page report. One presentation slide is open.</span></td>
       </tr>
     </tbody>
   </table></div>
@@ -220,29 +225,42 @@ html.js .langbar{display:flex}
   <ol>
     <li><span lang="ko"><b>심사 페이지를 썼다.</b> 탭 3개: 학회 심사자, 담당 교수, 비교와 할 일.</span><span lang="en"><b>Review page written.</b> Three tabs: conference reviewer, course professor, comparison and to-do.</span></li>
     <li><span lang="ko"><b>그림 4를 차이 패널과 함께 다시 그렸다.</b> 아래 그림이다.</span><span lang="en"><b>Figure 4 redrawn with a gap panel.</b> See the figure below.</span></li>
-    <li><span lang="ko"><b>논문 글을 고쳤다.</b> 내부 용어를 지웠다. 초록 순서를 바꿨다. 참고문헌 5편을 더했다(2편은 일부만 확인). <code>\DaysLong</code>을 지웠다. <code>\todo</code> 4개는 저자 몫으로 남았다.</span><span lang="en"><b>Paper text fixed.</b> Internal jargon removed. Abstract reordered. Five references added (two partly verified). <code>\DaysLong</code> removed. Four <code>\todo</code> slots remain for the authors.</span></li>
-    <li><span lang="ko"><b>robustness v3를 사전 등록했다</b> (commit <code>aef0808</code>). job을 준비하는 중이다. 결과는 대기(pending)다.</span><span lang="en"><b>Robustness v3 pre-registered</b> (commit <code>aef0808</code>). The job is being prepared. Results are pending.</span></li>
-    <li><span lang="ko"><b>다음:</b> 피드백 응답 표가 있는 별도의 2쪽 수업 보고서.</span><span lang="en"><b>Next:</b> a separate 2-page course report with a feedback-response table.</span></li>
+    <li><span lang="ko"><b>논문 글을 고쳤다.</b> 내부 용어를 지웠다. 초록 순서를 바꿨다. 참고문헌 5편을 더했다(2편은 일부만 확인). <code>\DaysLong</code>을 지웠다.</span><span lang="en"><b>Paper text fixed.</b> Internal jargon removed. Abstract reordered. Five references added (two partly verified). <code>\DaysLong</code> removed.</span></li>
+    <li><span lang="ko"><b>robustness v3를 사전 등록했다</b> (commit <code>aef0808</code>).</span><span lang="en"><b>Robustness v3 pre-registered</b> (commit <code>aef0808</code>).</span></li>
+    <li><span lang="ko"><b>run 150310이 돌았다</b> (2026-11-08, Cradle에서 22분). 9단계가 모두 돌았고 관문(gate)을 통과했다. 결과는 아래 표다.</span><span lang="en"><b>Run 150310 ran</b> (2026-11-08, 22 minutes on Cradle). All 9 stages ran and the gate passed. Results are in the table below.</span></li>
+    <li><span lang="ko"><b>D-040:</b> 주 Q1 결과에는 "outcome 1"을 유지한다. 강건성 절에 Yes/No 시장에서 Yes가 관측 비율보다 비싸다는 문장 하나를 더한다.</span><span lang="en"><b>D-040:</b> keep "outcome 1" for the main Q1 result. Add one sentence in the robustness section that Yes is priced above its observed rate in Yes/No markets.</span></li>
+    <li><span lang="ko"><b>논문에 "Checks requested in review" 절을 더했다.</b> 논문은 이제 22쪽이다.</span><span lang="en"><b>Paper section "Checks requested in review" added.</b> The paper is now 22 pages.</span></li>
+    <li><span lang="ko"><b><code>reports/report_v1.html</code></b>에 Robustness v3 단계가 있다.</span><span lang="en"><b><code>reports/report_v1.html</code></b> has a Robustness v3 step.</span></li>
+    <li><span lang="ko"><b>2쪽 수업 보고서가 있다</b> (<code>papers/course_report_mvp1/</code>). 그림은 반쪽 폭으로 다시 그렸고, 피드백 답 표(7줄)가 있다.</span><span lang="en"><b>A 2-page course report exists</b> (<code>papers/course_report_mvp1/</code>). Its figures are redrawn for half width, and it has a 7-row feedback-response table.</span></li>
+    <li><span lang="ko"><b>저자에게 남은 일:</b> 해석과 결론의 <code>\todo</code> 줄.</span><span lang="en"><b>Still open for the authors:</b> the <code>\todo</code> interpretation and conclusion lines.</span></li>
   </ol>
   <figure>
     <img src="../papers/paper_mvp1/figures/fig4_calibration_gap.png" alt="Figure 4 calibration with a gap panel">
     <figcaption><span lang="ko">그림 4: 보정(calibration)과 그 아래 차이 패널. 왜: 원래 눈금에서는 3%p가 안 보인다. 출처: <code>papers/paper_mvp1/figures/</code></span><span lang="en">Figure 4: calibration with a gap panel below it. Why: on the original scale a 3 point gap is not visible. Source: <code>papers/paper_mvp1/figures/</code></span></figcaption>
   </figure>
+  <figure>
+    <img src="../papers/paper_mvp1/figures/fig_r3_m1_price_definition.png" alt="Net gap under each price definition">
+    <figcaption><span lang="ko">그림 5: 가격 정의마다 순 차이와 95% 구간. 왜: VWAP와 중간 가격에서도 구간이 0의 왼쪽이면 차이는 가격 규칙 탓이 아니다. 출처: <code>runs/150310_r3_review_fixes_v6/</code></span><span lang="en">Figure 5: net gap under each price definition with its 95% interval. Why: an interval left of 0 under VWAP and midpoint means the gap is not a price-rule artifact. Source: <code>runs/150310_r3_review_fixes_v6/</code></span></figcaption>
+  </figure>
+  <figure>
+    <img src="../papers/paper_mvp1/figures/fig_r3_m2_yes_reliability.png" alt="Observed Yes rate against mean Yes price">
+    <figcaption><span lang="ko">그림 6: Yes/No 시장에서 평균 Yes 가격 대 관측 Yes 비율. 왜: 대각선 아래 점은 Yes가 관측 비율보다 비싸다는 뜻이다. 출처: <code>runs/150310_r3_review_fixes_v6/</code></span><span lang="en">Figure 6: observed Yes rate against mean Yes price in Yes/No markets. Why: points below the diagonal mean Yes is priced above its observed rate. Source: <code>runs/150310_r3_review_fixes_v6/</code></span></figcaption>
+  </figure>
 
-  <h3><span lang="ko">robustness v3 결과</span><span lang="en">Robustness v3 results</span></h3>
+  <h3><span lang="ko">robustness v3 결과 (run 150310)</span><span lang="en">Robustness v3 results (run 150310)</span></h3>
   <div class="tablewrap"><table>
-    <thead><tr><th><span lang="ko">행</span><span lang="en">Row</span></th><th><span lang="ko">무엇을 보나</span><span lang="en">What it checks</span></th><th><span lang="ko">상태</span><span lang="en">Status</span></th></tr></thead>
+    <thead><tr><th><span lang="ko">행</span><span lang="en">Row</span></th><th><span lang="ko">무엇을 보나</span><span lang="en">What it checks</span></th><th><span lang="ko">결과</span><span lang="en">Result</span></th></tr></thead>
     <tbody>
-      <tr><td>M1</td><td><span lang="ko">가격 정의</span><span lang="en">Price definition</span></td><td class="pend"><span lang="ko">대기(pending)</span><span lang="en">pending</span></td></tr>
-      <tr><td>M2</td><td><span lang="ko">Yes 기준 보정</span><span lang="en">Yes-oriented calibration</span></td><td class="pend"><span lang="ko">대기(pending)</span><span lang="en">pending</span></td></tr>
-      <tr><td>M3</td><td><span lang="ko">사건 단위 의존성 (대리 키)</span><span lang="en">Event-level dependence (proxy keys)</span></td><td class="pend"><span lang="ko">대기(pending)</span><span lang="en">pending</span></td></tr>
-      <tr><td>M4</td><td><span lang="ko">남긴 시장 대 뺀 시장</span><span lang="en">Kept versus dropped</span></td><td class="pend"><span lang="ko">대기(pending)</span><span lang="en">pending</span></td></tr>
-      <tr><td>M5</td><td><span lang="ko">실제 크기</span><span lang="en">Practical size</span></td><td class="pend"><span lang="ko">대기(pending)</span><span lang="en">pending</span></td></tr>
-      <tr><td><span lang="ko">중복 행</span><span lang="en">Duplicate rows</span></td><td><span lang="ko">민감도(sensitivity)</span><span lang="en">Sensitivity</span></td><td class="pend"><span lang="ko">대기(pending)</span><span lang="en">pending</span></td></tr>
-      <tr><td><span lang="ko">동료 요청</span><span lang="en">Peer asks</span></td><td><span lang="ko">거래량과 기간</span><span lang="en">Volume and period</span></td><td class="pend"><span lang="ko">대기(pending)</span><span lang="en">pending</span></td></tr>
+      <tr><td>M1</td><td><span lang="ko">가격 정의</span><span lang="en">Price definition</span></td><td><ul><li><span lang="ko">거래량 가중 평균 가격(VWAP): 순 차이 −1.20% [−1.50%, −0.91%].</span><span lang="en">VWAP: net gap −1.20% [−1.50%, −0.91%].</span></li><li><span lang="ko">체결가 기반 중간 가격(midpoint): 순 차이 −1.13% [−1.48%, −0.78%].</span><span lang="en">Trade-based midpoint: net gap −1.13% [−1.48%, −0.78%].</span></li><li><span lang="ko">차이는 평균 호가 차이 절반(1.57%) 안에 있다.</span><span lang="en">The gap is within the mean half spread (1.57%).</span></li></ul></td></tr>
+      <tr><td>M2</td><td><span lang="ko">Yes 기준 보정</span><span lang="en">Yes-oriented calibration</span></td><td><ul><li><span lang="ko">Yes/No 시장 30,112개: Yes가 관측 비율보다 비싸다. 순 차이 −1.32% [−1.61%, −1.03%], bin 7개가 BH 보정 뒤에도 벗어난다.</span><span lang="en">Yes/No markets (30,112): Yes is priced above its observed rate. Net gap −1.32% [−1.61%, −1.03%], 7 bins off after BH.</span></li><li><span lang="ko">다른 시장 17,836개: p = 0.133.</span><span lang="en">Other markets (17,836): p = 0.133.</span></li></ul></td></tr>
+      <tr><td>M3</td><td><span lang="ko">사건 단위 의존성 (대리 키)</span><span lang="en">Event-level dependence (proxy keys)</span></td><td><ul><li><span lang="ko">대리 키 k1(slug 앞 3단어)의 군집 구간: 순 차이 95% 구간 [−1.41%, −0.58%]. 여전히 0 아래다.</span><span lang="en">Proxy k1 (first 3 slug words): cluster interval for the net gap [−1.41%, −0.58%]. Still below 0.</span></li></ul></td></tr>
+      <tr><td>M4</td><td><span lang="ko">남긴 시장 대 뺀 시장</span><span lang="en">Kept versus dropped</span></td><td><ul><li><span lang="ko">마감 하루 전까지 거래량 중앙값: 남긴 1,790.0 대 뺀 69.0.</span><span lang="en">Median volume before T − 1 day: kept 1,790.0, dropped 69.0.</span></li><li><span lang="ko">시장 기간 중앙값: 남긴 7.0일 대 뺀 6.4일.</span><span lang="en">Median duration: kept 7.0 days, dropped 6.4 days.</span></li><li><span lang="ko">거래 수 중앙값: 남긴 292 대 뺀 17.</span><span lang="en">Median trades: kept 292, dropped 17.</span></li></ul></td></tr>
+      <tr><td>M5</td><td><span lang="ko">실제 크기</span><span lang="en">Practical size</span></td><td><ul><li><span lang="ko">보정 회귀: 기울기 1.028 [1.005, 1.050], 절편 −0.089 [−0.116, −0.061].</span><span lang="en">Calibration fit: slope 1.028 [1.005, 1.050], intercept −0.089 [−0.116, −0.061].</span></li><li><span lang="ko">Brier skill score 0.538.</span><span lang="en">Brier skill score 0.538.</span></li><li><span lang="ko">accuracy: 다수 클래스 63.4%, 0.5 기준 83.4%.</span><span lang="en">Accuracy: majority class 63.4%, model at 0.5 83.4%.</span></li><li><span lang="ko">격자 가격 7개 모두 실용적 크기가 아니다.</span><span lang="en">None of the 7 grid prices is practically sized.</span></li></ul></td></tr>
+      <tr><td><span lang="ko">중복 행</span><span lang="en">Duplicate rows</span></td><td><span lang="ko">민감도(sensitivity)</span><span lang="en">Sensitivity</span></td><td><ul><li><span lang="ko">정확히 같은 행이 3.1%다.</span><span lang="en">3.1% of rows are exact duplicates.</span></li><li><span lang="ko">지운 뒤에도 순 차이는 −0.99%로 같다.</span><span lang="en">After removing them the net gap stays −0.99%.</span></li><li><span lang="ko">Q2 상위 1% 몫의 변화: maker −0.16%p, taker −0.26%p.</span><span lang="en">Q2 top 1% share change: maker −0.16 pp, taker −0.26 pp.</span></li></ul></td></tr>
+      <tr><td><span lang="ko">동료 요청</span><span lang="en">Peer asks</span></td><td><span lang="ko">거래량(Gorabi)과 기간(Molina)</span><span lang="en">Volume (Gorabi) and period (Molina)</span></td><td><ul><li><span lang="ko">거래량 상위 tercile: 카이제곱이 기각하지 못한다(BH p = 0.166). 순 차이 −0.42% [−0.86%, 0.03%].</span><span lang="en">High volume tercile: chi-square does not reject (BH p = 0.166). Net gap −0.42% [−0.86%, 0.03%].</span></li><li><span lang="ko">거래량 하위와 중간 tercile은 기각한다(BH p = 2.2e-5, 6.4e-6).</span><span lang="en">Low and mid terciles reject (BH p = 2.2e-5, 6.4e-6).</span></li><li><span lang="ko">2026 마감: 카이제곱이 기각하지 못한다(BH p = 0.105). 그러나 순 차이 −0.65% [−1.04%, −0.25%]는 0을 포함하지 않는다.</span><span lang="en">2026 close: chi-square does not reject (BH p = 0.105). But the net gap −0.65% [−1.04%, −0.25%] still excludes 0.</span></li></ul></td></tr>
     </tbody>
   </table></div>
-  <p class="note"><span lang="ko">새 행은 원래 Q1 판정 옆에 둔다. 원래 판정을 바꾸지 않는다 (D-038). 출처: <code>DECISIONS.md</code>, <code>analysis/prereg_review_fixes.md</code>.</span><span lang="en">New rows sit next to the original Q1 verdict and never replace it (D-038). Source: <code>DECISIONS.md</code>, <code>analysis/prereg_review_fixes.md</code>.</span></p>
+  <p class="note"><span lang="ko">새 행은 원래 Q1 판정 옆에 둔다. 원래 판정을 바꾸지 않는다 (D-038). 설명만 하고 판정하지 않는다. 출처: <code>runs/150310_r3_review_fixes_v6/report_r3_*.md</code>, <code>papers/paper_mvp1/numbers.tex</code>.</span><span lang="en">New rows sit next to the original Q1 verdict and never replace it (D-038). They describe and give no verdict. Source: <code>runs/150310_r3_review_fixes_v6/report_r3_*.md</code>, <code>papers/paper_mvp1/numbers.tex</code>.</span></p>
 </section>
 
 <section id="s4">
@@ -255,14 +273,15 @@ html.js .langbar{display:flex}
       <tr><td><span lang="ko">T − 7일 기간은 제외</span><span lang="en">T − 7 day horizon stays out</span></td><td><span lang="ko">MVP2(Q1a)는 소유자가 가자고 할 때까지 범위 밖이다.</span><span lang="en">MVP2 (Q1a) stays out of scope until the owner goes for it.</span></td><td>D-020, D-038, D-039</td></tr>
       <tr><td><span lang="ko">강의 밖 방법은 남긴다</span><span lang="en">Outside-lecture methods are kept</span></td><td><span lang="ko">부트스트랩 카이제곱 구간과 Brier skill score는 논문에서 "outside the lectures"로 표시한다.</span><span lang="en">The bootstrap chi-square interval and the Brier skill score stay, labeled "outside the lectures" in the paper.</span></td><td>D-039</td></tr>
       <tr><td><span lang="ko">M3은 대리 키를 쓴다</span><span lang="en">M3 uses proxy keys</span></td><td><span lang="ko">market_slug의 첫 3단어, 그리고 주제 × 마감 시각. 더 넓은 구간을 보고한다. Gamma API는 쓰지 않는다.</span><span lang="en">First 3 words of <code>market_slug</code>, and topic × close hour. We report the wider interval. No Gamma API.</span></td><td>D-039</td></tr>
-      <tr><td><span lang="ko">M2는 민감도 행으로 보고한다</span><span lang="en">M2 is a sensitivity row</span></td><td><span lang="ko">Yes/No 시장에서 Yes가 너무 비싸면 D-037 문구를 바꾸기 전에 소유자에게 묻는다.</span><span lang="en">If Yes is priced too high in Yes/No markets, we ask the owner before any D-037 wording change.</span></td><td>D-039</td></tr>
+      <tr><td><span lang="ko">M2는 민감도 행으로 보고한다</span><span lang="en">M2 is a sensitivity row</span></td><td><span lang="ko">결과는 Yes/No 시장에서 Yes가 관측 비율보다 비싸다는 것이다. D-037 문구를 바꿀지 소유자에게 물었다.</span><span lang="en">The result: Yes is priced above its observed rate in Yes/No markets. We asked the owner about any D-037 wording change.</span></td><td>D-039</td></tr>
+      <tr><td><span lang="ko">"outcome 1"을 유지하고 Yes 문장을 더한다</span><span lang="en">Keep "outcome 1", add the Yes sentence</span></td><td><span lang="ko">주 Q1 결과와 판정은 "outcome 1"로 둔다. 강건성 절에 Yes 문장 하나를 더한다. 소유자가 "둘 다 쓰기"를 골랐다.</span><span lang="en">The main Q1 result and verdict keep "outcome 1". One Yes sentence is added in the robustness section. The owner picked "write both".</span></td><td>D-040</td></tr>
     </tbody>
   </table></div>
-  <div class="callout"><p><b><span lang="ko">열린 일:</span><span lang="en">Open:</span></b> <span lang="ko">robustness v3 결과, <code>\todo</code> 4개, 2쪽 보고서.</span><span lang="en">Robustness v3 results, the 4 <code>\todo</code> slots, the 2-page report.</span></p></div>
+  <div class="callout"><p><b><span lang="ko">열린 일:</span><span lang="en">Open:</span></b> <span lang="ko">해석과 결론의 <code>\todo</code> 줄(저자), 진짜 사건 ID(M3), 2쪽 보고서 그림의 반쪽 폭 재작업, 발표 슬라이드.</span><span lang="en">The <code>\todo</code> interpretation and conclusion lines (authors), a real event ID (M3), the half-width redraw of the 2-page report figures, the presentation slide.</span></p></div>
 </section>
 
 <footer>
-  <p><span lang="ko">출처: <code>analysis/review_paper_mvp1_two_reviewers.html</code>, <code>DECISIONS.md</code> D-038과 D-039, <code>analysis/prereg_review_fixes.md</code> "Owner answers".</span><span lang="en">Sources: <code>analysis/review_paper_mvp1_two_reviewers.html</code>, <code>DECISIONS.md</code> rows D-038 and D-039, <code>analysis/prereg_review_fixes.md</code> "Owner answers".</span></p>
+  <p><span lang="ko">출처: <code>analysis/review_paper_mvp1_two_reviewers.html</code>, <code>DECISIONS.md</code> D-038, D-039 and D-040, <code>analysis/prereg_review_fixes.md</code> "Owner answers", <code>runs/150310_r3_review_fixes_v6/report_r3_*.md</code>.</span><span lang="en">Sources: <code>analysis/review_paper_mvp1_two_reviewers.html</code>, <code>DECISIONS.md</code> rows D-038, D-039 and D-040, <code>analysis/prereg_review_fixes.md</code> "Owner answers", <code>runs/150310_r3_review_fixes_v6/report_r3_*.md</code>.</span></p>
 </footer>
 </main>
 <script>

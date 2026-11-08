@@ -84,3 +84,4 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-11-08 run: robustness v3 job 150310 submitted on kimq sxm003, 16 CPU, 200G (prereg aef0808, code 94f7ae6, runs/batch_20261108a.txt)
 2026-11-08 run: 150310 done in 22 min, all 9 stages ran, gate passed; fetched to runs/150310_r3_review_fixes_v6
 2026-11-08 decision: M2 Yes sentence added next to outcome-1 wording (D-040)
+2026-11-08 deliverables: paper section 'Checks requested in review' (22 pages), report_v1.html Robustness v3 step, 2-page course report papers/course_report_mvp1 (2 pages, clean build), tips/polymarket_paper_review_tips.html updated (D-040)

@@ -71,6 +71,10 @@
 \newcommand{\CcdfRun}{145892\_ccdf\_v6}
 \newcommand{\WalletDistRun}{145893\_walletdist\_v7}
 \newcommand{\QqRun}{145897\_q3figs\_v8}
+\newcommand{\RThreeRun}{150310\_r3\_review\_fixes\_v6}
+\newcommand{\RThreeFigRun}{local\_r3figs\_v10}
+\newcommand{\RThreeCodeVersion}{v6}
+\newcommand{\RThreePreregCommit}{aef0808}
 
 % --- Table row helpers: pull one row of macros by name ---
 \newcommand{\binrow}[2]{#1 & \csname Bin#2N\endcsname & \csname Bin#2Price\endcsname
@@ -386,6 +390,7 @@ An earlier review found three sources of small differences between reruns.
 They were tie order inside one block, a random sample, and row order.
 Code version \CodeVersion{} fixes these.
 The pre-registered criteria did not change, and no verdict flipped.
+The review-fix run is \RThreeRun, with code version \RThreeCodeVersion{} and the pre-registration in commit \RThreePreregCommit.
 
 \section{Results}\label{sec:results}
 \subsection{Q1: is the crowd right?}\label{sec:res-q1}
@@ -751,6 +756,147 @@ A negative difference means \pT{} is closer to the outcome than \pOne.
 On the \RobRTwoTradedN{} markets with a trade in the last day, the difference is \RobRTwoTradedMeanDiff.
 The \CiLevel{} CI is [\RobRTwoTradedCiLow, \RobRTwoTradedCiHigh].
 
+\subsection{Checks requested in review}\label{sec:res-review}
+% src: S-PAPER-9, S-PAPER-8
+Reviewers asked for further checks.
+We ran them in one run, \RThreeRun, with the rules fixed before the run in \texttt{analysis/prereg\_review\_fixes.md}.
+All checks are descriptive and add no verdict.
+Each new row sits next to the original Q1 row and does not replace it.
+The pre-registered Q1 verdict and its sentence stay as they are.
+Every check uses the \QOneN{} kept markets, except where stated.
+
+% src: S-PAPER-9
+Check M1 asks whether the price definition drives the net gap.
+Under the volume-weighted mean price (VWAP), the net gap is \RThreeMOneVwapNetGap{} (\CiLevel{} CI [\RThreeMOneVwapNetGapCiLow, \RThreeMOneVwapNetGapCiHigh]).
+Under the trade-based midpoint, it is \RThreeMOneMidNetGap{} (\CiLevel{} CI [\RThreeMOneMidNetGapCiLow, \RThreeMOneMidNetGapCiHigh]).
+The original row has \GapNetDiffMain.
+Both intervals lie below 0, so the pre-registered reading is that the gap is not an artifact of the price rule.
+The midpoint is a trade-based proxy and not a quote midpoint.
+It exists for the \RThreeMOneMidN{} markets with both trade sides (\RThreeMOneShareBoth).
+The mean half spread of this proxy is $h=\RThreeMOneMeanHalfSpread$.
+Is the size of the main net gap within $h$? \RThreeMOneGapWithinHalfSpread.
+\Cref{fig:r3-m1} shows the three net gaps.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r3_m1_price_definition}{0.8\linewidth}
+\caption{Net gap under each price definition, with \CiLevel{} intervals. Why: an interval below 0 under VWAP and the midpoint means the gap is not a price-rule artifact. Source: runs \RThreeRun{} and \RThreeFigRun.}
+\label{fig:r3-m1}
+\end{figure}
+
+% src: S-PAPER-9, S-PAPER-8
+Check M2 splits the markets by label.
+In the Yes/No markets ($n=\RThreeMTwoYesNoN$), Yes is priced above its observed rate.
+The net gap is \RThreeMTwoYesNoNetGap{} (\CiLevel{} CI [\RThreeMTwoYesNoNetGapCiLow, \RThreeMTwoYesNoNetGapCiHigh]), and \RThreeMTwoYesNoBinsBh{} of \NBins{} bins are off after BH.
+The other markets show no rejection ($n=\RThreeMTwoOtherN$, $\chi^2=\RThreeMTwoOtherChiSq$, $p=\RThreeMTwoOtherP$).
+Elsewhere we keep the term outcome 1.
+\Cref{fig:r3-m2} shows the Yes/No markets.
+The figure uses Wilson intervals, which are outside the lectures.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r3_m2_yes_reliability}{0.55\linewidth}
+\caption{Observed Yes rate against mean Yes price in the Yes/No markets. Why: points below the diagonal mean Yes is priced above its observed rate. Source: runs \RThreeRun{} and \RThreeFigRun.}
+\label{fig:r3-m2}
+\end{figure}
+
+% src: S-PAPER-9
+Check M3 asks how much dependence between markets matters.
+The data hold no event key, so we use two proxy keys.
+The first key (\texttt{\RThreeMThreeReadProxy}) is the first three tokens of the market slug, with \RThreeMThreeKOneNClusters{} clusters.
+The second key is category by close hour, with \RThreeMThreeKTwoNClusters{} clusters.
+We read the first key because its net gap interval is wider.
+Under it, the \CiLevel{} interval is [\RThreeMThreeKOneNetGapCiLow, \RThreeMThreeKOneNetGapCiHigh], and it still lies below 0.
+Under the second key it is [\RThreeMThreeKTwoNetGapCiLow, \RThreeMThreeKTwoNetGapCiHigh].
+The cluster chi-square is \RThreeMThreeKOneChiSq{} ($p=\RThreeMThreeKOneP$) for the first key and \RThreeMThreeKTwoChiSq{} ($p=\RThreeMThreeKTwoP$) for the second.
+The cluster bootstrap chi-square is outside the lectures.
+The proxies are not true event keys.
+\Cref{fig:r3-m3} compares the intervals.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r3_m3_cluster_bootstrap}{0.8\linewidth}
+\caption{Net gap with a cluster bootstrap interval under each proxy key, next to the one-market-per-cluster row. Why: a wider interval means markets in a cluster move together. Source: runs \RThreeRun{} and \RThreeFigRun.}
+\label{fig:r3-m3}
+\end{figure}
+
+% src: S-PAPER-9
+Check M4 compares the kept markets with the dropped ones.
+The kept markets have a median volume before $T-\DaysShort$ day of \RThreeMFourKeptMedianVolumeBeforeDay{} USDC.
+The pooled eligible dropped markets have \RThreeMFourDroppedMedianVolumeBeforeDay{} USDC.
+The median duration is \RThreeMFourKeptMedianDuration{} against \RThreeMFourDroppedMedianDuration{} days.
+The median trade count is \RThreeMFourKeptMedianTrades{} against \RThreeMFourDroppedMedianTrades.
+The stale-price markets have a net gap of \RThreeMFourStaleNetGap{} (\CiLevel{} CI [\RThreeMFourStaleNetGapCiLow, \RThreeMFourStaleNetGapCiHigh]).
+\Cref{fig:r3-m4} shows the share of markets in each group.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r3_m4_kept_vs_dropped}{0.8\linewidth}
+\caption{Share of in-scope markets in each kept and dropped group. Why: it shows how much of the market set each drop rule removes. Source: runs \RThreeRun{} and \RThreeFigRun.}
+\label{fig:r3-m4}
+\end{figure}
+
+% src: S-PAPER-9
+Check M5 asks how large the miscalibration is in usable terms.
+We fit a logistic calibration of the outcome on the price, $\mathrm{logit}\,P(y=1)=a+b\,\mathrm{logit}(p)$.
+The intercept is $a=\RThreeMFiveA$ (Wald \CiLevel{} CI [\RThreeMFiveAWaldLow, \RThreeMFiveAWaldHigh]).
+The slope is $b=\RThreeMFiveB$ (Wald \CiLevel{} CI [\RThreeMFiveBWaldLow, \RThreeMFiveBWaldHigh]).
+The practical line is the mean half spread, \RThreeMOneMeanHalfSpread.
+The largest implied gap on the price grid is \RThreeMFiveMaxAbsDelta{} in size.
+Of \RThreeMFiveGridPrices{} grid prices, \RThreeMFivePracticalPrices{} pass the practical line.
+The Brier skill score against climatology is \RThreeMFiveSkill{} (Brier \RThreeMFiveBrier{} against \RThreeMFiveClimatologyBrier).
+The climatology is in sample.
+The majority-class accuracy is \RThreeMFiveMajorityAccuracy{} and the accuracy at the \FavoriteLine{} line is \RThreeMFiveAccuracyHalf.
+Logistic calibration and the skill score are outside the lectures.
+\Cref{fig:r3-m5} shows the implied gap.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r3_m5_implied_gap}{0.8\linewidth}
+\caption{Implied gap between the fitted probability and the price, against the practical line. Why: a band that excludes 0 at a price shows the gap there is not noise. Source: runs \RThreeRun{} and \RThreeFigRun.}
+\label{fig:r3-m5}
+\end{figure}
+
+% src: S-PAPER-9
+The duplicate-row check removes exact duplicate trade rows.
+They are \RThreeMinorFourDupShare{} of the trade rows of the kept markets.
+Removing them drops \RThreeMinorFourRemoved{} markets from the kept set.
+Then $\chi^2=\RThreeMinorFourChiSq$ against \QOneChiSq{} in the original row, and the net gap is \RThreeMinorFourNetGap{} against \GapNetDiffMain.
+The top \TopOneLabel{} maker share changes by \RThreeMinorFourMakerTopOneDeltaPp{} percentage points.
+The top \TopTwentyLabel{} maker share changes by \RThreeMinorFourMakerTopTwentyDeltaPp.
+For takers the changes are \RThreeMinorFourTakerTopOneDeltaPp{} and \RThreeMinorFourTakerTopTwentyDeltaPp.
+
+% src: S-PAPER-9
+Two peer questions ask whether the gap depends on volume and on the close period.
+We split the kept markets into volume terciles, by volume before $T-\DaysShort$ day.
+The cut points are \RThreePeerACutLowMid{} and \RThreePeerACutMidHigh{} USDC.
+The net gap is \RThreePeerALowNetGap{} in the low tercile (CI [\RThreePeerALowNetGapCiLow, \RThreePeerALowNetGapCiHigh], BH $p=\RThreePeerALowBhP$).
+It is \RThreePeerAMidNetGap{} in the middle tercile (CI [\RThreePeerAMidNetGapCiLow, \RThreePeerAMidNetGapCiHigh], BH $p=\RThreePeerAMidBhP$).
+It is \RThreePeerAHighNetGap{} in the high tercile (CI [\RThreePeerAHighNetGapCiLow, \RThreePeerAHighNetGapCiHigh], BH $p=\RThreePeerAHighBhP$).
+The high minus low difference is \RThreePeerADiff{} (CI [\RThreePeerADiffCiLow, \RThreePeerADiffCiHigh], $p=\RThreePeerADiffP$).
+\Cref{fig:r3-peer-a} shows the terciles.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r3_peer_a_volume}{0.8\linewidth}
+\caption{Net gap per volume tercile, with \CiLevel{} intervals. Why: overlapping intervals mean no sign that the gap changes with volume. Source: runs \RThreeRun{} and \RThreeFigRun.}
+\label{fig:r3-peer-a}
+\end{figure}
+
+The close periods are \RThreePeerBPeriodOneLabel, \RThreePeerBPeriodTwoLabel, and \RThreePeerBPeriodThreeLabel.
+The net gap is \RThreePeerBPeriodOneNetGap{} in \RThreePeerBPeriodOneLabel{} (CI [\RThreePeerBPeriodOneNetGapCiLow, \RThreePeerBPeriodOneNetGapCiHigh], BH $p=\RThreePeerBPeriodOneBhP$, $n=\RThreePeerBPeriodOneN$).
+It is \RThreePeerBPeriodTwoNetGap{} in \RThreePeerBPeriodTwoLabel{} (CI [\RThreePeerBPeriodTwoNetGapCiLow, \RThreePeerBPeriodTwoNetGapCiHigh], BH $p=\RThreePeerBPeriodTwoBhP$, $n=\RThreePeerBPeriodTwoN$).
+In \RThreePeerBPeriodThreeLabel{} the chi-square test does not reject (BH $p=\RThreePeerBPeriodThreeBhP$, $n=\RThreePeerBPeriodThreeN$).
+In the same period the net gap is \RThreePeerBPeriodThreeNetGap, and its \CiLevel{} CI [\RThreePeerBPeriodThreeNetGapCiLow, \RThreePeerBPeriodThreeNetGapCiHigh] excludes 0.
+\Cref{fig:r3-peer-b} shows the periods.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r3_peer_b_period}{0.8\linewidth}
+\caption{Net gap per close period, with \CiLevel{} intervals. Why: overlapping intervals mean no sign that the gap changes with the period. Source: runs \RThreeRun{} and \RThreeFigRun.}
+\label{fig:r3-peer-b}
+\end{figure}
+
 \section{Discussion}\label{sec:discussion}
 % src: S-PAPER-5, S-PAPER-8, S-PAPER-10
 The answer to Q1 is no.
@@ -804,11 +950,14 @@ Our selection is narrow.
 Only \NMarketsKept{} of \NMarketsInScope{} markets pass the filters.
 \NNoPrice{} markets have no price \DaysShort{} day before the close (\PctNoPrice).
 The minimum-trade filter is a choice, and we show the result without it.
+\Cref{sec:res-review} compares kept and dropped markets (M4).
 Markets on one event move together.
 The binomial and chi-square tests assume independent markets, so the p-values are optimistic.
 The z intervals use the same assumption, so they may be too narrow.
 The role tests compare groups that share addresses and trades.
-No event-level count is saved, so we cannot size this dependence.
+No event key exists in the data, so we cannot size this dependence exactly.
+Two proxy keys address it in part (\Cref{sec:res-review}).
+The proxies are not true event keys.
 With this many rows, a tiny gap can give a tiny p-value.
 So we read the effect sizes first.
 The intervals do not escape the independence assumption.

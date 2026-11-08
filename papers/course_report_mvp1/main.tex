@@ -1,0 +1,167 @@
+% CS 6344 course final report (2 pages). Content copied from ../paper_mvp1/main.tex; every number is a macro.
+% src: S-PAPER-5, S-PAPER-9, S-PAPER-10 (paper_mvp1 main.tex and numbers.tex), D-038 to D-040, tips/polymarket_feedback_answers_tips.html
+\documentclass[10pt]{article}
+
+\usepackage[margin=0.6in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage[numbers]{natbib}
+\usepackage{figkit}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{../paper_mvp1/figures/}}
+\captionsetup{font=footnotesize,labelfont=bf,skip=2pt}
+\setlength{\emergencystretch}{2em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\setlength{\intextsep}{3pt}
+\setlength{\textfloatsep}{4pt}
+\setlength{\bibsep}{0pt}
+
+\DeclareRobustCommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+\newcommand{\hd}[1]{\medskip\noindent{\large\bfseries #1}\par\nopagebreak}
+
+\input{../paper_mvp1/numbers}
+
+% Design constants copied from the paper (not measured).
+\newcommand{\NBins}{10}
+\newcommand{\CiLevel}{95\%}
+\newcommand{\DaysShort}{1}
+\newcommand{\MaxStaleHours}{24}
+\newcommand{\TopTwentyLabel}{20\%}
+\newcommand{\HookPct}{70\%}
+\newcommand{\PaperTopShare}{84.1\%}
+\newcommand{\PaperTrades}{1.2 billion}
+\newcommand{\PaperMarkets}{1.3 million}
+\newcommand{\PaperPeriod}{November 2022 to April 2026}
+\newcommand{\pOne}{\ensuremath{p_{1\mathrm{d}}}}
+% Feedback counts after run 150310 (tips page, updated by D-038).
+\newcommand{\FbAsks}{18}
+\newcommand{\FbAnswered}{8}
+\newcommand{\FbPartly}{4}
+\newcommand{\FbMvpTwo}{6}
+\newcommand{\FbNotDone}{0}
+
+\title{When Polymarket Says \HookPct, Does It Happen \HookPct{} of the Time?\\[1pt]
+\large CS 6344 Introduction to Data Science, Final Report}
+\author{Group 1, Team Brier: Taek Lim, Zhugang Liu (Tony), Francisco Cortez}
+\date{}
+
+\begin{document}
+\maketitle
+
+\textbf{Question.} Is a Polymarket price a calibrated probability?
+We also ask who trades (Q2) and what the trades look like (Q3).
+
+\hd{1. Data and method}
+We use the Polymarket-v1 database, which holds \PaperTrades{} trades and \PaperMarkets{} markets from \PaperPeriod{} \citep{qin2026polymarketv1}.
+Of \NMarketsInScope{} Yes/No markets in scope we keep \NMarketsKept{} (\PctMarketsKept).
+We read each market's price \DaysShort{} day before its scheduled close, because a price after the close can contain the answer.
+We drop prices older than \MaxStaleHours{} hours and markets with fewer than \MinTrades{} trades.
+We cut the price into \NBins{} equal-width bins.
+We test each bin with a binomial test (Benjamini-Hochberg corrected \citep{benjamini1995controlling}) and all bins with a chi-square test.
+We fixed the criteria in a pre-registration before any Q1 result.
+We report one later rule change as an amendment (tie rule for the price).
+
+\hd{2. Q1: is the crowd right?}
+\begin{minipage}[t]{0.56\textwidth}\vspace{0pt}
+\centering
+\figorbox{../paper_mvp1/figures/fig4_calibration_gap_half}{4.088in}
+\captionof{figure}{Observed outcome-1 rate against mean price per bin (top), and the per-bin gap with \CiLevel{} intervals (bottom). Why: the lower panel shows the gaps that the diagonal hides.}
+\label{fig:calib}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.41\textwidth}\vspace{0pt}
+\textbf{\VerdictQOne} The effect is small and runs one way.
+
+\begin{tabular}{@{}lr@{}}
+\toprule
+Chi-square $\chi^2$ & \QOneChiSq \\
+\midrule
+p-value & \QOneP \\
+\midrule
+Bins with rate below price & \GapNegBinsMain{} of \GapBinsTotal \\
+\midrule
+Net gap & \GapNetDiffMain \\
+\midrule
+Largest per-bin gap & \LargestGapAbs \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+Outcome 1 is priced too high.
+We set no size line before the results, so ``small'' is our reading.
+With the minimum-trade filter, cheap bets pay off less often than priced, which matches horse racing \citep{snowberg2010favorite}.
+Without the filter, the cheapest bin flips above the price.
+
+\smallskip
+\textbf{Review checks} (rows next to the original, no new verdict).
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}\setlength{\topsep}{1pt}\setlength{\leftmargin}{1.2em}
+\item Price rule: with a volume-weighted average price the net gap is \RThreeMOneVwapNetGap{}, and with a trade-based midpoint it is \RThreeMOneMidNetGap{}. So the price rule does not create the gap.
+\item Yes/No markets (n=\RThreeMTwoYesNoN): Yes is priced above its observed rate, net gap \RThreeMTwoYesNoNetGap{}.
+\item Dependent markets: with markets grouped by a proxy event key, the net-gap interval is [\RThreeMThreeKOneNetGapCiLow, \RThreeMThreeKOneNetGapCiHigh]. It stays below 0.
+\item Size: the largest implied gap is \RThreeMFiveMaxAbsDelta{}, against a mean half spread of \RThreeMOneMeanHalfSpread.
+\end{itemize}
+\end{minipage}
+
+\hd{3. Q2 and Q3 (descriptive, no verdict)}
+\begin{minipage}[t]{0.48\textwidth}\vspace{0pt}
+{\centering
+\figorbox{../paper_mvp1/figures/fig6_ccdf_top_sampled_half}{3.504in}
+\captionof{figure}{CCDF of wallet volume, one line per role. Why: the tail bends down, so it is not a power law.}
+\label{fig:ccdf}}
+\textbf{Q2.} The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker and \TakerTopTwentyShare{} of taker USDC volume, against the 80/20 reference of \TopTwentyReference.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
+{\centering
+\figorbox{../paper_mvp1/figures/qq_trade_size_raw_log_half}{3.65in}
+\captionof{figure}{QQ plot of trade size against the normal, raw (left) and log (right). Why: the log points follow the line, so log sizes are closer to normal.}
+\label{fig:qq}}
+\textbf{Q3.} Mean trade size is \TradeSizeMean{} USDC and median is \TradeSizeMedian{} USDC, so sizes are strongly right skewed.
+\end{minipage}
+
+\hd{4. Limitations}
+\textbf{Independence.} Markets on one event move together, so the p-values may be too small. No event key exists, so we size this only with proxy keys.
+\textbf{Selection.} Only \PctMarketsKept{} of markets pass the filters. Kept markets trade more than dropped ones.
+
+\hd{5. Response to feedback}
+\FbAsks{} asks from the proposal feedback: answered \FbAnswered, partly \FbPartly, outside this report (MVP2) \FbMvpTwo, not done \FbNotDone.
+\medskip
+
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}p{2.6cm}p{2.6cm}Xp{1.3cm}@{}}
+\toprule
+Who & Ask & What we did & Status \\
+\midrule
+Amanda Aninagyei, Oscar Juarez, Ben Alvarado, Marcelo Cavazos & Which price, and when & One fixed price \DaysShort{} day before close. In the pilot, \PilotShareMarketsAfterClose{} of markets traded after the close. & Answered \\
+\midrule
+Hameem Gorabi & Map the longshot effect & Gap per bin, \NBins{} bins (Figure~\ref{fig:calib}). & Answered \\
+\midrule
+Hameem Gorabi & Volume with odds & Volume terciles. High minus low net gap is \RThreePeerADiff. & Done \\
+\midrule
+Robert Molina & Other periods & Three close periods. In the third, BH $p=\RThreePeerBPeriodThreeBhP$ and net gap \RThreePeerBPeriodThreeNetGap. & Done \\
+\midrule
+Yusuf Oraby & Group dependent markets & Cluster bootstrap on proxy event keys. The interval widens and stays below 0. Proxies are not event keys. & In part \\
+\midrule
+Luis Tapia & Odd resolutions, late swings & \RobROneSplitN{} split payouts, verdict unchanged. Price moves by 0.10 or more in \RobRTwoShareDeltaAtLeastTen{} of markets. & Partly \\
+\midrule
+Ben Alvarado, Victor Alvarez, Siyi Chen & Other horizons, topics, volume & Run as MVP2 checks, not a target of this report. & Outside \\
+\bottomrule
+\end{tabularx}
+\normalsize
+
+\hd{6. Interpretation and conclusion}
+\todo{owner: interpretation of why prices run high and what the gaps mean in practice for a reader of the price}
+\todo{owner: closing sentence on the value of the study, and future work}
+\vspace{1.2cm}
+
+\begingroup\footnotesize\raggedright
+\bibliographystyle{plainnat}
+\bibliography{../paper_mvp1/references}
+\endgroup
+
+\end{document}
