@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="ko" data-lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6344 논문 결정 흐름</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<script>
+/* Runs first: marks JS as on and sets the language. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){var d=document.documentElement;d.className="js";var l="ko";try{var s=localStorage.getItem("decisiontips-lang");if(s==="ko"||s==="en"){l=s;}}catch(e){}try{var q=/[?&]lang=(ko|en)(&|$)/.exec(location.search);if(q){l=q[1];}}catch(e){}d.setAttribute("data-lang",l);d.lang=l;})();
+</script>
+<style>
+/* theme.css from skills/html-theme, light tokens only (rules/answering.md section 3) */
+:root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
+/* series colours for decision kinds (page-owned, rules/answering.md section 3) */
+--k-crit:#dbe4ff;--k-crit-l:#0432ff;--k-scope:#fff3a0;--k-scope-l:#c9a400;--k-method:#f0e0ff;--k-method-l:#7a2db8;--k-fig:#dcf5e3;--k-fig-l:#1f8a45;--k-env:#e4e4e2;--k-env-l:#888}
+*{box-sizing:border-box;border-radius:var(--radius)}
+body{background:var(--background);color:var(--foreground);font-family:var(--font);font-size:14px;line-height:1.6;padding-inline:16px;padding-block:32px 64px;margin:0}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1{font-size:24px;line-height:1.3;font-weight:700;margin:0}
+h2{font-size:17px;font-weight:500;margin:0}
+h3{font-size:15px;font-weight:700;margin:0}
+p{margin:0}
+.muted{color:var(--muted-foreground)}
+.label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-foreground)}
+.panel{background:var(--card);border:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:12px;scroll-margin-top:80px}
+.step{border-top:4px solid var(--primary)}
+.scroll-x{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{padding:6px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{font-weight:500;color:var(--muted-foreground)}
+tbody tr:nth-child(even){background:var(--muted)}
+code{font-family:var(--font);font-size:13px}
+button{font:inherit;padding:6px 14px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer}
+button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;background:var(--background);padding:8px 0;border-bottom:1px solid var(--rule);z-index:2}
+.tab{display:flex;flex-direction:column;gap:24px}
+.tab[hidden]{display:none}
+.mermaid{display:flex;justify-content:center}
+.mermaid svg{max-width:100%;height:auto}
+/* One small left-to-right diagram per phase: one big graph spread out and shrank the labels. */
+.lane{border:1px solid var(--rule);background:var(--muted);padding:10px;display:flex;flex-direction:column;gap:6px}
+.lane-t{font-weight:700}
+.lane .mermaid{background:var(--card);padding:8px 0}
+.link-down{text-align:center;color:var(--muted-foreground)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center}
+.sw{display:inline-block;width:14px;height:14px;border:2px solid;vertical-align:-2px;margin-right:6px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:760px){.cards{grid-template-columns:1fr}}
+.card{border:1px solid var(--border);border-left:6px solid;padding:12px;display:flex;flex-direction:column;gap:6px;scroll-margin-top:80px;background:var(--card)}
+.card .id{font-weight:700}
+.card dl{display:grid;grid-template-columns:76px 1fr;gap:4px 10px;margin:0}
+html[data-lang="en"] .card dl{grid-template-columns:104px 1fr}
+.card dt{color:var(--muted-foreground)}
+.card dd{margin:0}
+.card.dead{opacity:.7}
+.chip{display:inline-block;padding:0 6px;border:1px solid var(--border);font-size:11px;margin-left:6px;color:var(--muted-foreground)}
+.dlink{color:var(--signal-plan);cursor:pointer;text-decoration:underline}
+.flow-click g.node{cursor:pointer}
+.flow-click g.node:hover rect{stroke-width:3px!important}
+@keyframes hit{0%,60%{outline:3px solid #d40000;background:#fff3a0}100%{outline:3px solid transparent}}
+.hit{animation:hit 2.4s ease-out}
+.back{position:fixed;right:16px;bottom:16px;z-index:3;background:var(--primary);color:var(--primary-foreground)}
+.back[hidden]{display:none}
+.phase{display:flex;flex-direction:column;gap:10px}
+html[data-lang="ko"] [lang="en"],html[data-lang="en"] [lang="ko"]{display:none!important}
+/* While mermaid measures text, show both languages so each diagram gets real sizes. */
+html.rendering[data-lang] [lang]{display:revert!important}
+html[data-lang="ko"] body{word-break:keep-all}
+.topbar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.langbar{display:none}
+html.js .langbar{display:flex}
+.langbar button{font:500 12.5px var(--font);padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer;margin-left:-1px}
+.langbar button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topbar" aria-label="Page navigation">
+  <div class="langbar" role="group" aria-label="Language">
+    <button type="button" data-set="ko" aria-pressed="true">한국어</button>
+    <button type="button" data-set="en" aria-pressed="false">English</button>
+  </div>
+</nav>
+
+<header style="display:flex;flex-direction:column;gap:8px">
+  <p class="label"><span lang="ko">cs6344_group_01 · paper_mvp1 · 결정 흐름</span><span lang="en">cs6344_group_01 · paper_mvp1 · Decision flow</span></p>
+  <h1><span lang="ko">논문은 어떤 결정으로 지금 모양이 됐나</span><span lang="en">Which decisions gave the paper its current shape</span></h1>
+  <p><b><span lang="ko">결론: 논문의 뼈대는 큰 결정 네 개가 만들었다.</span><span lang="en">Conclusion: four big decisions built the skeleton of the paper.</span></b></p>
+  <ol style="margin:0;padding-left:22px">
+    <li><span lang="ko">결과를 보기 전에 기준을 고정했다 (D-005, D-007).</span><span lang="en">We fixed the criteria before we saw any result (D-005, D-007).</span></li>
+    <li><span lang="ko">모든 숫자는 저장된 run 파일에서 나온다 (D-011, D-014).</span><span lang="en">Every number comes from a saved run file (D-011, D-014).</span></li>
+    <li><span lang="ko">범위는 MVP1(Q1, Q2, Q3)만이다 (D-016, D-019, D-023).</span><span lang="en">The scope is minimum viable product 1 (MVP1) only: Q1, Q2, Q3 (D-016, D-019, D-023).</span></li>
+    <li><span lang="ko">방법은 강의 안에서만 쓴다 (D-025, D-026).</span><span lang="en">We use only methods taught in the lecture (D-025, D-026).</span></li>
+  </ol>
+  <p class="muted"><span lang="ko">왜: 논문을 읽는 사람이 "왜 이렇게 했나"를 물을 때, 결정과 이유를 한 장으로 보이려고 만들었다. 쓴 데이터: <code>cs6344_group_01/DECISIONS.md</code>(D-001 ~ D-034, 34행), <code>papers/paper_mvp1/main.tex</code>의 절 목록, <code>STATUS.md</code>. "왜 중요한가" 칸은 각 행의 버린 안(Rejected)과 이유를 근거로 썼다.</span><span lang="en">Why: a reader of the paper may ask "why did you do this?". This page shows each decision and its reason on one page. Data used: <code>cs6344_group_01/DECISIONS.md</code> (D-001 to D-034, 34 rows), the section list of <code>papers/paper_mvp1/main.tex</code>, and <code>STATUS.md</code>. The "Why it matters" field comes from the rejected option and its reason in each row.</span></p>
+</header>
+
+<nav class="tabs" aria-label="보기 선택 / Choose a view">
+  <button data-tab="flow" aria-pressed="true">1 · <span lang="ko">결정 흐름</span><span lang="en">Decision flow</span></button>
+  <button data-tab="cards" aria-pressed="false">2 · <span lang="ko">결정 34개: 왜, 왜 중요한가</span><span lang="en">34 decisions: why, why it matters</span></button>
+  <button data-tab="paper" aria-pressed="false">3 · <span lang="ko">논문 절 ↔ 결정</span><span lang="en">Paper sections ↔ decisions</span></button>
+</nav>
+
+<!-- TAB 1 -->
+<section class="tab" id="tab-flow">
+  <div class="panel step">
+    <p class="label">Step 1 of 2</p>
+    <h2><span lang="ko">결정이 이어진 순서: 질문에서 17쪽 논문까지</span><span lang="en">Order of the decisions: from the question to the 17-page paper</span></h2>
+    <p style="color:var(--signal-plan)">👆 <span lang="ko">상자를 누르면 그 결정의 카드(왜, 왜 중요한가, 버린 안)로 간다.</span><span lang="en">Click a box to jump to the card of that decision (why, why it matters, rejected option).</span></p>
+    <div class="legend muted">
+      <span><span class="sw" style="background:var(--k-crit);border-color:var(--k-crit-l)"></span><span lang="ko">기준과 데이터</span><span lang="en">Criteria and data</span></span>
+      <span><span class="sw" style="background:var(--k-scope);border-color:var(--k-scope-l)"></span><span lang="ko">범위</span><span lang="en">Scope</span></span>
+      <span><span class="sw" style="background:var(--k-method);border-color:var(--k-method-l)"></span><span lang="ko">방법</span><span lang="en">Method</span></span>
+      <span><span class="sw" style="background:var(--k-fig);border-color:var(--k-fig-l)"></span><span lang="ko">그림과 글</span><span lang="en">Figures and text</span></span>
+    </div>
+    <div class="lane"><p class="lane-t"><span lang="ko">① 데이터와 기준 · 2026-10-19</span><span lang="en">1. Data and criteria · 2026-10-19</span></p><pre class="mermaid" lang="ko">
+flowchart LR
+  Q(["질문: 가격을<br/>확률로 읽어도 되나?"]) --> D003["D-003<br/>daily_aligned 층"] --> D004["D-004 파일럿<br/>2025-06 마감 시장"] --> D005["D-005 벽<br/>Job A는 검사만"] --> D007["D-007 T = close_at<br/>10 trades, 중복 유지"]
+  classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
+  class D003,D004,D005,D007 crit
+</pre><pre class="mermaid" lang="en">
+flowchart LR
+  Q(["Question: can we read<br/>a price as<br/>a probability?"]) --> D003["D-003<br/>daily_aligned layer"] --> D004["D-004 pilot<br/>markets closing 2025-06"] --> D005["D-005 wall<br/>Job A only checks"] --> D007["D-007 T = close_at<br/>10 trades, keep duplicates"]
+  classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
+  class D003,D004,D005,D007 crit
+</pre></div>
+    <p class="link-down">▼ <span lang="ko">D-007의 기준 위에서 실행하고 리뷰했다. 기준은 그 뒤로 바뀌지 않았다.</span><span lang="en">We ran and reviewed on the D-007 criteria. The criteria did not change after that.</span></p>
+    <div class="lane"><p class="lane-t"><span lang="ko">② 실행, 리뷰, 논문 틀 · 2026-10-19</span><span lang="en">2. Runs, review, paper frame · 2026-10-19</span></p><pre class="mermaid" lang="ko">
+flowchart LR
+  D011["D-011 리뷰 수정<br/>같은 시각은 평균, 해시 표본"] --> D013["D-013 강건성 R1, R2<br/>판정은 안 바꿈"]
+  D012["D-012<br/>임무, 비전"] --> D014["D-014 LaTeX 논문<br/>숫자는 numbers.tex"]
+  classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
+  classDef scope fill:#fff3a0,stroke:#c9a400,color:#111
+  classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
+  class D011,D013 crit
+  class D012 scope
+  class D014 fig
+</pre><pre class="mermaid" lang="en">
+flowchart LR
+  D011["D-011 review fixes<br/>same-time average, hash sample"] --> D013["D-013 robustness R1, R2<br/>verdicts unchanged"]
+  D012["D-012<br/>mission, vision"] --> D014["D-014 LaTeX paper<br/>numbers from numbers.tex"]
+  classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
+  classDef scope fill:#fff3a0,stroke:#c9a400,color:#111
+  classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
+  class D011,D013 crit
+  class D012 scope
+  class D014 fig
+</pre></div>
+    <p class="link-down">▼ <span lang="ko">마감(D-021)을 앞두고 논문 범위를 좁혔다.</span><span lang="en">Before the deadline (D-021), we narrowed the paper scope.</span></p>
+    <div class="lane"><p class="lane-t"><span lang="ko">③ 범위 좁히기 · 2026-11-01</span><span lang="en">3. Narrowing the scope · 2026-11-01</span></p><pre class="mermaid" lang="ko">
+flowchart LR
+  D016["D-016<br/>목표는 MVP1만"] --> D017["D-017 MVP2<br/>→ future_work"]
+  D016 --> D019["D-019 임무 =<br/>검사한 시장만"]
+  D016 --> D020["D-020 비전 유지<br/>주제, 기간은 한계로"]
+  D016 --> D023["D-023<br/>paper_mvp1만"]
+  classDef scope fill:#fff3a0,stroke:#c9a400,color:#111
+  class D016,D017,D019,D020,D023 scope
+</pre><pre class="mermaid" lang="en">
+flowchart LR
+  D016["D-016<br/>target is MVP1 only"] --> D017["D-017 MVP2<br/>→ future_work"]
+  D016 --> D019["D-019 mission =<br/>checked markets only"]
+  D016 --> D020["D-020 vision kept<br/>topic, period as limits"]
+  D016 --> D023["D-023<br/>paper_mvp1 only"]
+  classDef scope fill:#fff3a0,stroke:#c9a400,color:#111
+  class D016,D017,D019,D020,D023 scope
+</pre></div>
+    <p class="link-down">▼ <span lang="ko">좁힌 범위 안에서, 방법도 강의 안으로 좁혔다.</span><span lang="en">Inside the narrowed scope, we also narrowed the methods to the lecture.</span></p>
+    <div class="lane"><p class="lane-t"><span lang="ko">④ 강의 방법만 · 2026-11-01 ~ 11-02</span><span lang="en">4. Lecture methods only · 2026-11-01 ~ 11-02</span></p><pre class="mermaid" lang="ko">
+flowchart LR
+  D024["D-024 80/20은<br/>참고선, 판정선 아님"] --> D025["D-025 강의 방법만<br/>멱법칙도 기술만"] --> D026["D-026 이름 바꿈, 제거<br/>Brier, w, Wilson, Gini"]
+  D025 --> D027["D-027 lognormal<br/>향후 연구 한 줄"]
+  D026 --> D028["D-028 Lorenz는<br/>CCDF 옆, 강의 밖 표시"]
+  D026 --> D030["D-030 군집 카이제곱<br/>복귀, 효과 = 몫 차이"]
+  classDef method fill:#f0e0ff,stroke:#7a2db8,color:#111
+  class D024,D025,D026,D027,D028,D030 method
+</pre><pre class="mermaid" lang="en">
+flowchart LR
+  D024["D-024 80/20 is a<br/>reference line,<br/>not a verdict line"] --> D025["D-025 lecture methods only<br/>power law: description only"] --> D026["D-026 renamed, removed<br/>Brier, w, Wilson, Gini"]
+  D025 --> D027["D-027 lognormal<br/>one line of future work"]
+  D026 --> D028["D-028 Lorenz beside CCDF,<br/>marked outside lecture"]
+  D026 --> D030["D-030 cluster chi-square back,<br/>effect = share difference"]
+  classDef method fill:#f0e0ff,stroke:#7a2db8,color:#111
+  class D024,D025,D026,D027,D028,D030 method
+</pre></div>
+    <p class="link-down">▼ <span lang="ko">남은 방법으로 그림을 다시 그리고, 리뷰를 거쳐 논문을 마무리했다.</span><span lang="en">We redrew the figures with the remaining methods, passed review, and finished the paper.</span></p>
+    <div class="lane"><p class="lane-t"><span lang="ko">⑤ 그림과 마무리 · 2026-11-01 ~ 11-02</span><span lang="en">5. Figures and wrap-up · 2026-11-01 ~ 11-02</span></p><pre class="mermaid" lang="ko">
+flowchart LR
+  D029["D-029 CCDF 다시<br/>꼬리 표본"] --> D031["D-031 지갑 분포<br/>+ 전체 Lorenz"]
+  D018["D-018 상자그림<br/>저장 파일로"] --> D033
+  D031 --> D033["D-033 읽히면 두 개<br/>18쪽 → 17쪽"]
+  D032["D-032 그림<br/>한 줄에 하나"] --> D033
+  D022["D-022 세 번째<br/>관문 리뷰"] --> D034["D-034 Q1 p 뒤에<br/>독립성 경고"]
+  D033 --> P(["paper_mvp1<br/>17쪽"])
+  D034 --> P
+  classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
+  class D018,D022,D029,D031,D032,D033,D034 fig
+</pre><pre class="mermaid" lang="en">
+flowchart LR
+  D029["D-029 CCDF redrawn<br/>tail sample"] --> D031["D-031 wallet distribution<br/>+ full Lorenz"]
+  D018["D-018 box plot<br/>from saved files"] --> D033
+  D031 --> D033["D-033 two per row if readable<br/>18 pages → 17 pages"]
+  D032["D-032 figures<br/>one per row"] --> D033
+  D022["D-022 third<br/>gate review"] --> D034["D-034 independence warning<br/>after the Q1 p value"]
+  D033 --> P(["paper_mvp1<br/>17 pages"])
+  D034 --> P
+  classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
+  class D018,D022,D029,D031,D032,D033,D034 fig
+</pre></div>
+    <p class="muted"><span lang="ko">그림에 없는 결정: 환경 D-001, D-002, D-006, D-008, D-015, 마감 D-021, 나중에 바뀐 MVP2 결정 D-009, D-010. 탭 2 카드에 있다.</span><span lang="en">Decisions not in the figure: environment D-001, D-002, D-006, D-008, D-015, deadline D-021, and the MVP2 decisions changed later, D-009 and D-010. They are in the tab 2 cards.</span></p>
+    <p class="muted"><span lang="ko">그림 1. 논문 모양을 바꾼 결정 26개를 다섯 단계로 나눈 순서와 연결. 왜: 한 결정이 다음 결정의 조건이 된 길을 보이면, 논문의 각 선택이 어디서 왔는지 거꾸로 따라갈 수 있다. 출처: <code>cs6344_group_01/DECISIONS.md</code>.</span><span lang="en">Figure 1. The 26 decisions that shaped the paper, in five phases with their links. Why: when one decision is the condition of the next, you can trace each paper choice back to its source. CCDF means complementary cumulative distribution function. Source: <code>cs6344_group_01/DECISIONS.md</code>.</span></p>
+  </div>
+
+  <div class="panel step">
+    <p class="label">Step 2 of 2</p>
+    <h2><span lang="ko">네 개의 큰 줄기: 무엇을 막았나</span><span lang="en">Four main threads: what each one prevented</span></h2>
+    <div class="scroll-x"><table>
+      <thead><tr><th><span lang="ko">줄기</span><span lang="en">Thread</span></th><th><span lang="ko">결정</span><span lang="en">Decisions</span></th><th><span lang="ko">막은 위험</span><span lang="en">Risk prevented</span></th><th><span lang="ko">논문에서 보이는 곳</span><span lang="en">Where it shows in the paper</span></th></tr></thead>
+      <tbody>
+        <tr><td><span lang="ko">기준 먼저</span><span lang="en">Criteria first</span></td><td><span class="dlink" data-d="D-005">D-005</span>, <span class="dlink" data-d="D-007">D-007</span>, <span class="dlink" data-d="D-013">D-013</span></td><td><span lang="ko">결과를 본 뒤 기준을 바꿔 원하는 답을 만드는 것</span><span lang="en">Changing the criteria after seeing results to make the wanted answer</span></td><td><span lang="ko">Methods: Evaluation price and pre-registration</span><span lang="en">Methods: Evaluation price and pre-registration</span></td></tr>
+        <tr><td><span lang="ko">숫자는 파일에서</span><span lang="en">Numbers from files</span></td><td><span class="dlink" data-d="D-011">D-011</span>, <span class="dlink" data-d="D-014">D-014</span></td><td><span lang="ko">실행마다 다른 숫자, 손으로 옮기다 틀린 숫자</span><span lang="en">Numbers that differ from run to run, and numbers mistyped when copied by hand</span></td><td><span lang="ko">Methods: Reproducibility, 모든 숫자 매크로</span><span lang="en">Methods: Reproducibility, a macro for every number</span></td></tr>
+        <tr><td><span lang="ko">범위 좁히기</span><span lang="en">Narrow the scope</span></td><td><span class="dlink" data-d="D-016">D-016</span>, <span class="dlink" data-d="D-019">D-019</span>, <span class="dlink" data-d="D-023">D-023</span></td><td><span lang="ko">검사하지 않은 시장까지 주장하는 것, 마감 전에 못 끝내는 것</span><span lang="en">Claiming markets we did not check, and not finishing before the deadline</span></td><td><span lang="ko">Introduction, Data: Source and scope</span><span lang="en">Introduction, Data: Source and scope</span></td></tr>
+        <tr><td><span lang="ko">강의 방법만</span><span lang="en">Lecture methods only</span></td><td><span class="dlink" data-d="D-025">D-025</span>, <span class="dlink" data-d="D-026">D-026</span>, <span class="dlink" data-d="D-028">D-028</span></td><td><span lang="ko">수업 범위 밖 방법을 설명 없이 쓰는 것</span><span lang="en">Using methods outside the course without explanation</span></td><td><span lang="ko">Methods Q1, Q2, 강의 밖 표시가 붙은 Lorenz 그림</span><span lang="en">Methods Q1, Q2, the Lorenz figure with the outside-lecture mark</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- TAB 2 -->
+<section class="tab" id="tab-cards" hidden>
+  <div class="panel">
+    <p><span lang="ko"><b>읽는 법:</b> 카드 하나 = 결정 하나. 왼쪽 띠 색 = 종류(탭 1 범례와 같다). "왜" = 결정 당시의 이유. "왜 중요한가" = 논문에 생긴 일, 또는 버린 안을 택했을 때 생겼을 문제. 회색 카드는 나중에 바뀐 결정이다.</span><span lang="en"><b>How to read:</b> one card = one decision. Left stripe color = kind (same as the tab 1 legend). "Why" = the reason at the time of the decision. "Why it matters" = what happened in the paper, or the problem the rejected option would have caused. Grey cards are decisions that were changed later.</span></p>
+  </div>
+  <div id="cards"></div>
+</section>
+
+<!-- TAB 3 -->
+<section class="tab" id="tab-paper" hidden>
+  <div class="panel step">
+    <p class="label">Step 1 of 2</p>
+    <h2><span lang="ko">논문 절마다 어떤 결정이 들어 있나</span><span lang="en">Which decisions each paper section holds</span></h2>
+    <div class="scroll-x"><pre class="mermaid" lang="ko">
+flowchart LR
+  subgraph PAPER["paper_mvp1 main.tex"]
+    S1["1 Introduction"]
+    S3["3 Data"]
+    S4["4 Methods"]
+    S5["5 Results"]
+    S6["6-7 Discussion, Limitations"]
+  end
+  K1["범위<br/>D-012 D-016 D-019 D-023"] --> S1
+  K2["데이터와 거르기<br/>D-003 D-004 D-007 D-011"] --> S3
+  K3["사전 등록과 방법<br/>D-005 D-007 D-024 D-025 D-026 D-030"] --> S4
+  K4["재현성<br/>D-011 D-014"] --> S4
+  K5["그림과 강건성<br/>D-013 D-018 D-028 D-029 D-031 D-033 D-034"] --> S5
+  K6["한계와 향후<br/>D-017 D-020 D-027 D-034"] --> S6
+  classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
+  classDef scope fill:#fff3a0,stroke:#c9a400,color:#111
+  classDef method fill:#f0e0ff,stroke:#7a2db8,color:#111
+  classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
+  class K1,K6 scope
+  class K2,K4 crit
+  class K3 method
+  class K5 fig
+</pre><pre class="mermaid" lang="en">
+flowchart LR
+  subgraph PAPER["paper_mvp1 main.tex"]
+    S1["1 Introduction"]
+    S3["3 Data"]
+    S4["4 Methods"]
+    S5["5 Results"]
+    S6["6-7 Discussion, Limitations"]
+  end
+  K1["Scope<br/>D-012 D-016 D-019 D-023"] --> S1
+  K2["Data and filtering<br/>D-003 D-004 D-007 D-011"] --> S3
+  K3["Pre-registration and methods<br/>D-005 D-007 D-024 D-025 D-026 D-030"] --> S4
+  K4["Reproducibility<br/>D-011 D-014"] --> S4
+  K5["Figures and robustness<br/>D-013 D-018 D-028 D-029 D-031 D-033 D-034"] --> S5
+  K6["Limits and future work<br/>D-017 D-020 D-027 D-034"] --> S6
+  classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
+  classDef scope fill:#fff3a0,stroke:#c9a400,color:#111
+  classDef method fill:#f0e0ff,stroke:#7a2db8,color:#111
+  classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
+  class K1,K6 scope
+  class K2,K4 crit
+  class K3 method
+  class K5 fig
+</pre></div>
+    <p class="muted"><span lang="ko">그림 2. 결정 묶음이 들어간 논문의 절. 왜: 리뷰어가 한 절을 물으면, 그 절을 정한 결정 행으로 바로 갈 수 있다. 출처: <code>papers/paper_mvp1/main.tex</code> 절 목록, <code>DECISIONS.md</code>.</span><span lang="en">Figure 2. The paper sections that hold each group of decisions. Why: when a reviewer asks about one section, you can go straight to the decision rows that set it. Source: section list of <code>papers/paper_mvp1/main.tex</code>, <code>DECISIONS.md</code>.</span></p>
+  </div>
+
+  <div class="panel step">
+    <p class="label">Step 2 of 2</p>
+    <h2><span lang="ko">절별 표: 결정이 그 절에 남긴 것</span><span lang="en">Table by section: what the decisions left in that section</span></h2>
+    <div class="scroll-x"><table id="paper-table">
+      <thead><tr><th><span lang="ko">절 (main.tex)</span><span lang="en">Section (main.tex)</span></th><th><span lang="ko">결정</span><span lang="en">Decisions</span></th><th><span lang="ko">그 절에 남긴 것</span><span lang="en">What it left in that section</span></th></tr></thead>
+      <tbody>
+        <tr><td>1 Introduction</td><td>D-012, D-019, D-016</td><td><span lang="ko">질문 문장. "검사한 시장(마감 1일 전 가격, 10 trades 이상)"으로 범위를 한정</span><span lang="en">The question sentence. The scope is limited to "checked markets (price 1 day before close, at least 10 trades)"</span></td></tr>
+        <tr><td>2 Related Work</td><td><span lang="ko">없음</span><span lang="en">none</span></td><td><span lang="ko">소유자가 쓸 부분 (<code>\todo{owner}</code>)</span><span lang="en">Part for the owner to write (<code>\todo{owner}</code>)</span></td></tr>
+        <tr><td>3.1 Source and scope</td><td>D-003, D-016</td><td><span lang="ko"><code>daily_aligned/</code>를 쓰는 이유. MVP1 범위</span><span lang="en">Why we use <code>daily_aligned/</code>. The MVP1 scope</span></td></tr>
+        <tr><td>3.2 Filters and drop reasons</td><td>D-007, D-004</td><td><span lang="ko">거르기 6단계와 순서. 10 trades 기준은 파일럿에서 Q1 결과 전에 정함</span><span lang="en">The six filter steps and their order. The 10 trades threshold was set in the pilot, before the Q1 result</span></td></tr>
+        <tr><td>3.3 Market and wallet tables</td><td>D-011</td><td><span lang="ko">지갑의 주 주제는 <code>category_refined</code>, 동점은 이름순</span><span lang="en">The main topic of a wallet is <code>category_refined</code>. Ties go by name order</span></td></tr>
+        <tr><td>4.1 Evaluation price and pre-registration</td><td>D-005, D-007, D-011</td><td><span lang="ko">T = close_at. 가격 = 마지막 시각 거래들의 평균. 기준은 결과 전에 커밋</span><span lang="en">T = close_at. Price = mean of the trades at the last timestamp. The criteria were committed before the results</span></td></tr>
+        <tr><td>4.2 Q1 calibration</td><td>D-026</td><td><span lang="ko">구간별 격차와 z 구간. 가격의 평균 제곱 잔차(이름만 바뀐 Brier)</span><span lang="en">Per-bin gap and z interval. Mean squared residual of the price (the Brier score, renamed only)</span></td></tr>
+        <tr><td>4.3 Q2 wallet concentration</td><td>D-024, D-025, D-030</td><td><span lang="ko">80/20은 참고선. 멱법칙은 기술만. 군집 × 주제 카이제곱, 효과 = 몫 차이</span><span lang="en">80/20 is a reference line. Power law is description only. Cluster × topic chi-square, effect = share difference</span></td></tr>
+        <tr><td>4.4 Q3 distributions</td><td>D-018</td><td><span lang="ko">주제별 가격 상자그림</span><span lang="en">Box plot of price by topic</span></td></tr>
+        <tr><td>4.5 Reproducibility</td><td>D-011, D-014, D-001</td><td><span lang="ko">해시 순서 표본. 숫자 매크로. 같은 Python 버전</span><span lang="en">Hash-ordered sample. Number macros. Same Python version</span></td></tr>
+        <tr><td>5.1 Results Q1</td><td>D-034</td><td><span lang="ko">p 값 뒤 한 문장: 시장이 독립이라고 가정하므로 p가 너무 작을 수 있다</span><span lang="en">One sentence after the p value: the test assumes markets are independent, so p may be too small</span></td></tr>
+        <tr><td>5.2 Results Q2</td><td>D-028, D-029, D-031, D-033</td><td><span lang="ko">CCDF, 지갑 분포, Lorenz(강의 밖 표시). 읽히는 쌍만 한 줄에</span><span lang="en">Complementary cumulative distribution function (CCDF), wallet distribution, Lorenz (marked outside lecture). Only readable pairs go on one row</span></td></tr>
+        <tr><td>5.3 Results Q3</td><td>D-032, D-033</td><td><span lang="ko">가격과 거래 크기 히스토그램을 한 줄에 둘</span><span lang="en">The price and trade-size histograms, two on one row</span></td></tr>
+        <tr><td>5.4 Robustness</td><td>D-013</td><td><span lang="ko">반반 지급 시장(R1)과 마지막 하루 가격 변화(R2). 판정은 그대로</span><span lang="en">50/50 payout markets (R1) and the price change in the last day (R2). Verdicts unchanged</span></td></tr>
+        <tr><td>6 Discussion, 7 Limitations</td><td>D-020, D-034, D-027, D-017</td><td><span lang="ko">주제와 기간은 MVP1 밖. 독립성 한계. lognormal 비교는 향후 연구</span><span lang="en">Topic and period are outside MVP1. The independence limit. The lognormal comparison is future work</span></td></tr>
+        <tr><td>8 Conclusion</td><td><span lang="ko">없음</span><span lang="en">none</span></td><td><span lang="ko">소유자가 쓸 부분 (<code>\todo{owner}</code>)</span><span lang="en">Part for the owner to write (<code>\todo{owner}</code>)</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted"><span lang="ko">결정 번호를 누르면 탭 2의 카드로 간다.</span><span lang="en">Click a decision number to go to its card in tab 2.</span></p>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* Language toggle. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){
+  var d=document.documentElement;
+  var TITLE={ko:"6344 논문 결정 흐름",en:"6344 Paper Decision Flow"};
+  var KEY="decisiontips-lang";
+  function setLang(l,save){
+    d.setAttribute("data-lang",l);
+    d.lang=l;
+    document.title=TITLE[l];
+    var b=document.querySelectorAll(".langbar button");
+    for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",b[i].getAttribute("data-set")===l?"true":"false");}
+    if(save){try{localStorage.setItem(KEY,l);}catch(e){}}
+  }
+  setLang(d.getAttribute("data-lang")==="en"?"en":"ko",false);
+  var btn=document.querySelectorAll(".langbar button");
+  for(var i=0;i<btn.length;i++){
+    btn[i].addEventListener("click",function(){setLang(this.getAttribute("data-set"),true);});
+  }
+})();
+</script>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+
+// One row per DECISIONS.md row. "matters" = what it changed in the paper, or what the rejected option would have broken.
+// D holds the Korean text. DE holds the English twin: [what, why, matters, rejected].
+const KIND = { crit: "var(--k-crit-l)", scope: "var(--k-scope-l)", method: "var(--k-method-l)", fig: "var(--k-fig-l)", env: "var(--k-env-l)" };
+const KIND_NAME = { crit: "기준과 데이터", scope: "범위", method: "방법", fig: "그림과 글", env: "환경" };
+const KIND_NAME_EN = { crit: "Criteria and data", scope: "Scope", method: "Method", fig: "Figures and text", env: "Environment" };
+const L = (ko, en) => `<span lang="ko">${ko}</span><span lang="en">${en}</span>`;
+const PHASES = [
+  ["① 데이터와 기준 · 2026-10-19", ["D-001","D-002","D-003","D-004","D-005","D-006","D-007","D-008"]],
+  ["② 실행, 리뷰, 논문 틀 · 2026-10-19 ~ 10-21", ["D-009","D-010","D-011","D-012","D-013","D-014","D-015"]],
+  ["③ 범위 좁히기 · 2026-11-01", ["D-016","D-017","D-019","D-020","D-021","D-023"]],
+  ["④ 강의 방법만 · 2026-11-01 ~ 11-02", ["D-024","D-025","D-026","D-027","D-028","D-030"]],
+  ["⑤ 그림과 마무리 · 2026-11-01 ~ 11-02", ["D-018","D-022","D-029","D-031","D-032","D-033","D-034"]],
+];
+const PHASES_EN = [
+  "1. Data and criteria · 2026-10-19",
+  "2. Runs, review, paper frame · 2026-10-19 ~ 10-21",
+  "3. Narrowing the scope · 2026-11-01",
+  "4. Lecture methods only · 2026-11-01 ~ 11-02",
+  "5. Figures and wrap-up · 2026-11-01 ~ 11-02",
+];
+const D = {
+  "D-001": ["env", "클러스터 환경: uv + Python 3.13.12", "로컬과 같은 Python으로 모든 데이터 질의를 클러스터에서 돌린다", "로컬 코드가 클러스터에서 그대로 돈다. 재현성 절의 근거", "python3.9 venv (문법이 다름)"],
+  "D-002": ["env", "작업은 CPU만", "DuckDB와 SciPy는 GPU가 필요 없다", "다른 사용자의 GPU를 막지 않는다", "GPU 요청 (낭비)"],
+  "D-003": ["crit", "데이터: daily_aligned/ 1,248 files + resolutions", "daily_aligned/는 분석 층, resolutions는 예비 결과 출처", "논문 Data 절의 출처가 하나로 정해졌다. resolutions는 R1 검사에 쓰였다", "OrderFilled/ (릴레이어 기록이 섞인 원본)"],
+  "D-004": ["crit", "파일럿 = 2025-06에 마감한 시장, 거래 전부", "한 달 치 거래 파일만 쓰면 시장이 중간에 잘린다", "마감 시각 검사가 가능해졌다. 10 trades 기준이 여기서 나왔다", "한 달 거래 파티션, 2026년 달(미해결 많음)"],
+  "D-005": ["crit", "두 작업 사이의 벽: Job A는 검사만", "기준과 T는 Q1 결과를 보기 전에 정한다", "기준이 결과를 따라가지 못한다. 논문 사전 등록 절의 핵심", "만들고 검정하는 작업 하나 (기준이 결과를 따를 수 있음)"],
+  "D-006": ["env", "Job A를 gpul40q CPU 8개로", "kimq는 빈 CPU가 적고 대기 24개", "파일럿이 일주일 일찍 돌았다", "kimq CPU 4개 (예상 시작 10-26)"],
+  "D-007": ["crit", "T = close_at, T − 1일 전 10 trades 이상, 중복 행 유지", "파일럿 결과로, Q1 결과 전에 고정", "Q1의 모든 숫자가 이 기준 위에 있다. 기준 있는 결과와 없는 결과를 함께 보고한다", "T = 마지막 거래 (51%가 close_at 뒤에 거래), 기준 5·20·50, 중복 삭제 (실제 체결을 지울 수 있음)"],
+  "D-008": ["env", "MVP1, MVP2 작업 모두 gpul40q CPU", "kimq에 빈 CPU가 없다", "전체 run이 같은 날 끝났다", "kimq"],
+  "D-009": ["env", "보고서 v1(MVP1) + v2(MVP1 + MVP2)", "소유자가 두 판을 모두 보고 싶어 했다", "D-016이 목표 범위를 MVP1로 바꿨다. v2는 future_work에 남는다", "2주차 관문까지 기다리기"],
+  "D-010": ["env", "MVP2 기준을 결과 전에 고정", "D-005와 같은 벽", "MVP2는 목표 밖이 됐지만 기준은 그대로 보관된다", "결과를 보고 주 검정 고르기"],
+  "D-011": ["crit", "리뷰 수정: 같은 시각 거래는 평균, 표본은 해시 순서, 코드 v3, 재실행", "한 블록 안 거래에는 순서가 없다. 리뷰 F1–F4, F8, F9", "같은 입력이면 같은 숫자가 나온다. 사전 등록 기준과 판정은 바뀌지 않았다", "arg_max 유지 (실행마다 다름), 단일 스레드 (느리고 여전히 순서 없음)"],
+  "D-012": ["scope", "임무와 비전을 정함", "임무 수준은 소유자가 정한다", "논문의 질문 문장과 범위의 기준선이 됐다", "다른 초안 둘"],
+  "D-013": ["crit", "강건성: R1 반반 지급, R2 마지막 하루 가격 경로", "비전 \"가격을 얼마나 믿을지\", 수업 답변에서 남은 한계 둘", "판정을 바꾸지 않고 두 한계를 검사했다. 반반 지급 시장은 7개다(r1_results.json). 논문 Robustness 절", "Q1에 몰래 섞기 (결과 뒤 판정 변경), 새 주 검정 (MVP1 다시 열림)"],
+  "D-014": ["fig", "LaTeX 논문, 숫자는 numbers.tex 매크로", "강의 최종 보고서. 손으로 옮긴 숫자 금지", "논문 숫자가 run 파일과 어긋날 수 없다. 출처 없는 글은 \\todo{}로 남는다", "IEEEtran (설치 없음), 손으로 쓴 숫자"],
+  "D-015": ["env", "클러스터 경로를 cs6344로 개명", "과목 번호가 6344다", "환경은 그대로, 이름만 바뀜", "uv 환경 mv (절대 경로가 깨짐)"],
+  "D-016": ["scope", "목표는 MVP1만 (Q1, Q2, Q3)", "소유자: \"from now on I will focus on mvp 01\"", "논문 범위가 Q1–Q3으로 좁아졌다. 마감 안에 끝낼 수 있게 됐다", "MVP2를 목표에 유지"],
+  "D-017": ["scope", "MVP2는 그대로 두고 future_work/로 옮김", "시간이 되면 다시 할 수 있게", "지우지 않고 보관. 논문은 향후 연구로 언급만 한다", "MVP2 삭제, 제자리에 두기"],
+  "D-018": ["fig", "상자그림을 저장 파일로 로컬에서 그림", "Q3 계획 행에 상자그림이 있다", "새 클러스터 작업 없이 Q3 그림이 생겼다", "클러스터 재실행 (가장 느림), 계획에서 빼기"],
+  "D-019": ["scope", "임무 문장을 \"검사한 시장\"으로 고침", "결과물은 남은 시장만 검사한다", "논문이 검사하지 않은 시장까지 주장하지 않는다", "문장 유지 + 남은/버린 시장 비교 행"],
+  "D-020": ["scope", "비전은 유지, MVP2는 범위 밖", "주제와 기간 질문은 MVP2에 있다", "논문에서 주제와 기간은 한계와 향후 연구가 된다", "비전을 MVP1에 맞게 고치기"],
+  "D-021": ["env", "마감 2026-11-15", "소유자: \"2 weeks from now\"", "남은 작업의 순서를 정한다", "없음"],
+  "D-022": ["fig", "M1 관문 리뷰를 한 번 더", "소유자: \"review again\"", "세 번째 리뷰가 PASS (0 blocker, 0 major)", "세 번째 리뷰 생략"],
+  "D-023": ["scope", "M4 출구는 paper_mvp1만", "MVP2는 목표 밖 (D-016)", "논문 하나에 집중한다", "논문 둘 모두 유지"],
+  "D-024": ["method", "RQ2 제목 유지, 80/20은 기술용 참고선", "수업 글에 80/20이 이미 있었다", "결과를 본 뒤 판정선을 만들지 않았다. 상위 20% 몫을 80%와 비교만 한다", "RQ2를 기술형으로 바꾸기, 결과 뒤 새 판정선 (\"기준 먼저\" 위반)"],
+  "D-025": ["method", "멱법칙도 기술만. 분석은 강의 안에서만", "제약: 강의 방법만", "새 검정 없이 저장된 결과로만 쓴다", "새 멱법칙 검정 (작업 필요, 이미 본 데이터)"],
+  "D-026": ["method", "감사 결과 적용: 이름 바꿈과 제거", "강의 안 방법만 남긴다", "Brier → 평균 제곱 잔차, w → 구간별 격차, Wilson → z 구간. Gini, Cramér V, ARI 등 제거. 숫자는 같다", "강의 밖 방법을 표시만 하고 유지"],
+  "D-027": ["method", "README에 향후 연구 한 줄: 멱법칙 대 lognormal", "lognormal은 강의에 없다", "지금 돌리지 않고 한계로 남긴다", "지금 비교 실행"],
+  "D-028": ["method", "Lorenz 곡선은 CCDF 옆에, 강의 밖 표시", "소유자: CCDF와 같이 쓰면 좋겠다", "상위 몫을 그림으로 보인다. Gini는 계속 빠진다", "Lorenz 제거 (D-026)"],
+  "D-029": ["fig", "CCDF를 꼬리 표본으로 다시 그림", "프로젝트 끝 리뷰 A1", "꼬리가 잘 보이는 Q2 그림", "캡션만 고치기"],
+  "D-030": ["method", "군집 × 주제 카이제곱 복귀, 효과 = 몫 차이", "검정 자체는 강의 12장 내용. V만 강의 밖", "Q2에 검정과 효과 크기가 함께 있다", "제거 유지"],
+  "D-031": ["fig", "지갑 수·거래액 분포 + 전체 Lorenz, Gini 없음", "시각화 규칙 §7을 예외 없이 지킨다", "개체 비율과 양 비율을 따로 보인다", "거친 Lorenz + 예외"],
+  "D-032": ["fig", "그림은 한 줄에 하나", "두 개는 작아서 읽기 어렵다", "그림이 커졌다. 대신 논문이 18쪽이 됐다 (D-033이 고침)", "합친 그림 유지"],
+  "D-033": ["fig", "읽히면 두 그림을 한 줄에 (반 폭으로 다시 그림)", "D-032로 논문이 18쪽", "읽기 쉬움과 쪽수를 함께 맞췄다. 논문 17쪽", "항상 한 줄에 하나"],
+  "D-034": ["fig", "Q1 p 값 뒤에 독립성 경고 한 문장", "최종 리뷰 finding 2", "p 값을 과하게 믿지 않게 한다. 초록은 그대로", "한계 절에만 두기"],
+};
+const DE = {
+  "D-001": ["Cluster environment: uv + Python 3.13.12", "Every data query runs on the cluster with the same Python as the local machine", "Local code runs on the cluster unchanged. This is the basis of the reproducibility section", "python3.9 venv (different syntax)"],
+  "D-002": ["Work uses the central processing unit (CPU) only", "DuckDB and SciPy need no graphics processing unit (GPU)", "We do not block the GPUs of other users", "Request a GPU (waste)"],
+  "D-003": ["Data: daily_aligned/ 1,248 files + resolutions", "daily_aligned/ is the analysis layer. resolutions is the source of the preliminary outcomes", "The Data section of the paper has one source. resolutions was used in the R1 check", "OrderFilled/ (raw data mixed with relayer records)"],
+  "D-004": ["Pilot = markets that closed in 2025-06, all their trades", "Using only one month of trade files cuts markets in the middle", "The close-time check became possible. The 10 trades threshold came from here", "One-month trade partition, months of 2026 (many unresolved)"],
+  "D-005": ["Wall between two jobs: Job A only checks", "The criteria and T are fixed before we see the Q1 result", "The criteria cannot follow the result. This is the core of the pre-registration section", "One job that builds and tests (the criteria could follow the result)"],
+  "D-006": ["Job A on gpul40q with 8 central processing units (CPUs)", "kimq has few free CPUs and 24 jobs waiting", "The pilot ran one week earlier", "kimq with 4 CPUs (expected start 10-26)"],
+  "D-007": ["T = close_at, at least 10 trades before T − 1 day, keep duplicate rows", "Set from the pilot result, fixed before the Q1 result", "Every Q1 number rests on this criterion. We report the results with and without the criterion together", "T = last trade (51% trade after close_at), thresholds 5, 20, 50, delete duplicates (could delete real fills)"],
+  "D-008": ["MVP1 and MVP2 jobs both on gpul40q CPUs", "kimq has no free central processing unit (CPU)", "All full runs finished on the same day", "kimq"],
+  "D-009": ["Report v1 (MVP1) + v2 (MVP1 + MVP2)", "The owner wanted to see both versions", "D-016 changed the target scope to MVP1. v2 stays in future_work", "Wait until the week 2 gate"],
+  "D-010": ["MVP2 criteria fixed before results", "The same wall as D-005", "MVP2 is no longer a target, but its criteria stay archived", "Pick the main test after seeing the results"],
+  "D-011": ["Review fixes: trades at the same timestamp are averaged, the sample follows hash order, code v3, re-run", "Trades inside one block have no order. Review findings F1–F4, F8, F9", "The same input gives the same numbers. The pre-registered criteria and verdicts did not change", "Keep arg_max (differs by run), single thread (slow and still unordered)"],
+  "D-012": ["Mission and vision set", "The owner sets the mission level", "They became the question sentence and the scope baseline of the paper", "Two other drafts"],
+  "D-013": ["Robustness: R1 50/50 payout, R2 price path in the last day", "Vision \"how far to trust the price\", and two limits left from the class answers", "We checked the two limits without changing a verdict. There are 7 markets with a 50/50 payout (r1_results.json). The Robustness section of the paper", "Mix them into Q1 secretly (verdict change after results), a new main test (reopens MVP1)"],
+  "D-014": ["LaTeX paper, numbers as numbers.tex macros", "The final report of the course. No hand-copied numbers", "Paper numbers cannot drift from the run files. Text without a source stays as \\todo{}", "IEEEtran (not installed), hand-written numbers"],
+  "D-015": ["Cluster path renamed to cs6344", "The course number is 6344", "The environment stays the same. Only the name changed", "mv the uv environment (absolute paths break)"],
+  "D-016": ["Target is MVP1 only (Q1, Q2, Q3)", "Owner: \"from now on I will focus on mvp 01\"", "The paper scope narrowed to Q1–Q3. We can finish before the deadline", "Keep MVP2 as a target"],
+  "D-017": ["Leave MVP2 as it is and move it to future_work/", "So we can redo it if time allows", "Kept, not deleted. The paper only mentions it as future work", "Delete MVP2, leave it in place"],
+  "D-018": ["Draw the box plot locally from saved files", "The Q3 plan row has a box plot", "The Q3 figure appeared without a new cluster job", "Cluster re-run (slowest), drop it from the plan"],
+  "D-019": ["Mission sentence changed to \"checked markets\"", "The deliverable checks only the remaining markets", "The paper does not claim markets it did not check", "Keep the sentence + a comparison row of kept and dropped markets"],
+  "D-020": ["Vision kept, MVP2 out of scope", "The topic and period questions are in MVP2", "In the paper, topic and period become limits and future work", "Change the vision to fit MVP1"],
+  "D-021": ["Deadline 2026-11-15", "Owner: \"2 weeks from now\"", "It sets the order of the remaining work", "None"],
+  "D-022": ["One more M1 gate review", "Owner: \"review again\"", "The third review is PASS (0 blocker, 0 major)", "Skip the third review"],
+  "D-023": ["M4 exit is paper_mvp1 only", "MVP2 is not a target (D-016)", "We focus on one paper", "Keep both papers"],
+  "D-024": ["Keep the RQ2 title, 80/20 is a descriptive reference line", "80/20 was already in the class text", "We did not build a verdict line after seeing the results. We only compare the top 20% share with 80%", "Change RQ2 to a descriptive question, a new verdict line after results (breaks \"criteria first\")"],
+  "D-025": ["Power law is description only. Analysis uses lecture methods only", "Constraint: lecture methods only", "We write it from saved results, with no new test", "A new power-law test (needs work, data already seen)"],
+  "D-026": ["Apply the audit result: renames and removals", "Keep only methods inside the lecture", "Brier → mean squared residual, w → per-bin gap, Wilson → z interval. Gini, Cramér's V, adjusted Rand index (ARI) and others removed. The numbers stay the same", "Keep the outside-lecture methods and only mark them"],
+  "D-027": ["One line of future work in README: power law versus lognormal", "lognormal is not in the lecture", "We do not run it now and leave it as a limit", "Run the comparison now"],
+  "D-028": ["Lorenz curve beside the complementary cumulative distribution function (CCDF), marked outside lecture", "Owner: it would be good to use it together with the CCDF", "The top share is shown as a figure. Gini stays removed", "Remove Lorenz (D-026)"],
+  "D-029": ["Redraw the complementary cumulative distribution function (CCDF) with a tail sample", "End-of-project review A1", "A Q2 figure where the tail is clearly visible", "Fix only the caption"],
+  "D-030": ["Cluster × topic chi-square returns, effect = share difference", "The test itself is chapter 12 of the lecture. Only V is outside the lecture", "Q2 has the test and an effect size together", "Keep it removed"],
+  "D-031": ["Wallet count and trade amount distributions + full Lorenz, no Gini", "Follow visualization rule §7 with no exception", "It shows the share of units and the share of amount separately", "Coarse Lorenz + exception"],
+  "D-032": ["One figure per row", "Two per row are small and hard to read", "The figures grew. The paper became 18 pages (D-033 fixes this)", "Keep the combined figure"],
+  "D-033": ["Two figures per row if readable (redrawn for half width)", "D-032 made the paper 18 pages", "Readability and page count both fit. The paper is 17 pages", "Always one per row"],
+  "D-034": ["One independence warning sentence after the Q1 p value", "Final review finding 2", "It stops readers from over-trusting the p value. The abstract is unchanged", "Put it only in the Limitations section"],
+};
+const SUPERSEDED = { "D-009": "D-016", "D-006": "D-008", "D-032": "D-033", "D-001": "D-015" };
+
+const host = document.getElementById("cards");
+PHASES.forEach(([title, ids], pi) => {
+  const sec = document.createElement("div");
+  sec.className = "panel phase";
+  sec.innerHTML = `<h2>${L(title, PHASES_EN[pi])}</h2>`;
+  const grid = document.createElement("div");
+  grid.className = "cards";
+  for (const id of ids) {
+    const [kind, what, why, matters, rejected] = D[id];
+    const [whatE, whyE, mattersE, rejectedE] = DE[id];
+    const c = document.createElement("div");
+    c.className = "card" + (SUPERSEDED[id] ? " dead" : "");
+    c.id = id;
+    c.style.borderLeftColor = KIND[kind];
+    const sup = SUPERSEDED[id] ? `<span class="chip">${L(`→ ${SUPERSEDED[id]}가 바꿈`, `replaced by ${SUPERSEDED[id]}`)}</span>` : "";
+    c.innerHTML = `<p><span class="id">${id}</span><span class="chip">${L(KIND_NAME[kind], KIND_NAME_EN[kind])}</span>${sup}</p>
+      <p><b>${L(what, whatE)}</b></p>
+      <dl><dt>${L("왜", "Why")}</dt><dd>${L(why, whyE)}</dd><dt>${L("왜 중요한가", "Why it matters")}</dt><dd>${L(matters, mattersE)}</dd><dt>${L("버린 안", "Rejected option")}</dt><dd class="muted">${L(rejected, rejectedE)}</dd></dl>`;
+    grid.appendChild(c);
+  }
+  sec.appendChild(grid);
+  host.appendChild(sec);
+});
+
+// Turn every D-0xx in the paper table into a link. The cell may hold language twins, so edit innerHTML.
+document.querySelectorAll("#paper-table td:nth-child(2)").forEach(td => {
+  td.innerHTML = td.innerHTML.replace(/D-\d{3}/g, m => `<span class="dlink" data-d="${m}">${m}</span>`);
+});
+
+// Show both languages and every tab while mermaid measures text, then restore.
+document.documentElement.classList.add("rendering");
+document.querySelectorAll(".tab").forEach(t => t.hidden = false);
+mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict",
+  fontFamily: '"IBM Plex Mono","IBM Plex Sans KR",monospace', flowchart: { useMaxWidth: true } });
+// Render one diagram at a time into its own element, with a unique id. mermaid.run() mixed up the twins.
+const dec = document.createElement("textarea");
+let mmN = 0;
+for (const el of document.querySelectorAll(".mermaid")) {
+  dec.innerHTML = el.innerHTML;
+  const def = dec.value.replace(/<br\s*\/?>/gi, "<br/>").trim();
+  const { svg } = await mermaid.render("mm" + (mmN++), def);
+  el.innerHTML = svg;
+  el.setAttribute("data-processed", "true");
+}
+document.documentElement.classList.remove("rendering");
+
+const buttons = document.querySelectorAll("[data-tab]");
+function show(name) {
+  buttons.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tab === name)));
+  document.querySelectorAll(".tab").forEach(t => t.hidden = t.id !== "tab-" + name);
+}
+buttons.forEach(b => b.addEventListener("click", () => { show(b.dataset.tab); back.hidden = true; }));
+
+const back = document.createElement("button");
+back.className = "back";
+back.hidden = true;
+back.addEventListener("click", () => { show(back.dataset.tab); back.hidden = true; window.scrollTo({ top: 0 }); });
+document.body.appendChild(back);
+
+function jump(id) {
+  const card = document.getElementById(id);
+  if (!card) return;
+  const from = document.querySelector(".tab:not([hidden])").id.replace("tab-", "");
+  show("cards");
+  card.scrollIntoView({ behavior: "smooth", block: "center" });
+  card.classList.remove("hit");
+  void card.offsetWidth;  // restart the flash on repeat clicks
+  card.classList.add("hit");
+  if (from !== "cards") {
+    back.dataset.tab = from;
+    back.innerHTML = from === "flow" ? L("← 결정 흐름으로", "← Back to the decision flow") : L("← 논문 절로", "← Back to the paper sections");
+    back.hidden = false;
+  }
+}
+document.addEventListener("click", ev => {
+  const link = ev.target.closest(".dlink");
+  if (link) jump(link.dataset.d);
+});
+
+// Flowchart nodes: mermaid ids look like "flowchart-D007-12". The ENV node carries several ids: open the first.
+document.querySelectorAll("#tab-flow .mermaid svg").forEach(svg => {
+  svg.classList.add("flow-click");
+  svg.addEventListener("click", ev => {
+    const node = ev.target.closest("g.node");
+    if (!node) return;
+    const m = /flowchart-D(\d{3})-/.exec(node.id);
+    if (m) jump("D-" + m[1]);
+    else if (/flowchart-ENV-/.test(node.id)) jump("D-001");
+  });
+});
+
+let start = "flow";
+if (["#flow", "#cards", "#paper"].includes(location.hash)) start = location.hash.slice(1);
+show(start);
+if (/^#D-\d{3}$/.test(location.hash)) jump(location.hash.slice(1));
+</script>
+</body>
+</html>

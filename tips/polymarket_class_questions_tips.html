@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<title>6344 Polymarket Class Questions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<script>
+/* Runs first: marks JS as on and sets the language. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){var d=document.documentElement;d.className="js";var l="en";try{var s=localStorage.getItem("cqtips-lang");if(s==="ko"||s==="en"){l=s;}}catch(e){}try{var q=/[?&]lang=(ko|en)(&|$)/.exec(location.search);if(q){l=q[1];}}catch(e){}d.setAttribute("data-lang",l);d.lang=l;})();
+</script>
+<style>
+/* theme.css (skills/html-theme), inlined. Layout: tips exemplar, step boxes. */
+:root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--card-foreground:oklch(0.145 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
+--over:oklch(0.62 0.17 45);--under:oklch(0.5 0.1 210);--busy:oklch(0.62 0.17 45);--quiet:oklch(0.82 0 0);--obs:#0432ff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--background:oklch(0.145 0 0);--foreground:oklch(0.985 0 0);--card:oklch(0.185 0 0);--card-foreground:oklch(0.985 0 0);--primary:oklch(0.922 0 0);--primary-foreground:oklch(0.205 0 0);--muted:oklch(0.269 0 0);--muted-foreground:oklch(0.708 0 0);--border:oklch(0.5 0 0);--rule:oklch(0.3 0 0);--ring:oklch(0.6 0 0);--signal-instruction:#ff5a52;--signal-plan:#6f8cff;--signal-flag-fill:#4a4312;--signal-flag-line:#c9b53a;--signal-dead-fill:#2b2b2a;--signal-dead-ink:oklch(0.68 0.01 260);--over:oklch(0.72 0.15 50);--under:oklch(0.72 0.1 210);--busy:oklch(0.72 0.15 50);--quiet:oklch(0.42 0 0);--obs:#6f8cff}}
+:root[data-theme="dark"]{color-scheme:dark;--background:oklch(0.145 0 0);--foreground:oklch(0.985 0 0);--card:oklch(0.185 0 0);--card-foreground:oklch(0.985 0 0);--primary:oklch(0.922 0 0);--primary-foreground:oklch(0.205 0 0);--muted:oklch(0.269 0 0);--muted-foreground:oklch(0.708 0 0);--border:oklch(0.5 0 0);--rule:oklch(0.3 0 0);--ring:oklch(0.6 0 0);--signal-instruction:#ff5a52;--signal-plan:#6f8cff;--signal-flag-fill:#4a4312;--signal-flag-line:#c9b53a;--signal-dead-fill:#2b2b2a;--signal-dead-ink:oklch(0.68 0.01 260);--over:oklch(0.72 0.15 50);--under:oklch(0.72 0.1 210);--busy:oklch(0.72 0.15 50);--quiet:oklch(0.42 0 0);--obs:#6f8cff}
+*{box-sizing:border-box;border-radius:var(--radius)}
+body{background:var(--background);color:var(--foreground);font:15px/1.5 var(--font);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 40px;margin:0;overflow-wrap:anywhere}
+main{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:650;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:650;margin-bottom:10px}
+h3{font-size:14px;font-weight:600;margin:12px 0 4px}
+p{margin:0 0 6px}
+.eyebrow{font:500 11px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--signal-plan);margin-bottom:8px}
+.lede{font-size:15.5px;color:var(--muted-foreground);margin-top:8px}
+.steps-nav{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0;padding:0;list-style:none;counter-reset:st}
+.steps-nav li{counter-increment:st}
+.steps-nav a{display:block;padding:4px 10px;border:1px solid var(--rule);color:var(--foreground);text-decoration:none;font-size:12.5px}
+.steps-nav a::before{content:counter(st) " ";color:var(--signal-plan);font-weight:600}
+main>section{border:1px solid var(--border);border-top:4px solid var(--signal-plan);background:var(--card);padding:16px 18px 18px;margin-top:14px;scroll-margin-top:12px;display:flex;flex-direction:column;gap:8px}
+main>section>.eyebrow{font-size:12px;margin-bottom:0}
+.flow{display:flex;flex-wrap:wrap;gap:6px}
+.stage{flex:1 1 160px;background:var(--card);border:1px solid var(--rule);padding:6px 8px;min-width:0}
+.stage.big{border-color:var(--signal-plan)}
+.stage .n{font:600 12.5px var(--font)}
+.stage .s{font:12px/1.4 var(--font);color:var(--muted-foreground)}
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:520px}
+svg text{font-family:var(--font)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card);overflow-wrap:normal}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 11px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground);background:var(--background)}
+tr:last-child td{border-bottom:0}
+td.num{white-space:nowrap;color:var(--signal-plan)}
+td ul{margin:0;padding-left:16px}
+ul,ol{margin:0;padding-left:18px}
+li{margin:2px 0}
+.note{font-size:12.5px;color:var(--muted-foreground)}
+.callout{border-left:3px solid var(--signal-flag-line);background:var(--signal-flag-fill);padding:6px 12px;font-size:13px}
+.callout p:last-child{margin:0}
+.add{border:1px solid var(--signal-plan);padding:6px 12px;font-size:13.5px}
+.add b{color:var(--signal-plan)}
+footer{font-size:12.5px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:8px}
+a{color:var(--signal-plan)}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+@media (max-width:720px){main>section{padding:12px}}
+html[data-lang="ko"] [lang="en"],html[data-lang="en"] [lang="ko"]{display:none!important}
+html[data-lang="ko"] body{word-break:keep-all}
+.topbar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-bottom:6px}
+.langbar{display:none}
+html.js .langbar{display:flex}
+.langbar button{font:500 12.5px var(--font);padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer;margin-left:-1px}
+.langbar button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+.row2{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:12px;align-items:center;color:var(--muted-foreground)}
+.row2 .cur{color:var(--foreground);font-weight:600;border-bottom:2px solid var(--signal-plan)}
+</style>
+<style>.q{border-left:3px solid var(--signal-plan);padding:4px 12px;font-size:14px;color:var(--muted-foreground)}.q b{color:var(--foreground)}.ans{font-size:15px}</style>
+</head>
+<body>
+<main>
+<nav class="topbar" aria-label="Page navigation">
+  <div class="langbar" role="group" aria-label="Language">
+    <button type="button" data-set="ko" aria-pressed="false">한국어</button>
+    <button type="button" data-set="en" aria-pressed="true">English</button>
+  </div>
+  <div class="row2">
+    <span lang="ko">다른 페이지:</span><span lang="en">Other pages:</span>
+    <span class="cur" aria-current="page"><span lang="ko">이 페이지 (수업 질문)</span><span lang="en">This page (class questions)</span></span>
+    <a href="index.html" target="_top"><span lang="ko">전체 보기</span><span lang="en">All pages</span></a>
+    <a href="index.html#proposal" target="_top"><span lang="ko">제안서</span><span lang="en">Proposal</span></a>
+    <a href="index.html#flow" target="_top"><span lang="ko">연구 흐름</span><span lang="en">Research flow</span></a>
+    <a href="index.html#preprocessing" target="_top"><span lang="ko">전처리</span><span lang="en">Preprocessing</span></a>
+    <a href="index.html#feedback" target="_top"><span lang="ko">피드백 답</span><span lang="en">Feedback answers</span></a>
+  </div>
+</nav>
+<header>
+  <div class="eyebrow"><span lang="ko">CS 6344 데이터 과학 입문 · 1조 · 수업 질문 답변</span><span lang="en">CS 6344 Intro to Data Science · Group 1 · Answers to class questions</span></div>
+  <h1><span lang="ko">Polymarket 프로젝트에 대한 여러분의 질문</span><span lang="en">Your questions about the Polymarket project</span></h1>
+  <p class="lede"><span lang="ko">답은 모두 우리 전체 데이터 실행에서 나왔고 짐작이 아니다. 아직 답이 없는 곳은 없다고 말한다. 질문은 네 개다.</span><span lang="en">Each answer comes from our full-data runs, not from guesses. Where we have no answer yet, we say so. Four questions.</span></p>
+  <div class="callout"><p><b><span lang="ko">알림, 2026-11-02:</span><span lang="en">Note, 2026-11-02:</span></b> <span lang="ko">아래 답은 2026-10-19에 쓴 것이고 문구를 그대로 둔다. 2026-11-01부터 보고서와 논문은 새 이름과 새 방법을 쓴다. Brier 점수(Brier score)는 가격의 평균 제곱 잔차(mean squared residual of the price)로 이름이 바뀌었고 숫자는 같다(D-026). Cohen의 w와 Cramér V는 보고하지 않는다(D-025, D-026, D-030). Cohen의 w 대신 구간별 격차(관측 비율 − 평균 가격)를 쓴다. Cohen의 d는 log10 평균 차이로 바꿨다(D-026). 질문 3과 4는 MVP2 실행을 쓴다. MVP2는 2026-11-01부터 목표가 아니고 파일은 <code>future_work/</code>에 있다(D-016, D-017). 이 페이지의 숫자는 지금도 같은 실행에서 나온다.</span><span lang="en">The answers below date from 2026-10-19 and keep their wording. Since 2026-11-01, the report and the paper use new names and methods. The Brier score is renamed the mean squared residual of the price, with the same numbers (D-026). Cohen's w and Cramér's V are not reported (D-025, D-026, D-030). The per-bin gap (observed rate minus mean price) replaces Cohen's w. Cohen's d is replaced by the log10 mean difference (D-026). Questions 3 and 4 use MVP2 runs. MVP2 is not a target since 2026-11-01 and its files sit in <code>future_work/</code> (D-016, D-017). The numbers on this page still come from the same runs.</span> <a href="index.html#feedback" target="_top"><span lang="ko">함께 보기: 피드백 답 페이지.</span><span lang="en">See also: the feedback answers page.</span></a></p></div>
+  <ol class="steps-nav">
+    <li><a href="#q1"><span lang="ko">정해진 시점의 가격?</span><span lang="en">Price at a set time?</span></a></li>
+    <li><a href="#q2"><span lang="ko">애매한 결과</span><span lang="en">Ambiguous resolutions</span></a></li>
+    <li><a href="#q3"><span lang="ko">마감 직전 급변동</span><span lang="en">Wild swings before close</span></a></li>
+    <li><a href="#q4"><span lang="ko">주제별 롱샷 편향</span><span lang="en">Longshot bias by topic</span></a></li>
+  </ol>
+</header>
+
+<section id="q1">
+  <div class="eyebrow"><span lang="ko">질문 1 / 4</span><span lang="en">Question 1 of 4</span> · Amanda Aninagyei</div>
+  <h2><span lang="ko">시장이 닫히기 전 정해진 시점의 가격을 쓰나?</span><span lang="en">Do you use the price from a set time before the market closes?</span></h2>
+  <p class="q"><b><span lang="ko">질문 원문:</span><span lang="en">Asked:</span></b> "Are you planning to use the price from a set time before the market closes?"</p>
+  <p class="ans"><span lang="ko"><b>그렇다. 예정된 마감 1일 전 가격을 쓴다.</b> 이 규칙은 어떤 결과도 보기 전에 정했다.</span><span lang="en"><b>Yes. We use the price 1 day before the scheduled close.</b> We fixed this rule before we looked at any result.</span></p>
+  <ol>
+    <li><span lang="ko">시장의 예정 마감 시각 <code>close_at</code>을 T라 부른다.</span><span lang="en">Take the market's scheduled close time, <code>close_at</code>. Call it T.</span></li>
+    <li><span lang="ko">T − 1일 이전(같은 시각 포함)의 마지막 거래를 찾는다.</span><span lang="en">Find the last trade at or before T − 1 day.</span></li>
+    <li><span lang="ko">그 시각에 거래가 여러 건 있을 수 있다(블록 하나). 그 가격을 평균한다.</span><span lang="en">Several trades can share that timestamp (one block). We average their prices.</span></li>
+    <li><span lang="ko">그 가격이 24시간보다 오래되었으면 시장을 뺀다. 묵은 가격은 지금 군중의 생각이 아니다.</span><span lang="en">If that price is more than 24 hours old, we drop the market. A stale price is not today's crowd view.</span></li>
+  </ol>
+  <div class="chart">
+    <svg viewBox="0 0 740 150" role="img" aria-labelledby="c1ko c1en">
+      <title id="c1ko" lang="ko">시장 하나의 시간선. 열림, 거래들, T 빼기 1일의 평가 가격, close_at, 빨간색으로 표시된 close_at 뒤 거래 두 개, 결과 확정.</title>
+      <title id="c1en" lang="en">Timeline of one market: open, trades, the evaluation price at T minus 1 day, close_at, then two trades after close_at in red, then resolution.</title>
+      <line x1="40" y1="70" x2="710" y2="70" stroke="var(--muted-foreground)" stroke-width="1.5"/>
+      <g fill="var(--foreground)"><circle cx="90" cy="70" r="3"/><circle cx="150" cy="70" r="3"/><circle cx="220" cy="70" r="3"/><circle cx="290" cy="70" r="3"/><circle cx="360" cy="70" r="3"/><circle cx="410" cy="70" r="3"/><circle cx="436" cy="70" r="3"/><circle cx="500" cy="70" r="3"/></g>
+      <g fill="var(--signal-instruction)"><circle cx="590" cy="70" r="4"/><circle cx="620" cy="70" r="4"/></g>
+      <g stroke="var(--foreground)"><line x1="40" y1="54" x2="40" y2="86"/><line x1="560" y1="46" x2="560" y2="94"/><line x1="680" y1="54" x2="680" y2="86"/></g>
+      <line x1="440" y1="46" x2="440" y2="94" stroke="var(--signal-plan)" stroke-width="2" stroke-dasharray="4 3"/>
+      <g font-size="11" fill="var(--foreground)" text-anchor="middle">
+        <text x="40" y="108" lang="ko">열림</text><text x="40" y="108" lang="en">open</text><text x="560" y="108">close_at = T</text><text x="680" y="108" lang="ko">결과 확정</text><text x="680" y="108" lang="en">resolved</text>
+        <text x="440" y="38" fill="var(--signal-plan)" lang="ko">쓰는 가격: T − 1일</text><text x="440" y="38" fill="var(--signal-plan)" lang="en">price used: T − 1 day</text>
+        <text x="605" y="38" fill="var(--signal-instruction)" lang="ko">마감 뒤 거래</text><text x="605" y="38" fill="var(--signal-instruction)" lang="en">trades after close</text>
+      </g>
+      <text x="40" y="138" font-size="10.5" fill="var(--muted-foreground)" lang="ko">설명용 시간선. 빨간 거래는 예정 마감 뒤에 일어나고, 보통 답이 알려진 뒤다.</text><text x="40" y="138" font-size="10.5" fill="var(--muted-foreground)" lang="en">Illustrative timeline. Red trades happen after the scheduled close, often once the answer is known.</text>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 1. 시장의 한살이에서 평가 가격이 놓이는 자리. 왜: 마감 뒤에 잡은 가격에는 이미 답이 들어 있을 수 있다.</span><span lang="en">Figure 1. Where the evaluation price sits in a market's life. Why: a price taken after the close can already contain the answer.</span></p>
+  <h3><span lang="ko">왜 마지막 거래가 아니라 예정 마감인가</span><span lang="en">Why the scheduled close and not the last trade</span></h3>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">잰 것 (파일럿: 2025년 6월에 마감한 시장)</span><span lang="en">What we measured (pilot: markets closing in June 2025)</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th></tr>
+    <tr><td><span lang="ko"><code>close_at</code> 뒤에 거래가 한 건 이상 있는 시장</span><span lang="en">Markets with at least one trade after <code>close_at</code></span></td><td class="num">51.3%</td></tr>
+    <tr><td><span lang="ko"><code>close_at</code> 뒤에 거래된 거래량의 몫</span><span lang="en">Share of volume traded after <code>close_at</code></span></td><td class="num">34.0%</td></tr>
+  </table></div>
+  <p><span lang="ko">"마지막 거래"를 끝으로 쓰면, 마감 뒤에도 거래하는 시장은 모두 평가 시점이 뒤로 밀린다. 파일럿 시장의 51.3%가 그렇다. 그러면 가격에 예정 종료 뒤의 소식이 들어가고, 보정이 실제보다 좋아 보인다. 출처: <code>runs/142041_pilotA_2025_06/close_time_summary.json</code>.</span><span lang="en">If we used "the last trade" as the end, every market that keeps trading after its close would get a later evaluation point. That is 51.3% of the pilot markets. Their price could then contain news from after the scheduled end, and calibration would look better than it is. Source: <code>runs/142041_pilotA_2025_06/close_time_summary.json</code>.</span></p>
+  <p><span lang="ko">T − 7일의 두 번째 가격도 잡는다(질문 3 참고).</span><span lang="en">We also take a second price at T − 7 days (see Question 3).</span></p>
+</section>
+
+<section id="q2">
+  <div class="eyebrow"><span lang="ko">질문 2 / 4</span><span lang="en">Question 2 of 4</span> · Luis Tapia</div>
+  <h2><span lang="ko">이상하거나 애매한 결과 기준은 어떻게 다루나?</span><span lang="en">How do you deal with weird or ambiguous resolution criteria?</span></h2>
+  <p class="q"><b><span lang="ko">질문 원문:</span><span lang="en">Asked:</span></b> "How are you planning to deal with weird or ambiguous resolution criteria?"</p>
+  <p class="ans"><span lang="ko"><b>그렇다. 승자 라벨이 분명하지 않은 시장은 뺀다. 나뉜 지급(split payout)도 확인했다. 50/50으로 지급된 시장은 7개뿐이다.</b></span><span lang="en"><b>Yes. We drop markets with no clear winner label. We also checked split payouts: only 7 markets paid 50/50.</b></span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">지금 하는 일</span><span lang="en">What we do now</span></th><th><span lang="ko">전체 실행에서의 효과</span><span lang="en">Effect in the full run</span></th></tr>
+    <tr><td><span lang="ko">결과는 시장의 <code>winning_outcome_label</code>이다. 질문 문장은 읽거나 판단하지 않는다</span><span lang="en">The outcome is the market's <code>winning_outcome_label</code>. We do not read or judge the question text</span></td><td><span lang="ko">모든 시장에 규칙 하나, 손으로 단 라벨 없음</span><span lang="en">One rule for every market, no hand labels</span></td></tr>
+    <tr><td><span lang="ko">쓸 수 있는 승자 라벨이 없는 시장은 빼고 센다</span><span lang="en">A market with no usable winner label is dropped and counted</span></td><td class="num"><span lang="ko">688,131개 시장 중 62,718개 (9.1%)</span><span lang="en">62,718 of 688,131 markets (9.1%)</span></td></tr>
+    <tr><td><span lang="ko">빠진 결과를 채우지 않는다</span><span lang="en">We never fill in a missing outcome</span></td><td><span lang="ko">짐작한 라벨이 검정에 들어가지 않는다</span><span lang="en">No guessed labels enter the tests</span></td></tr>
+  </table></div>
+  <p class="note"><span lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code> (<code>no_outcome</code>). 우리 규칙은 데이터셋 논문의 집계보다 엄격하다. Yes 쪽 라벨이 거래된 적 없는 시장도 빼기 때문이다.</span><span lang="en">Source: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code> (<code>no_outcome</code>). Our rule is stricter than the dataset paper's count, because it also drops markets whose Yes-side label never traded.</span></p>
+  <p><span lang="ko">질문이 불분명하다고 드러나면 시장이 50/50으로 결과가 날 수 있다. 결과 파일(<code>CTF/resolutions.parquet</code>)에 시장마다 지급 비율이 있다. 남은 47,948개 시장을 모두 이 파일과 맞춰 봤다.</span><span lang="en">A market can resolve 50/50 when its question turns out unclear. The resolution file (<code>CTF/resolutions.parquet</code>) holds the payout split for each market. We checked all 47,948 kept markets against it.</span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">확인한 것</span><span lang="en">What we checked</span></th><th><span lang="ko">결과</span><span lang="en">Result</span></th></tr>
+    <tr><td><span lang="ko">50/50으로 지급된 남은 시장</span><span lang="en">Kept markets that paid 50/50</span></td><td class="num">7 / 47,948 (0.015%)</td></tr>
+    <tr><td><span lang="ko">우리 승자 라벨과 결과 파일 비교</span><span lang="en">Our winner label against the resolution file</span></td><td><ul><li><span lang="ko">깨끗한 시장 47,940개 중 99.92%가 일치</span><span lang="en">agree on 99.92% of 47,940 clean markets</span></li><li><span lang="ko">95% 신뢰구간 [99.89%, 99.94%], 불일치 40개</span><span lang="en">95% CI [99.89%, 99.94%], 40 mismatches</span></li></ul></td></tr>
+    <tr><td><span lang="ko">분할 지급 7개와 불일치 40개, 모두 47개를 뺀 Q1 재실행</span><span lang="en">Q1 re-run without the 47 split and mismatching markets</span></td><td><ul><li><span lang="ko">카이제곱 68.0 → 64.3, 효과 크기 w 0.038 → 0.037</span><span lang="en">chi-square 68.0 → 64.3, effect size w 0.038 → 0.037</span></li><li><span lang="ko">판정 그대로: 가격은 전체로 보정되지 않았다</span><span lang="en">verdict unchanged: prices are not calibrated as a whole</span></li></ul></td></tr>
+  </table></div>
+  <p class="note"><span lang="ko">출처: <code>runs/142123_robust_full_v4/report_r1_split_payout.md</code>. 재실행은 원래 Q1 결과 옆에 두는 민감도(sensitivity) 줄이다. 원래 결과를 대신하지 않는다.</span><span lang="en">Source: <code>runs/142123_robust_full_v4/report_r1_split_payout.md</code>. The re-run is a sensitivity row next to the original Q1 result. It does not replace it.</span></p>
+</section>
+
+<section id="q3">
+  <div class="eyebrow"><span lang="ko">질문 3 / 4</span><span lang="en">Question 3 of 4</span> · Luis Tapia</div>
+  <h2><span lang="ko">마감 직전에 크게 요동치는 가격은 어떻게 하나?</span><span lang="en">What about prices that swing wildly right before the close?</span></h2>
+  <p class="q"><b><span lang="ko">질문 원문:</span><span lang="en">Asked:</span></b> "...or prices that swing wildly right before a market closes?"</p>
+  <p class="ans"><span lang="ko"><b>마지막 하루를 일부러 피하고, 두 시점을 비교한다.</b></span><span lang="en"><b>We avoid the last day on purpose, and we compare two horizons.</b></span></p>
+  <ul>
+    <li><span lang="ko">주 가격은 마감 직전 몇 분이 아니라 마감 1일 전 가격이다.</span><span lang="en">Our main price is from 1 day before the close, not the closing minutes.</span></li>
+    <li><span lang="ko">시장은 그 시점 전에 거래가 10건 이상 있어야 한다. 거래 두 건의 가격은 잡음이다.</span><span lang="en">A market needs at least 10 trades before that point. A price from two trades is noise.</span></li>
+    <li><span lang="ko">같은 시장에서 마감 7일 전 가격과 1일 전 가격을 비교한다.</span><span lang="en">We compare the price 7 days before the close with the price 1 day before, on the same markets.</span></li>
+  </ul>
+  <div class="chart">
+    <svg viewBox="0 0 740 150" role="img" aria-labelledby="c2ko c2en">
+      <title id="c2ko" lang="ko">같은 11,005개 시장의 평균 Brier 점수: 마감 7일 전 0.0959, 마감 1일 전 0.0702.</title>
+      <title id="c2en" lang="en">Mean Brier score on the same 11,005 markets: 0.0959 at 7 days before close, 0.0702 at 1 day before close.</title>
+      <g font-size="11.5" fill="var(--foreground)"><text x="20" y="48" lang="ko">7일 전</text><text x="20" y="48" lang="en">7 days before</text><text x="20" y="98" lang="ko">1일 전</text><text x="20" y="98" lang="en">1 day before</text></g>
+      <rect x="140" y="30" width="383.5" height="28" fill="var(--quiet)"/>
+      <rect x="140" y="80" width="280.7" height="28" fill="var(--obs)"/>
+      <g font-size="11" fill="var(--foreground)"><text x="531" y="49">0.0959</text><text x="429" y="99">0.0702</text></g>
+      <line x1="140" y1="20" x2="140" y2="118" stroke="var(--muted-foreground)"/>
+      <g font-size="10" fill="var(--muted-foreground)"><text x="140" y="134" text-anchor="middle">0</text><text x="540" y="134" text-anchor="middle">0.10</text><text x="340" y="146" text-anchor="middle" lang="ko">평균 Brier 점수 (낮을수록 좋다), 같은 11,005개 시장</text><text x="340" y="146" text-anchor="middle" lang="en">mean Brier score (lower is better), same 11,005 markets</text></g>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 2. 마감 7일 전과 1일 전의 평균 Brier 점수. 왜: 같은 시장의 두 시점을 보면 군중이 진실에 가까워지는지 알 수 있다.</span><span lang="en">Figure 2. Mean Brier score at 7 days and at 1 day before the close. Why: the same markets at two times show whether the crowd gets closer to the truth.</span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">검정 (사전 등록)</span><span lang="en">Test (pre-registered)</span></th><th><span lang="ko">결과</span><span lang="en">Result</span></th></tr>
+    <tr><td><span lang="ko">시장마다 7일 전 Brier − 1일 전 Brier</span><span lang="en">Brier at 7 days − Brier at 1 day, per market</span></td><td><ul><li><span lang="ko">평균 0.0257, 95% 신뢰구간 [0.0232, 0.0282]</span><span lang="en">mean 0.0257, 95% CI [0.0232, 0.0282]</span></li><li><span lang="ko">t = 19.96, p &lt; 0.0001, Cohen의 d = 0.19 (작음)</span><span lang="en">t = 19.96, p &lt; 0.0001, Cohen's d = 0.19 (small)</span></li></ul></td></tr>
+  </table></div>
+  <p class="note"><span lang="ko">출처: <code>runs/142083_mvp2_full_v2r3/verdicts.json</code>, <code>q1b_table.csv</code>. 11,005개 시장이 7일 이상 열려 있었고 두 시점 모두 신선한 가격이 있었다.</span><span lang="en">Source: <code>runs/142083_mvp2_full_v2r3/verdicts.json</code>, <code>q1b_table.csv</code>. 11,005 markets were open at least 7 days with a fresh price at both times.</span></p>
+  <h3><span lang="ko">마지막 24시간을 쟀다</span><span lang="en">The last 24 hours, measured</span></h3>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">T − 1일부터 T 전 마지막 거래까지의 가격 경로 (47,948개 시장)</span><span lang="en">Price path from T − 1 day to the last trade before T (47,948 markets)</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th></tr>
+    <tr><td><span lang="ko">가격 변화 절댓값의 중앙값</span><span lang="en">Median absolute price change</span></td><td class="num">0.015</td></tr>
+    <tr><td><span lang="ko">가격이 0.5를 넘나드는 시장</span><span lang="en">Markets whose price crosses 0.5</span></td><td class="num">8.0%</td></tr>
+    <tr><td><span lang="ko">변화가 0.10 이상인 시장</span><span lang="en">Markets with a change of 0.10 or more</span></td><td class="num">19.0%</td></tr>
+    <tr><td><span lang="ko">마감 직전 가격의 Brier 점수</span><span lang="en">Brier score at the price just before close</span></td><td class="num">0.075</td></tr>
+    <tr><td><span lang="ko">1일 전(T − 1일) 가격의 Brier 점수</span><span lang="en">Brier score at the price 1 day before (T − 1 day)</span></td><td class="num">0.107</td></tr>
+  </table></div>
+  <p><span lang="ko">대부분의 가격은 마지막 하루에 거의 안 움직이지만, 다섯 중 하나는 0.10 이상 움직인다. 0.075는 마감 직전 가격의 점수다. 하루 앞선 예측의 점수가 아니다.</span><span lang="en">Most prices barely move in the final day, but a fifth move by 0.10 or more. The 0.075 is the score of the price just before close. It is not a one-day-ahead forecast.</span></p>
+  <p class="note"><span lang="ko">출처: <code>runs/142123_robust_full_v4/report_r2_price_path.md</code>. 서술만 하고 새 검정은 없다. 방향이 바뀐 횟수는 세지 않았다.</span><span lang="en">Source: <code>runs/142123_robust_full_v4/report_r2_price_path.md</code>. Descriptive only, no new test. We did not count direction changes.</span></p>
+</section>
+
+<section id="q4">
+  <div class="eyebrow"><span lang="ko">질문 4 / 4</span><span lang="en">Question 4 of 4</span> · Luis Tapia</div>
+  <h2><span lang="ko">인기-롱샷 편향(favorite-longshot bias)은 주제에 따라 달라지나?</span><span lang="en">Does the favorite-longshot bias change by topic?</span></h2>
+  <p class="q"><b><span lang="ko">질문 원문:</span><span lang="en">Asked:</span></b> "Do you think the favorite-longshot bias changes much depending on the topic, like politics versus crypto?"</p>
+  <p class="ans"><span lang="ko"><b>그렇다. Crypto와 Politics의 싼 베팅은 가격이 말하는 것보다 덜 맞는다. Sports는 그렇지 않다.</b></span><span lang="en"><b>Yes. Cheap bets in Crypto and Politics pay off less often than priced. In Sports they do not.</b></span></p>
+  <div class="chart">
+    <svg viewBox="0 0 740 260" role="img" aria-labelledby="c3ko c3en">
+      <title id="c3ko" lang="ko">가격 10~20센트 시장. 평균 가격과 관측된 Yes 비율, 95% 신뢰구간. Crypto: 가격 14.5%, 관측 8.8%. Politics: 14.7%와 9.1%. Sports: 15.0%와 15.0%. 전체 시장: 14.8%와 12.5%.</title>
+      <title id="c3en" lang="en">Markets priced 10 to 20 cents. Mean price and observed Yes rate with 95% CI. Crypto: price 14.5%, observed 8.8%. Politics: 14.7% and 9.1%. Sports: 15.0% and 15.0%. All markets: 14.8% and 12.5%.</title>
+      <g font-size="10.5"><rect x="100" y="8" width="10" height="10" fill="var(--quiet)"/><text x="116" y="17" fill="var(--foreground)" lang="ko">평균 가격</text><text x="116" y="17" fill="var(--foreground)" lang="en">mean price</text><rect x="220" y="8" width="10" height="10" fill="var(--obs)"/><text x="236" y="17" fill="var(--foreground)" lang="ko">실제로 일어난 몫, 95% 신뢰구간</text><text x="236" y="17" fill="var(--foreground)" lang="en">share that happened, with 95% CI</text></g>
+      <g stroke="var(--rule)"><line x1="70" y1="50" x2="700" y2="50"/><line x1="70" y1="100" x2="700" y2="100"/><line x1="70" y1="150" x2="700" y2="150"/></g>
+      <line x1="70" y1="200" x2="700" y2="200" stroke="var(--muted-foreground)"/>
+      <g font-size="10" fill="var(--muted-foreground)" text-anchor="end"><text x="64" y="204">0%</text><text x="64" y="154">5%</text><text x="64" y="104">10%</text><text x="64" y="54">15%</text></g>
+      <g fill="var(--quiet)"><rect x="100" y="54.8" width="40" height="145.2"/><rect x="260" y="53.5" width="40" height="146.5"/><rect x="420" y="49.5" width="40" height="150.5"/><rect x="580" y="51.6" width="40" height="148.4"/></g>
+      <g fill="var(--obs)"><rect x="144" y="112.3" width="40" height="87.7"/><rect x="304" y="108.9" width="40" height="91.1"/><rect x="464" y="49.8" width="40" height="150.2"/><rect x="624" y="74.6" width="40" height="125.4"/></g>
+      <g stroke="var(--foreground)" stroke-width="1.5"><line x1="164" y1="136.3" x2="164" y2="80.4"/><line x1="159" y1="136.3" x2="169" y2="136.3"/><line x1="159" y1="80.4" x2="169" y2="80.4"/><line x1="324" y1="131.2" x2="324" y2="80.3"/><line x1="319" y1="131.2" x2="329" y2="131.2"/><line x1="319" y1="80.3" x2="329" y2="80.3"/><line x1="484" y1="67.6" x2="484" y2="30.1"/><line x1="479" y1="67.6" x2="489" y2="67.6"/><line x1="479" y1="30.1" x2="489" y2="30.1"/><line x1="644" y1="86.5" x2="644" y2="61.6"/><line x1="639" y1="86.5" x2="649" y2="86.5"/><line x1="639" y1="61.6" x2="649" y2="61.6"/></g>
+      <g font-size="11" fill="var(--foreground)" text-anchor="middle"><text x="142" y="222">Crypto</text><text x="302" y="222">Politics</text><text x="462" y="222">Sports</text><text x="622" y="222" lang="ko">전체 주제</text><text x="622" y="222" lang="en">All topics</text></g>
+      <g font-size="10" fill="var(--muted-foreground)" text-anchor="middle"><text x="142" y="238">n = 399</text><text x="302" y="238">n = 494</text><text x="462" y="238">n = 1,398</text><text x="622" y="238">n = 2,703</text></g>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 3. 마감 1일 전 가격이 10~20센트인 시장: 주제별로 평균 가격과 실제로 일어난 사건의 몫. 왜: 파란 막대가 회색 막대보다 낮으면 싼 베팅이 가격이 말한 것보다 덜 맞았다는 뜻이다.</span><span lang="en">Figure 3. Markets priced 10 to 20 cents one day before close: mean price against the share of events that happened, by topic. Why: a blue bar below the grey bar means the cheap bet paid off less often than its price said.</span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">주제, 가격 10–20¢</span><span lang="en">Topic, price 10–20¢</span></th><th><span lang="ko">평균 가격</span><span lang="en">Mean price</span></th><th><span lang="ko">일어남</span><span lang="en">Happened</span></th><th><span lang="ko">격차</span><span lang="en">Gap</span></th><th><span lang="ko">BH 보정 p</span><span lang="en">BH-corrected p</span></th></tr>
+    <tr><td>Crypto</td><td class="num">14.5%</td><td class="num">8.8%</td><td class="num">−5.7 pts</td><td class="num">0.021</td></tr>
+    <tr><td>Politics</td><td class="num">14.7%</td><td class="num">9.1%</td><td class="num">−5.5 pts</td><td class="num">0.017</td></tr>
+    <tr><td>Sports</td><td class="num">15.0%</td><td class="num">15.0%</td><td class="num">−0.0 pts</td><td class="num">1.0</td></tr>
+    <tr><td><span lang="ko">전체 주제</span><span lang="en">All topics</span></td><td class="num">14.8%</td><td class="num">12.5%</td><td class="num">−2.3 pts</td><td class="num">0.002</td></tr>
+  </table></div>
+  <p class="note"><span lang="ko">출처: <code>runs/142083_mvp2_full_v2r3/q1a_bins_by_category.csv</code> (주제)와 <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (전체 주제). BH = Benjamini-Hochberg 보정, 주제 × 구간 검정 전체(주제) 또는 10개 구간(전체 주제)에 걸쳐 적용한다.</span><span lang="en">Sources: <code>runs/142083_mvp2_full_v2r3/q1a_bins_by_category.csv</code> (topics) and <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (all topics). BH = Benjamini-Hochberg correction over all topic × bin tests (topics) or over the 10 bins (all topics).</span></p>
+  <ul>
+    <li><span lang="ko"><b>경마와 같은 방향:</b> 롱샷에 돈이 너무 몰려서 덜 맞는다(Snowberg and Wolfers, 2010).</span><span lang="en"><b>Same direction as horse racing:</b> longshots are overbet and pay too little (Snowberg and Wolfers, 2010).</span></li>
+    <li><span lang="ko"><b>전체로 봐도 주제가 중요하다:</b> 인기 쪽이 이기는 빈도가 주제마다 다르다(카이제곱 독립성 검정, Cramér V = 0.258, p &lt; 0.0001). Sports의 인기 쪽은 72.2%, Crypto는 94.8% 이긴다.</span><span lang="en"><b>Topic matters overall too:</b> how often the favorite wins differs by topic (chi-square test of independence, Cramér's V = 0.258, p &lt; 0.0001). Sports favorites win 72.2% of the time, Crypto favorites 94.8%.</span></li>
+    <li><span lang="ko"><b>주의:</b> 한 사건의 시장들은 함께 움직이는데 검정은 그렇지 않다고 가정한다. 이것을 한계로 적는다.</span><span lang="en"><b>Caution:</b> markets on one event move together, and the test assumes they do not. We report this as a limit.</span></li>
+  </ul>
+</section>
+
+<footer>
+  <p><span lang="ko">전체 결과: 보고서 v2 (MVP1 + MVP2). 데이터: Qin and Yang (2026), Polymarket-v1 Database, <a href="https://arxiv.org/abs/2606.04217">arXiv:2606.04217</a>. 경마의 롱샷 편향: Snowberg and Wolfers (2010), Journal of Political Economy 118(4): 723–746.</span><span lang="en">Full results: report v2 (MVP1 + MVP2). Data: Qin and Yang (2026), Polymarket-v1 Database, <a href="https://arxiv.org/abs/2606.04217">arXiv:2606.04217</a>. Longshot bias in horse racing: Snowberg and Wolfers (2010), Journal of Political Economy 118(4): 723–746.</span></p>
+  <p><span lang="ko">질문해 준 Amanda Aninagyei와 Luis Tapia에게 감사한다.</span><span lang="en">Thanks to Amanda Aninagyei and Luis Tapia for the questions.</span></p>
+</footer>
+</main>
+<script>
+/* Language toggle. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){
+  var d=document.documentElement;
+  var TITLE={ko:"6344 Polymarket 수업 질문",en:"6344 Polymarket Class Questions"};
+  var KEY="cqtips-lang";
+  function setLang(l,save){
+    d.setAttribute("data-lang",l);
+    d.lang=l;
+    document.title=TITLE[l];
+    var b=document.querySelectorAll(".langbar button");
+    for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",b[i].getAttribute("data-set")===l?"true":"false");}
+    if(save){try{localStorage.setItem(KEY,l);}catch(e){}}
+  }
+  setLang(d.getAttribute("data-lang")==="en"?"en":"ko",false);
+  var btn=document.querySelectorAll(".langbar button");
+  for(var i=0;i<btn.length;i++){
+    btn[i].addEventListener("click",function(){setLang(this.getAttribute("data-set"),true);});
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<title>6344 Polymarket 연구 흐름</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<script>
+/* Runs first: marks JS as on and sets the language. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){var d=document.documentElement;d.className="js";var l="ko";try{var s=localStorage.getItem("flowtips-lang");if(s==="ko"||s==="en"){l=s;}}catch(e){}try{var q=/[?&]lang=(ko|en)(&|$)/.exec(location.search);if(q){l=q[1];}}catch(e){}d.setAttribute("data-lang",l);d.lang=l;})();
+</script>
+<style>
+/* theme.css (skills/html-theme), inlined. Layout: tips exemplar, step boxes. */
+:root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--card-foreground:oklch(0.145 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
+--over:oklch(0.62 0.17 45);--under:oklch(0.5 0.1 210);--busy:oklch(0.62 0.17 45);--quiet:oklch(0.82 0 0);--pilot:#0432ff;--wall:#d40000}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--background:oklch(0.145 0 0);--foreground:oklch(0.985 0 0);--card:oklch(0.185 0 0);--card-foreground:oklch(0.985 0 0);--primary:oklch(0.922 0 0);--primary-foreground:oklch(0.205 0 0);--muted:oklch(0.269 0 0);--muted-foreground:oklch(0.708 0 0);--border:oklch(0.5 0 0);--rule:oklch(0.3 0 0);--ring:oklch(0.6 0 0);--signal-instruction:#ff5a52;--signal-plan:#6f8cff;--signal-flag-fill:#4a4312;--signal-flag-line:#c9b53a;--signal-dead-fill:#2b2b2a;--signal-dead-ink:oklch(0.68 0.01 260);--over:oklch(0.72 0.15 50);--under:oklch(0.72 0.1 210);--busy:oklch(0.72 0.15 50);--quiet:oklch(0.42 0 0)}}
+:root[data-theme="dark"]{color-scheme:dark;--background:oklch(0.145 0 0);--foreground:oklch(0.985 0 0);--card:oklch(0.185 0 0);--card-foreground:oklch(0.985 0 0);--primary:oklch(0.922 0 0);--primary-foreground:oklch(0.205 0 0);--muted:oklch(0.269 0 0);--muted-foreground:oklch(0.708 0 0);--border:oklch(0.5 0 0);--rule:oklch(0.3 0 0);--ring:oklch(0.6 0 0);--signal-instruction:#ff5a52;--signal-plan:#6f8cff;--signal-flag-fill:#4a4312;--signal-flag-line:#c9b53a;--signal-dead-fill:#2b2b2a;--signal-dead-ink:oklch(0.68 0.01 260);--over:oklch(0.72 0.15 50);--under:oklch(0.72 0.1 210);--busy:oklch(0.72 0.15 50);--quiet:oklch(0.42 0 0)}
+*{box-sizing:border-box;border-radius:var(--radius)}
+body{background:var(--background);color:var(--foreground);font:15px/1.5 var(--font);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 40px;margin:0;overflow-wrap:anywhere}
+main{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:650;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:650;margin-bottom:10px}
+h3{font-size:14px;font-weight:600;margin:12px 0 4px}
+p{margin:0 0 6px}
+.eyebrow{font:500 11px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--signal-plan);margin-bottom:8px}
+.lede{font-size:15.5px;color:var(--muted-foreground);margin-top:8px}
+.steps-nav{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0;padding:0;list-style:none;counter-reset:st}
+.steps-nav li{counter-increment:st}
+.steps-nav a{display:block;padding:4px 10px;border:1px solid var(--rule);color:var(--foreground);text-decoration:none;font-size:12.5px}
+.steps-nav a::before{content:counter(st) " ";color:var(--signal-plan);font-weight:600}
+main>section{border:1px solid var(--border);border-top:4px solid var(--signal-plan);background:var(--card);padding:16px 18px 18px;margin-top:14px;scroll-margin-top:12px;display:flex;flex-direction:column;gap:8px}
+main>section>.eyebrow{font-size:12px;margin-bottom:0}
+.flow{display:flex;flex-wrap:wrap;gap:6px}
+.stage{flex:1 1 160px;background:var(--card);border:1px solid var(--rule);padding:6px 8px;min-width:0}
+.stage.big{border-color:var(--signal-plan)}
+.stage .n{font:600 12.5px var(--font)}
+.stage .s{font:12px/1.4 var(--font);color:var(--muted-foreground)}
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:520px}
+svg text{font-family:var(--font)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card);overflow-wrap:normal}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 11px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground);background:var(--background)}
+tr:last-child td{border-bottom:0}
+td.num{white-space:nowrap;color:var(--signal-plan)}
+td ul{margin:0;padding-left:16px}
+ul,ol{margin:0;padding-left:18px}
+li{margin:2px 0}
+.note{font-size:12.5px;color:var(--muted-foreground)}
+.callout{border-left:3px solid var(--signal-flag-line);background:var(--signal-flag-fill);padding:6px 12px;font-size:13px}
+.callout p:last-child{margin:0}
+.add{border:1px solid var(--signal-plan);padding:6px 12px;font-size:13.5px}
+.add b{color:var(--signal-plan)}
+footer{font-size:12.5px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:8px}
+a{color:var(--signal-plan)}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+@media (max-width:720px){main>section{padding:12px}}
+html[data-lang="ko"] [lang="en"],html[data-lang="en"] [lang="ko"]{display:none!important}
+html[data-lang="ko"] body{word-break:keep-all}
+.topbar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-bottom:6px}
+.langbar{display:none}
+html.js .langbar{display:flex}
+.langbar button{font:500 12.5px var(--font);padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer;margin-left:-1px}
+.langbar button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+.row2{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:12px;align-items:center;color:var(--muted-foreground)}
+.row2 .cur{color:var(--foreground);font-weight:600;border-bottom:2px solid var(--signal-plan)}
+</style>
+</head>
+<body>
+<main>
+<nav class="topbar" aria-label="Page navigation">
+  <div class="langbar" role="group" aria-label="Language">
+    <button type="button" data-set="ko" aria-pressed="true">한국어</button>
+    <button type="button" data-set="en" aria-pressed="false">English</button>
+  </div>
+  <div class="row2">
+    <span lang="ko">다른 페이지:</span><span lang="en">Other pages:</span>
+    <span class="cur" aria-current="page"><span lang="ko">이 페이지 (연구 흐름)</span><span lang="en">This page (research flow)</span></span>
+    <a href="index.html" target="_top"><span lang="ko">전체 보기</span><span lang="en">All pages</span></a>
+    <a href="index.html#proposal" target="_top"><span lang="ko">제안서</span><span lang="en">Proposal</span></a>
+    <a href="index.html#preprocessing" target="_top"><span lang="ko">전처리</span><span lang="en">Preprocessing</span></a>
+    <a href="index.html#feedback" target="_top"><span lang="ko">피드백 답</span><span lang="en">Feedback answers</span></a>
+    <a href="index.html#questions" target="_top"><span lang="ko">수업 질문</span><span lang="en">Class questions</span></a>
+  </div>
+</nav>
+<header>
+  <div class="eyebrow"><span lang="ko">CS 6344 데이터 과학 입문 · 1조 프로젝트 · 연구 흐름</span><span lang="en">CS 6344 Intro to Data Science · Group 1 project · research flow</span></div>
+  <h1><span lang="ko">Polymarket 연구는 어떤 순서로, 왜 그렇게 하나</span><span lang="en">In what order do we run the Polymarket study, and why</span></h1>
+  <p class="lede"><span lang="ko">제안서에서 결과까지 가는 길. 무엇을 하고, 왜 그 순서이며, 왜 중요한지. 9단계로, 앞 단계 위에 다음 단계를 쌓습니다.</span><span lang="en">From proposal to results. What we do, why in this order, and why it matters. 9 steps, each building on the one before.</span></p>
+  <ol class="steps-nav">
+    <li><a href="#why"><span lang="ko">왜 하나</span><span lang="en">Why we do it</span></a></li>
+    <li><a href="#flow"><span lang="ko">전체 흐름</span><span lang="en">Whole flow</span></a></li>
+    <li><a href="#data"><span lang="ko">어떤 데이터</span><span lang="en">Which data</span></a></li>
+    <li><a href="#wall"><span lang="ko">결과를 보기 전에 정한다</span><span lang="en">Fix criteria before results</span></a></li>
+    <li><a href="#pilot"><span lang="ko">파일럿에서 정한 것</span><span lang="en">What the pilot settled</span></a></li>
+    <li><a href="#traps"><span lang="ko">세 가지 함정</span><span lang="en">Three traps</span></a></li>
+    <li><a href="#mvp"><span lang="ko">MVP1, 게이트, MVP2</span><span lang="en">MVP1, gate, MVP2</span></a></li>
+    <li><a href="#where"><span lang="ko">어디서 계산하나</span><span lang="en">Where we compute</span></a></li>
+    <li><a href="#log"><span lang="ko">진행 기록과 결정</span><span lang="en">Progress log and decisions</span></a></li>
+  </ol>
+</header>
+
+<section id="why">
+  <div class="eyebrow">Step 1 of 9</div>
+  <h2><span lang="ko">왜 이 연구를 하나</span><span lang="en">Why we do this study</span></h2>
+  <div class="add"><p><b><span lang="ko">임무(mission):</span><span lang="en">Mission:</span></b> <span lang="ko">Polymarket 가격을 확률로 읽어도 되는지, 결과가 확정되고 마감 하루 전 가격이 신선하며 거래가 10건 이상인 Yes/No 시장으로, 수업에서 배운 방법만 써서 검정한다.</span><span lang="en">Test whether a Polymarket price can be read as a probability, using resolved Yes/No markets with a fresh price one day before the close and at least 10 trades, and only methods from our lectures.</span></p><p><b><span lang="ko">비전(vision):</span><span lang="en">Vision:</span></b> <span lang="ko">독자가 Polymarket 가격을 보고 얼마나 믿을지 안다. 어떤 가격 구간, 주제, 시점이 얼마나 어긋나는지, 그리고 누가 가격을 정하는지.</span><span lang="en">A reader can look at a Polymarket price and know how far to trust it: which price ranges, topics and horizons are off, by how much, and who sets the prices.</span></p><p class="note"><span lang="ko">소유자, 2026-10-19. 2026-11-01에 임무의 범위 문구를 실제로 검정한 시장으로 좁혔다. 기록: <code>PLAN.md</code>, <code>DECISIONS.md</code> D-012, D-019.</span><span lang="en">Owner, 2026-10-19. On 2026-11-01 the mission scope was narrowed to the markets actually tested. Records: <code>PLAN.md</code>, <code>DECISIONS.md</code> D-012, D-019.</span></p></div>
+  <div class="flow">
+    <div class="stage"><div class="n"><span lang="ko">문제</span><span lang="en">Problem</span></div><div class="s"><span lang="ko">사람들은 Polymarket 가격을 확률로 읽는다. 사건은 한 번만 일어나서, 가격 하나로는 그 읽기가 맞는지 알 수 없다.</span><span lang="en">People read a Polymarket price as a probability. An event happens only once, so one price cannot show whether that reading is right.</span></div></div>
+    <div class="stage big"><div class="n"><span lang="ko">아이디어</span><span lang="en">Idea</span></div><div class="s"><span lang="ko">같은 가격의 시장을 모아, 그 사건이 실제로 일어난 비율과 비교한다.</span><span lang="en">Group markets with the same price and compare with the share of those events that really happened.</span></div></div>
+    <div class="stage"><div class="n"><span lang="ko">임무(mission)</span><span lang="en">Mission</span></div><div class="s"><span lang="ko">가격을 확률로 읽어도 되는지, 실제 거래 기록으로 보인다.</span><span lang="en">Show with real trade records whether a price may be read as a probability.</span></div></div>
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">질문</span><span lang="en">Question</span></th><th><span lang="ko">무엇을 알려고</span><span lang="en">What we want to know</span></th><th><span lang="ko">왜 중요한가</span><span lang="en">Why it matters</span></th></tr>
+    <tr><td><span lang="ko">Q1. 군중이 맞나?</span><span lang="en">Q1. Is the crowd right?</span></td><td><span lang="ko">70% 가격의 사건이 70%로 일어나는가</span><span lang="en">Do events priced at 70% happen 70% of the time?</span></td><td><span lang="ko">맞으면 가격을 확률로 읽어도 된다. 틀리면 어디가 어긋나는지 보인다</span><span lang="en">If yes, we may read prices as probabilities. If not, we see where they are off.</span></td></tr>
+    <tr><td><span lang="ko">Q2. 군중은 누구인가?</span><span lang="en">Q2. Who is the crowd?</span></td><td><span lang="ko">소수 지갑(wallet)이 거래 대부분을 하는가</span><span lang="en">Do a few wallets make most of the trades?</span></td><td><span lang="ko">그렇다면 "군중의 가격"은 작은 군중의 가격이다</span><span lang="en">If so, the "crowd's price" is the price of a small crowd.</span></td></tr>
+    <tr><td><span lang="ko">Q3. 데이터는 어떻게 생겼나?</span><span lang="en">Q3. What does the data look like?</span></td><td><span lang="ko">거래 크기와 지갑 활동의 분포</span><span lang="en">The distribution of trade sizes and wallet activity</span></td><td><span lang="ko">분포를 알아야 맞는 검정과 변환을 고른다</span><span lang="en">We need the distribution to choose the right tests and transforms.</span></td></tr>
+  </table></div>
+</section>
+
+<section id="flow">
+  <div class="eyebrow">Step 2 of 9</div>
+  <h2><span lang="ko">전체 흐름</span><span lang="en">Whole flow</span></h2>
+  <div class="chart">
+    <svg viewBox="0 0 740 210" role="img" aria-labelledby="f1ko f1en">
+      <title id="f1ko" lang="ko">연구 흐름. 윗줄: 1 데이터 받기, 2 Job A 살펴보기, 3 기준 사전 등록, 그다음 빨간 점선 벽, 4 Job B 표 만들기. 아랫줄: 5 Q3 분포, 6 Q1 보정, 7 Q2 집중도, 8 게이트, 9 MVP2.</title>
+      <title id="f1en" lang="en">Research flow. Top row: 1 get data, 2 Job A inspect, 3 pre-register criteria, then a red dashed wall, 4 Job B build tables. Bottom row: 5 Q3 distributions, 6 Q1 calibration, 7 Q2 concentration, 8 gate, 9 MVP2.</title>
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted-foreground)"/></marker></defs>
+      <text x="540" y="16" font-size="10.5" fill="var(--signal-instruction)" text-anchor="end" lang="ko">벽: 이 앞에서는 가격과 결과를 함께 보지 않는다</text><text x="540" y="16" font-size="10.5" fill="var(--signal-instruction)" text-anchor="end" lang="en">Wall: before it we never look at price and outcome together</text>
+      <g fill="var(--card)" stroke="var(--border)">
+        <rect x="20" y="30" width="150" height="54"/><rect x="200" y="30" width="150" height="54"/><rect x="380" y="30" width="150" height="54"/><rect x="570" y="30" width="150" height="54"/>
+        <rect x="20" y="140" width="120" height="54"/><rect x="162" y="140" width="120" height="54"/><rect x="304" y="140" width="120" height="54"/><rect x="446" y="140" width="120" height="54"/>
+      </g>
+      <rect x="588" y="140" width="120" height="54" fill="var(--card)" stroke="var(--border)" stroke-dasharray="4 3"/>
+      <rect x="380" y="30" width="150" height="54" fill="none" stroke="var(--signal-plan)" stroke-width="1.5"/>
+      <line x1="550" y1="24" x2="550" y2="92" stroke="var(--signal-instruction)" stroke-width="2" stroke-dasharray="5 3"/>
+      <g font-size="11.5" fill="var(--foreground)" text-anchor="middle" font-weight="600">
+        <text x="95" y="53" lang="ko">1 데이터 받기</text><text x="95" y="53" lang="en">1 Get data</text><text x="275" y="53" lang="ko">2 Job A 살펴보기</text><text x="275" y="53" lang="en">2 Job A inspect</text><text x="455" y="53" lang="ko">3 기준 사전 등록</text><text x="455" y="53" lang="en">3 Pre-register</text><text x="645" y="53" lang="ko">4 Job B 표 만들기</text><text x="645" y="53" lang="en">4 Job B tables</text>
+        <text x="80" y="163" lang="ko">5 Q3 분포</text><text x="80" y="163" lang="en">5 Q3 distributions</text><text x="222" y="163" lang="ko">6 Q1 보정</text><text x="222" y="163" lang="en">6 Q1 calibration</text><text x="364" y="163" lang="ko">7 Q2 집중도</text><text x="364" y="163" lang="en">7 Q2 concentration</text><text x="506" y="163" lang="ko">8 게이트</text><text x="506" y="163" lang="en">8 Gate</text><text x="648" y="163" lang="ko">9 MVP2 (보류)</text><text x="648" y="163" lang="en">9 MVP2 (on hold)</text>
+      </g>
+      <g font-size="10" fill="var(--muted-foreground)" text-anchor="middle">
+        <text x="95" y="72" lang="ko">13.2 GB, 한 번만</text><text x="95" y="72" lang="en">13.2 GB, once</text><text x="275" y="72" lang="ko">마감 시각, 거래 수</text><text x="275" y="72" lang="en">close time, trade counts</text><text x="455" y="72" lang="ko">T 규칙, 최소 거래</text><text x="455" y="72" lang="en">T rule, min trades</text><text x="645" y="72" lang="ko">시장 표, 지갑 표</text><text x="645" y="72" lang="en">market table, wallet table</text>
+        <text x="80" y="182" lang="ko">그림 1–3</text><text x="80" y="182" lang="en">Figures 1–3</text><text x="222" y="182" lang="ko">그림 4–5</text><text x="222" y="182" lang="en">Figures 4–5</text><text x="364" y="182" lang="ko">그림 6–8</text><text x="364" y="182" lang="en">Figures 6–8</text><text x="506" y="182" lang="ko">통과해야 다음</text><text x="506" y="182" lang="en">pass to go on</text><text x="648" y="182">Q1a, Q1b, Q1c</text>
+      </g>
+      <g stroke="var(--muted-foreground)" stroke-width="1.3" fill="none" marker-end="url(#ar)">
+        <path d="M170 57H198"/><path d="M350 57H378"/><path d="M530 57H568"/>
+        <path d="M645 84V112H80V138"/>
+        <path d="M140 167H160"/><path d="M282 167H302"/><path d="M424 167H444"/><path d="M566 167H586"/>
+      </g>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 1. 데이터에서 MVP2까지 아홉 단계. 9번 MVP2는 2026-11-01부터 목표가 아니다(D-016). 3번(파란 테두리)에서 기준을 커밋한 뒤에만 4번으로 넘어간다. 왜: 기준을 정하는 단계와 결과를 보는 단계를 떼어 놓아야 결과가 기준을 바꾸지 못한다.</span><span lang="en">Figure 1. Nine steps from data to MVP2. MVP2, step 9, is not a target since 2026-11-01 (D-016). We move from step 3 (blue border) to step 4 only after the criteria are committed. Why: separating the step that sets criteria from the step that sees results keeps results from changing the criteria.</span></p>
+  <ol>
+    <li><span lang="ko"><b>데이터 받기.</b> 분석층(<code>daily_aligned/</code>)을 클러스터에 한 번 내려받는다. 작업마다 다시 받지 않는다.</span><span lang="en"><b>Get the data.</b> Download the analysis layer (<code>daily_aligned/</code>) to the cluster once. Do not download again for each job.</span></li>
+    <li><span lang="ko"><b>Job A 살펴보기.</b> 열 이름, 값의 종류, 중복, 마감 시각 뒤의 거래, 시장마다 거래 수를 본다. 가격과 결과는 함께 보지 않는다.</span><span lang="en"><b>Job A inspect.</b> Look at column names, kinds of values, duplicates, trades after the close, and trades per market. Never look at price and outcome together.</span></li>
+    <li><span lang="ko"><b>기준 사전 등록(pre-registration).</b> Job A를 보고 두 가지를 정해 커밋한다: 마감 시각 T를 무엇으로 볼지, 최소 거래 수.</span><span lang="en"><b>Pre-registration.</b> After Job A, fix two things and commit them: what counts as the close time T, and the minimum number of trades.</span></li>
+    <li><span lang="ko"><b>Job B.</b> 시장 표(시장 하나에 한 줄)와 지갑 표(지갑 하나에 한 줄)를 만든다.</span><span lang="en"><b>Job B.</b> Build the market table (one row per market) and the wallet table (one row per wallet).</span></li>
+    <li><span lang="ko"><b>Q3 → Q1 → Q2.</b> 분포를 먼저 본다. 그래야 Q1과 Q2에서 쓸 변환과 검정을 고른다.</span><span lang="en"><b>Q3 → Q1 → Q2.</b> Look at the distributions first. Then we choose the transforms and tests for Q1 and Q2.</span></li>
+  </ol>
+</section>
+
+<section id="data">
+  <div class="eyebrow">Step 3 of 9</div>
+  <h2><span lang="ko">어떤 데이터를 쓰나</span><span lang="en">Which data we use</span></h2>
+  <p><span lang="ko">데이터셋에는 네 층(layer)이 있다. 우리는 그중 두 개만 쓴다.</span><span lang="en">The dataset has four layers. We use only two of them.</span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">층</span><span lang="en">Layer</span></th><th><span lang="ko">무엇</span><span lang="en">What it is</span></th><th><span lang="ko">우리 사용</span><span lang="en">How we use it</span></th></tr>
+    <tr><td><code>daily_aligned/</code></td><td><span lang="ko">정리된 분석층. Yes/No 시장만. 중계(relayer) 기록은 이미 빠졌다. 날짜마다 파일 하나</span><span lang="en">Cleaned analysis layer. Yes/No markets only. Relayer records are already removed. One file per day.</span></td><td><span lang="ko">주 데이터. 1,248개 파일, 13.2 GB</span><span lang="en">Main data. 1,248 files, 13.2 GB</span></td></tr>
+    <tr><td><code>CTF/resolutions.parquet</code></td><td><span lang="ko">시장의 공식 결과 기록</span><span lang="en">The official outcome record of a market</span></td><td><span lang="ko">결과가 빠진 시장의 예비 출처</span><span lang="en">Backup source for markets with no outcome</span></td></tr>
+    <tr><td><code>OrderFilled/</code></td><td><span lang="ko">원본 거래 기록. 중계 기록이 섞여 있다</span><span lang="en">Raw trade records. Relayer records are mixed in.</span></td><td><span lang="ko">쓰지 않음</span><span lang="en">Not used</span></td></tr>
+    <tr><td><code>daily_aligned_multi/</code></td><td><span lang="ko">후보가 여럿인 시장 (예: 누가 우승하나)</span><span lang="en">Markets with several candidates (for example, who wins)</span></td><td><span lang="ko">쓰지 않음. Yes/No 시장과 섞지 않는다</span><span lang="en">Not used. We do not mix them with Yes/No markets.</span></td></tr>
+  </table></div>
+  <div class="chart">
+    <svg viewBox="0 0 760 290" role="img" aria-labelledby="f2ko f2en">
+      <title id="f2ko" lang="ko">2025년 1월부터 2026년 4월까지 달마다 daily_aligned 파일 크기, MB. 2025년 9월까지 100 MB 아래, 2025년 10월 190, 11월 326, 12월 575, 2026년 1월 1566, 2월 2711, 3월 4215, 4월 2897. 2025년 6월은 파일럿 달로 강조.</title>
+      <title id="f2en" lang="en">Size of daily_aligned files per month, January 2025 to April 2026, in MB. Below 100 MB until September 2025, then October 2025 190, November 326, December 575, January 2026 1566, February 2711, March 4215, April 2897. June 2025 is highlighted as the pilot month.</title>
+      <g stroke="var(--rule)"><line x1="64" y1="44" x2="744" y2="44"/><line x1="64" y1="137" x2="744" y2="137"/></g>
+      <line x1="64" y1="230" x2="744" y2="230" stroke="var(--muted-foreground)"/>
+      <g font-size="10" fill="var(--muted-foreground)" text-anchor="end"><text x="58" y="234">0</text><text x="58" y="141">2,000</text><text x="58" y="48">4,000</text></g>
+      <text x="14" y="137" font-size="10" fill="var(--muted-foreground)" transform="rotate(-90 14 137)" text-anchor="middle" lang="ko">크기 (MB)</text><text x="14" y="137" font-size="10" fill="var(--muted-foreground)" transform="rotate(-90 14 137)" text-anchor="middle" lang="en">Size (MB)</text>
+      <g fill="var(--quiet)">
+        <rect x="70" y="227.1" width="34" height="2.9"/><rect x="112" y="227.9" width="34" height="2.1"/><rect x="154" y="227.6" width="34" height="2.4"/><rect x="196" y="228.1" width="34" height="1.9"/><rect x="238" y="228" width="34" height="2"/>
+        <rect x="322" y="227" width="34" height="3"/><rect x="364" y="226.7" width="34" height="3.3"/><rect x="406" y="226.3" width="34" height="3.7"/><rect x="448" y="221.2" width="34" height="8.8"/><rect x="490" y="214.8" width="34" height="15.2"/><rect x="532" y="203.3" width="34" height="26.7"/><rect x="574" y="157.2" width="34" height="72.8"/><rect x="616" y="103.9" width="34" height="126.1"/><rect x="658" y="34" width="34" height="196"/><rect x="700" y="95.3" width="34" height="134.7"/>
+      </g>
+      <rect x="280" y="227.6" width="34" height="2.4" fill="var(--signal-plan)"/>
+      <g font-size="9.5" fill="var(--foreground)" text-anchor="middle">
+        <text x="87" y="222">62</text><text x="129" y="222">46</text><text x="171" y="222">52</text><text x="213" y="222">41</text><text x="255" y="222">42</text><text x="297" y="222" fill="var(--signal-plan)">52</text><text x="339" y="222">64</text><text x="381" y="222">71</text><text x="423" y="221">80</text><text x="465" y="216">190</text><text x="507" y="210">326</text><text x="549" y="198">575</text><text x="591" y="152">1,566</text><text x="633" y="99">2,711</text><text x="675" y="29">4,215</text><text x="717" y="90">2,897</text>
+      </g>
+      <g font-size="9.5" fill="var(--muted-foreground)" text-anchor="middle">
+        <text x="87" y="246">25-01</text><text x="129" y="246">02</text><text x="171" y="246">03</text><text x="213" y="246">04</text><text x="255" y="246">05</text><text x="297" y="246" fill="var(--signal-plan)">06</text><text x="339" y="246">07</text><text x="381" y="246">08</text><text x="423" y="246">09</text><text x="465" y="246">10</text><text x="507" y="246">11</text><text x="549" y="246">12</text><text x="591" y="246">26-01</text><text x="633" y="246">02</text><text x="675" y="246">03</text><text x="717" y="246">04*</text>
+        <text x="404" y="266" lang="ko">거래 달 (년-월)</text><text x="404" y="266" lang="en">Trade month (year-month)</text>
+      </g>
+      <text x="64" y="284" font-size="9.5" fill="var(--muted-foreground)" lang="ko">* 2026년 4월은 4월 28일까지. 파란 막대 = 파일럿 달 (2025년 6월).</text><text x="64" y="284" font-size="9.5" fill="var(--muted-foreground)" lang="en">* April 2026 runs to April 28. Blue bar = pilot month (June 2025).</text>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 2. 달마다 <code>daily_aligned/</code> 파일 크기, Hugging Face 목록 (2026-10-19, <code>analysis/hf_daily_aligned_listing.txt</code>). 왜: 마지막 넉 달이 전체의 대부분이라, 파일럿은 작은 달로 먼저 돌린다.</span><span lang="en">Figure 2. Size of the <code>daily_aligned/</code> files per month, from the Hugging Face listing (2026-10-19, <code>analysis/hf_daily_aligned_listing.txt</code>). Why: the last four months hold most of the data, so we run the pilot on a small month first.</span></p>
+  <p><span lang="ko">파일럿은 <b>2025년 6월에 마감한 시장</b>이다. 그 시장들의 거래는 모든 날짜 파일에서 가져온다. 한 달치 날짜 파일만 쓰면 시장이 중간에 잘린다. 그러면 마감 시각 확인이 틀린다.</span><span lang="en">The pilot is the <b>markets that closed in June 2025</b>. We take their trades from all day files. If we used only one month of day files, markets would be cut in the middle, and the close-time check would be wrong.</span></p>
+</section>
+
+<section id="wall">
+  <div class="eyebrow">Step 4 of 9</div>
+  <h2><span lang="ko">결과를 보기 전에 기준을 정한다</span><span lang="en">Fix the criteria before seeing results</span></h2>
+  <div class="flow">
+    <div class="stage"><div class="n"><span lang="ko">문제</span><span lang="en">Problem</span></div><div class="s"><span lang="ko">결과를 본 뒤 기준을 고르면, 원하는 결과가 나오는 기준을 고르게 된다.</span><span lang="en">If we pick criteria after seeing results, we pick the criteria that give the result we want.</span></div></div>
+    <div class="stage big"><div class="n"><span lang="ko">아이디어</span><span lang="en">Idea</span></div><div class="s"><span lang="ko">기준을 먼저 적고 커밋한다. 커밋 시각이 "결과를 보기 전"의 증거다.</span><span lang="en">Write the criteria first and commit them. The commit time is the proof of "before the result".</span></div></div>
+    <div class="stage"><div class="n"><span lang="ko">이것이 지키는 것</span><span lang="en">What it protects</span></div><div class="s"><span lang="ko">Q1의 답이 우리 선택이 아니라 데이터에서 나온다.</span><span lang="en">The answer to Q1 comes from the data, not from our choices.</span></div></div>
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">미리 정하는 것</span><span lang="en">Fixed in advance</span></th><th><span lang="ko">Job A에서 보는 것</span><span lang="en">What we see in Job A</span></th><th><span lang="ko">왜</span><span lang="en">Why</span></th></tr>
+    <tr><td><span lang="ko">마감 시각 T: 마지막 거래 또는 <code>close_at</code></span><span lang="en">Close time T: the last trade or <code>close_at</code></span></td><td><span lang="ko">마감 뒤에도 거래가 많은가</span><span lang="en">Are there many trades after the close?</span></td><td><span lang="ko">결과가 알려진 뒤의 거래로 T를 잡으면 가격에 답이 들어간다</span><span lang="en">If T comes from trades after the result is known, the price already holds the answer.</span></td></tr>
+    <tr><td><span lang="ko">최소 거래 수</span><span lang="en">Minimum number of trades</span></td><td><span lang="ko">시장마다 거래 수의 분포</span><span lang="en">The distribution of trades per market</span></td><td><span lang="ko">거래 두 건짜리 가격은 군중의 의견이 아니다</span><span lang="en">A price from two trades is not the crowd's view.</span></td></tr>
+    <tr><td><span lang="ko">구간 10개, 유의수준 0.05</span><span lang="en">10 bins, significance level 0.05</span></td><td><span lang="ko">(보지 않음)</span><span lang="en">(not looked at)</span></td><td><span lang="ko">계획에 이미 있다. 바꾸지 않는다</span><span lang="en">Already in the plan. We do not change them.</span></td></tr>
+  </table></div>
+  <div class="callout"><p><span lang="ko">Job A는 가격과 결과를 한 표에 놓지 않는다. 그래서 Job A를 보고 정한 기준은 Q1의 답에 맞춰질 수 없다.</span><span lang="en">Job A never puts price and outcome in one table. So the criteria we set after Job A cannot be fitted to the answer of Q1.</span></p></div>
+</section>
+
+<section id="pilot">
+  <div class="eyebrow">Step 5 of 9</div>
+  <h2><span lang="ko">파일럿에서 본 것과 정한 것</span><span lang="en">What we saw and settled in the pilot</span></h2>
+  <p><span lang="ko">Job A는 2025년 6월에 마감한 시장을 살펴봤다. 시장 3,841개, 거래 3,065,179건이다. Up/Down 시장을 빼면 Yes/No 시장 2,063개가 남는다. CPU 8개로 약 2.5분 걸렸다.</span><span lang="en">Job A inspected the markets that closed in June 2025: 3,841 markets and 3,065,179 trades. Without the Up/Down markets, 2,063 Yes/No markets remain. It took about 2.5 minutes on 8 CPUs.</span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">본 것</span><span lang="en">What we saw</span></th><th><span lang="ko">숫자</span><span lang="en">Number</span></th><th><span lang="ko">그래서 정한 것</span><span lang="en">What we settled</span></th></tr>
+    <tr><td><span lang="ko"><code>close_at</code> 뒤에도 거래가 있는 시장</span><span lang="en">Markets with trades after <code>close_at</code></span></td><td class="num"><ul><li>51.3%</li><li><span lang="ko">거래량으로는 34.0%</span><span lang="en">34.0% by volume</span></li></ul></td><td><span lang="ko">T = <code>close_at</code>. 마지막 거래를 T로 잡으면 결과가 알려진 뒤의 가격이 섞인다</span><span lang="en">T = <code>close_at</code>. If the last trade sets T, prices from after the result is known mix in.</span></td></tr>
+    <tr><td><span lang="ko">T − 1일 전 거래 수의 중앙값</span><span lang="en">Median number of trades before T − 1 day</span></td><td class="num"><ul><li><span lang="ko">T = <code>close_at</code>: 200건</span><span lang="en">T = <code>close_at</code>: 200 trades</span></li><li><span lang="ko">T = 마지막 거래: 18건</span><span lang="en">T = last trade: 18 trades</span></li></ul></td><td><span lang="ko">같은 이유로 <code>close_at</code></span><span lang="en">Same reason: <code>close_at</code></span></td></tr>
+    <tr><td><span lang="ko">같은 키(key)를 가진 행</span><span lang="en">Rows with the same key</span></td><td class="num">155,885 / 3,065,179 (5.1%)</td><td><span lang="ko">남긴다. 행마다 고유 번호가 없어, 같은 블록의 반복 체결인지 복사본인지 가릴 수 없다</span><span lang="en">Keep them. Rows have no unique id, so we cannot tell repeated fills in one block from copies.</span></td></tr>
+    <tr><td><span lang="ko">결과 라벨이 없는 시장</span><span lang="en">Markets with no outcome label</span></td><td class="num"><span lang="ko">14개</span><span lang="en">14 markets</span></td><td><span lang="ko">뺀다. 채우지 않는다</span><span lang="en">Drop them. Do not fill in.</span></td></tr>
+  </table></div>
+  <div class="chart">
+    <svg viewBox="0 0 740 270" role="img" aria-labelledby="f3ko f3en">
+      <title id="f3ko" lang="ko">최소 거래 수에 따라 남는 시장 수, T는 close_at. 전체 2,063. 최소 1건 1,709, 5건 1,629, 10건 1,563, 20건 1,475, 50건 1,314. 10건이 선택되어 강조된다.</title>
+      <title id="f3en" lang="en">Markets left by the minimum number of trades, T is close_at. All 2,063. At least 1 trade 1,709, 5 trades 1,629, 10 trades 1,563, 20 trades 1,475, 50 trades 1,314. The 10-trade cutoff is chosen and highlighted.</title>
+      <g stroke="var(--rule)"><line x1="64" y1="40" x2="700" y2="40"/><line x1="64" y1="130" x2="700" y2="130"/></g>
+      <line x1="64" y1="220" x2="700" y2="220" stroke="var(--muted-foreground)"/>
+      <g font-size="10" fill="var(--muted-foreground)" text-anchor="end"><text x="58" y="224">0</text><text x="58" y="134">1,032</text><text x="58" y="44">2,063</text></g>
+      <text x="14" y="130" font-size="10" fill="var(--muted-foreground)" transform="rotate(-90 14 130)" text-anchor="middle" lang="ko">남는 시장 수</text><text x="14" y="130" font-size="10" fill="var(--muted-foreground)" transform="rotate(-90 14 130)" text-anchor="middle" lang="en">Markets left</text>
+      <g fill="var(--quiet)"><rect x="80" y="40" width="60" height="180"/><rect x="180" y="70.9" width="60" height="149.1"/><rect x="280" y="77.9" width="60" height="142.1"/><rect x="480" y="91.3" width="60" height="128.7"/><rect x="580" y="105.4" width="60" height="114.6"/></g>
+      <rect x="380" y="83.6" width="60" height="136.4" fill="var(--signal-plan)"/>
+      <g font-size="10.5" fill="var(--foreground)" text-anchor="middle"><text x="110" y="34">2,063</text><text x="210" y="65">1,709</text><text x="310" y="72">1,629</text><text x="410" y="78" fill="var(--signal-plan)" font-weight="600">1,563</text><text x="510" y="86">1,475</text><text x="610" y="100">1,314</text></g>
+      <g font-size="10.5" fill="var(--muted-foreground)" text-anchor="middle"><text x="110" y="238" lang="ko">전체</text><text x="110" y="238" lang="en">All</text><text x="210" y="238">≥ 1</text><text x="310" y="238">≥ 5</text><text x="410" y="238" fill="var(--signal-plan)" lang="ko">≥ 10 (선택)</text><text x="410" y="238" fill="var(--signal-plan)" lang="en">≥ 10 (chosen)</text><text x="510" y="238">≥ 20</text><text x="610" y="238">≥ 50</text><text x="360" y="260" lang="ko">T − 1일 전까지의 최소 거래 수</text><text x="360" y="260" lang="en">Minimum number of trades before T − 1 day</text></g>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 3. 최소 거래 수에 따라 남는 Yes/No 시장 수, T = <code>close_at</code>, <code>runs/142041_pilotA_2025_06/activity_summary.json</code>. 왜: 10건은 76%를 남기면서 거의 빈 시장을 걸러 낸다.</span><span lang="en">Figure 3. Yes/No markets left by the minimum number of trades, T = <code>close_at</code>, <code>runs/142041_pilotA_2025_06/activity_summary.json</code>. Why: 10 trades keep 76% and still filter out nearly empty markets.</span></p>
+  <div class="add"><span lang="ko"><b>정한 기준 (소유자, 2026-10-19):</b> T = <code>close_at</code>, 최소 거래 10건, 중복 행은 남김. 기록: <code>analysis/prereg_mvp1.json</code>, <code>analysis/prereg_mvp1.md</code>, <code>DECISIONS.md</code> D-007. Q1은 최소 거래 기준을 쓴 결과와 안 쓴 결과를 함께 보고한다.</span><span lang="en"><b>Settled criteria (owner, 2026-10-19):</b> T = <code>close_at</code>, at least 10 trades, keep duplicate rows. Records: <code>analysis/prereg_mvp1.json</code>, <code>analysis/prereg_mvp1.md</code>, <code>DECISIONS.md</code> D-007. Q1 reports the result with the minimum-trade cutoff and without it.</span></div>
+  <div class="callout"><p><span lang="ko">이 숫자들 중 어느 것도 가격과 결과를 함께 보지 않았다. 그래서 이 기준은 Q1의 답에 맞춰 고를 수 없었다.</span><span lang="en">None of these numbers looked at price and outcome together. So these criteria could not be picked to fit the answer of Q1.</span></p></div>
+</section>
+
+<section id="traps">
+  <div class="eyebrow">Step 6 of 9</div>
+  <h2><span lang="ko">세 가지 함정과 대처</span><span lang="en">Three traps and how we handle them</span></h2>
+  <div class="chart">
+    <svg viewBox="0 0 740 170" role="img" aria-labelledby="f4ko f4en">
+      <title id="f4ko" lang="ko">시장 하나의 시간선. 열림, 거래들, 평가 시점 T 빼기 1일, close_at, 결과 확정. close_at 뒤의 거래 두 개는 빨간색으로 표시된다.</title>
+      <title id="f4en" lang="en">Timeline of one market. Open, trades, evaluation time T minus 1 day, close_at, outcome known. Two trades after close_at are red.</title>
+      <line x1="40" y1="80" x2="710" y2="80" stroke="var(--muted-foreground)" stroke-width="1.5"/>
+      <g fill="var(--foreground)"><circle cx="90" cy="80" r="3"/><circle cx="140" cy="80" r="3"/><circle cx="210" cy="80" r="3"/><circle cx="260" cy="80" r="3"/><circle cx="330" cy="80" r="3"/><circle cx="390" cy="80" r="3"/><circle cx="430" cy="80" r="3"/><circle cx="470" cy="80" r="3"/><circle cx="520" cy="80" r="3"/></g>
+      <g fill="var(--signal-instruction)"><circle cx="590" cy="80" r="4"/><circle cx="620" cy="80" r="4"/></g>
+      <g stroke="var(--foreground)"><line x1="40" y1="64" x2="40" y2="96"/><line x1="560" y1="56" x2="560" y2="104"/><line x1="680" y1="64" x2="680" y2="96"/></g>
+      <line x1="440" y1="56" x2="440" y2="104" stroke="var(--signal-plan)" stroke-width="2" stroke-dasharray="4 3"/>
+      <g font-size="11" fill="var(--foreground)" text-anchor="middle">
+        <text x="40" y="118" lang="ko">열림</text><text x="40" y="118" lang="en">open</text><text x="560" y="118">close_at</text><text x="680" y="118" lang="ko">결과 확정</text><text x="680" y="118" lang="en">outcome known</text>
+        <text x="440" y="48" fill="var(--signal-plan)" lang="ko">평가 가격: T − 1일</text><text x="440" y="48" fill="var(--signal-plan)" lang="en">evaluated price: T − 1 day</text>
+        <text x="605" y="48" fill="var(--signal-instruction)" lang="ko">마감 뒤 거래</text><text x="605" y="48" fill="var(--signal-instruction)" lang="en">trades after close</text>
+      </g>
+      <text x="40" y="150" font-size="10.5" fill="var(--muted-foreground)" lang="ko">T를 마지막 거래(빨간 점)로 잡으면, T − 1일이 close_at 뒤로 밀려 답을 아는 가격을 쓰게 된다.</text><text x="40" y="150" font-size="10.5" fill="var(--muted-foreground)" lang="en">If the last trade (red dots) sets T, T − 1 day moves past close_at and we use a price that knows the answer.</text>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 4. 시장 하나의 시간선. 설명용 그림. 왜: 마감 뒤 거래가 있으면 T를 잡는 규칙이 Q1 결과를 바꾼다.</span><span lang="en">Figure 4. Timeline of one market. Illustration. Why: when trades exist after the close, the rule that sets T changes the Q1 result.</span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">함정</span><span lang="en">Trap</span></th><th><span lang="ko">무엇이 잘못되나</span><span lang="en">What goes wrong</span></th><th><span lang="ko">대처</span><span lang="en">What we do</span></th></tr>
+    <tr><td><span lang="ko">답이 알려진 뒤의 거래</span><span lang="en">Trades after the answer is known</span></td><td><span lang="ko">가격에 결과가 이미 들어 있다. 보정이 완벽해 보인다</span><span lang="en">The price already holds the result. Calibration looks perfect.</span></td><td><span lang="ko">Job A에서 마감 뒤 거래를 잰다. T 규칙을 커밋한다</span><span lang="en">Measure trades after the close in Job A. Commit the T rule.</span></td></tr>
+    <tr><td><span lang="ko">거의 빈 시장</span><span lang="en">Nearly empty markets</span></td><td><span lang="ko">몇 건의 거래로 정해진 가격은 잡음이다</span><span lang="en">A price set by a few trades is noise.</span></td><td><ul><li><span lang="ko">최소 거래 수를 미리 정한다.</span><span lang="en">Fix a minimum number of trades in advance.</span></li><li><span lang="ko">기준을 쓴 결과와 안 쓴 결과를 함께 보고한다.</span><span lang="en">Report results with and without the cutoff.</span></li></ul></td></tr>
+    <tr><td><span lang="ko">연결된 시장</span><span lang="en">Linked markets</span></td><td><span lang="ko">한 사건에 걸린 시장들은 함께 움직인다. 검정은 독립을 가정한다</span><span lang="en">Markets on one event move together. The tests assume independence.</span></td><td><span lang="ko">보고서에 한계로 적는다. 시장 의존성은 아직 처리하지 않았다(아래 열린 항목). 주제별 검정은 MVP2라서 보류다</span><span lang="en">We state it as a limit in the report. We have not handled market dependence yet (see open items below). The test by topic belongs to MVP2, which is on hold.</span></td></tr>
+  </table></div>
+</section>
+
+<section id="mvp">
+  <div class="eyebrow">Step 7 of 9</div>
+  <h2><span lang="ko">MVP1, 게이트, MVP2</span><span lang="en">MVP1, gate, MVP2</span></h2>
+  <p><span lang="ko">최소 기능 결과(minimum viable product, MVP)를 먼저 끝까지 만든다. 그다음에만 넓힌다. 그래서 어느 시점에 멈춰도 낼 수 있는 보고서가 있다.</span><span lang="en">We build the minimum viable product (MVP) end to end first. We widen only after that. So at any moment we have a report we can hand in.</span></p>
+  <div class="flow">
+    <div class="stage big"><div class="n"><span lang="ko">MVP1 (2주차까지)</span><span lang="en">MVP1 (until week 2)</span></div><div class="s"><span lang="ko">Q1, Q2, Q3. 그림 8개. 모든 검정에 효과 크기를 함께 적는다.</span><span lang="en">Q1, Q2, Q3. 8 figures. Every test reports an effect size.</span></div></div>
+    <div class="stage"><div class="n"><span lang="ko">게이트(gate)</span><span lang="en">Gate</span></div><div class="s"><span lang="ko">MVP1 항목이 모두 끝났나? 전체 데이터 질의가 몇 분 안에 끝나나? 시간이 남았나?</span><span lang="en">Are all MVP1 items done? Does the full-data query finish in minutes? Is there time left?</span></div></div>
+    <div class="stage"><div class="n"><span lang="ko">MVP2 (보류)</span><span lang="en">MVP2 (on hold)</span></div><div class="s"><span lang="ko">Q1a 주제별, Q1b 마감이 가까울수록, Q1c 거래가 많을수록. 2026-11-01부터 목표가 아니다. 파일은 그대로 <code>future_work/</code>에 있다(D-016, D-017).</span><span lang="en">Q1a by topic, Q1b closer to the close, Q1c more trades. Not a target since 2026-11-01. Its files stay unchanged in <code>future_work/</code> (D-016, D-017).</span></div></div>
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">질문</span><span lang="en">Question</span></th><th><span lang="ko">주 방법</span><span lang="en">Main method</span></th><th><span lang="ko">나오는 것</span><span lang="en">Output</span></th></tr>
+    <tr><td><span lang="ko">Q3 분포</span><span lang="en">Q3 distributions</span></td><td><ul><li><span lang="ko">요약 통계, 히스토그램, ECDF</span><span lang="en">Summary statistics, histogram, ECDF</span></li><li><span lang="ko">정규, 지수, 멱법칙 맞춤과 KS 검정</span><span lang="en">Normal, exponential and power-law fits and the KS test</span></li><li><span lang="ko">로그 변환 전후 QQ 그림</span><span lang="en">QQ plots before and after a log transform</span></li></ul></td><td><span lang="ko">그림 1–3</span><span lang="en">Figures 1–3</span></td></tr>
+    <tr><td><span lang="ko">Q1 보정</span><span lang="en">Q1 calibration</span></td><td><ul><li><span lang="ko">가격 구간마다 이항 검정과 95% z 구간</span><span lang="en">A binomial test and a 95% z interval per price bin</span></li><li><span lang="ko">카이제곱 적합도(강의 12의 형태), Bonferroni와 BH 보정</span><span lang="en">Chi-square goodness of fit (a form of Lecture 12), Bonferroni and BH corrections</span></li><li><span lang="ko">구간별 격차(관측 비율 − 평균 가격)</span><span lang="en">Per-bin gap (observed rate − mean price)</span></li><li><span lang="ko">가격의 평균 제곱 잔차(mean squared residual, 사전 등록 이름은 Brier 점수, 숫자는 같다), 로그 손실</span><span lang="en">Mean squared residual of the price (the pre-registration calls it the Brier score, same numbers), log loss</span></li></ul></td><td><span lang="ko">그림 4–5</span><span lang="en">Figures 4–5</span></td></tr>
+    <tr><td><span lang="ko">Q2 집중도</span><span lang="en">Q2 concentration</span></td><td><ul><li><span lang="ko">상위 1%, 5%, 10% 몫</span><span lang="en">Top 1%, 5%, 10% shares</span></li><li><span lang="ko">CCDF(complementary cumulative distribution function, 지갑 거래량 위쪽 몫)와 이름 붙인 로렌츠 곡선. 지니 계수는 뺐다</span><span lang="en">CCDF (complementary cumulative distribution function, the share of wallets above a volume) and a labeled Lorenz curve. We dropped the Gini coefficient.</span></li><li><span lang="ko">80/20과 멱법칙은 서술용 참고선이다. 사전 등록 판정이 아니다</span><span lang="en">80/20 and the power law are descriptive reference lines, not pre-registered verdicts</span></li><li><span lang="ko">k-평균(k-means)은 곁가지 분석, 보고서의 1/10 미만</span><span lang="en">k-means is a side analysis, under 1/10 of the report</span></li></ul></td><td><span lang="ko">그림 6–8</span><span lang="en">Figures 6–8</span></td></tr>
+  </table></div>
+  <p class="note"><span lang="ko">계획: <code>tips/polymarket_plan_detailed.md</code>. 방법 이름은 2026-11-01에 강의 범위 감사로 바뀌었다(D-025, D-026, D-028). Cramér V, 지니 계수, 조정 랜드 지수(ARI), Cohen의 d_z는 쓰지 않는다. 위 Q1, Q2 줄이 현재 판이다.</span><span lang="en">Plan: <code>tips/polymarket_plan_detailed.md</code>. Method names changed on 2026-11-01 after the lecture-scope audit (D-025, D-026, D-028). We do not use Cramér's V, the Gini coefficient, the adjusted Rand index (ARI) or Cohen's d_z. The Q1 and Q2 rows above are the current version.</span></p>
+</section>
+
+<section id="where">
+  <div class="eyebrow">Step 8 of 9</div>
+  <h2><span lang="ko">어디서 계산하나</span><span lang="en">Where we compute</span></h2>
+  <div class="flow">
+    <div class="stage"><div class="n"><span lang="ko">노트북 (Mac)</span><span lang="en">Laptop (Mac)</span></div><div class="s"><span lang="ko">코드를 쓴다. 데이터는 돌리지 않는다.</span><span lang="en">Write the code. Do not run the data.</span></div></div>
+    <div class="stage"><div class="n"><span lang="ko">로그인 노드</span><span lang="en">Login node</span></div><div class="s"><span lang="ko">코드를 올리고 작업(job)을 제출한다. 계산하지 않는다.</span><span lang="en">Upload the code and submit jobs. No computing.</span></div></div>
+    <div class="stage big"><div class="n"><span lang="ko">계산 노드</span><span lang="en">Compute node</span></div><div class="s"><span lang="ko">DuckDB와 SciPy로 계산한다. CPU 8개, 메모리 64 GB, GPU 없음.</span><span lang="en">Compute with DuckDB and SciPy. 8 CPUs, 64 GB memory, no GPU.</span></div></div>
+    <div class="stage"><div class="n"><span lang="ko">다시 노트북</span><span lang="en">Back to the laptop</span></div><div class="s"><span lang="ko">저장된 결과(CSV, JSON, 그림)만 가져와 읽는다.</span><span lang="en">Fetch only saved results (CSV, JSON, figures) and read them.</span></div></div>
+  </div>
+  <ul>
+    <li><span lang="ko"><b>왜 클러스터:</b> 데이터는 거래 12억 건이다. 노트북에서 돌리면 오래 걸리고 기계를 묶어 둔다.</span><span lang="en"><b>Why a cluster:</b> the data holds 1.2 billion trades. On a laptop it takes long and ties up the machine.</span></li>
+    <li><span lang="ko"><b>왜 GPU 없이:</b> 표 질의와 통계 검정은 GPU를 쓰지 않는다. GPU를 요청하면 다른 사람이 기다린다.</span><span lang="en"><b>Why no GPU:</b> table queries and statistical tests do not use a GPU. Asking for one makes others wait.</span></li>
+    <li><span lang="ko"><b>왜 실행마다 폴더 하나:</b> 숫자마다 그것을 만든 코드와 설정이 남는다. 그래서 보고서의 숫자를 다시 만들 수 있다.</span><span lang="en"><b>Why one folder per run:</b> every number keeps the code and settings that made it. So we can rebuild every number in the report.</span></li>
+  </ul>
+  <div class="add"><span lang="ko"><b>이 연구가 중요한 이유:</b> 어느 쪽 결과든 쓸모가 있다. 가격이 맞으면 가격을 확률로 읽을 근거가 생긴다. 틀리면 어떤 가격과 주제를 조심해야 하는지 보인다.</span><span lang="en"><b>Why this study matters:</b> either result is useful. If prices are right, we have grounds to read them as probabilities. If not, we see which prices and topics need care.</span></div>
+</section>
+
+<section id="log">
+  <div class="eyebrow">Step 9 of 9</div>
+  <h2><span lang="ko">진행 기록과 결정</span><span lang="en">Progress log and decisions</span></h2>
+  <p><span lang="ko">단계마다 한 일과 정한 것을 적는다. 최종 보고서는 이 기록의 제약과 기준을 그대로 따른다.</span><span lang="en">We write down what we did and what we decided at each step. The final report follows the constraints and criteria in this log.</span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">파일</span><span lang="en">File</span></th><th><span lang="ko">무엇을 적나</span><span lang="en">What it holds</span></th></tr>
+    <tr><td><code>STATUS.md</code></td><td><ul><li><span lang="ko">단계마다 한 줄: 날짜, 무엇을 했나, 근거 파일</span><span lang="en">One line per step: date, what we did, evidence file</span></li><li><span lang="ko">최종판까지 지킬 제약 표</span><span lang="en">The constraint table that holds until the final version</span></li></ul></td></tr>
+    <tr><td><code>DECISIONS.md</code></td><td><span lang="ko">선택마다 한 행: 무엇을, 왜, 버린 대안, 누가, 근거</span><span lang="en">One row per choice: what, why, the rejected options, who, evidence</span></td></tr>
+    <tr><td><code>analysis/prereg_mvp1.md</code></td><td><span lang="ko">결과를 보기 전에 정한 기준과 판정선</span><span lang="en">The criteria and verdict lines fixed before the results</span></td></tr>
+  </table></div>
+  <h3><span lang="ko">견고성 점검(robustness check) 결과</span><span lang="en">Robustness check results</span></h3>
+  <p><span lang="ko"><b>왜 점검했나:</b> 열린 질문이 둘 있었다. 결과 기록에 50/50 분할 지급(split payout)이 섞여 있으면 Q1 판정이 바뀌나? 평가 가격(T − 1일)과 마감 직전 가격은 얼마나 다른가? 기준은 결과를 보기 전에 <code>analysis/prereg_robustness.md</code>에 정했다. 새 주 검정은 없고 서술만 한다. 민감도(sensitivity) 줄은 원래 줄 옆에 두고, 원래 줄을 대신하지 않는다.</span><span lang="en"><b>Why we checked:</b> two questions were open. If the outcome records hold 50/50 split payouts, does the Q1 verdict change? How different are the evaluation price (T − 1 day) and the price just before the close? We fixed the criteria before the results in <code>analysis/prereg_robustness.md</code>. There is no new main test. We only describe. The sensitivity row sits next to the original row and does not replace it.</span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">점검</span><span lang="en">Check</span></th><th><span lang="ko">숫자 (남은 시장 47,948개)</span><span lang="en">Numbers (47,948 markets kept)</span></th><th><span lang="ko">읽는 법</span><span lang="en">How to read</span></th></tr>
+    <tr><td><span lang="ko">분할 지급</span><span lang="en">Split payouts</span></td><td class="num"><ul><li><span lang="ko">7개 (0.015%)가 50/50</span><span lang="en">7 (0.015%) paid 50/50</span></li><li><span lang="ko">우리 라벨과 결과 기록의 승자 일치: 99.92% (불일치 40 / 47,940)</span><span lang="en">Our label and the outcome record agree on the winner: 99.92% (40 mismatches / 47,940)</span></li></ul></td><td><span lang="ko">드물다. 라벨이 거의 모두 일치한다</span><span lang="en">Rare. The labels almost all agree.</span></td></tr>
+    <tr><td><span lang="ko">Q1 민감도 (분할 7 + 불일치 40 = 47개 뺌, 47,901개)</span><span lang="en">Q1 sensitivity (7 split + 40 mismatches = 47 dropped, 47,901 left)</span></td><td class="num"><ul><li><span lang="ko">카이제곱 68.0 → 64.3</span><span lang="en">chi-square 68.0 → 64.3</span></li><li><span lang="ko">효과 크기 w 0.038 → 0.037</span><span lang="en">effect size w 0.038 → 0.037</span></li><li>Brier 0.1071 → 0.1068</li><li><span lang="ko">BH 보정 뒤 어긋난 구간 5 → 4</span><span lang="en">Bins off after BH correction 5 → 4</span></li></ul></td><td><span lang="ko">판정 그대로: 전체로 보정되지 않음</span><span lang="en">Verdict unchanged: not calibrated as a whole</span></td></tr>
+    <tr><td><span lang="ko">마지막 24시간 가격 변화</span><span lang="en">Price change in the last 24 hours</span></td><td class="num"><ul><li><span lang="ko">절댓값 중앙값(median) 0.015</span><span lang="en">median absolute change 0.015</span></li><li><span lang="ko">0.5를 넘나드는 시장 8.0%</span><span lang="en">8.0% of markets cross 0.5</span></li></ul></td><td><span lang="ko">보통은 거의 안 움직인다</span><span lang="en">Usually barely moves</span></td></tr>
+    <tr><td><span lang="ko">Brier 점수, 두 가격</span><span lang="en">Brier score, two prices</span></td><td class="num"><ul><li><span lang="ko">T − 1일 가격: 0.107</span><span lang="en">T − 1 day price: 0.107</span></li><li><span lang="ko">마감 직전 마지막 거래 가격: 0.075</span><span lang="en">last-trade price just before close: 0.075</span></li></ul></td><td><span lang="ko">마감 직전 가격이 결과에 더 가깝다</span><span lang="en">The price just before the close is closer to the outcome</span></td></tr>
+  </table></div>
+  <p class="note"><span lang="ko">이 절의 표는 2026-10-19 당시 이름 그대로다. 2026-11-01부터 보고서와 논문은 효과 크기 w 대신 구간별 격차를, Brier 점수 대신 가격의 평균 제곱 잔차를 쓴다. 숫자는 같다(D-026).</span><span lang="en">The tables in this section keep their 2026-10-19 names. Since 2026-11-01, the report and the paper use the per-bin gap instead of the effect size w, and the mean squared residual of the price instead of the Brier score. The numbers are the same (D-026).</span></p>
+  <div class="chart">
+    <svg viewBox="0 0 740 150" role="img" aria-labelledby="f5ko f5en">
+      <title id="f5ko" lang="ko">같은 47,948개 시장의 Brier 점수. T 빼기 1일 가격은 0.1071, 마감 직전 마지막 거래 가격은 0.0749.</title>
+      <title id="f5en" lang="en">Brier score of the same 47,948 markets. The T minus 1 day price scores 0.1071 and the last-trade price just before close scores 0.0749.</title>
+      <g font-size="11.5" fill="var(--foreground)"><text x="20" y="48" lang="ko">T − 1일 가격</text><text x="20" y="48" lang="en">T − 1 day price</text><text x="20" y="98" lang="ko">마감 직전 가격</text><text x="20" y="98" lang="en">price just before close</text></g>
+      <rect x="150" y="30" width="357" height="28" fill="var(--quiet)"/>
+      <rect x="150" y="80" width="250" height="28" fill="var(--signal-plan)"/>
+      <g font-size="11" fill="var(--foreground)"><text x="515" y="49">0.1071</text><text x="408" y="99">0.0749</text></g>
+      <line x1="150" y1="20" x2="150" y2="118" stroke="var(--muted-foreground)"/>
+      <g font-size="10" fill="var(--muted-foreground)"><text x="150" y="134" text-anchor="middle">0</text><text x="510" y="134" text-anchor="middle">0.12</text><text x="330" y="146" text-anchor="middle" lang="ko">평균 Brier 점수 (낮을수록 좋다), 같은 47,948개 시장</text><text x="330" y="146" text-anchor="middle" lang="en">mean Brier score (lower is better), same 47,948 markets</text></g>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림. 같은 시장의 두 가격과 Brier 점수. 왜: 같은 시장의 두 시점을 비교하면 마감 전 하루 동안 가격이 결과에 얼마나 가까워지는지 보인다. 출처: <code>runs/142123_robust_full_v4/</code></span><span lang="en">Figure. Two prices of the same markets and their Brier scores. Why: comparing two times of the same market shows how much closer the price gets to the outcome during the last day. Source: <code>runs/142123_robust_full_v4/</code></span></p>
+  <div class="callout"><p><span lang="ko"><b>읽을 때 주의:</b> 0.075는 마감 직전 마지막 거래 가격의 점수다. 하루 앞선 예측의 점수가 아니다. Q1 판정은 T − 1일 가격 그대로 둔다.</span><span lang="en"><b>Note when reading:</b> 0.075 is the score of the last-trade price just before the close. It is not the score of a forecast one day ahead. The Q1 verdict keeps the T − 1 day price.</span></p></div>
+  <ul>
+    <li><span lang="ko">분할 지급은 7개뿐이어서 Q1 판정을 바꾸지 않는다.</span><span lang="en">Only 7 split payouts, so they do not change the Q1 verdict.</span></li>
+    <li><span lang="ko">가격 변화의 중앙값은 작다. 그래도 변화가 0.10 이상인 시장이 19.0%다.</span><span lang="en">The median price change is small. Still, 19.0% of markets change by 0.10 or more.</span></li>
+  </ul>
+  <p class="note"><span lang="ko">출처: <code>report_r1_split_payout.md</code>, <code>report_r2_price_path.md</code>, <code>r1_results.json</code>, <code>r2_results.json</code>. 결정: D-013.</span><span lang="en">Sources: <code>report_r1_split_payout.md</code>, <code>report_r2_price_path.md</code>, <code>r1_results.json</code>, <code>r2_results.json</code>. Decision: D-013.</span></p>
+  <h3><span lang="ko">진행 기록 (단계마다 한 줄, 새 줄은 아래에)</span><span lang="en">Progress log (one line per step, new lines at the bottom)</span></h3>
+  <div class="tablewrap"><table>
+    <tr><th>#</th><th><span lang="ko">날짜</span><span lang="en">Date</span></th><th><span lang="ko">단계</span><span lang="en">Step</span></th><th><span lang="ko">결과</span><span lang="en">Result</span></th><th><span lang="ko">결정과 근거</span><span lang="en">Decision and evidence</span></th></tr>
+    <tr><td class="num">1</td><td>10-19</td><td><span lang="ko">데이터 받기</span><span lang="en">Get data</span></td><td><span lang="ko">파일 1,248개, 13 GB. 크기가 목록과 모두 같음</span><span lang="en">1,248 files, 13 GB. Every size equals the listing</span></td><td><span lang="ko">D-001 환경, D-002 CPU만, D-003 데이터 층</span><span lang="en">D-001 environment, D-002 CPU only, D-003 data layer</span></td></tr>
+    <tr><td class="num">2</td><td>10-19</td><td><span lang="ko">Job A 살펴보기 (142041)</span><span lang="en">Job A inspect (142041)</span></td><td><span lang="ko">약 2.5분. 마감 뒤 거래가 있는 시장 51.3%</span><span lang="en">About 2.5 min. 51.3% of markets have trades after the close</span></td><td><span lang="ko">D-004 파일럿 범위, D-006 파티션</span><span lang="en">D-004 pilot scope, D-006 partition</span></td></tr>
+    <tr><td class="num">3</td><td>10-19</td><td><span lang="ko">MVP1 기준 사전 등록</span><span lang="en">MVP1 pre-registration</span></td><td><span lang="ko">T = <code>close_at</code>, 최소 거래 10건, 중복 남김. 커밋 <code>530fe0d</code></span><span lang="en">T = <code>close_at</code>, at least 10 trades, keep duplicates. Commit <code>530fe0d</code></span></td><td><span lang="ko">D-005 벽, D-007 기준</span><span lang="en">D-005 wall, D-007 criteria</span></td></tr>
+    <tr><td class="num">4</td><td>10-19</td><td><span lang="ko">Job B 파일럿 (142056), 첫 바퀴</span><span lang="en">Job B pilot (142056), first cycle</span></td><td><ul><li><span lang="ko">약 75초. 시장 2,063개 중 726개가 남음</span><span lang="en">About 75 s. 726 of 2,063 markets kept</span></li><li><span lang="ko">가장 많이 빠진 이유: 가격이 24시간보다 오래됨 (851개)</span><span lang="en">Top drop reason: price older than 24 hours (851)</span></li><li><span lang="ko">q3 단계 실패: scipy 1.18의 KS 호출. 고침</span><span lang="en">Stage q3 failed: the KS call in scipy 1.18. Fixed</span></li></ul></td><td><span lang="ko">판정 없음 (첫 바퀴)</span><span lang="en">No verdict (first cycle)</span></td></tr>
+    <tr><td class="num">5</td><td>10-19</td><td><span lang="ko">계획 확장</span><span lang="en">Plan widened</span></td><td><span lang="ko">gpul40q의 CPU 사용. 보고서 v1 (MVP1)과 v2 (MVP1 + MVP2)</span><span lang="en">CPU use on gpul40q. Report v1 (MVP1) and v2 (MVP1 + MVP2)</span></td><td><span lang="ko">D-008, D-009 (소유자)</span><span lang="en">D-008, D-009 (owner)</span></td></tr>
+    <tr><td class="num">6</td><td>10-19</td><td><span lang="ko">MVP2 기준 사전 등록</span><span lang="en">MVP2 pre-registration</span></td><td><span lang="ko">Q1a 카이제곱 독립성, Q1b Brier 차이 t-검정, Q1c 스피어만. 커밋 <code>a6fb2c7</code></span><span lang="en">Q1a chi-square of independence, Q1b t-test of the Brier difference, Q1c Spearman. Commit <code>a6fb2c7</code></span></td><td>D-010</td></tr>
+    <tr><td class="num">7</td><td>10-19</td><td><span lang="ko">MVP1 전체 실행 (142057)</span><span lang="en">MVP1 full run (142057)</span></td><td><ul><li><span lang="ko">약 15분, 네 단계 모두 성공</span><span lang="en">About 15 min, all four stages succeeded</span></li><li><span lang="ko">범위 안 시장 688,131개 중 47,948개가 남음</span><span lang="en">47,948 of 688,131 markets in scope kept</span></li><li><span lang="ko">Q1 카이제곱 p = 2.6e-10, 효과 크기 w = 0.037 (작음). BH 보정 뒤 10개 구간 중 5개가 어긋남</span><span lang="en">Q1 chi-square p = 2.6e-10, effect size w = 0.037 (small). After BH correction 5 of 10 bins are off</span></li></ul></td><td><span lang="ko">D-007 기준 그대로.</span><span lang="en">D-007 criteria as fixed.</span> <code>runs/142057_mvp1_full_v1/</code></td></tr>
+    <tr><td class="num">8</td><td>10-19</td><td><span lang="ko">보고서 v1 (영어)</span><span lang="en">Report v1 (English)</span></td><td><span lang="ko">MVP1 전체 실행에서 숫자를 읽어 만듦</span><span lang="en">Built by reading numbers from the MVP1 full run</span></td><td><code>reports/report_v1.html</code></td></tr>
+    <tr><td class="num">9</td><td>10-19</td><td><span lang="ko">MVP2 파일럿 (142077), 첫 바퀴</span><span lang="en">MVP2 pilot (142077), first cycle</span></td><td><ul><li><span lang="ko">약 5분. q1b, q1c 성공</span><span lang="en">About 5 min. q1b and q1c succeeded</span></li><li><span lang="ko">q1a 실패: 그림 오차 막대의 -1e-17. 그림만 고침</span><span lang="en">q1a failed: −1e-17 in a figure error bar. Fixed the figure only</span></li><li><span lang="ko">남은 시장 726개 = MVP1 파일럿. 기존 숫자가 그대로임</span><span lang="en">726 markets kept = the MVP1 pilot. Existing numbers unchanged</span></li></ul></td><td><span lang="ko">판정 없음 (첫 바퀴)</span><span lang="en">No verdict (first cycle)</span></td></tr>
+    <tr><td class="num">10</td><td>10-19</td><td><span lang="ko">MVP2 전체 실행 (142078)</span><span lang="en">MVP2 full run (142078)</span></td><td><span lang="ko">약 14분, 일곱 단계 모두 성공</span><span lang="en">About 14 min, all seven stages succeeded</span></td><td><span lang="ko">D-010 기준 그대로.</span><span lang="en">D-010 criteria as fixed.</span> <code>runs/142078_mvp2_full_v2/</code></td></tr>
+    <tr><td class="num">11</td><td>10-19</td><td><span lang="ko">보고서 v2 (영어)</span><span lang="en">Report v2 (English)</span></td><td><ul><li><span lang="ko">v1과의 일관성 표: 남은 시장 수와 지니 계수는 같음</span><span lang="en">Consistency table with v1: the kept-market count and the Gini coefficient are equal</span></li><li><span lang="ko">Brier 점수가 여섯째 자리에서 다름. 같은 시각 거래의 순서가 정해지지 않은 탓. 고칠 예정</span><span lang="en">The Brier score differs in the sixth digit, because the order of trades at the same time is undefined. To be fixed</span></li></ul></td><td><code>reports/report_v2.html</code></td></tr>
+    <tr><td class="num">12</td><td>10-19</td><td><span lang="ko">reviewer 한 번</span><span lang="en">One reviewer pass</span></td><td><ul><li><span lang="ko">막는 문제 0, 중요 8, 작은 것 16</span><span lang="en">0 blocking, 8 major, 16 minor issues</span></li><li><span lang="ko">사전 등록 판정 4건은 기준대로 적용되어 유지</span><span lang="en">4 pre-registered verdicts applied as fixed and kept</span></li><li><span lang="ko">중요: 같은 시각 거래 순서, 표본 추출이 실행마다 달라짐, Q2 카이제곱 칸이 너무 희소, 버전 기록 누락, 대장과 판정 파일 없음</span><span lang="en">Major: order of trades at the same time, sampling that varied between runs, Q2 chi-square cells too sparse, version record missing, no ledger and verdict file</span></li></ul></td><td><code>analysis/review_mvp1_mvp2.md</code></td></tr>
+    <tr><td class="num">13</td><td>10-19</td><td><span lang="ko">고침 (코드 v3)</span><span lang="en">Fixes (code v3)</span></td><td><span lang="ko">끝남. 같은 시각 거래는 가격 평균, Q2 범주는 <code>category_refined</code>, 표본은 고정 순서, 판정은 <code>verdicts.json</code>에 따로 저장</span><span lang="en">Done. Trades at the same time use the mean price, Q2 categories use <code>category_refined</code>, samples use a fixed order, verdicts are saved apart in <code>verdicts.json</code></span></td><td>D-011, <code>CHANGELOG.md</code></td></tr>
+    <tr><td class="num">14</td><td>10-19</td><td><span lang="ko">v3로 두 전체 실행 다시 (142082, 142083)</span><span lang="en">Both full runs again with v3 (142082, 142083)</span></td><td><ul><li><span lang="ko">각 약 27분, 모든 단계 성공</span><span lang="en">About 27 min each, all stages succeeded</span></li><li><span lang="ko">남은 시장 47,948개, 빠진 이유별 개수 그대로</span><span lang="en">47,948 markets kept, drop counts per reason unchanged</span></li><li><span lang="ko">v1과 v2의 MVP1 값 77개가 모두 같음</span><span lang="en">All 77 MVP1 values in v1 and v2 are equal</span></li></ul></td><td><span lang="ko"><code>00.runs.md</code> (실행 대장)</span><span lang="en"><code>00.runs.md</code> (run ledger)</span></td></tr>
+    <tr><td class="num">15</td><td>10-19</td><td><span lang="ko">보고서 v1, v2 다시 만듦 (영어)</span><span lang="en">Reports v1 and v2 rebuilt (English)</span></td><td><ul><li><span lang="ko">Q1: 전체로 보정되지 않음. 카이제곱 68.0, p &lt; 0.0001, w = 0.038 (작음)</span><span lang="en">Q1: not calibrated as a whole. Chi-square 68.0, p &lt; 0.0001, w = 0.038 (small)</span></li><li><span lang="ko">Q1a: 주제에 따라 다름. Cramér V = 0.258</span><span lang="en">Q1a: differs by topic. Cramér V = 0.258</span></li><li><span lang="ko">Q1b: 마감이 가까울수록 나아짐. Brier 차이 0.0257, d = 0.19, 시장 11,005개</span><span lang="en">Q1b: better closer to the close. Brier difference 0.0257, d = 0.19, 11,005 markets</span></li><li><span lang="ko">Q1c: 거래가 많을수록 정확하다는 증거 없음. ρ = +0.226</span><span lang="en">Q1c: no evidence that more trades means more accurate. ρ = +0.226</span></li></ul></td><td><code>runs/142083_mvp2_full_v2r3/verdicts.json</code></td></tr>
+    <tr><td class="num">16</td><td>10-19</td><td><span lang="ko">정리</span><span lang="en">Cleanup</span></td><td><ul><li><span lang="ko">시장별, 지갑별 CSV는 git에서 뺌. 클러스터에 남아 있고 <code>jobs/fetch_run.sh</code>로 받음</span><span lang="en">Per-market and per-wallet CSVs left out of git. They stay on the cluster and come back with <code>jobs/fetch_run.sh</code></span></li><li><span lang="ko">제안서: 결과 라벨이 없어 뺀 시장 62,718 / 688,131 (9.1%)을 적음</span><span lang="en">Proposal: states 62,718 / 688,131 (9.1%) markets dropped for no outcome label</span></li><li><span lang="ko">임무와 비전을 정함. <code>PLAN.md</code>, <code>RQ.md</code> 만듦</span><span lang="en">Mission and vision set. Created <code>PLAN.md</code> and <code>RQ.md</code></span></li></ul></td><td><span lang="ko">D-012 (소유자)</span><span lang="en">D-012 (owner)</span></td></tr>
+    <tr><td class="num">17</td><td>10-19</td><td><span lang="ko">수업 질문 답변 페이지 (영어)</span><span lang="en">Class questions answer page (English)</span></td><td><ul><li><span lang="ko">질문 4개: 평가 시점, 애매한 결과, 마감 직전 가격 변동, 주제별 롱샷 편향</span><span lang="en">4 questions: evaluation time, ambiguous outcomes, price swings near the close, longshot bias by topic</span></li><li><span lang="ko">가격 10~20센트: Crypto 14.5% 대 8.8%, Politics 14.7% 대 9.1%, Sports 15.0% 대 15.0%</span><span lang="en">Price 10 to 20 cents: Crypto 14.5% vs 8.8%, Politics 14.7% vs 9.1%, Sports 15.0% vs 15.0%</span></li><li><span lang="ko">새 다음 단계: 결과 파일의 50/50 지급 확인, 마지막 24시간 가격 경로</span><span lang="en">New next steps: check 50/50 payouts in the outcome file, the price path in the last 24 hours</span></li></ul></td><td><code>tips/polymarket_class_questions_tips.html</code></td></tr>
+    <tr><td class="num">18</td><td>10-19</td><td><span lang="ko">견고성 사전 등록, 코드 v4, 작업 제출</span><span lang="en">Robustness pre-registration, code v4, job submitted</span></td><td><span lang="ko">사전 등록과 코드 v4 커밋 (<code>3182a89</code>). 작업 142123 제출</span><span lang="en">Committed the pre-registration and code v4 (<code>3182a89</code>). Submitted job 142123</span></td><td>D-013, <code>analysis/prereg_robustness.md</code></td></tr>
+    <tr><td class="num">19</td><td>10-19</td><td><span lang="ko">견고성 전체 실행 (142123)</span><span lang="en">Robustness full run (142123)</span></td><td><ul><li><span lang="ko">약 42분. 남은 시장 47,948개, <code>q1_results.json</code>이 142082와 같음 (v4 불변 확인)</span><span lang="en">About 42 min. 47,948 markets kept, <code>q1_results.json</code> equals 142082 (v4 unchanged confirmed)</span></li><li><span lang="ko">분할 지급 7개. 라벨 일치 99.92%. Q1 민감도 판정 같음</span><span lang="en">7 split payouts. Label agreement 99.92%. Q1 sensitivity verdict the same</span></li><li><span lang="ko">마지막 24시간 가격 변화 중앙값 0.015. Brier 0.075 (마감 직전) 대 0.107 (T − 1일)</span><span lang="en">Median price change in the last 24 hours 0.015. Brier 0.075 (just before close) vs 0.107 (T − 1 day)</span></li></ul></td><td><code>runs/142123_robust_full_v4/</code>, <code>00.runs.md</code></td></tr>
+    <tr><td class="num">20</td><td>10-19</td><td><span lang="ko">논문 초안 v1, v2</span><span lang="en">Paper drafts v1, v2</span></td><td><span lang="ko">v1은 MVP1(142082), v2는 MVP1 + MVP2(142083). <code>papers/</code> 아래. reviewer 관문 진행 중</span><span lang="en">v1 is MVP1 (142082), v2 is MVP1 + MVP2 (142083). Under <code>papers/</code>. Reviewer gate in progress</span></td><td>D-014</td></tr>
+    <tr><td class="num">21</td><td>11-01</td><td><span lang="ko">범위</span><span lang="en">Scope</span></td><td><span lang="ko">MVP1만 목표(Q1, Q2, Q3). MVP2 파일은 내용 그대로 <code>future_work/</code>로 옮김. 임무 범위 문구를 검정한 시장으로 좁힘. 마감일 2026-11-15. 논문 출구는 <code>paper_mvp1</code>만</span><span lang="en">MVP1 only is the target (Q1, Q2, Q3). MVP2 files moved unchanged to <code>future_work/</code>. Mission scope narrowed to the markets tested. Deadline 2026-11-15. Paper exit names <code>paper_mvp1</code> only</span></td><td><span lang="ko">D-016, D-017, D-019, D-020, D-021, D-023 (소유자)</span><span lang="en">D-016, D-017, D-019, D-020, D-021, D-023 (owner)</span></td></tr>
+    <tr><td class="num">22</td><td>11-01</td><td><span lang="ko">MVP1 게이트 검토</span><span lang="en">MVP1 gate review</span></td><td><span lang="ko">세 번째 검토(경계를 넘어 한 번 더, D-022) 통과: 막는 문제 0, 중요 0, 작은 것 4. 상자그림으로 G1을 닫음(D-018)</span><span lang="en">Third review (one more beyond the bound, D-022) passed: 0 blocking, 0 major, 4 minor. G1 closed with a box plot (D-018)</span></td><td><code>analysis/review_mvp1_rq_r3.md</code></td></tr>
+    <tr><td class="num">23</td><td>11-01</td><td><span lang="ko">Q2 답의 기준</span><span lang="en">Standard for the Q2 answer</span></td><td><span lang="ko">제목은 그대로. 80/20은 서술용 참고선이고 사전 등록 판정이 아님. 상위 20% 지갑의 거래량 몫: maker 98.9%, taker 98.0%</span><span lang="en">Title stays. 80/20 is a descriptive reference line and not a pre-registered verdict. Volume share of the top 20% of wallets: maker 98.9%, taker 98.0%</span></td><td>D-024, <code>runs/142082_mvp1_full_v1r3/q2_results.json</code></td></tr>
+    <tr><td class="num">24</td><td>11-01</td><td><span lang="ko">강의 범위 감사</span><span lang="en">Lecture-scope audit</span></td><td><span lang="ko">방법 52개 중 강의 안 35, 일부 7, 못 찾음 10. 분석은 모두 강의 내용 안에서 한다. 카이제곱 적합도는 유지, Brier 점수와 에타 제곱은 이름만 바꿈(같은 숫자). Cohen의 w는 구간별 격차로, Wilson 구간은 z 구간으로, Cohen의 d는 log10 평균 차이로 바꿈. 지니, Cramér V, ARI, d_z는 뺌. 멱법칙은 서술용 참고이고 새 실행은 없음</span><span lang="en">Of 52 methods, 35 are in lecture, 7 partly, 10 not found. All analysis stays inside the lecture content. Chi-square goodness of fit stays. The Brier score and eta squared only change names (same numbers). Cohen's w becomes per-bin gaps, Wilson interval becomes the z interval, Cohen's d becomes the log10 mean difference. Gini, Cramér's V, ARI and d_z are dropped. The power law is a descriptive reference and no new run</span></td><td>D-025, D-026, D-027, <code>analysis/lecture_method_audit.md</code></td></tr>
+    <tr><td class="num">25</td><td>11-01</td><td><span lang="ko">로렌츠 곡선</span><span lang="en">Lorenz curve</span></td><td><span lang="ko">CCDF 옆 그림으로 둠. 강의 밖이라고 표시하고 지니는 뺌</span><span lang="en">Kept as a figure beside the CCDF. Marked as outside the lectures. Gini removed</span></td><td><span lang="ko">D-028 (소유자)</span><span lang="en">D-028 (owner)</span></td></tr>
+    <tr><td class="num">26</td><td>11-02</td><td><span lang="ko">프로젝트 끝 검토와 읽기 고침</span><span lang="en">Project-end review and fixes to readings</span></td><td><span lang="ko">Q1: 카이제곱 67.99(df 10), p = 1.08e-10, BH 뒤 5/10 구간이 어긋남. 10개 구간 중 9개에서 관측 비율이 가격보다 낮음(Yes가 비싸게 매겨짐). 효과는 작고 한 방향이며, 크기 기준은 미리 정하지 않았다. 롱샷 문장은 최소 거래 필터가 있을 때만 성립. 독립 가정 한계는 p값과 z 구간 모두에 해당</span><span lang="en">Q1: chi-square 67.99 (df 10), p = 1.08e-10, 5 of 10 bins off after BH. In 9 of 10 bins the observed rate is below the price (Yes is priced too high). The effect is small and runs one way, and we set no size line in advance. The longshot statement holds only with the minimum-trade filter. The independence limit covers both the p-values and the z intervals</span></td><td><code>cs6344_group_01/README.md</code>, <code>runs/142082_mvp1_full_v1r3/verdicts.json</code>, <code>analysis/review_project_end_analyst.md</code> A2, A3, A4</td></tr>
+    <tr><td class="num">27</td><td>11-02</td><td><span lang="ko">CCDF 다시 그림 (145892)</span><span lang="en">CCDF redrawn (145892)</span></td><td><span lang="ko">꼬리 위쪽 순위를 표본에 넣어 다시 그림. 가장 큰 지갑에서 꼬리가 아래로 휘어 직선이 아님. 이전의 "긴 직선 꼬리"는 옛 표본 추출이 만든 그림 오류. 멱법칙 꼬리 맞춤 alpha 1.788, xmin 3,450 USDC. KS 검정이 정확한 멱법칙을 기각해서 따른다고 쓰지 않음</span><span lang="en">Redrawn with the top-tail ranks in the sample. The tail bends downward at the largest wallets, so it is not a straight line. The earlier "long straight tail" was a plotting error of the old sampling. Power-law tail fit: alpha 1.788, xmin 3,450 USDC. The KS test rejects an exact power law, so we do not say it follows one</span></td><td>D-029, <code>runs/142082_mvp1_full_v1r3/q3_results.json</code>, <code>reports/figures/fig6_ccdf_top_sampled.png</code></td></tr>
+    <tr><td class="num">28</td><td>11-02</td><td><span lang="ko">지갑 그림 (145893)</span><span lang="en">Wallet figures (145893)</span></td><td><span lang="ko">지갑 수와 거래량 분포, 전체 로렌츠 곡선(지니 없음). 상위 1% 몫은 maker 86.1%, taker 75.9%. G7은 대장 한 줄로 닫음</span><span lang="en">Wallet-count and volume distributions, and a full Lorenz curve (no Gini). Top 1% share: maker 86.1%, taker 75.9%. G7 closed with one ledger line</span></td><td>D-031, <code>runs/142082_mvp1_full_v1r3/q2_results.json</code></td></tr>
+    <tr><td class="num">29</td><td>11-02</td><td><span lang="ko">군집 × 주제 카이제곱 복귀</span><span lang="en">Cluster × topic chi-square returns</span></td><td><span lang="ko">k-평균 군집과 주제 범주. 카이제곱 6,653.0(df 21), p &lt; 0.0001. 효과 크기는 관측 몫 − 기대 몫의 최대 칸(군집 2, Sports: 6.7% 대 8.2%, −1.49%). Cramér V는 쓰지 않음</span><span lang="en">k-means clusters against topic category. Chi-square 6,653.0 (df 21), p &lt; 0.0001. The effect size is the largest observed minus expected share in one cell (cluster 2, Sports: 6.7% vs 8.2%, −1.49%). We do not use Cramér's V</span></td><td>D-030, <code>reports/lecture_numbers.json</code> <code>cluster_category_gap</code></td></tr>
+    <tr><td class="num">30</td><td>11-02</td><td><span lang="ko">그림 배치 (145897)</span><span lang="en">Figure layout (145897)</span></td><td><span lang="ko">한 줄에 그림 하나. 두 그림은 비교할 때만 한 줄에. 반 폭에서도 글자가 7 pt 이상이면 짝으로 허용: 지갑 수와 거래량, 로렌츠 maker와 taker, 가격과 거래 크기 히스토그램. Q3 그림을 나눠 다시 그림</span><span lang="en">One figure per row. Two figures share a row only to compare them. Later, pairs are allowed when the text stays at 7 pt or more at half width: wallet count and volume, Lorenz maker and taker, price and trade-size histograms. The Q3 figures were split and redrawn</span></td><td>D-032, D-033</td></tr>
+    <tr><td class="num">31</td><td>11-02</td><td><span lang="ko">피드백 답 페이지</span><span lang="en">Feedback answers page</span></td><td><span lang="ko">제안서 피드백 7가지(시점, 데이터 품질, 주제, 거래량, 의존성, 군중, 기간)에 논문의 답을 적음</span><span lang="en">Answers 7 themes of proposal feedback (timing, data quality, topic, volume, dependence, crowd, periods) with what the paper says</span></td><td><a href="index.html#feedback" target="_top">polymarket_feedback_answers_tips.html</a></td></tr>
+  </table></div>
+  <p class="note"><span lang="ko">1–20번은 MVP1과 MVP2 끝(2026-10-19)까지다. 21번부터는 MVP1만 목표가 된 뒤의 기록이다. 같은 기록: <code>STATUS.md</code>, 실행 대장 <code>00.runs.md</code>.</span><span lang="en">Rows 1–20 run up to the end of MVP1 and MVP2 (2026-10-19). From row 21 on, the log covers the time when only MVP1 is the target. Same record: <code>STATUS.md</code>, run ledger <code>00.runs.md</code>.</span></p>
+  <h3><span lang="ko">열린 항목 (2026-11-02)</span><span lang="en">Open items (2026-11-02)</span></h3>
+  <ul>
+    <li><span lang="ko">논문의 소유자 <code>\todo{owner: ...}</code> 4곳: 관련 연구, 해석, 더 넓은 함의, 맺음말. 소유자가 쓰거나 지운다.</span><span lang="en">4 owner <code>\todo{owner: ...}</code> parts in the paper: related work, interpretation, wider implications, closing. The owner writes or removes them.</span></li>
+    <li><span lang="ko">3인 업무 분담: 아직 정하지 않았다.</span><span lang="en">Work split among 3 people: not decided yet.</span></li>
+    <li><span lang="ko">보고서 v1 검토: 소유자 검토가 열려 있다.</span><span lang="en">Report v1 review: the owner review is open.</span></li>
+    <li><span lang="ko">시장 의존성: 같은 사건의 시장은 독립이 아니다. 사건 단위 수를 저장하지 않아서 p값이 낙관적인 정도를 모른다. 한계로만 적었다.</span><span lang="en">Dependence of markets: markets on one event are not independent. No event-level count is saved, so we do not know how optimistic the p-values are. We state it only as a limit.</span></li>
+    <li><span lang="ko"><code>make_report.py</code> 나누기: 별도 커밋.</span><span lang="en">Split <code>make_report.py</code>: in its own commit.</span></li>
+  </ul>
+  <h3><span lang="ko">최종판까지 지킬 제약</span><span lang="en">Constraints that hold until the final version</span></h3>
+  <ul>
+    <li><span lang="ko">강의에서 배운 방법만 쓴다. 분석 전체가 강의 내용 안이다(D-025). 이름만 바꾼 방법도 강의 안으로 센다. k-평균은 곁가지, 보고서의 1/10 미만.</span><span lang="en">Use only methods from the lectures. All analysis stays inside the lecture content (D-025). A renamed method counts as in lecture. k-means is a side analysis, under 1/10 of the report.</span></li>
+    <li><span lang="ko">게시글의 모든 사실에는 출처가 있다.</span><span lang="en">Every fact in a post has a source.</span></li>
+    <li><span lang="ko">데이터 질의는 클러스터에서만 돌린다.</span><span lang="en">Data queries run on the cluster only.</span></li>
+    <li><span lang="ko">T, 최소 거래 수, Q1 판정 기준은 결과를 보기 전에 정했고 바꾸지 않는다.</span><span lang="en">T, the minimum number of trades and the Q1 verdict criteria were fixed before seeing results and do not change.</span></li>
+    <li><span lang="ko">"지갑" 또는 "주소"라고 쓴다. "사람"이라고 쓰지 않는다.</span><span lang="en">Write "wallet" or "address". Do not write "person".</span></li>
+    <li><span lang="ko">모든 검정은 p값 옆에 효과 크기를 적는다.</span><span lang="en">Every test reports an effect size next to the p-value.</span></li>
+  </ul>
+</section>
+
+<footer>
+  <p><span lang="ko">데이터: Qin and Yang (2026). Polymarket-v1 Database. <a href="https://arxiv.org/abs/2606.04217">arXiv:2606.04217</a>. <a href="https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1">huggingface.co/datasets/TimeSeventeen/Polymarket-v1</a> (데이터 카드: 층 구조와 열).</span><span lang="en">Data: Qin and Yang (2026). Polymarket-v1 Database. <a href="https://arxiv.org/abs/2606.04217">arXiv:2606.04217</a>. <a href="https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1">huggingface.co/datasets/TimeSeventeen/Polymarket-v1</a> (data card: layers and columns).</span></p>
+  <p><span lang="ko">계획: <code>tips/polymarket_plan_detailed.md</code>. 결정 기록: <code>DECISIONS.md</code>. 진행 기록: <code>STATUS.md</code>.</span><span lang="en">Plan: <code>tips/polymarket_plan_detailed.md</code>. Decision log: <code>DECISIONS.md</code>. Progress log: <code>STATUS.md</code>.</span></p>
+</footer>
+</main>
+<script>
+/* Language toggle. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){
+  var d=document.documentElement;
+  var TITLE={ko:"6344 Polymarket 연구 흐름",en:"6344 Polymarket research flow"};
+  var KEY="flowtips-lang";
+  function setLang(l,save){
+    d.setAttribute("data-lang",l);
+    d.lang=l;
+    document.title=TITLE[l];
+    var b=document.querySelectorAll(".langbar button");
+    for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",b[i].getAttribute("data-set")===l?"true":"false");}
+    if(save){try{localStorage.setItem(KEY,l);}catch(e){}}
+  }
+  setLang(d.getAttribute("data-lang")==="en"?"en":"ko",false);
+  var btn=document.querySelectorAll(".langbar button");
+  for(var i=0;i<btn.length;i++){
+    btn[i].addEventListener("click",function(){setLang(this.getAttribute("data-set"),true);});
+  }
+})();
+</script>
+</body>
+</html>

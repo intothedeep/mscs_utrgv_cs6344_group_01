@@ -16,7 +16,7 @@ from pathlib import Path
 
 CODE_VERSION = "v3"   # not imported from common.py: that module needs duckdb, this script reads saved files only
 
-# Theme tokens and page CSS: the <style> block of ../tips/group_01/polymarket_proposal_tips.html, inlined.
+# Theme tokens and page CSS: the <style> block of tips/polymarket_proposal_tips.html, inlined.
 CSS = r"""
 :root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--card-foreground:oklch(0.145 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
 --over:oklch(0.62 0.17 45);--under:oklch(0.5 0.1 210);--busy:oklch(0.62 0.17 45);--quiet:oklch(0.82 0 0)}
@@ -78,7 +78,7 @@ figcaption{font-size:12.5px;color:var(--muted-foreground)}
 PAPER = "Qin and Yang 2026, Polymarket-v1, arXiv:2606.04217"
 # Dataset paper Table 3, mean return (payout minus price) per token, counted per trade. Quoted from the plan, not computed here.
 PAPER_LONGSHOT = {"0.0-0.1": -0.0023, "0.1-0.2": -0.0019}
-# Plan figure ids of the saved PNGs (../tips/group_01/polymarket_plan_detailed.md). The report numbers its figures in page order.
+# Plan figure ids of the saved PNGs (tips/polymarket_plan_detailed.md). The report numbers its figures in page order.
 # v1 only: six single figures of code/wallet_figs_single.py, in print order: file, what it compares, why (owner, 2026-11-02).
 WALLET_RUN = "145893_walletdist_v7"
 _DIST = "{r} wallets: share of wallets in each volume decade, the bottom 80% of wallets against the top 20%."

@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<title>6344 Polymarket MVP1 필터링과 전처리</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<script>
+/* Runs first: marks JS as on and restores the saved language. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){var d=document.documentElement;d.className="js";var l="ko";try{var s=localStorage.getItem("mvp1tips-lang");if(s==="ko"||s==="en"){l=s;}}catch(e){}try{var q=/[?&]lang=(ko|en)(&|$)/.exec(location.search);if(q){l=q[1];}}catch(e){}d.setAttribute("data-lang",l);d.lang=l;})();
+</script>
+<style>
+/* theme.css (skills/html-theme), inlined, light only. Layout: tips exemplar, step boxes. */
+:root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--card-foreground:oklch(0.145 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;--quiet:oklch(0.82 0 0)}
+*{box-sizing:border-box;border-radius:var(--radius)}
+/* One language at a time. Without JS the html element keeps data-lang="ko". */
+html[data-lang="ko"] [lang="en"],html[data-lang="en"] [lang="ko"]{display:none!important}
+body{background:var(--background);color:var(--foreground);font:15px/1.5 var(--font);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;margin:0;overflow-wrap:anywhere}
+main{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:650;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:650;margin-bottom:10px}
+h3{font-size:14px;font-weight:600;margin:12px 0 4px}
+p{margin:0 0 6px}
+.eyebrow{font:500 11px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--signal-plan);margin-bottom:8px}
+.lede{font-size:15.5px;color:var(--muted-foreground);margin-top:8px}
+header{padding-top:18px}
+/* Sticky nav: language buttons, step items, links to sibling pages. */
+.bar{position:sticky;top:0;z-index:5;background:var(--background);border-bottom:1px solid var(--border);padding:8px 0 6px;display:flex;flex-direction:column;gap:6px}
+.row1{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.langbar{display:none}
+html.js .langbar{display:flex}
+.langbar button{font:500 12.5px var(--font);padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer;margin-left:-1px}
+.langbar button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none;counter-reset:st}
+.steps li{counter-increment:st;margin:0}
+.steps a{display:block;padding:4px 10px;border:1px solid var(--rule);color:var(--foreground);text-decoration:none;font-size:12.5px}
+.steps a::before{content:counter(st) " ";color:var(--signal-plan);font-weight:600}
+.steps a.on{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+.steps a.on::before{color:var(--primary-foreground)}
+.row2{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:12px;align-items:center;color:var(--muted-foreground)}
+.row2 .cur{color:var(--foreground);font-weight:600;border-bottom:2px solid var(--signal-plan)}
+main>section{border:1px solid var(--border);border-top:4px solid var(--signal-plan);background:var(--card);padding:16px 18px 18px;margin-top:14px;scroll-margin-top:150px;display:flex;flex-direction:column;gap:8px}
+/* With JS, one step shows at a time. */
+html.js main>section{display:none}
+html.js main>section.on{display:flex}
+main>section>.eyebrow{font-size:12px;margin-bottom:0}
+.flow{display:flex;flex-wrap:wrap;gap:6px}
+.stage{flex:1 1 160px;background:var(--card);border:1px solid var(--rule);padding:6px 8px;min-width:0}
+.stage.big{border-color:var(--signal-plan)}
+.stage .n{font:600 12.5px var(--font)}
+.stage .s{font:12px/1.4 var(--font);color:var(--muted-foreground)}
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:520px}
+svg text{font-family:var(--font)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card);overflow-wrap:normal}
+table{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top;overflow-wrap:break-word}
+td code{overflow-wrap:anywhere}
+html[data-lang="ko"] body{word-break:keep-all}
+td:first-child,th:first-child{word-break:keep-all;min-width:6.5em}
+th{font:600 11px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground);background:var(--background)}
+tr:last-child td{border-bottom:0}
+td.num{white-space:nowrap;color:var(--signal-plan)}
+td ul{margin:0;padding-left:16px}
+ul,ol{margin:0;padding-left:18px}
+li{margin:2px 0}
+.note{font-size:12.5px;color:var(--muted-foreground)}
+.src{font-size:12px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:6px;margin-top:4px}
+.callout{border-left:3px solid var(--signal-flag-line);background:var(--signal-flag-fill);padding:6px 12px;font-size:13px}
+.callout p:last-child{margin:0}
+.add{border:1px solid var(--signal-plan);padding:6px 12px;font-size:13.5px}
+.add b{color:var(--signal-plan)}
+.guess{display:inline-block;font:600 11px/1.3 var(--font);background:var(--signal-flag-fill);border:1px solid var(--signal-flag-line);padding:0 5px}
+footer{font-size:12.5px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:8px}
+a{color:var(--signal-plan)}
+.steps a{color:var(--foreground)}
+.steps a.on{color:var(--primary-foreground)}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+@media (max-width:720px){main>section{padding:12px}}
+</style>
+</head>
+<body>
+<main>
+<nav class="bar" aria-label="Page navigation">
+  <div class="row1">
+    <div class="langbar" role="group" aria-label="Language">
+      <button type="button" data-set="ko" aria-pressed="true">한국어</button>
+      <button type="button" data-set="en" aria-pressed="false">English</button>
+    </div>
+    <ol class="steps">
+      <li><a href="#s1" data-step="1"><span lang="ko">목적</span><span lang="en">Purpose</span></a></li>
+      <li><a href="#s2" data-step="2"><span lang="ko">데이터</span><span lang="en">Data</span></a></li>
+      <li><a href="#s3" data-step="3"><span lang="ko">필터링</span><span lang="en">Filtering</span></a></li>
+      <li><a href="#s4" data-step="4"><span lang="ko">왜 T − 1일</span><span lang="en">Why T − 1 day</span></a></li>
+      <li><a href="#s5" data-step="5"><span lang="ko">세 질문</span><span lang="en">Questions</span></a></li>
+      <li><a href="#s6" data-step="6"><span lang="ko">제약</span><span lang="en">Constraints</span></a></li>
+      <li><a href="#s7" data-step="7"><span lang="ko">한계</span><span lang="en">Limits</span></a></li>
+    </ol>
+  </div>
+  <div class="row2">
+    <span lang="ko">다른 페이지:</span><span lang="en">Other pages:</span>
+    <span class="cur" aria-current="page"><span lang="ko">이 페이지 (전처리)</span><span lang="en">This page (preprocessing)</span></span>
+    <a href="index.html" target="_top"><span lang="ko">전체 보기</span><span lang="en">All pages</span></a>
+    <a href="index.html#proposal" target="_top"><span lang="ko">제안서</span><span lang="en">Proposal</span></a>
+    <a href="index.html#flow" target="_top"><span lang="ko">연구 흐름</span><span lang="en">Research flow</span></a>
+    <a href="index.html#feedback" target="_top"><span lang="ko">피드백 답</span><span lang="en">Feedback answers</span></a>
+    <a href="index.html#questions" target="_top"><span lang="ko">수업 질문</span><span lang="en">Class questions</span></a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow"><span lang="ko">CS 6344 데이터 과학 입문 · 1조 프로젝트 · MVP1 전처리</span><span lang="en">CS 6344 Intro to Data Science · Group 1 project · MVP1 preprocessing</span></div>
+  <h1><span lang="ko">Polymarket MVP1: 어떤 시장을 남기고, 왜 그렇게 거르나</span><span lang="en">Polymarket MVP1: which markets we keep, and why we filter</span></h1>
+  <p class="lede"><span lang="ko">우리 실행에서 얻은 교훈. 무엇을 걸렀고, 왜 그랬고, 왜 중요한가. 7단계로, 앞 단계 위에 다음 단계를 쌓습니다.</span><span lang="en">Lessons from our own runs: what we filtered, why, and why it matters. 7 steps, each building on the one before.</span></p>
+</header>
+
+<section id="s1">
+  <div class="eyebrow">Step 1 of 7</div>
+  <h2><span lang="ko">무엇을 위해 거르나</span><span lang="en">What the filtering is for</span></h2>
+  <div class="add" lang="ko"><p><b>목적:</b> MVP1은 "가격을 확률로 읽어도 되는가"를 공정하게 검정한다. 그래서 시장마다 가격 1개와 결과 1개만 남긴다.</p></div>
+  <div class="add" lang="en"><p><b>Purpose:</b> MVP1 tests fairly whether a price can be read as a probability. So we keep one price and one outcome per market.</p></div>
+  <div class="chart">
+    <svg viewBox="0 0 760 150" role="img" aria-labelledby="t1ko t1en">
+      <title id="t1ko" lang="ko">흐름. 거래 데이터, 시장 걸러내기, 시장당 가격 1개와 결과 1개, 그다음 Q1, Q2, Q3 세 갈래.</title>
+      <title id="t1en" lang="en">Flow. Trade data, filter markets, one price and one outcome per market, then three branches Q1, Q2, Q3.</title>
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted-foreground)"/></marker></defs>
+      <g fill="var(--card)" stroke="var(--border)">
+        <rect x="10" y="45" width="150" height="56"/><rect x="195" y="45" width="150" height="56"/><rect x="380" y="45" width="170" height="56"/>
+      </g>
+      <rect x="380" y="45" width="170" height="56" fill="none" stroke="var(--signal-plan)" stroke-width="1.5"/>
+      <g fill="var(--card)" stroke="var(--border)"><rect x="640" y="8" width="110" height="36"/><rect x="640" y="57" width="110" height="36"/><rect x="640" y="106" width="110" height="36"/></g>
+      <g font-size="12" fill="var(--foreground)" text-anchor="middle" font-weight="600">
+        <text lang="ko" x="85" y="69">거래 데이터</text><text lang="en" x="85" y="69">Trade data</text>
+        <text lang="ko" x="270" y="69">시장 걸러내기</text><text lang="en" x="270" y="69">Filter markets</text>
+        <text lang="ko" x="465" y="69">시장당 가격 1개</text><text lang="en" x="465" y="69">One price per market</text>
+        <text lang="ko" x="465" y="87">+ 결과 1개</text><text lang="en" x="465" y="87">+ one outcome</text>
+        <text x="695" y="31">Q1</text><text x="695" y="80">Q2</text><text x="695" y="129">Q3</text>
+      </g>
+      <g font-size="10.5" fill="var(--muted-foreground)" text-anchor="middle">
+        <text lang="ko" x="85" y="90">688,131개 시장</text><text lang="en" x="85" y="90">688,131 markets</text>
+        <text lang="ko" x="270" y="90">5가지 이유로 제외</text><text lang="en" x="270" y="90">Dropped for 5 reasons</text>
+      </g>
+      <g stroke="var(--muted-foreground)" stroke-width="1.3" fill="none" marker-end="url(#ar)">
+        <path d="M160 73H193"/><path d="M345 73H378"/><path d="M550 73H600V26H638"/><path d="M550 73H638"/><path d="M550 73H600V124H638"/>
+      </g>
+    </svg>
+  </div>
+  <p class="note" lang="ko">그림 1. 거래 데이터에서 세 질문까지의 흐름. 왜: 시장 하나가 가격 하나와 결과 하나로 줄어야 가격과 실제 결과를 짝지어 비교할 수 있다.</p>
+  <p class="note" lang="en">Figure 1. Flow from trade data to the three questions. Why: one price and one outcome per market let us pair prices with real results.</p>
+  <p class="note" lang="ko">범위: MVP1(Q1, Q2, Q3)만 다룬다. MVP2(Q1a, Q1b, Q1c)는 목표가 아니다.</p>
+  <p class="note" lang="en">Scope: MVP1 only (Q1, Q2, Q3). MVP2 (Q1a, Q1b, Q1c) is not a target.</p>
+  <p class="src" lang="ko">출처: <code>tips/polymarket_plan_detailed.md</code> 0절, <code>DECISIONS.md</code> D-016.</p>
+  <p class="src" lang="en">Sources: <code>tips/polymarket_plan_detailed.md</code> section 0, <code>DECISIONS.md</code> D-016.</p>
+</section>
+
+<section id="s2">
+  <div class="eyebrow">Step 2 of 7</div>
+  <h2><span lang="ko">쓰는 데이터</span><span lang="en">Data we use</span></h2>
+  <p lang="ko">분석층 <code>daily_aligned/</code>에서 열 몇 개와 보조 파일 하나만 쓴다.</p>
+  <p lang="en">We use a few columns of the analysis layer <code>daily_aligned/</code> and one helper file.</p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">데이터</span><span lang="en">Data</span></th><th><span lang="ko">왜 쓰나</span><span lang="en">Why we use it</span></th><th><span lang="ko">어떻게 쓰나</span><span lang="en">How we use it</span></th><th><span lang="ko">왜 중요한가</span><span lang="en">Why it matters</span></th></tr>
+    <tr><td><code>daily_aligned/</code></td>
+      <td><span lang="ko">정리된 분석층. 중계(relayer) 기록이 이미 빠졌다</span><span lang="en">Cleaned analysis layer. Relayer records are already removed.</span></td>
+      <td><ul><li><span lang="ko">1,248개 파일, 13.2 GB를 클러스터에 한 번 내려받는다.</span><span lang="en">Download 1,248 files, 13.2 GB, to the cluster once.</span></li><li><span lang="ko"><code>neg_risk = false</code> 시장만 쓴다.</span><span lang="en">Use markets with <code>neg_risk = false</code> only.</span></li></ul></td>
+      <td><span lang="ko">중계 기록이 이미 빠져 있어, 우리가 따로 거를 필요가 없다</span><span lang="en">Relayer records are already gone, so we need no extra filter.</span></td></tr>
+    <tr><td><code>p_event</code></td>
+      <td><span lang="ko">Yes 쪽 가격. 거래마다 한 값</span><span lang="en">Price of the Yes side. One value per trade.</span></td>
+      <td><span lang="ko">다시 계산하지 않고 그대로 읽는다</span><span lang="en">Read it as is. Do not recompute it.</span></td>
+      <td><span lang="ko">가격 척도가 하나로 정해진다. 계획이 다시 계산하지 말라고 정했다</span><span lang="en">One price scale. The plan says not to recompute it.</span></td></tr>
+    <tr><td><code>winning_outcome_label</code></td>
+      <td><span lang="ko">시장의 승자 라벨</span><span lang="en">The winner label of the market.</span></td>
+      <td><span lang="ko">Yes 쪽 라벨과 같으면 결과 y = 1, 아니면 0</span><span lang="en">If it equals the Yes-side label, outcome y = 1. Otherwise y = 0.</span></td>
+      <td><span lang="ko">결과가 없으면 가격이 맞았는지 비교할 수 없다</span><span lang="en">Without an outcome we cannot check whether the price was right.</span></td></tr>
+    <tr><td><code>maker</code>, <code>taker</code></td>
+      <td><span lang="ko">거래의 두 지갑(wallet, 블록체인 주소) 열</span><span lang="en">The two wallet columns of a trade. A wallet is a blockchain address.</span></td>
+      <td><span lang="ko">지갑마다 역할(maker 또는 taker)별 거래량을 센다. taker는 먼저 체결을 거는 쪽(aggressor)이다</span><span lang="en">Sum the volume per wallet and role (maker or taker). The taker is the aggressor, the side that starts the fill.</span></td>
+      <td><span lang="ko">Q2가 "소수 지갑이 거래 대부분을 하는가"를 묻는다. 지갑은 주소 하나이고, 한 사람이 주소를 여러 개 가질 수 있다</span><span lang="en">Q2 asks whether a few wallets make most of the trades. A wallet is one address. One owner can hold many addresses.</span></td></tr>
+    <tr><td><code>CTF/resolutions.parquet</code></td>
+      <td><span lang="ko">시장의 공식 결과 기록</span><span lang="en">The official outcome record of a market.</span></td>
+      <td><span lang="ko">예비 출처다. 로버스트니스(robustness, 결과가 규칙에 흔들리지 않는지) 확인에만 쓴다</span><span lang="en">Backup source. We use it only for robustness checks (does the result hold under other rules?).</span></td>
+      <td><span lang="ko">나뉜 지급(split payout)이 있는지 검사한다</span><span lang="en">It checks whether any split payouts exist.</span></td></tr>
+    <tr><td><code>OrderFilled/</code></td>
+      <td><span lang="ko"><b>쓰지 않는다.</b> 원본 거래 기록이다</span><span lang="en"><b>Not used.</b> It is the raw trade record.</span></td>
+      <td><span lang="ko">없음</span><span lang="en">None</span></td>
+      <td><span lang="ko">중계 기록이 섞여 있다. <code>daily_aligned/</code>가 이를 이미 뺐다 (D-003)</span><span lang="en">Relayer records are mixed in. <code>daily_aligned/</code> already removed them (D-003).</span></td></tr>
+  </table></div>
+  <p class="src" lang="ko">출처: <code>cs6344_group_01/README.md</code>, <code>DECISIONS.md</code> D-003, <code>tips/polymarket_plan_detailed.md</code> 0절.</p>
+  <p class="src" lang="en">Sources: <code>cs6344_group_01/README.md</code>, <code>DECISIONS.md</code> D-003, <code>tips/polymarket_plan_detailed.md</code> section 0.</p>
+</section>
+
+<section id="s3">
+  <div class="eyebrow">Step 3 of 7</div>
+  <h2><span lang="ko">필터링과 전처리</span><span lang="en">Filtering and preprocessing</span></h2>
+  <p lang="ko">688,131개 시장 중 47,948개가 남는다. 한 시장은 이유 하나로만 센다. 제외 수와 남은 수를 더하면 688,131이다.</p>
+  <p lang="en">Of 688,131 markets, 47,948 stay. Each market counts under one reason only. The dropped counts plus the kept count sum to 688,131.</p>
+  <div class="chart">
+    <svg viewBox="0 0 760 330" role="img" aria-labelledby="t2ko t2en">
+      <title id="t2ko" lang="ko">막대 길이는 시장 수에 비례한다. 전체 688,131. 제외: Up/Down 255,420, 이진 시장 아님 0, 승자 라벨 없음 62,718, T 빼기 1일 가격 없음 215,289, 가격이 24시간 초과 80,230, 거래 10건 미만 26,526. 남은 시장 47,948.</title>
+      <title id="t2en" lang="en">Bar length is proportional to the market count. Whole scope 688,131. Dropped: Up/Down 255,420, not binary 0, no winner label 62,718, no price at T minus 1 day 215,289, price older than 24 hours 80,230, under 10 trades 26,526. Kept markets 47,948.</title>
+      <g font-size="11.5" fill="var(--foreground)">
+        <text lang="ko" x="10" y="30">전체 범위</text><text lang="en" x="10" y="30">Whole scope</text>
+        <text x="10" y="76">Up/Down</text>
+        <text lang="ko" x="10" y="116">이진 시장 아님</text><text lang="en" x="10" y="116">Not binary</text>
+        <text lang="ko" x="10" y="156">승자 라벨 없음</text><text lang="en" x="10" y="156">No winner label</text>
+        <text lang="ko" x="10" y="196">T − 1일 가격 없음</text><text lang="en" x="10" y="196">No T − 1 day price</text>
+        <text lang="ko" x="10" y="236">가격이 24시간 초과</text><text lang="en" x="10" y="236">Price over 24 h old</text>
+        <text lang="ko" x="10" y="276">거래 10건 미만</text><text lang="en" x="10" y="276">Under 10 trades</text>
+        <text lang="ko" x="10" y="316" font-weight="600" fill="var(--signal-plan)">남은 시장</text><text lang="en" x="10" y="316" font-weight="600" fill="var(--signal-plan)">Kept markets</text>
+      </g>
+      <g>
+        <rect x="170" y="14" width="560" height="22" fill="var(--quiet)"/>
+        <rect x="170" y="60" width="207.9" height="22" fill="var(--muted-foreground)"/>
+        <rect x="170" y="100" width="1" height="22" fill="var(--muted-foreground)"/>
+        <rect x="170" y="140" width="51" height="22" fill="var(--muted-foreground)"/>
+        <rect x="170" y="180" width="175.2" height="22" fill="var(--muted-foreground)"/>
+        <rect x="170" y="220" width="65.3" height="22" fill="var(--muted-foreground)"/>
+        <rect x="170" y="260" width="21.6" height="22" fill="var(--muted-foreground)"/>
+        <rect x="170" y="300" width="39" height="22" fill="var(--signal-plan)"/>
+      </g>
+      <g font-size="11.5" fill="var(--foreground)">
+        <text x="722" y="30" font-weight="600" text-anchor="end">688,131</text>
+        <text x="388" y="76">255,420</text>
+        <text x="182" y="116">0</text>
+        <text x="232" y="156">62,718</text>
+        <text x="356" y="196">215,289</text>
+        <text x="246" y="236">80,230</text>
+        <text x="202" y="276">26,526</text>
+        <text x="220" y="316" fill="var(--signal-plan)" font-weight="600">47,948</text>
+      </g>
+    </svg>
+  </div>
+  <p class="note" lang="ko">그림 2. 필터마다 제외한 시장 수. 막대 길이는 수에 비례한다(0건은 가는 선). 왜: 어느 필터가 가장 많이 거르는지 한눈에 보인다. 출처 폴더: <code>runs/142082_mvp1_full_v1r3/</code>.</p>
+  <p class="note" lang="en">Figure 2. Markets dropped per filter. Bar length is proportional to the count (a thin line for 0). Why: it shows at a glance which filter drops the most. Source folder: <code>runs/142082_mvp1_full_v1r3/</code>.</p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">필터</span><span lang="en">Filter</span></th><th><span lang="ko">제외 수</span><span lang="en">Dropped</span></th><th><span lang="ko">왜</span><span lang="en">Why</span></th><th><span lang="ko">어떻게</span><span lang="en">How</span></th><th><span lang="ko">왜 중요한가</span><span lang="en">Why it matters</span></th></tr>
+    <tr><td><span lang="ko">Up/Down 시장</span><span lang="en">Up/Down markets</span></td><td class="num">255,420</td>
+      <td><ul>
+        <li><span lang="ko">데이터셋 논문: 정산 방식이 근본적으로 다르다(§6).</span><span lang="en">Dataset paper: they have "fundamentally different settlement mechanics" (section 6).</span></li>
+        <li><span lang="ko">데이터셋 논문: 다른 시장과 합치면 안 된다(한계 5).</span><span lang="en">Dataset paper: they "should not be pooled" with other markets (limitation 5).</span></li></ul></td>
+      <td><span lang="ko">기본 규칙 <code>UPDOWN_SQL</code>(<code>code/common.py</code>)로 <code>category</code>, <code>category_refined</code>를 보고 뺀다</span><span lang="en">Drop them with the default rule <code>UPDOWN_SQL</code> (<code>code/common.py</code>), which reads <code>category</code> and <code>category_refined</code>.</span></td>
+      <td><span lang="ko">제외 수가 가장 크다. 결론이 어떤 시장에 적용되는지를 바꾼다</span><span lang="en">Largest drop count. It changes which markets the conclusion covers.</span></td></tr>
+    <tr><td><span lang="ko">이진 시장 아님</span><span lang="en">Not a binary market</span></td><td class="num">0</td>
+      <td><span lang="ko">데이터셋 논문: Neg-Risk 시장은 별도 정규화가 필요하고, 다른 시장과 합치면 안 된다(§6, 한계 5).</span><span lang="en">Dataset paper: Neg-Risk markets "require a separate normalization" and should not be pooled (section 6, limitation 5).</span></td>
+      <td><span lang="ko">후보가 여럿인 시장은 <code>daily_aligned_multi/</code>에 따로 있고 쓰지 않는다</span><span lang="en">Markets with several candidates sit in <code>daily_aligned_multi/</code>. We do not use them.</span></td>
+      <td><span lang="ko">후보가 여럿이면 Yes 가격 하나로 읽을 수 없다. 집계 파일에는 이 이유의 칸이 없고 순서 목록에만 있다</span><span lang="en">With several candidates, one Yes price cannot be read alone. The summary file has no field for this reason. It appears only in the order list.</span></td></tr>
+    <tr><td><span lang="ko">승자 라벨 없음</span><span lang="en">No winner label</span></td><td class="num">62,718</td>
+      <td><span lang="ko">결과 y를 모르면 가격이 맞았는지 비교할 수 없다</span><span lang="en">Without outcome y we cannot check whether the price was right.</span></td>
+      <td><span lang="ko">뺀다. 결과를 채우지 않는다</span><span lang="en">Drop it. Do not fill in the outcome.</span></td>
+      <td><span lang="ko">우리 규칙은 논문보다 넓다. Yes 쪽 라벨이 거래된 적 없는 시장도 뺀다</span><span lang="en">Our rule is wider than the paper's. It also drops markets whose Yes-side label never traded.</span></td></tr>
+    <tr><td><span lang="ko">T − 1일 가격 없음</span><span lang="en">No price at T − 1 day</span></td><td class="num">215,289</td>
+      <td><span lang="ko">평가 가격은 T − 1일 이전 마지막 시각의 평균 거래 가격이다. 그때까지 거래가 없으면 가격이 없다</span><span lang="en">The evaluation price is the mean trade price at the last timestamp at or before T − 1 day. With no trade by then, there is no price.</span></td>
+      <td><span lang="ko">뺀다. 가격을 채우지 않는다</span><span lang="en">Drop it. Do not fill in the price.</span></td>
+      <td><span lang="ko">Up/Down 다음으로 제외 수가 크다. 평가 가격이 없으면 Q1에 넣을 수 없다</span><span lang="en">Second largest drop after Up/Down. Without an evaluation price a market cannot enter Q1.</span></td></tr>
+    <tr><td><span lang="ko">가격이 24시간 초과</span><span lang="en">Price over 24 hours old</span></td><td class="num">80,230</td>
+      <td><span class="guess"><span lang="ko">추정</span><span lang="en">Assumption</span></span> <span lang="ko">24시간보다 오래된 가격은 "하루 전 가격"이라고 부르기 어렵다. 출처는 규칙만 적고 이유는 적지 않았다.</span><span lang="en">A price older than 24 hours is hard to call a "one day before" price. The source states the rule but not the reason.</span></td>
+      <td><span lang="ko">평가 시점보다 24시간 넘게 앞선 가격이면 시장을 뺀다</span><span lang="en">Drop the market if its price is more than 24 hours older than the evaluation time.</span></td>
+      <td><span lang="ko">계획이 정한 규칙이다. 출처는 이 규칙의 효과를 따로 적지 않았다</span><span lang="en">The plan sets this rule. The source does not state its effect.</span></td></tr>
+    <tr><td><span lang="ko">거래 10건 미만</span><span lang="en">Under 10 trades</span></td><td class="num">26,526</td>
+      <td><span lang="ko">거래가 거의 없는 시장의 가격은 군중의 의견이 아니다</span><span lang="en">A price from a nearly empty market is not the crowd's view.</span></td>
+      <td><span lang="ko">T − 1일 전 거래가 10건 미만이면 뺀다. Q1을 이 필터 없이도 보고한다</span><span lang="en">Drop it if it has fewer than 10 trades before T − 1 day. We also report Q1 without this filter.</span></td>
+      <td><span lang="ko">필터를 쓰기 전에 파일럿에서 정했다. 결과를 보고 고르지 않았다</span><span lang="en">We set it in the pilot before using the filter. We did not choose it after seeing results.</span></td></tr>
+  </table></div>
+  <h3><span lang="ko">필터는 아니지만 정한 처리</span><span lang="en">Handling that is not a filter</span></h3>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">처리</span><span lang="en">Handling</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th><th><span lang="ko">왜</span><span lang="en">Why</span></th></tr>
+    <tr><td><span lang="ko">거래 10건 규칙 없이 남는 시장</span><span lang="en">Markets kept without the 10-trade rule</span></td><td class="num">74,474</td><td><span lang="ko">Q1을 이 규칙 있이와 없이 함께 보고하려고 센다</span><span lang="en">We count them so we can report Q1 with and without this rule.</span></td></tr>
+    <tr><td><span lang="ko">중복 행(duplicate)</span><span lang="en">Duplicate rows</span></td><td><span lang="ko">남긴다</span><span lang="en">Keep</span></td><td><span lang="ko">행마다 고유 번호가 없다. 같은 블록의 반복 체결인지 복사본인지 가릴 수 없다</span><span lang="en">Rows have no unique id. We cannot tell repeated fills in one block from copies.</span></td></tr>
+    <tr><td><span lang="ko">결측값(missing value)</span><span lang="en">Missing values</span></td><td><span lang="ko">채우지 않는다</span><span lang="en">Do not impute</span></td><td><span lang="ko">가격이나 결과를 만들어 넣으면 없는 정보를 지어낸다. 뺀 수를 보고한다</span><span lang="en">Filling in a price or outcome invents information. We report the dropped counts.</span></td></tr>
+    <tr><td><span lang="ko">가격 척도</span><span lang="en">Price scale</span></td><td><code>p_event</code> <span lang="ko">하나</span><span lang="en">only</span></td><td><span lang="ko">Yes 쪽 가격 하나로 통일한다. 다시 계산하지 않는다</span><span lang="en">One Yes-side price for all. Do not recompute it.</span></td></tr>
+  </table></div>
+  <p class="src" lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code>(수), <code>runs/142041_pilotA_2025_06/updown_check.csv</code>(Crypto 259/282), <code>cs6344_group_01/analysis/prereg_mvp1.md</code>, <code>DECISIONS.md</code> D-007, <code>tips/polymarket_plan_detailed.md</code> 0절.</p>
+  <p class="src" lang="en">Sources: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code> (counts), <code>runs/142041_pilotA_2025_06/updown_check.csv</code> (Crypto 259/282), <code>cs6344_group_01/analysis/prereg_mvp1.md</code>, <code>DECISIONS.md</code> D-007, <code>tips/polymarket_plan_detailed.md</code> section 0.</p>
+</section>
+
+<section id="s4">
+  <div class="eyebrow">Step 4 of 7</div>
+  <h2><span lang="ko">왜 평가 시점이 T − 1일인가</span><span lang="en">Why the evaluation time is T − 1 day</span></h2>
+  <div class="flow">
+    <div class="stage"><div class="n"><span lang="ko">문제</span><span lang="en">Problem</span></div><div class="s"><span lang="ko">결과가 거래가 멈추기 전에 알려질 수 있다. 늦은 가격에는 이미 답이 들어 있다.</span><span lang="en">A result can be known before trading stops. A late price already holds the answer.</span></div></div>
+    <div class="stage big"><div class="n"><span lang="ko">처방</span><span lang="en">Fix</span></div><div class="s"><span lang="ko">마감 하루 전(T − 1일)의 가격만 평가한다. T는 <code>close_at</code>이다.</span><span lang="en">Evaluate only the price one day before close (T − 1 day). T is <code>close_at</code>.</span></div></div>
+    <div class="stage"><div class="n"><span lang="ko">이것이 지키는 것</span><span lang="en">What it protects</span></div><div class="s"><span lang="ko">가격이 답을 모르는 시점에서 얼마나 맞았는지를 잰다.</span><span lang="en">We measure how right the price was when it did not yet know the answer.</span></div></div>
+  </div>
+  <div class="chart">
+    <svg viewBox="0 0 740 150" role="img" aria-labelledby="t3ko t3en">
+      <title id="t3ko" lang="ko">시장 하나의 시간선. 거래 점들, 평가 시점 T 빼기 1일, close_at, 결과 확정. close_at 뒤의 거래 두 개는 빨간색.</title>
+      <title id="t3en" lang="en">Timeline of one market. Trade dots, the evaluation time T minus 1 day, close_at, outcome known. Two trades after close_at are red.</title>
+      <line x1="40" y1="70" x2="710" y2="70" stroke="var(--muted-foreground)" stroke-width="1.5"/>
+      <g fill="var(--foreground)"><circle cx="90" cy="70" r="3"/><circle cx="140" cy="70" r="3"/><circle cx="210" cy="70" r="3"/><circle cx="260" cy="70" r="3"/><circle cx="330" cy="70" r="3"/><circle cx="390" cy="70" r="3"/><circle cx="430" cy="70" r="3"/><circle cx="470" cy="70" r="3"/><circle cx="520" cy="70" r="3"/></g>
+      <g fill="var(--signal-instruction)"><circle cx="590" cy="70" r="4"/><circle cx="620" cy="70" r="4"/></g>
+      <g stroke="var(--foreground)"><line x1="560" y1="46" x2="560" y2="94"/><line x1="680" y1="54" x2="680" y2="86"/></g>
+      <line x1="440" y1="46" x2="440" y2="94" stroke="var(--signal-plan)" stroke-width="2" stroke-dasharray="4 3"/>
+      <g font-size="11" fill="var(--foreground)" text-anchor="middle">
+        <text x="560" y="110">close_at (= T)</text>
+        <text lang="ko" x="680" y="110">결과 확정</text><text lang="en" x="680" y="110">Outcome known</text>
+        <text lang="ko" x="440" y="38" fill="var(--signal-plan)">평가 가격: T − 1일</text><text lang="en" x="440" y="38" fill="var(--signal-plan)">Evaluated price: T − 1 day</text>
+        <text lang="ko" x="605" y="38" fill="var(--signal-instruction)">마감 뒤 거래</text><text lang="en" x="620" y="38" fill="var(--signal-instruction)">Trades after close</text>
+      </g>
+      <text lang="ko" x="40" y="136" font-size="10.5" fill="var(--muted-foreground)">설명용 그림. 점 위치는 실제 값이 아니다.</text>
+      <text lang="en" x="40" y="136" font-size="10.5" fill="var(--muted-foreground)">Illustration. Dot positions are not real values.</text>
+    </svg>
+  </div>
+  <p class="note" lang="ko">그림 3. 시장 하나의 시간선. 왜: 마감 뒤 거래가 있으면 T를 어떻게 잡느냐가 평가 가격을 바꾼다. 출처 폴더: <code>runs/142041_pilotA_2025_06/</code>.</p>
+  <p class="note" lang="en">Figure 3. Timeline of one market. Why: with trades after close, how we set T changes the evaluation price. Source folder: <code>runs/142041_pilotA_2025_06/</code>.</p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">정한 것</span><span lang="en">Choice</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th><th><span lang="ko">왜</span><span lang="en">Why</span></th></tr>
+    <tr><td>T</td><td><code>close_at</code></td><td><ul>
+      <li><span lang="ko">파일럿 시장의 51.3%가 <code>close_at</code> 뒤에도 거래한다.</span><span lang="en">51.3% of pilot markets still trade after <code>close_at</code>.</span></li>
+      <li><span lang="ko">마지막 거래를 T로 잡으면 결과가 알려진 뒤의 가격이 섞인다.</span><span lang="en">If we set T to the last trade, prices after the result is known mix in.</span></li></ul></td></tr>
+    <tr><td><span lang="ko">평가 가격</span><span lang="en">Evaluation price</span></td><td><span lang="ko">T − 1일 이전 마지막 시각의 <code>p_event</code> 평균</span><span lang="en">Mean <code>p_event</code> at the last timestamp at or before T − 1 day</span></td><td><span lang="ko">한 블록 안의 거래에는 순서가 없다. 평균을 쓰면 결과가 매번 같다 (D-011)</span><span lang="en">Trades in one block have no order. The mean makes the result the same every time (D-011).</span></td></tr>
+  </table></div>
+  <h3><span lang="ko">하루 전 가격과 마감 직전 가격은 얼마나 다른가</span><span lang="en">How different are the price one day before and the price just before close?</span></h3>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">시점</span><span lang="en">Time</span></th><th><span lang="ko">가격의 평균 제곱 잔차(mean squared residual of the price, 가격과 결과 사이 격차 제곱의 평균). 사전 등록은 이것을 Brier 점수라 부른다. 숫자는 같다 (D-026)</span><span lang="en">Mean squared residual of the price (mean of the squared gap between price and outcome). The pre-registration calls it the Brier score. Same numbers (D-026).</span></th></tr>
+    <tr><td><span lang="ko">T − 1일</span><span lang="en">T − 1 day</span> (<code>p_1d</code>)</td><td class="num">0.1071</td></tr>
+    <tr><td><span lang="ko">마감 직전</span><span lang="en">Just before close</span> (<code>p_T</code>)</td><td class="num">0.0749</td></tr>
+  </table></div>
+  <p class="note" lang="ko">표 열: 전체 표본 "all kept" 열, 시장 47,948개. 점수가 낮을수록 좋다. 마감 직전 점수가 더 낮다. 그래서 평가 시점을 먼저 정한다.</p>
+  <p class="note" lang="en">Column used: the whole-sample "all kept" column, 47,948 markets. A lower score is better. The score is lower just before close. So we fix the evaluation time first.</p>
+  <div class="callout" lang="ko"><p>평가 가격의 동점 규칙은 첫 Q1 결과를 본 뒤 고쳤다. 이유는 결정성(같은 입력, 같은 결과)이다. 사전 등록 문서가 이 사실을 적는다.</p></div>
+  <div class="callout" lang="en"><p>We changed the tie rule of the evaluation price after we saw the first Q1 result. The reason is determinism (same input, same output). The pre-registration document records this.</p></div>
+  <p class="src" lang="ko">출처: <code>runs/142041_pilotA_2025_06/close_time_summary.json</code>(<code>share_markets_trade_after_close</code> 0.5133), <code>runs/142123_robust_full_v4/report_r2_price_path.md</code>(평균 제곱 잔차), <code>DECISIONS.md</code> D-007, D-011, D-026, <code>analysis/prereg_mvp1.md</code>.</p>
+  <p class="src" lang="en">Sources: <code>runs/142041_pilotA_2025_06/close_time_summary.json</code> (<code>share_markets_trade_after_close</code> 0.5133), <code>runs/142123_robust_full_v4/report_r2_price_path.md</code> (mean squared residual), <code>DECISIONS.md</code> D-007, D-011, D-026, <code>analysis/prereg_mvp1.md</code>.</p>
+</section>
+
+<section id="s5">
+  <div class="eyebrow">Step 5 of 7</div>
+  <h2><span lang="ko">세 질문과 방법</span><span lang="en">Three questions and their methods</span></h2>
+  <p lang="ko">방법만 적는다. 결과와 판정은 이 쪽지에 없다.</p>
+  <p lang="en">We write methods only. This page states no results or verdicts.</p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">질문</span><span lang="en">Question</span></th><th><span lang="ko">왜 묻나</span><span lang="en">Why ask</span></th><th><span lang="ko">어떻게</span><span lang="en">How</span></th><th><span lang="ko">왜 중요한가</span><span lang="en">Why it matters</span></th></tr>
+    <tr><td><span lang="ko">Q3. 데이터는 어떻게 생겼나</span><span lang="en">Q3. What does the data look like?</span></td>
+      <td><span lang="ko">분포를 알아야 맞는 검정과 변환을 고른다</span><span lang="en">We need the distribution to choose the right tests and transforms.</span></td>
+      <td><ul>
+        <li><span lang="ko">요약 통계, 히스토그램, 상자그림, 경험적 누적분포(ECDF)</span><span lang="en">Summary statistics, histogram, box plot, empirical cumulative distribution function (ECDF, a running share of values)</span></li>
+        <li><span lang="ko">정규, 지수, 멱법칙(power law) 맞춤과 KS 검정</span><span lang="en">Normal, exponential and power-law fits, and the Kolmogorov-Smirnov (KS) test (does the data fit the distribution?)</span></li>
+        <li><span lang="ko">로그 변환 전후 QQ 그림</span><span lang="en">QQ plot (quantile-quantile plot) before and after a log transform</span></li></ul></td>
+      <td><span lang="ko">먼저 해야 Q1과 Q2에서 쓸 변환과 검정을 고를 수 있다</span><span lang="en">Do it first. Then we can choose the transforms and tests for Q1 and Q2.</span></td></tr>
+    <tr><td><span lang="ko">Q1. 군중이 맞나</span><span lang="en">Q1. Is the crowd right?</span></td>
+      <td><span lang="ko">70% 가격의 사건이 70%로 일어나는지 본다</span><span lang="en">We check whether events priced at 70% happen 70% of the time.</span></td>
+      <td><ul>
+        <li><span lang="ko">가격을 같은 폭의 구간 10개로 나눈다.</span><span lang="en">Split prices into 10 equal-width bins.</span></li>
+        <li><span lang="ko">구간마다 이항 검정과 95% z 구간(관측 비율 ± 표준오차의 1.96배)을 구한다.</span><span lang="en">Run a binomial test and a 95% z interval (observed rate ± 1.96 standard errors) per bin.</span></li>
+        <li><span lang="ko">카이제곱 적합도 검정(강의 12의 형태)과 BH 보정을 쓴다.</span><span lang="en">Use the chi-square goodness-of-fit test (a form of Lecture 12) and the Benjamini-Hochberg (BH) correction (limits false alarms across many tests).</span></li>
+        <li><span lang="ko">구간별 격차(관측 비율 − 평균 가격)와 가격의 평균 제곱 잔차를 함께 적는다.</span><span lang="en">Report the per-bin gap (observed rate minus mean price) and the mean squared residual of the price together.</span></li></ul></td>
+      <td><span lang="ko">맞으면 가격을 확률로 읽어도 된다. 틀리면 어디가 어긋나는지 보인다</span><span lang="en">If right, we may read prices as probabilities. If wrong, we see where they are off.</span></td></tr>
+    <tr><td><span lang="ko">Q2. 군중은 누구인가</span><span lang="en">Q2. Who is the crowd?</span></td>
+      <td><span lang="ko">소수 지갑이 거래 대부분을 하는지 본다</span><span lang="en">We check whether a few wallets make most of the trades.</span></td>
+      <td><ul>
+        <li><span lang="ko">상위 1%, 5%, 10% 지갑의 거래량 몫을 센다.</span><span lang="en">Count the volume share of the top 1%, 5% and 10% of wallets.</span></li>
+        <li><span lang="ko">CCDF(complementary cumulative distribution function, 거래량이 x보다 큰 지갑의 몫)와 이름 붙인 로렌츠 곡선을 그린다. 지니 계수는 쓰지 않는다.</span><span lang="en">Draw the CCDF (complementary cumulative distribution function, the share of wallets above a volume) and a labeled Lorenz curve. No Gini coefficient.</span></li>
+        <li><span lang="ko">k-평균은 곁가지 분석이다.</span><span lang="en">k-means is a side analysis.</span></li></ul></td>
+      <td><span lang="ko">그렇다면 "군중의 가격"은 작은 군중의 가격이다</span><span lang="en">If so, the "crowd's price" is the price of a small crowd.</span></td></tr>
+  </table></div>
+  <p class="src" lang="ko">출처: <code>tips/polymarket_plan_detailed.md</code> MVP1 세 질문 절, <code>tips/polymarket_research_flow_tips.html</code> 1단계.</p>
+  <p class="src" lang="en">Sources: <code>tips/polymarket_plan_detailed.md</code> MVP1 section (three questions), <code>tips/polymarket_research_flow_tips.html</code> step 1.</p>
+</section>
+
+<section id="s6">
+  <div class="eyebrow">Step 6 of 7</div>
+  <h2><span lang="ko">제약</span><span lang="en">Constraints</span></h2>
+  <p lang="ko">아래 여섯 제약은 최종본까지 지킨다.</p>
+  <p lang="en">We keep these six constraints until the final version.</p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">제약</span><span lang="en">Constraint</span></th><th><span lang="ko">왜</span><span lang="en">Why</span></th></tr>
+    <tr><td><span lang="ko">수업에서 배운 방법만 쓴다. k-평균은 곁가지이고 보고서의 1/10 미만이다</span><span lang="en">Use only methods from our lectures. k-means is a side analysis, under 1/10 of the report.</span></td><td><span lang="ko">방법을 수업 범위 안에 둔다</span><span lang="en">It keeps the methods inside the course scope.</span></td></tr>
+    <tr><td><span lang="ko">수업 게시글의 모든 사실에는 출처가 있다. 출처가 없으면 쓰지 않는다</span><span lang="en">Every fact in a class post has a source. No source, no claim.</span></td><td><span lang="ko">이 규칙 자체가 이유다</span><span lang="en">The rule is its own reason.</span></td></tr>
+    <tr><td><span lang="ko">모든 데이터 질의는 클러스터에서 돈다. 노트북은 저장된 산출물로 그림만 그린다</span><span lang="en">All data queries run on the cluster. The laptop only draws figures from saved outputs.</span></td><td><span lang="ko">노트북이 전체 데이터를 훑으면 안 된다</span><span lang="en">A laptop must not pass over the whole dataset.</span></td></tr>
+    <tr><td><span lang="ko">T, 최소 거래 기준, Q1 기준은 Q1 결과 전에 정한다</span><span lang="en">T, the minimum-trade cutoff and the Q1 criteria are fixed before any Q1 result.</span></td><td><span lang="ko">결과를 보고 규칙을 고르는 일을 막는다</span><span lang="en">It stops us from choosing a rule after seeing results.</span></td></tr>
+    <tr><td><span lang="ko">"wallet" 또는 "address"라고 쓴다. "trader"나 "person"이라고 쓰지 않는다</span><span lang="en">Write "wallet" or "address". Never write "trader" or "person".</span></td><td><span lang="ko">한 사람이 주소를 여러 개 가질 수 있다</span><span lang="en">One owner can hold many addresses.</span></td></tr>
+    <tr><td><span lang="ko">모든 검정은 p값 옆에 효과 크기(effect size)를 적는다</span><span lang="en">Every test reports an effect size next to its p-value.</span></td><td><span lang="ko">표본이 크면 아주 작은 차이도 유의해진다</span><span lang="en">A large sample makes tiny gaps significant.</span></td></tr>
+  </table></div>
+  <p class="src" lang="ko">출처: <code>cs6344_group_01/STATUS.md</code> Constraints 표(여섯 행), <code>DECISIONS.md</code> D-005, D-007, <code>tips/polymarket_plan_detailed.md</code>.</p>
+  <p class="src" lang="en">Sources: <code>cs6344_group_01/STATUS.md</code> Constraints table (six rows), <code>DECISIONS.md</code> D-005, D-007, <code>tips/polymarket_plan_detailed.md</code>.</p>
+</section>
+
+<section id="s7">
+  <div class="eyebrow">Step 7 of 7</div>
+  <h2><span lang="ko">꼭 알아야 할 한계</span><span lang="en">Limits you must know</span></h2>
+  <div class="callout" lang="ko"><p><b>결론은 범위의 688,131개 시장 중 남은 47,948개에만 적용한다. 모든 시장에 적용하지 않는다.</b></p></div>
+  <div class="callout" lang="en"><p><b>The conclusions apply to the 47,948 kept markets of the 688,131 in scope. They do not apply to every market.</b></p></div>
+  <ul lang="ko">
+    <li>Up/Down 시장 255,420개는 결론 밖이다.</li>
+    <li>T − 1일에 가격이 없는 시장 215,289개는 결론 밖이다.</li>
+    <li>승자 라벨이 없는 시장 62,718개는 결론 밖이다.</li>
+    <li>가격이 24시간 넘게 묵은 시장 80,230개는 결론 밖이다.</li>
+    <li>거래 10건 미만 시장 26,526개는 기본 결과에서 빠진다. 10건 규칙 없는 결과도 함께 보고한다.</li>
+  </ul>
+  <ul lang="en">
+    <li>The 255,420 Up/Down markets are outside the conclusions.</li>
+    <li>The 215,289 markets with no price at T − 1 day are outside the conclusions.</li>
+    <li>The 62,718 markets with no winner label are outside the conclusions.</li>
+    <li>The 80,230 markets with a price older than 24 hours are outside the conclusions.</li>
+    <li>The 26,526 markets with under 10 trades are left out of the main result. We also report the result without the 10-trade rule.</li>
+  </ul>
+  <p class="src" lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code>.</p>
+  <p class="src" lang="en">Sources: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code>.</p>
+</section>
+
+<footer><span lang="ko">숫자는 저장된 산출물에서 읽었다. 추정 표시가 붙은 이유는 출처가 없는 짐작이다.</span><span lang="en">Numbers come from saved outputs. Items marked Assumption are guesses without a source.</span></footer>
+</main>
+
+<script>
+/* Language toggle and one-step-at-a-time nav. No library. Storage may be blocked. */
+(function(){
+  var d=document.documentElement;
+  var TITLE={ko:"6344 Polymarket MVP1 필터링과 전처리",en:"6344 Polymarket MVP1 filtering and preprocessing"};
+  var KEY="mvp1tips-lang";
+  function setLang(l,save){
+    d.setAttribute("data-lang",l);
+    d.lang=l;
+    document.title=TITLE[l];
+    var b=document.querySelectorAll(".langbar button");
+    for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",b[i].getAttribute("data-set")===l?"true":"false");}
+    if(save){try{localStorage.setItem(KEY,l);}catch(e){}}
+  }
+  var cur=d.getAttribute("data-lang")==="en"?"en":"ko";
+  setLang(cur,false);
+  var btn=document.querySelectorAll(".langbar button");
+  for(var i=0;i<btn.length;i++){
+    btn[i].addEventListener("click",function(){setLang(this.getAttribute("data-set"),true);});
+  }
+  /* The hash alone holds the step. */
+  function show(){
+    var m=/^#s([1-7])$/.exec(location.hash);
+    var n=m?m[1]:"1";
+    for(var k=1;k<=7;k++){
+      var s=document.getElementById("s"+k);
+      if(s){s.className=(String(k)===n)?"on":"";}
+    }
+    var a=document.querySelectorAll(".steps a");
+    for(var j=0;j<a.length;j++){
+      var on=a[j].getAttribute("data-step")===n;
+      a[j].className=on?"on":"";
+      if(on){a[j].setAttribute("aria-current","true");}else{a[j].removeAttribute("aria-current");}
+    }
+    window.scrollTo(0,0);
+  }
+  window.addEventListener("hashchange",show);
+  show();
+  window.addEventListener("load",function(){setTimeout(function(){window.scrollTo(0,0);},0);});
+})();
+</script>
+</body>
+</html>

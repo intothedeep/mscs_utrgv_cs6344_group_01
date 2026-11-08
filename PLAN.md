@@ -11,17 +11,17 @@
 - Target scope: MVP1 only (Q1, Q2, Q3). MVP2 (Q1a, Q1b, Q1c) is not a target (owner, 2026-11-01; D-016).
 - Goals (question-type): [RQ.md](./RQ.md): 6 answered, 0 open.
 - S1 → RQ1–RQ6: MVP ladder. MVP1 answers RQ1–RQ3, MVP2 adds RQ4–RQ6 (picked by the owner, plan 2026-10-18; report v1 and v2, D-009); listed alternative: one full analysis without MVP stages.
-- M1 → S1: MVP1; exit: the four "MVP1 is done when" boxes in `../tips/group_01/polymarket_plan_detailed.md`; first done 2026-10-19 (run `142082_mvp1_full_v1r3`, `reports/report_v1.html`); exit reopened 2026-11-01 by G1, box 3 (`analysis/review_mvp1_rq.md`), box 3 closed again 2026-11-01 (D-018); cycle 2/2, plus one review the owner allowed (D-022); recovery 0/2.
+- M1 → S1: MVP1; exit: the four "MVP1 is done when" boxes in `tips/polymarket_plan_detailed.md`; first done 2026-10-19 (run `142082_mvp1_full_v1r3`, `reports/report_v1.html`); exit reopened 2026-11-01 by G1, box 3 (`analysis/review_mvp1_rq.md`), box 3 closed again 2026-11-01 (D-018); cycle 2/2, plus one review the owner allowed (D-022); recovery 0/2.
 - M2 → S1: MVP2, not a target (D-016); exit: Q1a, Q1b, Q1c each with a pre-registered verdict; done 2026-10-19 (run `future_work/runs/142083_mvp2_full_v2r3`, `future_work/reports/report_v2.html`); cycle 1/2; recovery 0/2.
 - M3 → S1: robustness cycle (D-013); exit: R1 and R2 stage reports from run `142123_robust_full_v4` and the Q1 sensitivity row; done 2026-10-19 (`runs/142123_robust_full_v4/report_r1_split_payout.md`, `report_r2_price_path.md`, `r1_results.json` `q1_sensitivity`); cycle 1/2; recovery 0/2.
 - M4 → S1: paper v1 (D-014, D-023); exit: reviewer gate PASS (`analysis/review_papers.md`), `papers/paper_mvp1` builds clean, every measured number is a `numbers.tex` macro; gate PASS with 3 major and 17 minor findings, review fixes closed 2026-11-01, residual rows open below; cycle 1/2; recovery 0/2.
 
 ## Detail
 
-- Method plan: `../tips/group_01/polymarket_plan_detailed.md`.
+- Method plan: `tips/polymarket_plan_detailed.md`.
 - Criteria: `analysis/prereg_mvp1.md`, `future_work/analysis/prereg_mvp2.md`.
 - Decisions: `DECISIONS.md`. Progress: `STATUS.md`. Runs: `00.runs.md`.
-- Progress page for the owner (Korean): `../tips/group_01/polymarket_research_flow_tips_ko.html`.
+- Progress page (English and Korean, toggle): `tips/polymarket_research_flow_tips.html`. Team tips start at `tips/index.html`.
 
 ## Open tasks
 

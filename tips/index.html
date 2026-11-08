@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6344 Group 1 Tips</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Tokens from skills/html-theme/theme.css, light only. One shell, pages stay as they are. */
+:root{--background:oklch(1 0 0);--foreground:oklch(.145 0 0);--primary:oklch(.205 0 0);--primary-foreground:oklch(.985 0 0);--muted-foreground:oklch(.556 0 0);--border:oklch(.55 0 0);--rule:oklch(.9 0 0);--signal-plan:#0432ff;--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace}
+*{box-sizing:border-box;border-radius:0}
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column;background:var(--background);color:var(--foreground);font:14px/1.5 var(--font)}
+header{padding:10px 16px;border-bottom:1px solid var(--border)}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+h1{margin:0;font-size:15px;font-weight:700}
+.lang{display:flex;margin-left:auto}
+.lang button{padding:4px 10px;border:1px solid var(--border);background:var(--background);color:var(--foreground);font:inherit;font-weight:500;cursor:pointer}
+.lang button+button{border-left:0}
+.lang button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+nav{display:flex;flex-wrap:wrap;gap:6px}
+nav a{padding:5px 10px;border:1px solid var(--rule);color:var(--signal-plan);text-decoration:none;font-weight:500}
+nav a:hover{border-color:var(--border)}
+nav a[aria-current="page"]{background:var(--primary);border-color:var(--primary);color:var(--primary-foreground)}
+#note{margin:8px 0 0;color:var(--muted-foreground);font-size:13px}
+#note a{color:var(--signal-plan)}
+iframe{flex:1;width:100%;border:0;display:block}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1 id="title"></h1>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="ko">한국어</button>
+      <button type="button" data-lang="en">English</button>
+    </div>
+  </div>
+  <nav id="tabs" aria-label="Tips pages"></nav>
+  <p id="note"></p>
+</header>
+<iframe id="page" title="Selected tips page"></iframe>
+<script>
+// Each page takes ?lang=ko|en.
+var PAGES = [
+  {id: "flow", file: "polymarket_research_flow_tips.html", ko: "연구 흐름", en: "Research flow", noteKo: "작업 순서, 계획, 진행 상황", noteEn: "Order of work, plan and progress"},
+  {id: "data", file: "polymarket_data_erd_tips.html", ko: "데이터 구조", en: "Data structure", noteKo: "ERD, 표 예시, 데이터 흐름, 프로젝트 진행", noteEn: "ERD, table examples, data flow and progress"},
+  {id: "decisions", file: "polymarket_paper_decisions_tips.html", ko: "논문 결정", en: "Paper decisions", noteKo: "결정 34개의 흐름, 왜 했나, 왜 중요한가, 논문 절과의 연결", noteEn: "The 34 decisions: flow, why, why it matters, and the paper sections"},
+  {id: "preprocessing", file: "polymarket_mvp1_preprocessing_tips.html", ko: "전처리", en: "Preprocessing", noteKo: "MVP1 필터, 전처리, 제약", noteEn: "MVP1 filters, preprocessing and constraints"},
+  {id: "feedback", file: "polymarket_feedback_answers_tips.html", ko: "피드백 답변", en: "Feedback answers", noteKo: "제안서 피드백 12개와 논문의 답", noteEn: "The 12 proposal feedback posts and what the paper answers"},
+  {id: "questions", file: "polymarket_class_questions_tips.html", ko: "수업 질문", en: "Class questions", noteKo: "수업 질문 4개의 답", noteEn: "Answers to 4 class questions"},
+  {id: "proposal", file: "polymarket_proposal_tips.html", ko: "제안서", en: "Proposal", noteKo: "제안서 7단계, 2026-10-18 게시 당시 기록", noteEn: "The proposal in seven steps, as posted on 2026-10-18"},
+  {id: "plan", file: "polymarket_plan_detailed.md", ko: "상세 계획", en: "Detailed plan", external: true}
+];
+var TEXT = {ko: {title: "Polymarket 프로젝트 tips (1조)", open: "새 탭에서 열기"}, en: {title: "Polymarket project tips (Group 1)", open: "Open in a new tab"}};
+var tabs = document.getElementById("tabs"), frame = document.getElementById("page"), note = document.getElementById("note");
+var buttons = document.querySelectorAll(".lang button");
+var lang = "ko";
+try { if (localStorage.getItem("group01-lang") === "en") { lang = "en"; } } catch (e) {}
+
+function fileOf(p) { return p.file || (lang === "en" ? p.fileEn : p.fileKo); }
+
+function drawTabs(current) {
+  tabs.textContent = "";
+  PAGES.forEach(function (p) {
+    var a = document.createElement("a");
+    a.textContent = p[lang] + (p.external ? " ↗" : "");
+    if (p.external) { a.href = p.file; a.target = "_blank"; a.rel = "noopener"; }
+    else { a.href = "#" + p.id; }
+    if (p === current) { a.setAttribute("aria-current", "page"); }
+    tabs.appendChild(a);
+  });
+}
+
+function show() {
+  var id = location.hash.slice(1);
+  var p = PAGES.filter(function (x) { return x.id === id && !x.external; })[0] || PAGES[0];
+  var src = fileOf(p) + "?lang=" + lang;
+  if (frame.getAttribute("src") !== src) { frame.setAttribute("src", src); }
+  document.documentElement.lang = lang;
+  document.getElementById("title").textContent = TEXT[lang].title;
+  drawTabs(p);
+  note.textContent = (lang === "en" ? p.noteEn : p.noteKo) + " · ";
+  var open = document.createElement("a");
+  open.href = src; open.target = "_blank"; open.rel = "noopener"; open.textContent = TEXT[lang].open;
+  note.appendChild(open);
+  buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
+  document.title = "6344 " + p[lang] + " · Group 1 Tips";
+}
+
+buttons.forEach(function (b) {
+  b.addEventListener("click", function () {
+    lang = b.dataset.lang;
+    try { localStorage.setItem("group01-lang", lang); } catch (e) {}
+    show();
+  });
+});
+window.addEventListener("hashchange", show);
+show();
+</script>
+</body>
+</html>

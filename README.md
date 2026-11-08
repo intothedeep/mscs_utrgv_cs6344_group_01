@@ -382,7 +382,7 @@ Read in this order. Each step builds on the one before.
 | 1 | `reports/report_v1.html` | The full story in steps, with tables and figures |
 | 2 | `papers/paper_mvp1/main.pdf` | The paper draft with the same numbers |
 | 3 | `runs/142082_mvp1_full_v1r3/summary.md` | Links to each stage report of the final run |
-| 4 | `../tips/group_01/polymarket_mvp1_preprocessing_tips.html` | Why each filter exists |
+| 4 | `tips/polymarket_mvp1_preprocessing_tips.html` | Why each filter exists |
 
 Open the HTML file in a browser. The PDF is a draft with open text parts. Numbers in the report and paper come from the saved run files. Do not retype them.
 
@@ -401,7 +401,7 @@ The MVP2 questions (Q1a, Q1b, Q1c) are in [future_work/README.02.md](future_work
 | File | What it is |
 |---|---|
 | `proposal_md/polymarket_proposal_v3.md` | **Current class post** (short proposal) |
-| `../tips/group_01/polymarket_plan_detailed.md` | **Current plan**: MVP1, gate, MVP2, timeline, risks |
+| `tips/polymarket_plan_detailed.md` | **Current plan**: MVP1, gate, MVP2, timeline, risks |
 | `docs/lecture_concept_map.md` | Lecture decks mapped to each question (section 6 = MVP1, section 7 = MVP2) |
 | `polymarket_v1_paper.pdf` | Dataset paper (Qin & Yang, 2026) |
 | `reports/` | HTML report v1 (`report_v1.html`) |
@@ -462,7 +462,7 @@ Which field carries the information each question needs:
 
 A wallet is one address. It is never one person.
 
-Source: `../tips/group_01/polymarket_plan_detailed.md` (section 0), `DECISIONS.md` D-003, `runs/142082_mvp1_full_v1r3/tables_summary.json`, `runs/142082_mvp1_full_v1r3/report_build_tables.md`, `runs/142041_pilotA_2025_06/report_pilot_inspect.md`, `analysis/hf_daily_aligned_listing.txt`, `code/common.py`, `CLAUDE.md` (repo root).
+Source: `tips/polymarket_plan_detailed.md` (section 0), `DECISIONS.md` D-003, `runs/142082_mvp1_full_v1r3/tables_summary.json`, `runs/142082_mvp1_full_v1r3/report_build_tables.md`, `runs/142041_pilotA_2025_06/report_pilot_inspect.md`, `analysis/hf_daily_aligned_listing.txt`, `code/common.py`, `CLAUDE.md` (repo root).
 
 ## How we filter the data
 

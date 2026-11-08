@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="ko" data-theme="light" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6344 Polymarket 데이터 ERD</title>
+<script>
+/* Runs first: sets the language. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){var d=document.documentElement;d.className="js";var l="ko";try{var s=localStorage.getItem("erdtips-lang");if(s==="ko"||s==="en"){l=s;}}catch(e){}try{var q=/[?&]lang=(ko|en)(&|$)/.exec(location.search);if(q){l=q[1];}}catch(e){}d.setAttribute("data-lang",l);d.lang=l;})();
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<style>
+/* theme.css from skills/html-theme, light tokens only (rules/answering.md section 3) */
+:root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--card-foreground:oklch(0.145 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--secondary:oklch(0.97 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace}
+*{box-sizing:border-box;border-radius:var(--radius)}
+body{background:var(--background);color:var(--foreground);font-family:var(--font);font-size:14px;line-height:1.6;padding-inline:16px;padding-block:32px 64px;margin:0}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1{font-size:24px;line-height:1.3;font-weight:700;margin:0}
+h2{font-size:17px;font-weight:500;margin:0}
+h3{font-size:15px;font-weight:700;margin:0}
+p{margin:0}
+.muted{color:var(--muted-foreground)}
+.label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-foreground)}
+.panel{background:var(--card);border:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:12px}
+.scroll-x{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:5px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{font-weight:500;color:var(--muted-foreground)}
+td.v{white-space:nowrap}
+tbody tr:nth-child(even){background:var(--muted)}
+.flag{background:var(--signal-flag-fill)!important;box-shadow:inset 3px 0 0 var(--signal-flag-line)}
+.plan{color:var(--signal-plan)}
+.dead{background:var(--signal-dead-fill);color:var(--signal-dead-ink)}
+code{font-family:var(--font);font-size:13px}
+button{font:inherit;padding:6px 14px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer}
+button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;background:var(--background);padding:8px 0;border-bottom:1px solid var(--rule);z-index:2}
+.tab{display:flex;flex-direction:column;gap:24px}
+.tab[hidden]{display:none}
+.mermaid{display:flex;justify-content:center}
+.mermaid svg{max-width:100%;height:auto}
+.toc{display:flex;flex-wrap:wrap;gap:6px 14px}
+.toc a{color:var(--foreground)}
+.badge{display:inline-block;min-width:26px;text-align:center;background:var(--primary);color:var(--primary-foreground);font-weight:700;margin-right:8px}
+.kind{font-size:11px;padding:1px 6px;border:1px solid var(--border);margin-left:6px;color:var(--muted-foreground)}
+.step{border-top:4px solid var(--primary)}
+.legend{display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+.funnel{display:flex;flex-direction:column;gap:4px}
+.frow{display:grid;grid-template-columns:170px 1fr 90px;gap:10px;align-items:center}
+.bar{height:18px;background:var(--primary)}
+.bar.drop{background:var(--signal-dead-ink)}
+.bar.keep{background:var(--signal-plan)}
+.frow .n{text-align:right;font-variant-numeric:tabular-nums}
+.erd-click rect.er,.erd-click text.er{cursor:pointer}
+.erd-click rect.er:hover{fill:#fff3a0!important}
+.panel,tbody tr,thead th{scroll-margin-top:80px}
+@keyframes hit{0%,60%{background:#fff3a0;outline:3px solid #d40000}100%{outline:3px solid transparent}}
+.hit{animation:hit 2.4s ease-out}
+.back{position:fixed;right:16px;bottom:16px;z-index:3;background:var(--primary);color:var(--primary-foreground)}
+.back[hidden]{display:none}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--rule);padding:12px;background:var(--muted)}
+.mini>div{background:var(--card);padding:8px;min-width:0;display:flex;flex-direction:column;gap:6px}
+@media (max-width:760px){.mini{grid-template-columns:1fr}}
+@media (max-width:640px){.frow{grid-template-columns:110px 1fr 70px}}
+html[data-lang="ko"] [lang="en"],html[data-lang="en"] [lang="ko"]{display:none!important}
+.langbar{display:none;gap:0}
+html.js .langbar{display:flex}
+.langbar button{margin-left:-1px}
+.langbar button:first-child{margin-left:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="langbar" role="group" aria-label="Language">
+  <button type="button" data-set="ko" aria-pressed="true">한국어</button>
+  <button type="button" data-set="en" aria-pressed="false">English</button>
+</div>
+
+<header style="display:flex;flex-direction:column;gap:8px">
+  <p class="label" lang="ko">cs6344_group_01 · MVP1 · 데이터 구조</p>
+  <p class="label" lang="en">cs6344_group_01 · MVP1 · data structure</p>
+  <h1 lang="ko">Polymarket 데이터: ERD, 테이블 예시, 흐름도, 진행</h1>
+  <h1 lang="en">Polymarket data: entity relationship diagram (ERD), example tables, flow chart, progress</h1>
+  <p lang="ko"><b>결론: 모든 분석은 시장(market) 한 행 표 <code>markets</code> 하나에서 갈라진다.</b> 원본 거래 표의 <code>condition_id</code>가 그 시장 표의 <code>market_id</code>다.</p>
+  <p lang="en"><b>Conclusion: every analysis branches from one table, <code>markets</code>, with one row per market.</b> The <code>condition_id</code> of the raw trade table is the <code>market_id</code> of that market table.</p>
+  <p class="muted" lang="ko">왜: 어느 표가 어느 표에서 나오고, 무엇으로 이어지는지 한눈에 보려고 만들었다. 쓴 데이터: 실제 run <code>142082_mvp1_full_v1r3</code>, <code>142123_robust_full_v4</code>의 저장된 표와 <code>code/build_tables.py</code>, <code>code/common.py</code>. 생성 데이터는 없다.</p>
+  <p class="muted" lang="en">Why: this page shows at a glance which table comes from which table, and what links them. Data used: the saved tables of the real runs <code>142082_mvp1_full_v1r3</code> and <code>142123_robust_full_v4</code>, plus <code>code/build_tables.py</code> and <code>code/common.py</code>. There is no generated data.</p>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="보기 선택 / Select view">
+  <button role="tab" data-tab="erd" aria-pressed="true">1 · ERD</button>
+  <button role="tab" data-tab="tables" aria-pressed="false">2 · <span lang="ko">테이블 예시와 설명</span><span lang="en">Example tables and notes</span></button>
+  <button role="tab" data-tab="flow" aria-pressed="false">3 · <span lang="ko">흐름도와 관계</span><span lang="en">Flow chart and relations</span></button>
+  <button role="tab" data-tab="progress" aria-pressed="false">4 · <span lang="ko">프로젝트 진행</span><span lang="en">Project progress</span></button>
+</nav>
+
+<!-- ============ TAB 1: ERD ============ -->
+<section class="tab" id="tab-erd">
+  <div class="panel step">
+    <p class="label">Step 1 of 2</p>
+    <h2 lang="ko">원본과 중간 표: 무엇이 무엇을 가리키나</h2>
+    <h2 lang="en">Raw and middle tables: what points to what</h2>
+    <p class="plan" lang="ko">👆 상자 제목을 누르면 그 표의 설명으로, 열 행을 누르면 그 열의 설명 행으로 간다.</p>
+    <p class="plan" lang="en">👆 Click a box title to go to the notes of that table. Click a column row to go to the notes row of that column.</p>
+    <p class="muted" lang="ko">개체 관계도(entity relationship diagram, ERD): 표와 열, 표 사이 연결을 그린 그림. PK(primary key, 기본 키): 한 행을 고르는 열. FK(foreign key, 외래 키): 다른 표의 PK를 가리키는 열.</p>
+    <p class="muted" lang="en">Entity relationship diagram (ERD): a picture of tables, columns, and the links between tables. Primary key (PK): the column that picks one row. Foreign key (FK): a column that points to the PK of another table.</p>
+    <div class="scroll-x"><pre class="mermaid">
+erDiagram
+  DAILY_ALIGNED_TRADE }o--|| MARKETS : "condition_id = market_id"
+  CTF_RESOLUTIONS |o..|| MARKETS : "condition_id (R1 only)"
+  WALLETS ||..|{ DAILY_ALIGNED_TRADE : "wallet = maker or taker"
+  TRADE_SIZES_SAMPLE }o..|| DAILY_ALIGNED_TRADE : "1,000,000 row sample"
+  DAILY_ALIGNED_TRADE {
+    string condition_id FK "market id"
+    string asset_id "outcome token"
+    bigint block_timestamp "trade time, sec"
+    bigint outcome_seq "1 = Yes leg"
+    double price "token price"
+    double p_event "Yes-scale price"
+    double usdc_amount "trade size"
+    string maker "wallet"
+    string taker "wallet"
+    string category_refined "topic"
+    string outcome_label "leg label"
+    string winning_outcome_label "winner"
+    timestamp close_at "close time"
+    string neg_risk "multi-outcome flag"
+    string market_slug "url name"
+  }
+  MARKETS {
+    string market_id PK "= condition_id"
+    string category_refined "topic"
+    timestamp close_at "T"
+    bool is_updown "filter 1"
+    bool is_binary "filter 2"
+    int y "1 Yes won, 0 lost"
+    bigint n_trades "all trades"
+    double p_1d "price at T-1 day"
+    double p_age_h "price age, hours"
+    bigint n_trades_before_T1d "filter 6"
+    string drop_reason "first failing rule"
+    bool kept "47,948 true"
+    bool kept_no_min "74,474 true"
+  }
+  WALLETS {
+    string wallet PK "address"
+    string role PK "maker or taker"
+    double volume_usdc "summed size"
+    bigint n_trades "count"
+    bigint n_markets "distinct markets"
+    double mean_trade_price "mean p_event"
+    double median_trade_size "median size"
+    string dominant_category "top topic by volume"
+  }
+  CTF_RESOLUTIONS {
+    string condition_id PK "market id"
+    list payout_numerators "payout per leg"
+  }
+  TRADE_SIZES_SAMPLE {
+    string condition_id FK "kept market"
+    double usdc_amount "trade size"
+    double p_event "Yes-scale price"
+  }
+</pre></div>
+  </div>
+
+  <div class="panel step">
+    <p class="label">Step 2 of 2</p>
+    <h2 lang="ko">결과 표: 질문(Q1, Q2, Q3)과 강건성 검사(robustness, R1, R2)</h2>
+    <h2 lang="en">Result tables: questions (Q1, Q2, Q3) and robustness checks (R1, R2)</h2>
+    <h3 lang="ko">2a · 시장 쪽: Q1, Q3, R1, R2</h3>
+    <h3 lang="en">2a · Market side: Q1, Q3, R1, R2</h3>
+    <div class="scroll-x"><pre class="mermaid">
+erDiagram
+  MARKETS ||--o| Q1_MARKETS : "market_id (kept_no_min)"
+  Q1_BINS ||--|{ Q1_MARKETS : "bin"
+  MARKETS ||--o| R1_MARKETS : "market_id (kept)"
+  MARKETS ||--o| R2_MARKETS : "market_id (kept)"
+  Q3_SUMMARY ||..|| MARKETS : "p_1d (aggregate)"
+  MARKETS {
+    string market_id PK
+    double p_1d
+    int y
+    bool kept
+  }
+  Q1_MARKETS {
+    string market_id FK
+    double p_1d
+    double y
+    bool kept_with_min_filter
+    int bin FK "0-9"
+  }
+  Q1_BINS {
+    int bin PK "10 bins"
+    bigint n
+    double mean_price
+    double observed_rate
+    double binom_p
+    bool reject_bonferroni
+  }
+  R1_MARKETS {
+    string market_id FK
+    string res_class "clean, split, ..."
+    int y_resolutions
+    bool mismatch
+  }
+  R2_MARKETS {
+    string market_id FK
+    double p_1d
+    double p_T "price just before T"
+    double delta "p_T - p_1d"
+  }
+  Q3_SUMMARY {
+    string variable PK "p_1d, trade size, wallet volume"
+    double mean
+    double median
+  }
+</pre></div>
+    <h3 lang="ko">2b · 지갑 쪽: Q2, Q3</h3>
+    <h3 lang="en">2b · Wallet side: Q2, Q3</h3>
+    <div class="scroll-x"><pre class="mermaid">
+erDiagram
+  WALLETS ||--o| Q2_KMEANS_SAMPLE : "wallet, role"
+  Q2_CLUSTERS ||--|{ Q2_KMEANS_SAMPLE : "cluster = cluster_z"
+  Q2_CONCENTRATION ||..|{ WALLETS : "role (aggregate)"
+  Q3_SUMMARY ||..|{ WALLETS : "volume_usdc (aggregate)"
+  WALLETS {
+    string wallet PK
+    string role PK
+    double volume_usdc
+  }
+  Q2_KMEANS_SAMPLE {
+    string wallet FK
+    string role FK
+    int cluster_z FK
+    int cluster_robust
+  }
+  Q2_CLUSTERS {
+    int cluster PK "0-3"
+    bigint n
+    double median_volume
+  }
+  Q2_CONCENTRATION {
+    string role PK
+    double top1_share
+    double gini
+  }
+  Q3_SUMMARY {
+    string variable PK
+    double mean
+  }
+</pre></div>
+    <div class="legend muted">
+      <span lang="ko">실선 <code>--</code></span><span lang="en">Solid line <code>--</code></span>
+      <span lang="ko">열 값이 같으면 이어진다 (FK → PK)</span><span lang="en">Rows link when the column values match (FK → PK)</span>
+      <span lang="ko">점선 <code>..</code></span><span lang="en">Dotted line <code>..</code></span>
+      <span lang="ko">집계나 표본으로 만들어진다. 열 하나로 바로 잇지 않는다</span><span lang="en">Made by aggregation or sampling. One column does not link it directly</span>
+      <span><code>||--o{</code></span><span lang="ko">한 행 ↔ 0개 이상 행 (1 : N)</span><span lang="en">one row ↔ 0 or more rows (1 : N)</span>
+      <span><code>||--o|</code></span><span lang="ko">한 행 ↔ 0 또는 1 행 (1 : 0..1)</span><span lang="en">one row ↔ 0 or 1 row (1 : 0..1)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TAB 2: TABLES ============ -->
+<section class="tab" id="tab-tables" hidden>
+  <div class="panel">
+    <p class="label" lang="ko">표 목록 · 누르면 그 표로 간다</p>
+    <p class="label" lang="en">Table list · click to go to that table</p>
+    <div class="toc">
+      <a href="#t1">1 daily_aligned</a><a href="#t2">2 resolutions</a><a href="#t3">3 markets</a>
+      <a href="#t4">4 wallets</a><a href="#t5">5 trade_sizes_sample</a><a href="#t6">6 q1_markets</a>
+      <a href="#t7">7 q1_bins</a><a href="#t8">8 q2_concentration</a><a href="#t9">9 q2_clusters</a>
+      <a href="#t10">10 q2_kmeans_sample</a><a href="#t11">11 q3_summary</a><a href="#t12">12 r1_markets</a>
+      <a href="#t13">13 r2_markets</a>
+    </div>
+    <p class="muted" lang="ko">읽는 법: 넓은 표는 열마다 한 행으로 뒤집어 보인다. 노란 행은 핵심 열이다. 긴 16진수 id는 <code>…</code>로 줄였다.</p>
+    <p class="muted" lang="en">How to read: a wide table is turned so that each column becomes one row. A yellow row is a key column. A long hexadecimal id is cut with <code>…</code>.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="panel step" id="t1">
+    <h3><span class="badge">1</span>daily_aligned/*.parquet<span class="kind"><span lang="ko">원본 · Hugging Face</span><span lang="en">raw · Hugging Face</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 거래(trade) 한 건이 한 행이다. 1,248개 파일, 13.2 GB, 24개 열.</p>
+    <p lang="en"><b>What:</b> one trade is one row. 1,248 files, 13.2 GB, 24 columns.</p>
+    <p lang="ko"><b>왜:</b> 가격, 결과, 주제, 지갑이 모두 여기서 나온다. 클러스터(cluster)에만 있다.</p>
+    <p lang="en"><b>Why:</b> price, result, topic, and wallet all come from here. It exists only on the cluster.</p>
+    <p class="muted" lang="ko">예시 행: 설명용 값(Illustrative values). 로컬에 원본 행이 없다. 실제 시장 <code>0x0000dbb9…</code>의 저장된 값을 쓴 열: <code>condition_id</code>, <code>block_timestamp</code>, <code>p_event</code>, <code>category</code>, <code>category_refined</code>, <code>opens_at</code>, <code>close_at</code> (<code>markets.csv</code>). 나머지 열의 값은 형식을 보이려고 꾸몄다.</p>
+    <p class="muted" lang="en">Example row: illustrative values. No raw row exists locally. These columns use saved values of the real market <code>0x0000dbb9…</code>: <code>condition_id</code>, <code>block_timestamp</code>, <code>p_event</code>, <code>category</code>, <code>category_refined</code>, <code>opens_at</code>, <code>close_at</code> (<code>markets.csv</code>). The other column values are made up to show the format.</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th><span lang="ko">열</span><span lang="en">Column</span></th><th><span lang="ko">형</span><span lang="en">Type</span></th><th><span lang="ko">예시</span><span lang="en">Example</span></th><th><span lang="ko">뜻</span><span lang="en">Meaning</span></th></tr></thead>
+      <tbody>
+        <tr class="flag"><td>condition_id</td><td>VARCHAR</td><td class="v">0x0000dbb9…3d4f</td><td><span lang="ko">시장 id. <code>markets.market_id</code>로 간다</span><span lang="en">Market id. It goes to <code>markets.market_id</code></span></td></tr>
+        <tr><td>asset_id</td><td>VARCHAR</td><td class="v">7123…<span lang="ko">(꾸민 값)</span><span lang="en">(made up)</span></td><td><span lang="ko">결과 토큰(outcome token) id. 한 시장에 다리(leg) 둘</span><span lang="en">Outcome token id. One market has two legs</span></td></tr>
+        <tr class="flag"><td>block_timestamp</td><td>BIGINT</td><td class="v">1774050333</td><td><span lang="ko">블록(block) 시각, 초. 2026-03-20 23:45:33 UTC</span><span lang="en">Block time, in seconds. 2026-03-20 23:45:33 UTC</span></td></tr>
+        <tr><td>outcome_seq</td><td>BIGINT</td><td class="v">1</td><td><span lang="ko">다리 번호. 1이 Yes 쪽</span><span lang="en">Leg number. 1 is the Yes side</span></td></tr>
+        <tr><td>price</td><td>DOUBLE</td><td class="v">0.15</td><td><span lang="ko">그 다리 토큰의 가격</span><span lang="en">Price of the token of that leg</span></td></tr>
+        <tr class="flag"><td>p_event</td><td>DOUBLE</td><td class="v">0.15</td><td><span lang="ko">Yes 쪽 눈금으로 바꾼 가격. 두 다리를 한 축에 둔다</span><span lang="en">Price converted to the Yes-side scale. It puts both legs on one axis</span></td></tr>
+        <tr class="flag"><td>usdc_amount</td><td>DOUBLE</td><td class="v">25.0 <span lang="ko">(꾸민 값)</span><span lang="en">(made up)</span></td><td><span lang="ko">거래 크기, USDC(달러 고정 토큰)</span><span lang="en">Trade size, in USD Coin (USDC), a token fixed to the dollar</span></td></tr>
+        <tr><td>fee_usdc</td><td>DOUBLE</td><td class="v">0.0</td><td><span lang="ko">수수료(fee), USDC</span><span lang="en">Fee, in USDC</span></td></tr>
+        <tr class="flag"><td>maker</td><td>VARCHAR</td><td class="v">0xA1…<span lang="ko">(꾸민 값)</span><span lang="en">(made up)</span></td><td><span lang="ko">호가를 낸 지갑(maker). 지갑은 주소 하나다. 사람이 아니다</span><span lang="en">The wallet that posted the quote (maker). A wallet is one address, not a person</span></td></tr>
+        <tr class="flag"><td>taker</td><td>VARCHAR</td><td class="v">0xB2…<span lang="ko">(꾸민 값)</span><span lang="en">(made up)</span></td><td><span lang="ko">호가를 받은 지갑(taker)</span><span lang="en">The wallet that took the quote (taker)</span></td></tr>
+        <tr><td>taker_direction</td><td>VARCHAR</td><td class="v">BUY</td><td><span lang="ko">taker가 샀나 팔았나</span><span lang="en">Did the taker buy or sell</span></td></tr>
+        <tr><td>neg_risk</td><td>VARCHAR</td><td class="v">false</td><td><span lang="ko">다중 결과 묶음(Neg-Risk) 표시. true면 이진(binary) 아님</span><span lang="en">Flag for a multi-outcome bundle (Neg-Risk). If true, the market is not binary</span></td></tr>
+        <tr><td>category</td><td>VARCHAR</td><td class="v">Trump</td><td><span lang="ko">원래 주제 태그</span><span lang="en">Original topic tag</span></td></tr>
+        <tr class="flag"><td>category_refined</td><td>VARCHAR</td><td class="v">Politics</td><td><span lang="ko">다듬은 주제. Q2, 그림의 묶음에 쓴다</span><span lang="en">Cleaned topic. Q2 and the figures use it for grouping</span></td></tr>
+        <tr><td>outcome_label</td><td>VARCHAR</td><td class="v">Yes</td><td><span lang="ko">이 다리의 이름</span><span lang="en">Name of this leg</span></td></tr>
+        <tr class="flag"><td>winning_outcome_label</td><td>VARCHAR</td><td class="v">No</td><td><span lang="ko">이긴 다리 이름. y를 만든다</span><span lang="en">Name of the winning leg. It makes y</span></td></tr>
+        <tr><td>resolution_status</td><td>VARCHAR</td><td class="v">resolved</td><td><span lang="ko">결과 확정 상태</span><span lang="en">Resolution status</span></td></tr>
+        <tr><td>taker_base_fee, maker_base_fee</td><td>DOUBLE</td><td class="v">0, 0</td><td><span lang="ko">기본 수수료율</span><span lang="en">Base fee rate</span></td></tr>
+        <tr><td>opens_at</td><td>TIMESTAMPTZ</td><td class="v">2026-03-13 20:23:53</td><td><span lang="ko">시장 열린 시각</span><span lang="en">Time the market opened</span></td></tr>
+        <tr class="flag"><td>close_at</td><td>TIMESTAMPTZ</td><td class="v">2026-03-22 00:00:00</td><td><span lang="ko">시장 닫힘 시각. 평가 시각 T</span><span lang="en">Time the market closed. Evaluation time T</span></td></tr>
+        <tr><td>resolved_at</td><td>TIMESTAMPTZ</td><td class="v">2026-03-23 …</td><td><span lang="ko">결과 확정 시각</span><span lang="en">Time the result was settled</span></td></tr>
+        <tr><td>market_slug</td><td>VARCHAR</td><td class="v">…<span lang="ko">(꾸민 값)</span><span lang="en">(made up)</span></td><td><span lang="ko">URL 이름. Up/Down 시장을 거른다</span><span lang="en">Name in the web address (URL). It filters out Up/Down markets</span></td></tr>
+        <tr><td>D</td><td>TINYINT</td><td class="v">1</td><td><span lang="ko">데이터셋(dataset) 논문의 방향 표시. MVP1에서 안 쓴다</span><span lang="en">Direction flag from the dataset paper. MVP1 does not use it</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">출처: 열과 형 <code>runs/142041_pilotA_2025_06/schema.csv</code>. 크기 <code>README.md</code> "Data we use".</p>
+    <p class="muted" lang="en">Source: columns and types in <code>runs/142041_pilotA_2025_06/schema.csv</code>. Size in <code>README.md</code> "Data we use".</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="panel step" id="t2">
+    <h3><span class="badge">2</span>CTF/resolutions.parquet<span class="kind"><span lang="ko">원본 · R1만</span><span lang="en">raw · R1 only</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 시장 하나의 지급(payout) 벡터. 1,313,030행. 중복 id 없음.</p>
+    <p lang="en"><b>What:</b> the payout vector of one market. 1,313,030 rows. No duplicate id.</p>
+    <p lang="ko"><b>왜:</b> 우리 y가 맞는지 다른 출처로 검사한다(R1). 반반 지급(split payout) 시장도 찾는다.</p>
+    <p lang="en"><b>Why:</b> a second source checks that our y is right (R1). It also finds split payout markets.</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>condition_id</th><th>payout_numerators</th><th><span lang="ko">뜻</span><span lang="en">Meaning</span></th></tr></thead>
+      <tbody>
+        <tr><td class="v">0x0000dbb9…3d4f</td><td class="v">[0, 1] <span lang="ko">(재구성)</span><span lang="en">(rebuilt)</span></td><td><span lang="ko">두 번째 다리(No)가 이겼다. 우리 y = 0과 같다</span><span lang="en">The second leg (No) won. It equals our y = 0</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">예시는 <code>r1_markets.csv</code>의 <code>res_class = clean</code>, <code>res_winner_index = 1</code>에서 재구성했다. 원본 행이 로컬에 없다. 행 수 <code>r1_results.json</code>.</p>
+    <p class="muted" lang="en">The example is rebuilt from <code>res_class = clean</code> and <code>res_winner_index = 1</code> in <code>r1_markets.csv</code>. No raw row exists locally. Row count: <code>r1_results.json</code>.</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="panel step" id="t3">
+    <h3><span class="badge">3</span>markets.parquet / markets.csv<span class="kind"><span lang="ko">중심 표 · build_tables</span><span lang="en">central table · build_tables</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 시장 한 개가 한 행. 688,131행. 그중 <code>kept = true</code>는 47,948행.</p>
+    <p lang="en"><b>What:</b> one market is one row. 688,131 rows. Of these, 47,948 rows have <code>kept = true</code>.</p>
+    <p lang="ko"><b>왜:</b> Q1, Q2, Q3이 모두 이 표에서 시작한다. 거른 이유도 행마다 남긴다. 아무것도 채워 넣지(impute) 않는다.</p>
+    <p lang="en"><b>Why:</b> Q1, Q2, and Q3 all start from this table. It also keeps the drop reason on each row. Nothing is filled in (imputed).</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th><span lang="ko">열</span><span lang="en">Column</span></th><th><span lang="ko">예 A: 남은 시장</span><span lang="en">Example A: kept market</span></th><th><span lang="ko">예 B: 걸러진 시장</span><span lang="en">Example B: dropped market</span></th><th><span lang="ko">뜻</span><span lang="en">Meaning</span></th></tr></thead>
+      <tbody>
+        <tr class="flag"><td>market_id</td><td class="v">0x0000dbb9…3d4f</td><td class="v">0x00008da1…9167</td><td><span lang="ko">PK. 원본 <code>condition_id</code></span><span lang="en">PK. The raw <code>condition_id</code></span></td></tr>
+        <tr><td>category / category_refined</td><td class="v">Trump / Politics</td><td class="v">Up or Down / Price Action</td><td><span lang="ko">주제</span><span lang="en">Topic</span></td></tr>
+        <tr><td>opens_at</td><td class="v">2026-03-13 20:23</td><td class="v">2026-01-09 02:47</td><td><span lang="ko">열린 시각</span><span lang="en">Open time</span></td></tr>
+        <tr><td>close_at = T</td><td class="v">2026-03-22 00:00</td><td class="v">2026-01-10 03:00</td><td><span lang="ko">평가 시각 T</span><span lang="en">Evaluation time T</span></td></tr>
+        <tr><td>is_updown</td><td class="v">false</td><td class="v">true</td><td><span lang="ko">규칙 1: Up/Down 시장인가</span><span lang="en">Rule 1: is it an Up/Down market</span></td></tr>
+        <tr><td>is_binary</td><td class="v">true</td><td class="v">true</td><td><span lang="ko">규칙 2: 결과 둘, Neg-Risk 아님</span><span lang="en">Rule 2: two outcomes, not Neg-Risk</span></td></tr>
+        <tr class="flag"><td>y</td><td class="v">0</td><td class="v">1</td><td><span lang="ko">결과. 1 = Yes 다리가 이김</span><span lang="en">Result. 1 = the Yes leg won</span></td></tr>
+        <tr><td>n_trades</td><td class="v">106</td><td class="v">6197</td><td><span lang="ko">전체 거래 수</span><span lang="en">Total number of trades</span></td></tr>
+        <tr><td>volume_usdc</td><td class="v">2545.67</td><td class="v">59973.70</td><td><span lang="ko">전체 거래액, USDC</span><span lang="en">Total trade amount, in USDC</span></td></tr>
+        <tr><td>first_ts / last_ts</td><td class="v">03-15 00:44 / 03-23 06:59</td><td class="v">01-10 00:45 / 01-10 03:00</td><td><span lang="ko">첫 거래, 마지막 거래</span><span lang="en">First trade, last trade</span></td></tr>
+        <tr class="flag"><td>p_1d</td><td class="v">0.15</td><td class="v"><span lang="ko">(없음)</span><span lang="en">(none)</span></td><td><span lang="ko">T 1일 전 가격. 그 직전 시각 거래들의 <code>p_event</code> 평균</span><span lang="en">Price 1 day before T. The mean <code>p_event</code> of the trades at the last time before it</span></td></tr>
+        <tr><td>p_ts</td><td class="v">2026-03-20 23:45:33</td><td class="v"><span lang="ko">(없음)</span><span lang="en">(none)</span></td><td><span lang="ko">p_1d를 잰 거래 시각</span><span lang="en">Trade time at which p_1d was taken</span></td></tr>
+        <tr><td>n_trades_before_T1d</td><td class="v">57</td><td class="v">0</td><td><span lang="ko">규칙 6: T 1일 전까지 거래 수, 10 이상</span><span lang="en">Rule 6: number of trades up to 1 day before T, at least 10</span></td></tr>
+        <tr><td>p_age_h</td><td class="v">0.24</td><td class="v"><span lang="ko">(없음)</span><span lang="en">(none)</span></td><td><span lang="ko">규칙 5: 가격 나이, 24시간 이하</span><span lang="en">Rule 5: price age, at most 24 hours</span></td></tr>
+        <tr class="flag"><td>drop_reason</td><td class="v"><span lang="ko">(없음)</span><span lang="en">(none)</span></td><td class="v">updown</td><td><span lang="ko">처음 실패한 규칙. 없으면 남는다</span><span lang="en">The first rule that failed. If none, the market is kept</span></td></tr>
+        <tr><td>drop_reason_no_min</td><td class="v"><span lang="ko">(없음)</span><span lang="en">(none)</span></td><td class="v">updown</td><td><span lang="ko">규칙 6 없이 본 이유</span><span lang="en">Reason when rule 6 is left out</span></td></tr>
+        <tr class="flag"><td>kept / kept_no_min</td><td class="v">true / true</td><td class="v">false / false</td><td><span lang="ko">분석에 남나. 규칙 6 있을 때 / 없을 때</span><span lang="en">Is it kept for analysis. With rule 6 / without rule 6</span></td></tr>
+        <tr class="dead"><td>p_7d, p_age_7d_h, open_ge_7d</td><td class="v"><span lang="ko">(없음), (없음)</span><span lang="en">(none), (none)</span>, true</td><td class="v"><span lang="ko">(없음), (없음)</span><span lang="en">(none), (none)</span>, false</td><td><span lang="ko">MVP2용 열. MVP1 목표 밖</span><span lang="en">Columns for MVP2. Outside the MVP1 goal</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">출처: <code>runs/142123_robust_full_v4/markets.csv</code> 행 1, 2. 행 수 <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code>.</p>
+    <p class="muted" lang="en">Source: rows 1 and 2 of <code>runs/142123_robust_full_v4/markets.csv</code>. Row counts: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code>.</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="panel step" id="t4">
+    <h3><span class="badge">4</span>wallets.parquet<span class="kind"><span lang="ko">build_tables · 클러스터에만</span><span lang="en">build_tables · cluster only</span></span></h3>
+    <p lang="ko"><b>무엇:</b> (지갑, 역할) 한 쌍이 한 행. 2,117,412행. maker 581,435 + taker 1,535,977.</p>
+    <p lang="en"><b>What:</b> one (wallet, role) pair is one row. 2,117,412 rows. maker 581,435 + taker 1,535,977.</p>
+    <p lang="ko"><b>왜:</b> Q2 "누가 군중인가"의 단위다. 남은 시장의 거래만 센다.</p>
+    <p lang="en"><b>Why:</b> it is the unit of Q2, "who is the crowd". It counts only trades in kept markets.</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th><span lang="ko">열</span><span lang="en">Column</span></th><th><span lang="ko">예시</span><span lang="en">Example</span></th><th><span lang="ko">뜻</span><span lang="en">Meaning</span></th></tr></thead>
+      <tbody>
+        <tr class="flag"><td>wallet</td><td class="v">0x00002c5C…6ED7</td><td><span lang="ko">PK 1. 주소 하나</span><span lang="en">PK 1. One address</span></td></tr>
+        <tr class="flag"><td>role</td><td class="v">taker</td><td><span lang="ko">PK 2. maker 또는 taker</span><span lang="en">PK 2. maker or taker</span></td></tr>
+        <tr class="flag"><td>volume_usdc</td><td class="v"><span lang="ko">(로컬 사본 없음)</span><span lang="en">(no local copy)</span></td><td><span lang="ko">거래액 합. 집중도(concentration)의 바탕</span><span lang="en">Sum of trade amounts. The base of concentration</span></td></tr>
+        <tr><td>n_trades</td><td class="v"><span lang="ko">(로컬 사본 없음)</span><span lang="en">(no local copy)</span></td><td><span lang="ko">거래 수</span><span lang="en">Number of trades</span></td></tr>
+        <tr><td>n_markets</td><td class="v"><span lang="ko">(로컬 사본 없음)</span><span lang="en">(no local copy)</span></td><td><span lang="ko">거래한 시장 수</span><span lang="en">Number of markets traded</span></td></tr>
+        <tr><td>mean_trade_price</td><td class="v"><span lang="ko">(로컬 사본 없음)</span><span lang="en">(no local copy)</span></td><td><span lang="ko"><code>p_event</code> 평균</span><span lang="en">Mean of <code>p_event</code></span></td></tr>
+        <tr><td>median_trade_size</td><td class="v"><span lang="ko">(로컬 사본 없음)</span><span lang="en">(no local copy)</span></td><td><span lang="ko">거래 크기 중앙값</span><span lang="en">Median trade size</span></td></tr>
+        <tr><td>dominant_category</td><td class="v"><span lang="ko">(로컬 사본 없음)</span><span lang="en">(no local copy)</span></td><td><span lang="ko">거래액이 가장 큰 주제. 동률이면 이름이 작은 쪽</span><span lang="en">Topic with the largest trade amount. On a tie, the smaller name</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">예시의 wallet, role은 실제 값이다: <code>q2_kmeans_sample.csv</code> 행 1. 나머지 열의 값은 로컬에 없다. 숫자를 지어내지 않았다. 행 수 <code>tables_summary.json</code>, 역할별 수 <code>q2_concentration.csv</code>.</p>
+    <p class="muted" lang="en">The wallet and role in the example are real values: row 1 of <code>q2_kmeans_sample.csv</code>. The values of the other columns are not available locally. We did not invent numbers. Row count: <code>tables_summary.json</code>. Count by role: <code>q2_concentration.csv</code>.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="panel step" id="t5">
+    <h3><span class="badge">5</span>trade_sizes_sample.parquet<span class="kind"><span lang="ko">build_tables · 클러스터에만</span><span lang="en">build_tables · cluster only</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 남은 시장 거래 63,023,987건 중 1,000,000건 표본. 열 3개: <code>condition_id</code>, <code>usdc_amount</code>, <code>p_event</code>.</p>
+    <p lang="en"><b>What:</b> a sample of 1,000,000 out of 63,023,987 trades in kept markets. 3 columns: <code>condition_id</code>, <code>usdc_amount</code>, <code>p_event</code>.</p>
+    <p lang="ko"><b>왜:</b> Q3의 거래 크기 히스토그램(histogram)과 분포 맞춤에 쓴다. 해시(hash) 순서로 뽑아 실행마다 같다.</p>
+    <p lang="en"><b>Why:</b> Q3 uses it for the trade size histogram and the distribution fit. It is drawn in hash order, so every run gives the same sample.</p>
+    <p class="muted" lang="ko">예시 행은 로컬에 없다. 요약값은 표 11 <code>trade_size_usdc</code> 행에 있다.</p>
+    <p class="muted" lang="en">No example row exists locally. The summary values are in the <code>trade_size_usdc</code> row of table 11.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="panel step" id="t6">
+    <h3><span class="badge">6</span>q1_markets.csv<span class="kind"><span lang="ko">Q1 · 시장 단위 출력</span><span lang="en">Q1 · output per market</span></span></h3>
+    <p lang="ko"><b>무엇:</b> <code>kept_no_min = true</code>인 시장 한 개가 한 행. 74,474행.</p>
+    <p lang="en"><b>What:</b> one market with <code>kept_no_min = true</code> is one row. 74,474 rows.</p>
+    <p lang="ko"><b>왜:</b> Q1 "군중 가격이 맞나"(보정, calibration)를 시장마다 남긴다. 어느 칸(bin)에 들어갔는지 보인다.</p>
+    <p lang="en"><b>Why:</b> it keeps Q1, "is the crowd price right" (calibration), for each market. It shows which bin the market fell into.</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>market_id</th><th>p_1d</th><th>y</th><th>kept_with_min_filter</th><th>bin</th></tr></thead>
+      <tbody>
+        <tr><td class="v">0x0000dbb9…3d4f</td><td>0.15</td><td>0</td><td>True</td><td>1</td></tr>
+        <tr><td class="v">0x000196d0…4395</td><td>0.87</td><td>1</td><td>True</td><td>8</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">bin = ⌊p_1d × 10⌋. 0.15 → 1, 0.87 → 8. 출처: <code>runs/142082_mvp1_full_v1r3/q1_markets.csv</code>.</p>
+    <p class="muted" lang="en">bin = ⌊p_1d × 10⌋. 0.15 → 1, 0.87 → 8. Source: <code>runs/142082_mvp1_full_v1r3/q1_markets.csv</code>.</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="panel step" id="t7">
+    <h3><span class="badge">7</span>q1_bins.csv<span class="kind"><span lang="ko">Q1 · 칸 단위 결과</span><span lang="en">Q1 · result per bin</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 가격 칸 하나가 한 행. 10행. 47,948개 남은 시장으로 만든다.</p>
+    <p lang="en"><b>What:</b> one price bin is one row. 10 rows. It is built from the 47,948 kept markets.</p>
+    <p lang="ko"><b>왜:</b> 칸마다 "평균 가격 = 실제 Yes 비율"인지 이항 검정(binomial test)으로 본다.</p>
+    <p lang="en"><b>Why:</b> a binomial test checks for each bin whether "mean price = actual Yes rate".</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>bin</th><th>n</th><th>n_yes</th><th>mean_price</th><th>observed_rate</th><th>binom_p</th><th>reject_bonferroni</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>18,209</td><td>249</td><td>0.0183</td><td>0.0137</td><td>1.6e-06</td><td>True</td></tr>
+        <tr><td>1</td><td>2,703</td><td>339</td><td>0.1484</td><td>0.1254</td><td>6.5e-04</td><td>True</td></tr>
+        <tr><td>2</td><td>2,543</td><td>609</td><td>0.2495</td><td>0.2395</td><td>0.252</td><td>False</td></tr>
+        <tr><td>3</td><td>2,769</td><td>919</td><td>0.3490</td><td>0.3319</td><td>0.058</td><td>False</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">처음 4행만 보인다. 다른 열: <code>diff_obs_minus_price</code>, 신뢰 구간(confidence interval) <code>ci_low</code>/<code>ci_high</code>, 다중 검정 보정 <code>p_bonferroni</code>, <code>p_bh</code>(Benjamini-Hochberg, BH: 거짓 발견 비율 보정), <code>reject_bh</code>. 출처: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>. 같은 형식 표: <code>q1_bins_no_min.csv</code>, <code>q1_bins_eqfreq.csv</code>(같은 개수 칸).</p>
+    <p class="muted" lang="en">Only the first 4 rows are shown. Other columns: <code>diff_obs_minus_price</code>, confidence interval <code>ci_low</code>/<code>ci_high</code>, multiple-test correction <code>p_bonferroni</code>, <code>p_bh</code> (Benjamini-Hochberg (BH): false discovery rate correction), <code>reject_bh</code>. Source: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>. Tables in the same format: <code>q1_bins_no_min.csv</code>, <code>q1_bins_eqfreq.csv</code> (bins with equal counts).</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="panel step" id="t8">
+    <h3><span class="badge">8</span>q2_concentration.csv<span class="kind"><span lang="ko">Q2 · 역할 단위 결과</span><span lang="en">Q2 · result per role</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 역할 하나가 한 행. 2행. <code>wallets</code>를 역할별로 집계한다.</p>
+    <p lang="en"><b>What:</b> one role is one row. 2 rows. It aggregates <code>wallets</code> by role.</p>
+    <p lang="ko"><b>왜:</b> 거래액이 몇몇 지갑에 몰렸나를 숫자로 보인다.</p>
+    <p lang="en"><b>Why:</b> it shows with numbers whether trade amounts sit in a few wallets.</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>role</th><th>n_wallets</th><th>median</th><th>top1_share</th><th>top20_share</th><th>gini</th></tr></thead>
+      <tbody>
+        <tr><td>maker</td><td>581,435</td><td>101.19</td><td>0.861</td><td>0.989</td><td>0.978</td></tr>
+        <tr><td>taker</td><td>1,535,977</td><td>86.57</td><td>0.759</td><td>0.980</td><td>0.963</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">top1_share: 상위 1% 지갑의 거래액 몫. 지니 계수(Gini coefficient): 0 고름 ~ 1 한 곳 집중. 다른 열: <code>mean</code>, <code>mean_over_median</code>, <code>top5_share</code>, <code>top10_share</code>. 출처: <code>runs/142082_mvp1_full_v1r3/q2_concentration.csv</code>.</p>
+    <p class="muted" lang="en">top1_share: the share of trade amount held by the top 1% of wallets. Gini coefficient: 0 is even, 1 is all in one place. Other columns: <code>mean</code>, <code>mean_over_median</code>, <code>top5_share</code>, <code>top10_share</code>. Source: <code>runs/142082_mvp1_full_v1r3/q2_concentration.csv</code>.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="panel step" id="t9">
+    <h3><span class="badge">9</span>q2_clusters.csv<span class="kind"><span lang="ko">Q2 · 군집 단위 결과</span><span lang="en">Q2 · result per cluster</span></span></h3>
+    <p lang="ko"><b>무엇:</b> k-평균(k-means: 가까운 중심으로 묶는 군집화) 군집 하나가 한 행. 4행.</p>
+    <p lang="en"><b>What:</b> one k-means cluster is one row (k-means: clustering that groups points by the nearest center). 4 rows.</p>
+    <p lang="ko"><b>왜:</b> 지갑 20만 개 표본을 거래액, 거래 수, 시장 수로 묶어 유형을 본다.</p>
+    <p lang="en"><b>Why:</b> a sample of 200,000 wallets is grouped by trade amount, trade count, and market count to see the types.</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>cluster</th><th>n</th><th>median_volume</th><th>median_n_trades</th><th>median_n_markets</th><th>mean_trade_price</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>57,550</td><td>212.69</td><td>6</td><td>2</td><td>0.297</td></tr>
+        <tr><td>1</td><td>15,294</td><td>5,815.26</td><td>129</td><td>42</td><td>0.380</td></tr>
+        <tr><td>2</td><td>69,556</td><td>6.60</td><td>2</td><td>1</td><td>0.291</td></tr>
+        <tr><td>3</td><td>57,600</td><td>268.99</td><td>20</td><td>10</td><td>0.293</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/q2_clusters.csv</code>. 척도 상수: <code>q2_kmeans_scaling.csv</code>.</p>
+    <p class="muted" lang="en">Source: <code>runs/142082_mvp1_full_v1r3/q2_clusters.csv</code>. Scaling constants: <code>q2_kmeans_scaling.csv</code>.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="panel step" id="t10">
+    <h3><span class="badge">10</span>q2_kmeans_sample.csv<span class="kind"><span lang="ko">Q2 · 지갑 단위 출력</span><span lang="en">Q2 · output per wallet</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 표본 지갑 하나가 한 행. 200,000행.</p>
+    <p lang="en"><b>What:</b> one sampled wallet is one row. 200,000 rows.</p>
+    <p lang="ko"><b>왜:</b> 어느 지갑이 어느 군집인지 남긴다. 두 척도를 비교한다: z 점수(z-score: 평균과 표준편차) 대 강건 척도(robust scaling: 중앙값과 사분위 범위).</p>
+    <p lang="en"><b>Why:</b> it keeps which wallet is in which cluster. It compares two scalings: z-score (mean and standard deviation) and robust scaling (median and interquartile range).</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>wallet</th><th>role</th><th>cluster_z</th><th>cluster_robust</th></tr></thead>
+      <tbody>
+        <tr><td class="v">0x00002c5C…6ED7</td><td>taker</td><td>3</td><td>0</td></tr>
+        <tr><td class="v">0x00006d7a…5390</td><td>taker</td><td>0</td><td>3</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">두 척도의 군집 번호는 서로 짝이 아니다. 번호만 다를 수 있다. 출처: <code>runs/142082_mvp1_full_v1r3/q2_kmeans_sample.csv</code>.</p>
+    <p class="muted" lang="en">The cluster numbers of the two scalings do not pair up. Only the numbers may differ. Source: <code>runs/142082_mvp1_full_v1r3/q2_kmeans_sample.csv</code>.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="panel step" id="t11">
+    <h3><span class="badge">11</span>q3_summary.csv<span class="kind"><span lang="ko">Q3 · 변수 단위 요약</span><span lang="en">Q3 · summary per variable</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 변수 하나가 한 행. 3행.</p>
+    <p lang="en"><b>What:</b> one variable is one row. 3 rows.</p>
+    <p lang="ko"><b>왜:</b> Q3 "데이터가 어떻게 생겼나"를 기술 통계(descriptive statistics)로 보인다. 판정은 없다.</p>
+    <p lang="en"><b>Why:</b> it shows Q3, "what does the data look like", with descriptive statistics. There is no verdict.</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th><span lang="ko">변수</span><span lang="en">Variable</span></th><th><span lang="ko">출처 표</span><span lang="en">Source table</span></th><th>n</th><th>mean</th><th>median</th><th>q99</th></tr></thead>
+      <tbody>
+        <tr><td>p_1d</td><td>markets (kept)</td><td>47,948</td><td>0.376</td><td>0.32</td><td>0.999</td></tr>
+        <tr><td>trade_size_usdc</td><td>trade_sizes_sample</td><td>1,000,000</td><td>129.82</td><td>6.93</td><td>1,955.36</td></tr>
+        <tr><td>wallet_volume_usdc</td><td>wallets</td><td>2,117,412</td><td>7,745.25</td><td>91.11</td><td>69,733.70</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">평균이 중앙값보다 훨씬 크다: 오른쪽 꼬리가 길다(right skewed). 다른 열: <code>mode_50bin_mid</code>, <code>min</code>, <code>max</code>, <code>range</code>, <code>variance</code>, 분위수 q1–q95. 출처: <code>runs/142082_mvp1_full_v1r3/q3_summary.csv</code>.</p>
+    <p class="muted" lang="en">The mean is much larger than the median. The right tail is long (right skewed). Other columns: <code>mode_50bin_mid</code>, <code>min</code>, <code>max</code>, <code>range</code>, <code>variance</code>, quantiles q1–q95. Source: <code>runs/142082_mvp1_full_v1r3/q3_summary.csv</code>.</p>
+  </div>
+
+  <!-- 12 -->
+  <div class="panel step" id="t12">
+    <h3><span class="badge">12</span>r1_markets.csv<span class="kind"><span lang="ko">R1 · 강건성</span><span lang="en">R1 · robustness</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 남은 시장 한 개가 한 행. 47,948행. <code>markets</code>와 <code>resolutions</code>를 잇는다.</p>
+    <p lang="en"><b>What:</b> one kept market is one row. 47,948 rows. It links <code>markets</code> and <code>resolutions</code>.</p>
+    <p lang="ko"><b>왜:</b> 우리 y가 지급 벡터의 승자와 같은지 본다. 같음 비율, 반반 지급 7개, 없음 1개를 센다.</p>
+    <p lang="en"><b>Why:</b> it checks whether our y equals the winner in the payout vector. It counts the match rate, 7 split payouts, and 1 missing.</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>market_id</th><th>p_1d</th><th>y</th><th>res_class</th><th>res_rows</th><th>res_winner_index</th><th>y_resolutions</th><th>mismatch</th><th>excluded</th></tr></thead>
+      <tbody>
+        <tr><td class="v">0x0000dbb9…3d4f</td><td>0.15</td><td>0</td><td>clean</td><td>1</td><td>1</td><td>0</td><td>False</td><td>False</td></tr>
+        <tr><td class="v">0x000196d0…4395</td><td>0.87</td><td>1</td><td>clean</td><td>1</td><td>0</td><td>1</td><td>False</td><td>False</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">출처: <code>runs/142123_robust_full_v4/r1_markets.csv</code>, 분류 수 <code>r1_results.json</code>.</p>
+    <p class="muted" lang="en">Source: <code>runs/142123_robust_full_v4/r1_markets.csv</code>. Class counts: <code>r1_results.json</code>.</p>
+  </div>
+
+  <!-- 13 -->
+  <div class="panel step" id="t13">
+    <h3><span class="badge">13</span>r2_markets.csv<span class="kind"><span lang="ko">R2 · 강건성</span><span lang="en">R2 · robustness</span></span></h3>
+    <p lang="ko"><b>무엇:</b> 남은 시장 한 개가 한 행. 47,948행.</p>
+    <p lang="en"><b>What:</b> one kept market is one row. 47,948 rows.</p>
+    <p lang="ko"><b>왜:</b> 마지막 하루 동안 가격이 얼마나 움직였나 본다. p_1d에서 p_T(T 직전 가격)까지.</p>
+    <p lang="en"><b>Why:</b> it shows how far the price moved in the last day. From p_1d to p_T (the price just before T).</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>market_id</th><th>category_group</th><th>p_1d</th><th>p_T</th><th>delta</th><th>n_window</th><th>crosses_half</th><th>y</th></tr></thead>
+      <tbody>
+        <tr><td class="v">0x0000dbb9…3d4f</td><td>Politics</td><td>0.15</td><td>0.01</td><td>−0.14</td><td>30</td><td>False</td><td>0</td></tr>
+        <tr><td class="v">0x000196d0…4395</td><td>Sports</td><td>0.87</td><td>0.86</td><td>−0.01</td><td>80</td><td>False</td><td>1</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">n_window: 마지막 하루의 거래 수. crosses_half: 0.5 선을 넘었나. 출처: <code>runs/142123_robust_full_v4/r2_markets.csv</code>.</p>
+    <p class="muted" lang="en">n_window: number of trades in the last day. crosses_half: did the price cross the 0.5 line. Source: <code>runs/142123_robust_full_v4/r2_markets.csv</code>.</p>
+  </div>
+
+  <div class="panel">
+    <h3 lang="ko">그림용 작은 표 (참고)</h3>
+    <h3 lang="en">Small tables for figures (reference)</h3>
+    <div class="scroll-x"><table>
+      <thead><tr><th><span lang="ko">파일</span><span lang="en">File</span></th><th>run</th><th><span lang="ko">한 행</span><span lang="en">One row</span></th><th><span lang="ko">그리는 그림</span><span lang="en">Figure it draws</span></th></tr></thead>
+      <tbody>
+        <tr><td>wallet_dist_bins.csv</td><td>145893_walletdist_v7</td><td><span lang="ko">역할 × 로그 크기 칸</span><span lang="en">role × log size bin</span></td><td><span lang="ko">지갑 거래액 분포</span><span lang="en">Distribution of wallet trade amount</span></td></tr>
+        <tr><td>lorenz_points.csv</td><td>145893_walletdist_v7</td><td><span lang="ko">로렌츠 곡선(Lorenz curve) 점</span><span lang="en">Point on the Lorenz curve</span></td><td><span lang="ko">집중 곡선</span><span lang="en">Concentration curve</span></td></tr>
+        <tr><td>hist_price_p1d.csv, hist_trade_size.csv</td><td>145897_q3figs_v8</td><td><span lang="ko">히스토그램 칸</span><span lang="en">Histogram bin</span></td><td><span lang="ko">Q3 히스토그램</span><span lang="en">Q3 histogram</span></td></tr>
+        <tr><td>qq_points.csv</td><td>145897_q3figs_v8</td><td><span lang="ko">분위수 점</span><span lang="en">Quantile point</span></td><td><span lang="ko">Q-Q 그림(quantile-quantile plot)</span><span lang="en">Quantile-quantile (Q-Q) plot</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ TAB 3: FLOW ============ -->
+<section class="tab" id="tab-flow" hidden>
+  <div class="panel step">
+    <p class="label">Step 1 of 3</p>
+    <h2 lang="ko">파이프라인 흐름: 어느 코드가 어느 표를 만드나</h2>
+    <h2 lang="en">Pipeline flow: which code makes which table</h2>
+    <p class="muted" lang="ko">상자 = 표. 둥근 상자 = 코드 단계. 모두 클러스터 Cradle에서 돈다. 노트북은 저장된 표로 그림만 그린다.</p>
+    <p class="muted" lang="en">Box = table. Round box = code step. All of it runs on the Cradle cluster. The notebook only draws figures from saved tables.</p>
+    <div class="scroll-x"><pre class="mermaid">
+flowchart TB
+  HF["Hugging Face<br/>Polymarket-v1"]
+  DA["daily_aligned/*.parquet<br/>trades, 13.2 GB"]
+  RES["CTF/resolutions.parquet<br/>1,313,030 rows"]
+  HF --> DA
+  HF --> RES
+
+  subgraph BT["build_tables.py"]
+    S1(["build_market_set<br/>mkts + tr"])
+    S2(["filters 1-6"])
+    S3(["group by wallet, role"])
+    S1 --> S2
+    S1 --> S3
+  end
+  DA --> S1
+  S2 --> MK["markets<br/>688,131 rows<br/>47,948 kept"]
+  S2 --> S3
+  S3 --> WL["wallets<br/>2,117,412 rows"]
+  S1 --> TS["trade_sizes_sample<br/>1,000,000 rows"]
+
+  MK --> Q1(["q1_calibration.py"])
+  Q1 --> Q1M["q1_markets<br/>74,474"]
+  Q1 --> Q1B["q1_bins<br/>10"]
+  Q1B --> V(["verdicts.py"])
+  V --> VJ["verdicts.json"]
+
+  WL --> Q2(["q2_concentration.py"])
+  Q2 --> Q2C["q2_concentration<br/>2"]
+  Q2 --> Q2K["q2_kmeans_sample<br/>200,000"]
+  Q2 --> Q2L["q2_clusters<br/>4"]
+
+  MK --> Q3(["q3_describe.py"])
+  TS --> Q3
+  WL --> Q3
+  Q3 --> Q3S["q3_summary<br/>3"]
+
+  MK --> R1(["r1_split_payout.py"])
+  RES --> R1
+  R1 --> R1M["r1_markets<br/>47,948"]
+  MK --> R2(["r2_price_path.py"])
+  DA --> R2
+  R2 --> R2M["r2_markets<br/>47,948"]
+
+  VJ --> OUT["report_v1.html<br/>paper_mvp1"]
+  Q2C --> OUT
+  Q3S --> OUT
+  R1M --> OUT
+  R2M --> OUT
+
+  classDef raw fill:#e4e4e2,stroke:#555
+  classDef core fill:#fff3a0,stroke:#e6d24a
+  class DA,RES,HF raw
+  class MK core
+</pre></div>
+    <div class="legend muted">
+      <span lang="ko">회색</span><span lang="en">Gray</span><span lang="ko">원본 (Hugging Face)</span><span lang="en">raw data (Hugging Face)</span>
+      <span lang="ko">노란색</span><span lang="en">Yellow</span><span lang="ko">중심 표 <code>markets</code></span><span lang="en">central table <code>markets</code></span>
+    </div>
+    <p class="muted" lang="ko">단계 순서: <code>jobs/mvp1_b.slurm</code> (build_tables → q3_describe → q1_calibration → q2_concentration → verdicts). R1, R2: <code>jobs/robustness.slurm</code>. R2는 원본 거래를 한 번 더 읽는다.</p>
+    <p class="muted" lang="en">Step order: <code>jobs/mvp1_b.slurm</code> (build_tables → q3_describe → q1_calibration → q2_concentration → verdicts). R1, R2: <code>jobs/robustness.slurm</code>. R2 reads the raw trades one more time.</p>
+  </div>
+
+  <div class="panel step">
+    <p class="label">Step 2 of 3</p>
+    <h2 lang="ko">거르기 깔때기: 688,131 → 47,948 시장</h2>
+    <h2 lang="en">Filter funnel: 688,131 → 47,948 markets</h2>
+    <p class="muted" lang="ko">시장마다 처음 실패한 규칙 하나로만 센다. 막대 길이 = 시장 수.</p>
+    <p class="muted" lang="en">Each market is counted only under the first rule it failed. Bar length = number of markets.</p>
+    <div class="funnel" id="funnel"></div>
+    <p class="muted" lang="ko">규칙 2(이진 아님)는 0개를 걸렀다. 규칙 6 없이 남는 시장은 74,474개다(<code>q1_markets</code>). 출처: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code> <code>drop_reasons</code>.</p>
+    <p class="muted" lang="en">Rule 2 (not binary) dropped 0 markets. Without rule 6, 74,474 markets are kept (<code>q1_markets</code>). Source: <code>drop_reasons</code> in <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code>.</p>
+  </div>
+
+  <div class="panel step">
+    <p class="label">Step 3 of 3</p>
+    <h2 lang="ko">관계 요약: 키 하나로 본다</h2>
+    <h2 lang="en">Relation summary: one key at a time</h2>
+    <div class="scroll-x"><table>
+      <thead><tr><th><span lang="ko">부모 표 (행 수)</span><span lang="en">Parent table (rows)</span></th><th><span lang="ko">자식 표 (행 수)</span><span lang="en">Child table (rows)</span></th><th><span lang="ko">잇는 키</span><span lang="en">Linking key</span></th><th><span lang="ko">관계</span><span lang="en">Relation</span></th><th><span lang="ko">자식에 들어가는 조건</span><span lang="en">Condition to enter the child</span></th></tr></thead>
+      <tbody>
+        <tr><td>markets (688,131)</td><td><span lang="ko">daily_aligned 거래</span><span lang="en">daily_aligned trades</span></td><td>market_id = condition_id</td><td>1 : N</td><td><span lang="ko">모든 거래</span><span lang="en">All trades</span></td></tr>
+        <tr><td>markets (688,131)</td><td>resolutions (1,313,030)</td><td>market_id = condition_id</td><td>1 : 0..1</td><td><span lang="ko">R1에서만 잇는다</span><span lang="en">Linked in R1 only</span></td></tr>
+        <tr class="flag"><td>markets (688,131)</td><td>q1_markets (74,474)</td><td>market_id</td><td>1 : 0..1</td><td><code>kept_no_min = true</code></td></tr>
+        <tr><td>markets (688,131)</td><td><span lang="ko">r1_markets, r2_markets (47,948)</span><span lang="en">r1_markets, r2_markets (47,948)</span></td><td>market_id</td><td>1 : 0..1</td><td><code>kept = true</code></td></tr>
+        <tr><td>q1_bins (10)</td><td>q1_markets (74,474)</td><td>bin</td><td>1 : N</td><td>bin = ⌊p_1d × 10⌋</td></tr>
+        <tr class="flag"><td>wallets (2,117,412)</td><td><span lang="ko">daily_aligned 거래</span><span lang="en">daily_aligned trades</span></td><td><span lang="ko">wallet = maker 또는 taker</span><span lang="en">wallet = maker or taker</span></td><td>1 : N</td><td><span lang="ko">남은 시장의 거래만 집계</span><span lang="en">Only trades in kept markets are counted</span></td></tr>
+        <tr><td>wallets (2,117,412)</td><td>q2_kmeans_sample (200,000)</td><td>(wallet, role)</td><td>1 : 0..1</td><td><span lang="ko">표본으로 뽑힌 지갑</span><span lang="en">Wallets drawn into the sample</span></td></tr>
+        <tr><td>q2_clusters (4)</td><td>q2_kmeans_sample (200,000)</td><td>cluster = cluster_z</td><td>1 : N</td><td><span lang="ko">z 점수 군집</span><span lang="en">z-score cluster</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">지갑과 시장은 거래를 거쳐 다대다(N : M)다. 한 지갑이 여러 시장에서 거래하고, 한 시장에 여러 지갑이 있다.</p>
+    <p class="muted" lang="en">Wallets and markets are many-to-many (N : M) through trades. One wallet trades in many markets, and one market has many wallets.</p>
+  </div>
+</section>
+
+<!-- ============ TAB 4: PROGRESS ============ -->
+<section class="tab" id="tab-progress" hidden>
+  <div class="panel">
+    <p lang="ko"><b>결론: MVP1 분석은 끝났다. 남은 일은 논문의 소유자 몫과 정리 작업 6개다.</b> 마감은 2026-11-15다(D-021).</p>
+    <p lang="en"><b>Conclusion: the MVP1 analysis is done. What remains is the owner's part of the paper and 6 cleanup tasks.</b> The deadline is 2026-11-15 (D-021).</p>
+    <p class="muted" lang="ko">왜: 프로젝트가 어떤 순서로 왔고 지금 어디인지 한 장으로 보려고 만들었다. 쓴 데이터: <code>STATUS.md</code> 로그(2026-10-18 ~ 11-02), <code>PLAN.md</code> 임무 블록(mission block)과 작업 행, <code>RQ.md</code>, <code>DECISIONS.md</code> D-id. 마지막 로그 줄은 2026-11-02다.</p>
+    <p class="muted" lang="en">Why: this page shows on one sheet how the project came here and where it stands now. Data used: the <code>STATUS.md</code> log (2026-10-18 to 11-02), the mission block and task rows of <code>PLAN.md</code>, <code>RQ.md</code>, and the D-ids of <code>DECISIONS.md</code>. The last log line is dated 2026-11-02.</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th><span lang="ko">지표</span><span lang="en">Metric</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th><th><span lang="ko">출처</span><span lang="en">Source</span></th></tr></thead>
+      <tbody>
+        <tr><td><span lang="ko">PLAN 작업 행</span><span lang="en">PLAN task rows</span></td><td><b><span lang="ko">18 닫힘 · 6 열림</span><span lang="en">18 closed · 6 open</span></b></td><td><code>PLAN.md</code> <code>[x]</code> / <code>[ ]</code> <span lang="ko">개수</span><span lang="en">count</span></td></tr>
+        <tr><td><span lang="ko">연구 질문(research question, RQ)</span><span lang="en">Research question (RQ)</span></td><td><span lang="ko">6 답함 · 0 열림 (목표는 RQ1–RQ3)</span><span lang="en">6 answered · 0 open (the goal is RQ1–RQ3)</span></td><td><code>RQ.md</code></td></tr>
+        <tr><td><span lang="ko">M1 관문(gate) 리뷰</span><span lang="en">M1 gate review</span></td><td><span lang="ko">세 번째에 PASS · 0 blocker · 0 major · 4 minor</span><span lang="en">PASS on the third try · 0 blocker · 0 major · 4 minor</span></td><td><code>analysis/review_mvp1_rq_r3.md</code></td></tr>
+        <tr><td><span lang="ko">최종 리뷰</span><span lang="en">Final review</span></td><td>PASS · 0 blocker · 0 major · 14 minor</td><td><code>analysis/review_final_2026_11_02.md</code></td></tr>
+      </tbody>
+    </table></div>
+    <div class="funnel">
+      <div class="frow"><span><span lang="ko">작업 진행</span><span lang="en">Task progress</span></span><div><div class="bar keep" style="width:75%"></div></div><span class="n">18 / 24</span></div>
+    </div>
+  </div>
+
+  <div class="panel step">
+    <p class="label">Step 1 of 3</p>
+    <h2 lang="ko">단계별 흐름: 제안서에서 최종 리뷰까지</h2>
+    <h2 lang="en">Flow by phase: from the proposal to the final review</h2>
+    <p class="muted" lang="ko">위에서 아래로 시간 순서다. 상자 안 숫자는 클러스터 run 번호(job ID)다. M1–M4는 마일스톤(milestone: 관문이 있는 단계)이다.</p>
+    <p class="muted" lang="en">Time runs from top to bottom. A number in a box is a cluster run number (job ID). M1–M4 are milestones (a milestone is a phase with a gate).</p>
+    <div class="scroll-x" lang="ko"><pre class="mermaid">
+flowchart TB
+  subgraph P0["0 · 준비 (10-18 ~ 10-19)"]
+    A1["제안서 v3<br/>출처 있는 사실만"]:::done --> A2["클러스터 Cradle<br/>CPU 작업 환경"]:::done --> A3["데이터 내려받기<br/>daily_aligned 1,248 files"]:::done --> A4["코드 v1<br/>Job A, Job B"]:::done
+  end
+  subgraph P1["1 · 파일럿과 사전 등록 (10-19)"]
+    B1["Job A 142041<br/>데이터 검사만"]:::done --> B2["사전 등록 prereg<br/>T = close_at, 10 trades"]:::done --> B3["Job B 142056<br/>첫 end-to-end, 판정 없음"]:::done
+  end
+  subgraph P2["2 · M1: MVP1 전체 실행 (10-19)"]
+    C1["전체 run 142057<br/>688,131 → 47,948"]:::done --> C2["보고서 v1"]:::done --> C3["리뷰 1<br/>0 blocker, 8 major"]:::done --> C4["코드 v3 재실행<br/>142082, 판정 같음"]:::done
+  end
+  subgraph P3["3 · M3, M4: 강건성과 논문 (10-19)"]
+    D1["강건성 142123<br/>R1, R2"]:::done --> D2["논문 초안<br/>관문 PASS"]:::done --> D3["코드 v5, 142140<br/>BH p 저장"]:::done
+  end
+  subgraph P4["4 · 범위 정리와 M1 관문 (11-01)"]
+    E1["D-016 MVP1만 목표<br/>MVP2 → future_work"]:::done --> E2["M1 관문 ISSUE<br/>G1 등 수정"]:::done --> E3["세 번째 관문 PASS"]:::done --> E4["강의 방법 감사<br/>D-024 ~ D-028"]:::done
+  end
+  subgraph P5["5 · 마무리 (11-02)"]
+    F1["그림 run<br/>145892, 145893, 145897"]:::done --> F2["최종 리뷰 PASS<br/>14 minor"]:::done --> F3["논문 D-034<br/>17쪽 빌드"]:::done
+  end
+  subgraph P6["6 · 남은 일 (마감 11-15)"]
+    G1["논문 todo 4개<br/>소유자 글"]:::open --> G2["F5 문장 길이<br/>소유자 글 뒤"]:::open
+    G3["보고서 v1<br/>소유자 검토"]:::open
+    G4["3인 분담 선택<br/>A, B, C"]:::open
+    G5["markets 해시 비교<br/>클러스터"]:::open
+    G6["make_report.py 분할"]:::open
+  end
+  A4 --> B1
+  B3 --> C1
+  C4 --> D1
+  D3 --> E1
+  E4 --> F1
+  F3 --> G1
+  F3 --> G3
+  F3 --> G4
+  F3 --> G5
+  F3 --> G6
+  C1 -.-> X1["MVP2 run<br/>142077, 142078, 142083"]:::dead
+  X1 -.-> X2["보고서 v2<br/>목표 밖 D-016"]:::dead
+  classDef done fill:#dbe4ff,stroke:#0432ff,color:#111
+  classDef open fill:#fff3a0,stroke:#d40000,stroke-width:2px,color:#111
+  classDef dead fill:#e4e4e2,stroke:#999,color:#666
+</pre></div>
+<div class="scroll-x" lang="en"><pre class="mermaid">
+flowchart TB
+  subgraph P0["0 · Preparation (10-18 to 10-19)"]
+    A1["Proposal v3<br/>sourced facts only"]:::done --> A2["Cradle cluster<br/>CPU work environment"]:::done --> A3["Data download<br/>daily_aligned 1,248 files"]:::done --> A4["Code v1<br/>Job A, Job B"]:::done
+  end
+  subgraph P1["1 · Pilot and pre-registration (10-19)"]
+    B1["Job A 142041<br/>data check only"]:::done --> B2["Pre-registration prereg<br/>T = close_at, 10 trades"]:::done --> B3["Job B 142056<br/>first end-to-end, no verdict"]:::done
+  end
+  subgraph P2["2 · M1: full MVP1 run (10-19)"]
+    C1["Full run 142057<br/>688,131 → 47,948"]:::done --> C2["Report v1"]:::done --> C3["Review 1<br/>0 blocker, 8 major"]:::done --> C4["Code v3 rerun<br/>142082, same verdicts"]:::done
+  end
+  subgraph P3["3 · M3, M4: robustness and paper (10-19)"]
+    D1["Robustness 142123<br/>R1, R2"]:::done --> D2["Paper draft<br/>gate PASS"]:::done --> D3["Code v5, 142140<br/>BH p saved"]:::done
+  end
+  subgraph P4["4 · Scope cleanup and M1 gate (11-01)"]
+    E1["D-016 MVP1 only goal<br/>MVP2 → future_work"]:::done --> E2["M1 gate ISSUE<br/>G1 and others fixed"]:::done --> E3["Third gate PASS"]:::done --> E4["Lecture method audit<br/>D-024 to D-028"]:::done
+  end
+  subgraph P5["5 · Wrap-up (11-02)"]
+    F1["Figure runs<br/>145892, 145893, 145897"]:::done --> F2["Final review PASS<br/>14 minor"]:::done --> F3["Paper D-034<br/>17 pages built"]:::done
+  end
+  subgraph P6["6 · Open work (deadline 11-15)"]
+    G1["Paper todo x 4<br/>owner text"]:::open --> G2["F5 sentence length<br/>after owner text"]:::open
+    G3["Report v1<br/>owner review"]:::open
+    G4["Choose 3-person split<br/>A, B, C"]:::open
+    G5["markets hash compare<br/>cluster"]:::open
+    G6["Split make_report.py"]:::open
+  end
+  A4 --> B1
+  B3 --> C1
+  C4 --> D1
+  D3 --> E1
+  E4 --> F1
+  F3 --> G1
+  F3 --> G3
+  F3 --> G4
+  F3 --> G5
+  F3 --> G6
+  C1 -.-> X1["MVP2 run<br/>142077, 142078, 142083"]:::dead
+  X1 -.-> X2["Report v2<br/>outside goal D-016"]:::dead
+  classDef done fill:#dbe4ff,stroke:#0432ff,color:#111
+  classDef open fill:#fff3a0,stroke:#d40000,stroke-width:2px,color:#111
+  classDef dead fill:#e4e4e2,stroke:#999,color:#666
+</pre></div>
+    <div class="legend muted">
+      <span style="color:#0432ff"><span lang="ko">■ 파랑</span><span lang="en">■ Blue</span></span><span lang="ko">끝남</span><span lang="en">Done</span>
+      <span style="color:#d40000"><span lang="ko">■ 노랑, 빨간 테두리</span><span lang="en">■ Yellow, red border</span></span><span lang="ko">열림: 아직 할 일</span><span lang="en">Open: work still to do</span>
+      <span><span lang="ko">■ 회색, 점선</span><span lang="en">■ Gray, dotted</span></span><span lang="ko">목표 밖: MVP2, <code>future_work/</code>에 보관</span><span lang="en">Outside the goal: MVP2, kept in <code>future_work/</code></span>
+    </div>
+  </div>
+
+  <div class="panel step">
+    <p class="label">Step 2 of 3</p>
+    <h2 lang="ko">마일스톤 상태</h2>
+    <h2 lang="en">Milestone status</h2>
+    <div class="scroll-x"><table>
+      <thead><tr><th><span lang="ko">마일스톤</span><span lang="en">Milestone</span></th><th><span lang="ko">무엇</span><span lang="en">What</span></th><th><span lang="ko">상태</span><span lang="en">Status</span></th><th><span lang="ko">근거</span><span lang="en">Evidence</span></th></tr></thead>
+      <tbody>
+        <tr><td>M1</td><td>MVP1: Q1, Q2, Q3</td><td><span lang="ko">끝남 · 관문 PASS (세 번째)</span><span lang="en">Done · gate PASS (third try)</span></td><td><code>runs/142082_mvp1_full_v1r3</code>, <code>reports/report_v1.html</code></td></tr>
+        <tr class="dead"><td>M2</td><td>MVP2: Q1a, Q1b, Q1c</td><td><span lang="ko">실행은 끝남 · 목표 밖 (D-016)</span><span lang="en">Run done · outside the goal (D-016)</span></td><td><code>future_work/runs/142083_mvp2_full_v2r3</code></td></tr>
+        <tr><td>M3</td><td><span lang="ko">강건성(robustness): R1, R2</span><span lang="en">Robustness: R1, R2</span></td><td><span lang="ko">끝남</span><span lang="en">Done</span></td><td><code>runs/142123_robust_full_v4</code></td></tr>
+        <tr class="flag"><td>M4</td><td><span lang="ko">논문 v1</span><span lang="en">Paper v1</span></td><td><span lang="ko">관문 PASS · 열린 행 3개</span><span lang="en">Gate PASS · 3 open rows</span></td><td><code>papers/paper_mvp1</code>, <code>analysis/review_papers.md</code></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel step">
+    <p class="label">Step 3 of 3</p>
+    <h2 lang="ko">열린 작업 6개: 누가, 무엇을 기다리나</h2>
+    <h2 lang="en">6 open tasks: who waits for what</h2>
+    <div class="scroll-x"><table>
+      <thead><tr><th>#</th><th><span lang="ko">작업</span><span lang="en">Task</span></th><th><span lang="ko">마일스톤</span><span lang="en">Milestone</span></th><th><span lang="ko">누가</span><span lang="en">Who</span></th><th><span lang="ko">닫히는 조건(acceptance criteria, AC)</span><span lang="en">Closing condition (acceptance criteria, AC)</span></th></tr></thead>
+      <tbody>
+        <tr class="flag"><td>1</td><td><span lang="ko">논문 <code>\todo{owner}</code> 4개: 관련 연구, 해석, 넓은 의미, 맺음</span><span lang="en">4 paper <code>\todo{owner}</code> items: related work, interpretation, wider meaning, closing</span></td><td>M4</td><td><span lang="ko">소유자</span><span lang="en">Owner</span></td><td><span lang="ko"><code>todo{owner</code> 0개</span><span lang="en">0 <code>todo{owner</code> left</span></td></tr>
+        <tr><td>2</td><td><span lang="ko">F5: 15단어 넘는 문장 정리 (1번 뒤)</span><span lang="en">F5: fix sentences longer than 15 words (after task 1)</span></td><td>M4</td><td>writer</td><td><span lang="ko">15단어 초과 0개, 빌드 오류 0</span><span lang="en">0 sentences over 15 words, 0 build errors</span></td></tr>
+        <tr class="flag"><td>3</td><td><span lang="ko">3인 분담 선택: A 안정, B 확장, C 최신</span><span lang="en">Pick the 3-person split: A stable, B extended, C latest</span></td><td>M4</td><td><span lang="ko">소유자</span><span lang="en">Owner</span></td><td><span lang="ko"><code>DECISIONS.md</code> 행</span><span lang="en">A row in <code>DECISIONS.md</code></span></td></tr>
+        <tr class="flag"><td>4</td><td><span lang="ko">보고서 v1 검토</span><span lang="en">Review report v1</span></td><td>M1</td><td><span lang="ko">소유자</span><span lang="en">Owner</span></td><td><span lang="ko">소유자 메모가 <code>STATUS.md</code>에</span><span lang="en">Owner note is in <code>STATUS.md</code></span></td></tr>
+        <tr><td>5</td><td><span lang="ko">142082와 142140의 <code>markets.parquet</code> 해시 비교</span><span lang="en">Compare the hash of <code>markets.parquet</code> from 142082 and 142140</span></td><td>M1</td><td><span lang="ko">메인 세션, 클러스터</span><span lang="en">Main session, cluster</span></td><td><span lang="ko"><code>00.runs.md</code>에 같음/다름</span><span lang="en">Same or different, in <code>00.runs.md</code></span></td></tr>
+        <tr><td>6</td><td><span lang="ko"><code>code/make_report.py</code>(약 800줄) 분할</span><span lang="en">Split <code>code/make_report.py</code> (about 800 lines)</span></td><td>M1</td><td>developer</td><td><span lang="ko">같은 HTML, 바이트 단위</span><span lang="en">Same HTML, byte for byte</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" lang="ko">노란 행은 소유자가 정하거나 써야 하는 일이다. 1번이 끝나야 2번을 할 수 있다. 출처: <code>PLAN.md</code> "Open tasks".</p>
+    <p class="muted" lang="en">A yellow row is work the owner must decide or write. Task 2 can start only after task 1. Source: "Open tasks" in <code>PLAN.md</code>.</p>
+  </div>
+</section>
+
+</div>
+
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+
+// Funnel rows: counts copied from tables_summary.json drop_reasons (run 142082).
+const total = 688131;
+const steps = [
+  [["시작: 범위 안 시장", "Start: markets in scope"], total, "all"],
+  [["1 Up/Down", "1 Up/Down"], 255420, "drop"],
+  [["2 이진 아님", "2 Not binary"], 0, "drop"],
+  [["3 결과 없음", "3 No result"], 62718, "drop"],
+  [["4 T−1일 가격 없음", "4 No price at T−1 day"], 215289, "drop"],
+  [["5 가격 24시간 넘음", "5 Price older than 24 hours"], 80230, "drop"],
+  [["6 거래 10 미만", "6 Fewer than 10 trades"], 26526, "drop"],
+  [["남은 시장 (kept)", "Kept markets (kept)"], 47948, "keep"],
+];
+const f = document.getElementById("funnel");
+for (const [label, n, kind] of steps) {
+  const row = document.createElement("div");
+  row.className = "frow";
+  const pct = Math.max(n / total * 100, n ? 0.4 : 0);
+  row.innerHTML = `<span><span lang="ko">${label[0]}</span><span lang="en">${label[1]}</span></span><div><div class="bar ${kind}" style="width:${pct}%"></div></div><span class="n">${n.toLocaleString("en-US")}</span>`;
+  f.appendChild(row);
+}
+
+// Per-table mini diagrams (tab 2): ERD = neighbours by key, flow = where the table comes from and goes to.
+const ER = s => "erDiagram\n" + s;
+const FL = s => "flowchart LR\n" + s + "\n  classDef me fill:#fff3a0,stroke:#e6d24a\n  classDef raw fill:#e4e4e2,stroke:#555\n  class ME me";
+const MINI = {
+  t1: [ER(`  DAILY_ALIGNED_TRADE }o--|| MARKETS : "condition_id"
+  WALLETS ||..|{ DAILY_ALIGNED_TRADE : "maker or taker"
+  DAILY_ALIGNED_TRADE {
+    string condition_id FK
+    bigint block_timestamp
+    double p_event
+    double usdc_amount
+    string maker
+    string taker
+  }`),
+    FL(`  HF["Hugging Face"]:::raw --> ME["daily_aligned<br/>1,248 files"]
+  ME --> B(["build_tables.py"])
+  B --> M["markets"]
+  B --> W["wallets"]
+  B --> S["trade_sizes_sample"]
+  ME --> R2(["r2_price_path.py"])`)],
+  t2: [ER(`  CTF_RESOLUTIONS |o..|| MARKETS : "condition_id"
+  CTF_RESOLUTIONS ||..o| R1_MARKETS : "condition_id"
+  CTF_RESOLUTIONS {
+    string condition_id PK
+    list payout_numerators
+  }`),
+    FL(`  HF["Hugging Face"]:::raw --> ME["resolutions<br/>1,313,030"]
+  ME --> R1(["r1_split_payout.py"])
+  K["markets (kept)"] --> R1
+  R1 --> O["r1_markets"]`)],
+  t3: [ER(`  DAILY_ALIGNED_TRADE }o--|| MARKETS : "condition_id"
+  MARKETS ||--o| Q1_MARKETS : "kept_no_min"
+  MARKETS ||--o| R1_MARKETS : "kept"
+  MARKETS ||--o| R2_MARKETS : "kept"
+  MARKETS {
+    string market_id PK
+    double p_1d
+    int y
+    string drop_reason
+    bool kept
+  }`),
+    FL(`  D["daily_aligned"]:::raw --> A(["build_market_set"])
+  A --> F(["filters 1-6"])
+  F --> ME["markets<br/>688,131 / 47,948 kept"]
+  ME --> Q1(["q1_calibration"])
+  ME --> Q3(["q3_describe"])
+  ME --> R(["r1, r2"])
+  ME --> W(["wallets build"])`)],
+  t4: [ER(`  WALLETS ||..|{ DAILY_ALIGNED_TRADE : "maker or taker"
+  WALLETS ||--o| Q2_KMEANS_SAMPLE : "wallet, role"
+  Q2_CONCENTRATION ||..|{ WALLETS : "role"
+  WALLETS {
+    string wallet PK
+    string role PK
+    double volume_usdc
+    bigint n_trades
+    bigint n_markets
+  }`),
+    FL(`  D["daily_aligned"]:::raw --> G(["group by<br/>wallet, role"])
+  K["markets (kept)"] --> G
+  G --> ME["wallets<br/>2,117,412"]
+  ME --> Q2(["q2_concentration"])
+  ME --> Q3(["q3_describe"])`)],
+  t5: [ER(`  TRADE_SIZES_SAMPLE }o--|| MARKETS : "condition_id"
+  TRADE_SIZES_SAMPLE {
+    string condition_id FK
+    double usdc_amount
+    double p_event
+  }`),
+    FL(`  D["daily_aligned"]:::raw --> H(["hash order<br/>first 1,000,000"])
+  K["markets (kept)"] --> H
+  H --> ME["trade_sizes_sample"]
+  ME --> Q3(["q3_describe"])
+  Q3 --> O["q3_summary"]`)],
+  t6: [ER(`  MARKETS ||--o| Q1_MARKETS : "market_id"
+  Q1_BINS ||--|{ Q1_MARKETS : "bin"
+  Q1_MARKETS {
+    string market_id FK
+    double p_1d
+    double y
+    int bin FK
+  }`),
+    FL(`  K["markets<br/>kept_no_min"] --> Q(["q1_calibration<br/>bin = floor(p_1d x 10)"])
+  Q --> ME["q1_markets<br/>74,474"]`)],
+  t7: [ER(`  Q1_BINS ||--|{ Q1_MARKETS : "bin"
+  Q1_BINS {
+    int bin PK
+    bigint n
+    double mean_price
+    double observed_rate
+    double binom_p
+  }`),
+    FL(`  K["markets (kept)"] --> Q(["q1_calibration<br/>10 bins, binomial test"])
+  Q --> ME["q1_bins<br/>10"]
+  ME --> V(["verdicts.py"])
+  V --> J["verdicts.json"]`)],
+  t8: [ER(`  Q2_CONCENTRATION ||..|{ WALLETS : "role"
+  Q2_CONCENTRATION {
+    string role PK
+    bigint n_wallets
+    double top1_share
+    double gini
+  }`),
+    FL(`  W["wallets"] --> Q(["q2_concentration<br/>sort by volume"])
+  Q --> ME["q2_concentration<br/>2"]`)],
+  t9: [ER(`  Q2_CLUSTERS ||--|{ Q2_KMEANS_SAMPLE : "cluster = cluster_z"
+  Q2_CLUSTERS {
+    int cluster PK
+    bigint n
+    double median_volume
+  }`),
+    FL(`  W["wallets"] --> S(["sample<br/>200,000"])
+  S --> Z(["log1p + z-score"])
+  Z --> K(["k-means, k = 4"])
+  K --> ME["q2_clusters<br/>4"]`)],
+  t10: [ER(`  WALLETS ||--o| Q2_KMEANS_SAMPLE : "wallet, role"
+  Q2_CLUSTERS ||--|{ Q2_KMEANS_SAMPLE : "cluster_z"
+  Q2_KMEANS_SAMPLE {
+    string wallet FK
+    string role FK
+    int cluster_z FK
+    int cluster_robust
+  }`),
+    FL(`  W["wallets"] --> S(["sample<br/>200,000"])
+  S --> Z(["z-score k-means"])
+  S --> R(["robust k-means"])
+  Z --> ME["q2_kmeans_sample"]
+  R --> ME`)],
+  t11: [ER(`  Q3_SUMMARY ||..|| MARKETS : "p_1d"
+  Q3_SUMMARY ||..|| TRADE_SIZES_SAMPLE : "usdc_amount"
+  Q3_SUMMARY ||..|| WALLETS : "volume_usdc"
+  Q3_SUMMARY {
+    string variable PK
+    double mean
+    double median
+  }`),
+    FL(`  M["markets (kept)"] --> Q(["q3_describe"])
+  T["trade_sizes_sample"] --> Q
+  W["wallets"] --> Q
+  Q --> ME["q3_summary<br/>3"]`)],
+  t12: [ER(`  MARKETS ||--o| R1_MARKETS : "market_id"
+  CTF_RESOLUTIONS ||..o| R1_MARKETS : "condition_id"
+  R1_MARKETS {
+    string market_id FK
+    int y
+    string res_class
+    int y_resolutions
+    bool mismatch
+  }`),
+    FL(`  M["markets (kept)"] --> R(["r1_split_payout"])
+  C["resolutions"]:::raw --> R
+  R --> ME["r1_markets<br/>47,948"]`)],
+  t13: [ER(`  MARKETS ||--o| R2_MARKETS : "market_id"
+  DAILY_ALIGNED_TRADE }o..|| R2_MARKETS : "last-day trades"
+  R2_MARKETS {
+    string market_id FK
+    double p_1d
+    double p_T
+    double delta
+  }`),
+    FL(`  M["markets (kept)"] --> R(["r2_price_path<br/>T-1d < ts < T"])
+  D["daily_aligned"]:::raw --> R
+  R --> ME["r2_markets<br/>47,948"]`)],
+};
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+for (const [id, [erd, flow]] of Object.entries(MINI)) {
+  const panel = document.getElementById(id);
+  const box = document.createElement("div");
+  box.className = "mini";
+  box.innerHTML = `<div><p class="label"><span lang="ko">ERD · 이어진 표</span><span lang="en">ERD · linked tables</span></p><pre class="mermaid">${esc(erd)}</pre></div>`
+    + `<div><p class="label"><span lang="ko">흐름(flow) · 어디서 와서 어디로</span><span lang="en">Flow · where it comes from and goes to</span></p><pre class="mermaid">${esc(flow)}</pre></div>`;
+  panel.querySelector("h3").after(box);
+}
+
+// Render every diagram while all tabs are visible: mermaid mis-sizes diagrams inside hidden elements.
+document.querySelectorAll(".tab").forEach(t => t.hidden = false);
+// Show both languages while mermaid measures, so no diagram is sized inside a hidden element.
+const rootEl = document.documentElement;
+const curLang = rootEl.getAttribute("data-lang");
+rootEl.setAttribute("data-lang", "both");
+mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict",
+  fontFamily: '"IBM Plex Mono","IBM Plex Sans KR",monospace', er: { useMaxWidth: true }, flowchart: { useMaxWidth: true } });
+await mermaid.run({ querySelector: ".mermaid" });
+rootEl.setAttribute("data-lang", rootEl.lang === "en" ? "en" : "ko");
+
+// Click an ERD box or row -> jump to that table's panel (tab 2) and its column row.
+const ENTITY_PANEL = {
+  DAILY_ALIGNED_TRADE: "t1", CTF_RESOLUTIONS: "t2", MARKETS: "t3", WALLETS: "t4",
+  TRADE_SIZES_SAMPLE: "t5", Q1_MARKETS: "t6", Q1_BINS: "t7", Q2_CONCENTRATION: "t8",
+  Q2_CLUSTERS: "t9", Q2_KMEANS_SAMPLE: "t10", Q3_SUMMARY: "t11", R1_MARKETS: "t12", R2_MARKETS: "t13",
+};
+// Mermaid drops "_" from entity names in its element ids (DAILY_ALIGNED_TRADE -> DAILYALIGNEDTRADE).
+const PANEL_BY_ID_NAME = Object.fromEntries(Object.entries(ENTITY_PANEL).map(([k, v]) => [k.replace(/_/g, ""), v]));
+const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+const ID_RE = new RegExp(`^text-entity-(.+?)-${UUID}(?:-attr-(\\d+)-\\w+)?$`);
+const tokens = s => s.split(/[\s,\/=()]+/).filter(Boolean);
+
+function findTarget(panel, col) {
+  if (!col) return null;
+  // Transposed tables: the column name sits in the first cell of a body row.
+  for (const tr of panel.querySelectorAll("tbody tr")) {
+    if (tokens(tr.cells[0].textContent).includes(col)) return tr;
+  }
+  // Row tables: the column name is a header cell.
+  for (const th of panel.querySelectorAll("thead th")) {
+    if (tokens(th.textContent).includes(col)) return th;
+  }
+  return null;
+}
+
+function jump(panelId, col) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  const from = document.querySelector(".tab:not([hidden])").id.replace("tab-", "");
+  show("tables");
+  const target = findTarget(panel, col) || panel;
+  target.scrollIntoView({ behavior: "smooth", block: "center" });
+  target.classList.remove("hit");
+  void target.offsetWidth;  // restart the flash animation on repeat clicks
+  target.classList.add("hit");
+  if (from !== "tables") {
+    back.dataset.tab = from;
+    const nm = from === "erd" ? "ERD" : from;
+    back.innerHTML = `<span lang="ko">← ${nm}로 돌아가기</span><span lang="en">← Back to ${nm}</span>`;
+    back.hidden = false;
+  }
+}
+
+function textIdOf(el) {
+  // A row rect is followed by its text; the entity box is followed by the title text.
+  if (el.tagName === "text") return el.id;
+  const next = el.nextElementSibling;
+  return next && next.tagName === "text" ? next.id : "";
+}
+
+document.querySelectorAll(".mermaid svg").forEach(svg => {
+  if (!svg.querySelector('[id^="text-entity-"]')) return;  // ER diagrams only
+  svg.classList.add("erd-click");
+  svg.addEventListener("click", ev => {
+    const el = ev.target.closest("rect, text");
+    if (!el) return;
+    const id = textIdOf(el);
+    const m = ID_RE.exec(id);
+    const panelId = m && PANEL_BY_ID_NAME[m[1]];
+    if (!panelId) return;
+    let col = null;
+    if (m[2]) {
+      // Mermaid ids are name-based, so the same entity repeats across diagrams: search this svg only.
+      const nameId = `${id.split("-attr-")[0]}-attr-${m[2]}-name`;
+      const nameEl = svg.querySelector(`[id="${nameId}"]`);
+      col = nameEl ? nameEl.textContent.trim() : null;
+    }
+    jump(panelId, col);
+  });
+});
+
+const back = document.createElement("button");
+back.className = "back";
+back.hidden = true;
+back.addEventListener("click", () => { show(back.dataset.tab); back.hidden = true; window.scrollTo({ top: 0 }); });
+document.body.appendChild(back);
+
+const buttons = document.querySelectorAll("[data-tab]");
+function show(name) {
+  buttons.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tab === name)));
+  document.querySelectorAll(".tab").forEach(t => t.hidden = t.id !== "tab-" + name);
+  try { localStorage.setItem("erd-tab", name); } catch (e) {}
+}
+buttons.forEach(b => b.addEventListener("click", () => show(b.dataset.tab)));
+let start = "erd";
+try { start = localStorage.getItem("erd-tab") || "erd"; } catch (e) {}
+if (["#erd", "#tables", "#flow", "#progress"].includes(location.hash)) start = location.hash.slice(1);
+else if (location.hash.startsWith("#t")) start = "tables";
+show(start);
+</script>
+<script>
+/* Language toggle. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){
+  var d=document.documentElement;
+  var TITLE={ko:"6344 Polymarket 데이터 ERD",en:"6344 Polymarket Data ERD"};
+  var KEY="erdtips-lang";
+  function setLang(l,save){
+    d.setAttribute("data-lang",l);
+    d.lang=l;
+    document.title=TITLE[l];
+    var b=document.querySelectorAll(".langbar button");
+    for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",b[i].getAttribute("data-set")===l?"true":"false");}
+    if(save){try{localStorage.setItem(KEY,l);}catch(e){}}
+  }
+  setLang(d.getAttribute("data-lang")==="en"?"en":"ko",false);
+  var btn=document.querySelectorAll(".langbar button");
+  for(var i=0;i<btn.length;i++){
+    btn[i].addEventListener("click",function(){setLang(this.getAttribute("data-set"),true);});
+  }
+})();
+</script>
+</body>
+</html>
