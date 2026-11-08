@@ -119,7 +119,10 @@ LN_PATH = Path(__file__).resolve().parent.parent / "reports" / "lecture_numbers.
 WALLET_DIST_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "wallet_dist_panels.png"   # v1 only: code/wallet_dist_figs.py, copied from its run
 CCDF_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "fig6_ccdf_top_sampled.png"   # v1 only: code/ccdf_redraw.py, copied from its run
 LABEL1_PATH = Path(__file__).resolve().parent.parent / "runs" / "150296_v1label" / "label1_counts.json"   # v1 only: share of kept markets whose outcome-1 label is Yes (D-036, rule B)
-Z_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "fig4_calibration_z.png"
+ROOT = Path(__file__).resolve().parent.parent
+GAP_PNG = ROOT / "runs" / "local_fig4gap_v9" / "fig4_calibration_gap.png"   # v1 only: two-panel calibration figure, code/fig_calibration_gap.py
+R3_RUN = ROOT / "runs" / "150310_r3_review_fixes_v6"   # v1 only: robustness v3, code v6, analysis/prereg_review_fixes.md (commit aef0808)
+R3_FIGS = ROOT / "runs" / "local_r3figs_v10"   # v1 only: plain redraws of the r3 figures, code/fig_r3_paper.py
 # Dataset paper (main.tex line 66): share of maker volume held by the top 1% of makers. Quoted, not computed here.
 PAPER_TOP1_MAKER = 0.841
 BRIER_NAME = "mean squared residual of the price"
@@ -573,9 +576,10 @@ def sec_q1(P: Page, D: dict, v2: bool) -> str:
         model = ("<p><b>Model:</b> each market's outcome is Bernoulli(p), where p is its price. If prices are calibrated, "
                  "the outcome-1 count in a bin is binomial(n, mean p). The chi-square test used here is the goodness-of-fit form of the "
                  "chi-square test in Lecture 12: observed against expected counts, expected from the prices.</p>")
-        fig = P.figure("fig4_calibration.png", "Observed rate of outcome 1 against mean price per bin, with 95% z interval.",
-                       "points on the diagonal mean the price matches the outcome rate.", Z_PNG,
-                       f"reports/figures/fig4_calibration_z.png, drawn by code/lecture_numbers.py from q1_bins.csv and "
+        fig = P.figure("fig4_calibration.png", "Top: observed rate of outcome 1 against mean price per bin. Bottom: gap, observed rate minus "
+                       "mean price, in percentage points. Both panels show the main set and the set without the minimum-trade filter, 95% z interval.",
+                       "points on the diagonal and a gap of zero mean the price matches the outcome rate, and the gap panel shows the size of each miss.",
+                       GAP_PNG, f"runs/local_fig4gap_v9/fig4_calibration_gap.png, drawn by code/fig_calibration_gap.py from q1_bins.csv and "
                        f"q1_bins_no_min.csv of {P.run}")
         bin_cap = ("Per bin, main set. BH p is the corrected binomial p. Observed minus price is the effect size. "
                    "The z interval is the observed rate plus or minus 1.96 Bernoulli SD / sqrt(n), ends cut at 0 and 1.")
@@ -937,6 +941,149 @@ def sec_method(P: Page, D: dict, run: Path) -> str:
                       ["Stage", "code_version", "code_sha", "SLURM job id", "Host", "CPUs"], mf))
 
 
+# ---------- robustness v3 (v1 only): every number is read from the saved JSON files of R3_RUN ----------
+def pp(x: float) -> str:
+    return f"{x * 100:+.2f} pp"
+
+
+def pci(lo: float, hi: float) -> str:
+    return f"[{lo * 100:.2f}, {hi * 100:.2f}] pp"
+
+
+def r3_figure(P: Page, png: str, what: str, why: str) -> str:
+    return P.figure(png, what, why, R3_FIGS / png, f"runs/local_r3figs_v10/{png}, drawn by code/fig_r3_paper.py from {R3_RUN.name}")
+
+
+def r3_m1(P: Page, R: dict) -> str:
+    m, rows = R["m1"], R["m1"]["rows"]
+    main, vw, mid, ask, bid = (rows[k] for k in ("p_1d (main)", "p_vwap", "p_mid", "p_ask", "p_bid"))
+    h = m["mean_h"]
+    inside = "inside" if m["side_line"]["gap_within_half_spread"] else "outside"
+    return ("<h3>M1: price definition</h3>"
+            f"<p>The main price is the last trade at or before T - 1 day. Does another price definition change the net gap (outcome minus price)? "
+            f"Main {pp(main['net_gap'])}, volume-weighted average price (VWAP) of the last 24 hours {pp(vw['net_gap'])}, trade-based midpoint "
+            f"{pp(mid['net_gap'])} on the {fmt(mid['n'])} markets with both sides. Buyer-initiated trades give {pp(ask['net_gap'])} "
+            f"and seller-initiated trades give {pp(bid['net_gap'])}. The mean half-spread proxy is {h * 100:.2f} pp, and the main gap lies {inside} it. "
+            f"The side sign check is {html.escape(str(m['sign_gate']))}.</p>"
+            + r3_figure(P, "fig_r3_m1_price_definition.png", "Net gap of the outcome minus the price, for five price definitions, with 95% t intervals.",
+                        "if the gap keeps its sign and size across definitions, the main price choice does not drive it."))
+
+
+def r3_m2(P: Page, R: dict) -> str:
+    m = R["m2"]
+    bias = (" In Yes/No markets Yes is priced above its observed rate. The main result keeps the label outcome 1 (D-040)."
+            if m["yes_bias"] else "")
+    return ("<h3>M2: Yes/No markets</h3>"
+            f"<p>Yes/No markets ({fmt(m['yes_no_n'])}) have net gap {pp(m['yes_no_net_gap'])}, 95% interval "
+            f"{pci(m['yes_no_net_gap_ci_low'], m['yes_no_net_gap_ci_high'])}. Chi-square {fmt(m['yes_no_chi2'])} (df {m['yes_no_df']}), "
+            f"p {fp(m['yes_no_p'])}, {m['yes_no_bins_off_bh']} of 10 bins off by Benjamini-Hochberg (BH). "
+            f"The other {fmt(m['other_n'])} markets have chi-square p {fp(m['other_p'])} and net gap {pp(m['other_net_gap'])}.{bias}</p>"
+            + r3_figure(P, "fig_r3_m2_yes_reliability.png", "Observed Yes rate against mean Yes price per bin in Yes/No markets, with 95% Wilson intervals.",
+                        "points below the diagonal mean Yes happens less often than its price says."))
+
+
+def r3_m3(P: Page, R: dict) -> str:
+    m = R["m3"]
+    keys = [("k0_market", "Each market alone"), ("k1_slug_stem", "Slug stem (3 words)"), ("k2_category_close_hour", "Topic x close hour")]
+    rows = [[lab, fmt(m[f"{k}_n_clusters"]), pp(m[f"{k}_net_gap"]), pci(m[f"{k}_net_gap_ci_low"], m[f"{k}_net_gap_ci_high"]),
+             fmt(m[f"{k}_x2_cl"]), fp(m[f"{k}_p"]), m[f"{k}_bins_off_bh"]] for k, lab in keys]
+    return ("<h3>M3: cluster bootstrap with proxy keys</h3>"
+            "<p>Markets on one event are not independent, and the event key is not in the saved tables. "
+            "Three proxy keys group the markets, and the bootstrap resamples whole groups. "
+            f"The gap interval and the cluster chi-square are {html.escape(m['k1_slug_stem_label'])}. "
+            f"The call is the same for all three keys: {html.escape(m['k1_slug_stem_rule_text'])}</p>"
+            + P.table("Cluster bootstrap by proxy key. The cluster chi-square ignores covariance between bins inside one cluster.",
+                      ["Key", "Clusters", "Net gap", "95% bootstrap interval", "Cluster chi-square", "p", "Bins off (BH)"], rows)
+            + r3_figure(P, "fig_r3_m3_cluster_bootstrap.png", "Net gap with a 95% bootstrap interval for three proxy keys.",
+                        "wider intervals for coarser keys show how much dependence between markets could matter."))
+
+
+def r3_m4(P: Page, R: dict) -> str:
+    m = R["m4"]
+    pct = lambda k: f"{m[k + '_share_of_total'] * 100:.1f}%"
+    cal = m["calibration"]
+    return ("<h3>M4: kept against dropped markets</h3>"
+            f"<p>Kept markets are {fmt(m['kept_n'])} of {fmt(m['n_in_scope'])} in scope ({pct('kept')}). Dropped: Up/Down {pct('updown')}, no price "
+            f"{pct('no_price')}, price too old {pct('stale_price')}, no winner label {pct('no_outcome')}, fewer than 10 trades {pct('below_min_trades')}. "
+            f"Median volume is {fmt(m['kept_volume_usdc_median'])} USDC for kept markets and {fmt(m['eligible_dropped_pooled_volume_usdc_median'])} USDC "
+            f"for the eligible dropped markets. Outcome-1 rate is {m['kept_outcome1_rate'] * 100:.1f}% and {m['eligible_dropped_pooled_outcome1_rate'] * 100:.1f}%. "
+            f"The old-price group has net gap {pp(cal['stale_price']['net_gap'])} and the few-trades group {pp(cal['below_min_trades']['net_gap'])}.</p>"
+            + r3_figure(P, "fig_r3_m4_kept_vs_dropped.png", "Share of the in-scope markets that are kept or dropped by the first failing rule.",
+                        "the kept markets are a small part of the in-scope markets, so the result describes them only."))
+
+
+def r3_m5(P: Page, R: dict) -> str:
+    m, fit = R["m5"], R["m5_fit"]
+    d = {r["price"]: r for r in fit["delta_table"]}
+    n_big = sum(bool(r["practically_sized"]) for r in fit["delta_table"])
+    lab = m["labels"]
+    return ("<h3>M5: practical size</h3>"
+            f"<p>Logistic calibration fit, {html.escape(lab['logistic_calibration'])}: intercept {m['a']:.3f}, slope {m['b']:.3f}. "
+            f"The implied gap is {pp(d[0.25]['delta'])} at price 0.25 and {pp(d[0.5]['delta'])} at price 0.50. "
+            f"The practical line is the mean half-spread {m['practical_line_mean_h'] * 100:.2f} pp, and {n_big} of {len(fit['delta_table'])} grid prices have "
+            f"an interval fully beyond it. Brier skill score, {html.escape(lab['brier_skill_score'])}: {m['brier_skill_score']:.3f} against in-sample climatology. Accuracy at 0.5 is {m['accuracy_at_0.5'] * 100:.1f}% against {m['majority_accuracy'] * 100:.1f}% for the majority.</p>"
+            + r3_figure(P, "fig_r3_m5_implied_gap.png", "Implied gap (fitted probability minus price) across prices, with saved 95% cluster bootstrap intervals at seven prices.",
+                        "the gap is largest in the middle of the price range, and the figure shows how it compares with zero."))
+
+
+def r3_dups(R: dict, P: Page) -> str:
+    m, main = R["minor4"], R["m1"]["rows"]["p_1d (main)"]
+    rows = [["Duplicate rows (all columns)", fmt(m["n_dup_all_columns"]), f"{m['share_dup_all_columns'] * 100:.2f}% of {fmt(m['n_rows'])}"],
+            ["Kept markets, saved to deduplicated", f"{fmt(m['kept_n_in'])} to {fmt(m['kept_n_out'])}", f"{fmt(m['kept_p1d_changed_in_new_kept'])} markets have a changed price"],
+            ["Q1 chi-square, saved to deduplicated", f"{fmt(main['chi2'])} to {fmt(m['q1_chi2'])}", f"df {m['q1_df']}, p {fp(m['q1_p'])}"],
+            ["Q1 net gap, saved to deduplicated", f"{main['net_gap'] * 100:+.3f} pp to {m['q1_net_gap'] * 100:+.3f} pp", f"change {m['q1_delta_net_gap'] * 100:+.3f} pp"],
+            ["Top 1% maker share of volume", f"{m['q2_maker_top1_share_saved'] * 100:.2f}% to {m['q2_maker_top1_share_dedup'] * 100:.2f}%",
+             f"change {m['q2_maker_top1_share_delta_pp']:+.2f} pp"],
+            ["Top 1% taker share of volume", f"{m['q2_taker_top1_share_saved'] * 100:.2f}% to {m['q2_taker_top1_share_dedup'] * 100:.2f}%",
+             f"change {m['q2_taker_top1_share_delta_pp']:+.2f} pp"]]
+    return ("<h3>Duplicate rows</h3>"
+            "<p>The main run keeps duplicate rows. Removing exact duplicate trade rows changes the Q1 and Q2 numbers only a little.</p>"
+            + P.table("Effect of removing duplicate rows. No figure was redrawn for this item.", ["Item", "Value", "Note"], rows))
+
+
+def r3_peer(P: Page, R: dict) -> str:
+    a, b, pa = R["peer_a"], R["peer_b"], R["prereg"]
+    alpha = pa["alpha"]
+    rows = []
+    for key, lab, res in [(f"tercile_{t}", f"Volume tercile {t}", a) for t in ("low", "mid", "high")] + \
+                          [(f"period_{y}", f"Close period {y}", b) for y in ("2022-2024", "2025", "2026")]:
+        rows.append([lab, fmt(res[f"{key}_n"]), fmt(res[f"{key}_chi2"]), fp(res[f"{key}_p"]), res[f"{key}_bins_off_bh"],
+                     pp(res[f"{key}_net_gap"]), pci(res[f"{key}_net_gap_ci_low"], res[f"{key}_net_gap_ci_high"])])
+    hl = a["high_vs_low"]
+    p26, lo26, hi26 = b["period_2026_p"], b["period_2026_net_gap_ci_low"], b["period_2026_net_gap_ci_high"]
+    chi_call = "does not reject" if p26 >= alpha else "rejects"
+    ci_call = "excludes 0" if (hi26 < 0 or lo26 > 0) else "includes 0"
+    return ("<h3>Peer asks: volume terciles and close periods</h3>"
+            f"<p>Volume terciles split at {fmt(a['cut_low_mid'])} and {fmt(a['cut_mid_high'])} USDC traded until T - 1 day. "
+            f"The high tercile minus the low tercile is {pp(hl['diff'])} in net gap, 95% interval {pci(hl['ci_low'], hl['ci_high'])}, "
+            f"p {fp(hl['p'])}. The high tercile chi-square p is {fp(a['tercile_high_p'])}.</p>"
+            f"<p>In the 2026 period the chi-square {chi_call} (chi-square {fmt(b['period_2026_chi2'])}, df {b['period_2026_df']}, p {fp(p26)}, alpha {alpha}), "
+            f"but the 95% interval of the net gap {pci(lo26, hi26)} {ci_call}.</p>"
+            + P.table("Calibration by volume tercile and by close period. The interval is a 95% t interval of the net gap.",
+                      ["Group", "Markets", "Chi-square (df 10)", "p", "Bins off (BH)", "Net gap", "95% interval"], rows)
+            + r3_figure(P, "fig_r3_peer_a_volume.png", "Net gap with a 95% t interval by volume tercile.",
+                        "the net gap is smaller in the most traded markets.")
+            + r3_figure(P, "fig_r3_peer_b_period.png", "Net gap with a 95% t interval by close period.",
+                        "the net gap shrinks in the newest period."))
+
+
+def sec_r3(P: Page) -> str:
+    names = {"m1": "m1_results.json", "m2": "m2_results.json", "m3": "m3_results.json", "m4": "m4_results.json", "m5": "m5_results.json",
+             "m5_fit": "m5_calibration_fit.json", "minor4": "minor4_results.json", "peer_a": "peer_a_results.json",
+             "peer_b": "peer_b_results.json", "prereg": "prereg.json", "gate": "r3_gate.json", "man": "manifest_r3_m5.json"}
+    R = {k: jload(R3_RUN, f) for k, f in names.items()}
+    miss = [names[k] for k, v in R.items() if v is None]
+    if miss:
+        return skipped(", ".join(miss) + f" in {R3_RUN}")
+    return (f'<div class="callout"><p>Descriptive only, with no verdict. The Q1 verdict in this report is unchanged. '
+            f"Run <code>{R3_RUN.name}</code>, code {html.escape(str(R['man']['code_version']))}, pre-registration "
+            "<code>analysis/prereg_review_fixes.md</code> (commit aef0808). "
+            f"Gate: the kept set was rebuilt ({fmt(R['gate']['n_kept_rebuilt'])} markets) and the main chi-square matched "
+            f"({fmt(R['gate']['chi2_rebuilt'])}): {'passed' if R['gate']['passed'] else 'failed'}. "
+            "Logistic calibration, Brier skill score and the cluster bootstrap chi-square are outside the lectures (D-039).</p></div>"
+            + r3_m1(P, R) + r3_m2(P, R) + r3_m3(P, R) + r3_m4(P, R) + r3_m5(P, R) + r3_dups(R, P) + r3_peer(P, R))
+
+
 # ---------- main ----------
 def load_run(run: Path) -> dict:
     return {"prereg": jload(run, "prereg.json") or {}, "tables": jload(run, "tables_summary.json"),
@@ -982,6 +1129,8 @@ def main() -> None:
     steps = [("summary", "Summary", sec_summary(P, D, full, v2)), ("data", "Data and filters", sec_data(P, D, v2)),
              ("q3", "Q3: distributions", sec_q3(P, D, v2)), ("q1", "Q1: calibration", sec_q1(P, D, v2)),
              ("q2", "Q2: wallet concentration", sec_q2(P, D, v2))]
+    if not v2:
+        steps.append(("r3", "Robustness v3", sec_r3(P)))
     if v2:
         steps += [("q1a", "Q1a: topic", sec_q1a(P, D)), ("q1b", "Q1b: deadline", sec_q1b(P, D)),
                   ("q1c", "Q1c: volume", sec_q1c(P, D))]

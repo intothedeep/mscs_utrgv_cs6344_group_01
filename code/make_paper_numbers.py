@@ -644,6 +644,123 @@ def add_robust(m: Macros, robust: Path) -> None:
         add_robust_r2(m, r2)
 
 
+# Robustness v3 (--r3): prefix RThree. Net gaps and gap CIs use pct2 (gaps in points); the
+# minor-4 shift in points is already in points, so it uses 2 decimals without a percent sign.
+R3_FIELDS = {
+    "n": ("N", count, "n"), "chi": ("ChiSq", stat, "chi2"), "p": ("P", pval, "p"),
+    "pbh": ("BhP", pval, "p_bh"), "bins": ("BinsBh", count, "bins_off_bh"),
+    "gap": ("NetGap", pct2, "net_gap"), "cilow": ("NetGapCiLow", pct2, "net_gap_ci_low"),
+    "cihigh": ("NetGapCiHigh", pct2, "net_gap_ci_high"),
+}
+R3_GAP_CI = ("gap", "cilow", "cihigh")
+
+
+def _r3_row(m: Macros, name: str, row: dict[str, Any], src: str, path: str, key_prefix: str,
+            fields: tuple[str, ...]) -> None:
+    """Macros RThree<name><Field> from row[key_prefix + key]; comment names file and key path."""
+    for f in fields:
+        suffix, fmt, key = R3_FIELDS[f]
+        m.add(f"RThree{name}{suffix}", fmt(row[key_prefix + key]), f"{src}: {path}{key_prefix}{key}")
+
+
+def add_r3_m1(m: Macros, run: Path) -> None:
+    src, r = "m1_results.json", load(run, "m1_results.json")
+    for key, name in (("p_vwap", "MOneVwap"), ("p_mid", "MOneMid")):
+        _r3_row(m, name, r["rows"][key], src, f"rows.{key}.", "", ("n", "chi", "bins") + R3_GAP_CI)
+    m.add("RThreeMOneMeanHalfSpread", pct2(r["mean_h"]), f"{src}: mean_h")
+    m.add("RThreeMOneShareBoth", pct(r["coverage"]["share_S_both"]), f"{src}: coverage.share_S_both")
+    m.add("RThreeMOneGapWithinHalfSpread", "yes" if r["side_line"]["gap_within_half_spread"] else "no",
+          f"{src}: side_line.gap_within_half_spread")
+
+
+def add_r3_m2(m: Macros, run: Path) -> None:
+    src, r = "m2_results.json", load(run, "m2_results.json")
+    _r3_row(m, "MTwoYesNo", r, src, "", "yes_no_", ("n", "chi", "p", "bins") + R3_GAP_CI)
+    _r3_row(m, "MTwoOther", r, src, "", "other_", ("n", "chi", "p") + R3_GAP_CI)
+
+
+def add_r3_m3(m: Macros, run: Path) -> None:
+    src, r = "m3_bootstrap.json", load(run, "m3_bootstrap.json")
+    for key, name in (("k1_slug_stem", "MThreeKOne"), ("k2_category_close_hour", "MThreeKTwo")):
+        p = r["proxies"][key]
+        s = f"proxies.{key}."
+        m.add(f"RThree{name}NClusters", count(p["n_clusters"]), f"{src}: {s}n_clusters")
+        m.add(f"RThree{name}NetGapCiLow", pct2(p["net_gap_ci_low"]), f"{src}: {s}net_gap_ci_low")
+        m.add(f"RThree{name}NetGapCiHigh", pct2(p["net_gap_ci_high"]), f"{src}: {s}net_gap_ci_high")
+        m.add(f"RThree{name}ChiSq", stat(p["x2_cl"]), f"{src}: {s}x2_cl")
+        m.add(f"RThree{name}P", pval(p["p"]), f"{src}: {s}p")
+    m.add("RThreeMThreeReadProxy", text(r["read_proxy"]), f"{src}: read_proxy")
+
+
+def add_r3_m4(m: Macros, run: Path) -> None:
+    src, r = "m4_results.json", load(run, "m4_results.json")
+    for pre, name in (("kept_", "Kept"), ("eligible_dropped_pooled_", "Dropped")):
+        m.add(f"RThreeMFour{name}MedianVolumeBeforeDay", amount(r[pre + "volume_before_T1d_median"]),
+              f"{src}: {pre}volume_before_T1d_median")
+        m.add(f"RThreeMFour{name}MedianDuration", amount(r[pre + "duration_days_median"]),
+              f"{src}: {pre}duration_days_median")
+        m.add(f"RThreeMFour{name}MedianTrades", count(round(r[pre + "n_trades_median"])),
+              f"{src}: {pre}n_trades_median")
+    _r3_row(m, "MFourStale", r, src, "", "stale_q1_", ("gap", "cilow", "cihigh"))
+
+
+def add_r3_m5(m: Macros, run: Path) -> None:
+    src, r = "m5_calibration_fit.json", load(run, "m5_calibration_fit.json")
+    for key, name in (("a", "A"), ("b", "B")):
+        m.add(f"RThreeMFive{name}", est(r[key]), f"{src}: {key}")
+        m.add(f"RThreeMFive{name}WaldLow", est(r[key + "_wald_ci"][0]), f"{src}: {key}_wald_ci[0]")
+        m.add(f"RThreeMFive{name}WaldHigh", est(r[key + "_wald_ci"][1]), f"{src}: {key}_wald_ci[1]")
+    m.add("RThreeMFiveBrier", est(r["brier"]), f"{src}: brier")
+    m.add("RThreeMFiveClimatologyBrier", est(r["climatology"]), f"{src}: climatology")
+    m.add("RThreeMFiveSkill", est(r["brier_skill_score"]), f"{src}: brier_skill_score")
+    m.add("RThreeMFiveMajorityAccuracy", pct(r["majority_accuracy"]), f"{src}: majority_accuracy")
+    m.add("RThreeMFiveAccuracyHalf", pct(r["accuracy_at_0.5"]), f"{src}: accuracy_at_0.5")
+    grid = r["delta_table"]
+    m.add("RThreeMFiveMaxAbsDelta", pct2(max(abs(g["delta"]) for g in grid)),
+          f"{src}: delta_table[].delta, largest absolute value")
+    m.add("RThreeMFivePracticalPrices", count(sum(g["practically_sized"] for g in grid)),
+          f"{src}: delta_table[].practically_sized, count of True")
+    m.add("RThreeMFiveGridPrices", count(len(grid)), f"{src}: delta_table, length")
+
+
+def add_r3_minor4(m: Macros, run: Path) -> None:
+    src, r = "minor4_dedup.json", load(run, "minor4_dedup.json")
+    m.add("RThreeMinorFourDupShare", pct(r["duplicates"]["share_dup_all_columns"]),
+          f"{src}: duplicates.share_dup_all_columns")
+    m.add("RThreeMinorFourRemoved", count(r["kept_set"]["n_removed"]), f"{src}: kept_set.n_removed")
+    m.add("RThreeMinorFourChiSq", stat(r["q1"]["chi2"]), f"{src}: q1.chi2")
+    m.add("RThreeMinorFourNetGap", pct2(r["q1"]["net_gap"]), f"{src}: q1.net_gap")
+    for role in ("maker", "taker"):
+        for top, tag in (("top1_share", "TopOne"), ("top20_share", "TopTwenty")):
+            m.add(f"RThreeMinorFour{role.capitalize()}{tag}DeltaPp",
+                  "\\ensuremath{" + _grouped(r["q2"][role][top]["delta_pp"], 2) + "}",
+                  f"{src}: q2.{role}.{top}.delta_pp (percentage points)")
+
+
+def add_r3_peer(m: Macros, run: Path) -> None:
+    src, a = "peer_a_results.json", load(run, "peer_a_results.json")
+    m.add("RThreePeerACutLowMid", amount(a["cut_low_mid"]), f"{src}: cut_low_mid")
+    m.add("RThreePeerACutMidHigh", amount(a["cut_mid_high"]), f"{src}: cut_mid_high")
+    for t, name in (("low", "Low"), ("mid", "Mid"), ("high", "High")):
+        _r3_row(m, f"PeerA{name}", a, src, "", f"tercile_{t}_", ("n", "chi", "pbh") + R3_GAP_CI)
+    d = a["high_vs_low"]
+    m.add("RThreePeerADiff", pct2(d["diff"]), f"{src}: high_vs_low.diff")
+    m.add("RThreePeerADiffCiLow", pct2(d["ci_low"]), f"{src}: high_vs_low.ci_low")
+    m.add("RThreePeerADiffCiHigh", pct2(d["ci_high"]), f"{src}: high_vs_low.ci_high")
+    m.add("RThreePeerADiffP", pval(d["p"]), f"{src}: high_vs_low.p")
+    src, b = "peer_b_results.json", load(run, "peer_b_results.json")
+    periods = list(dict.fromkeys(b["year_to_period"].values()))  # file order: early to late
+    for i, label in enumerate(periods, start=1):
+        name = f"PeerBPeriod{word(i)}"
+        m.add(f"RThree{name}Label", text(label), f"{src}: year_to_period values, period {i} in file order")
+        _r3_row(m, name, b, src, "", f"period_{label}_", ("n", "chi", "pbh") + R3_GAP_CI)
+
+
+def add_r3(m: Macros, run: Path) -> None:
+    for fn in (add_r3_m1, add_r3_m2, add_r3_m3, add_r3_m4, add_r3_m5, add_r3_minor4, add_r3_peer):
+        fn(m, run)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--run", required=True, type=Path)
@@ -651,6 +768,7 @@ def main() -> None:
     ap.add_argument("--q1eqfreq", type=Path, help="run dir (code v5) whose q1_bins_eqfreq.csv has p_bh and reject_bh")
     ap.add_argument("--pilot", type=Path, help="pilot run dir with close_time_summary.json")
     ap.add_argument("--robust", type=Path, help="robustness run dir with r1_results.json, r2_results.json")
+    ap.add_argument("--r3", type=Path, help="robustness v3 run dir (m1..m5, minor4, peer_a, peer_b JSON); adds RThree macros")
     ap.add_argument("--lecture", type=Path, default=Path(__file__).resolve().parent.parent / "reports" / "lecture_numbers.json",
                     help="lecture_numbers.json (code/lecture_numbers.py); used only when it is from --run")
     ap.add_argument("--label1", type=Path,
@@ -669,6 +787,8 @@ def main() -> None:
         add_robust(m, a.robust)
         if (a.robust / "markets.csv").exists():  # same build as the main runs, checked by row counts
             add_categories(m, a.run, a.robust / "markets.csv")
+    if a.r3 is not None:
+        add_r3(m, a.r3)
     a.out.parent.mkdir(parents=True, exist_ok=True)
     header = f"% Generated by code/make_paper_numbers.py from {a.run}. Do not edit by hand.\n"
     a.out.write_text(header + "\n".join(m.lines) + "\n")
