@@ -11,6 +11,7 @@
 %   S-PAPER-8 PLAN.md, RQ.md, DECISIONS.md, STATUS.md
 %   S-PAPER-9 analysis/prereg_robustness.md, runs/142123_robust_full_v4 (reports r1, r2) via numbers.tex
 %   S-PAPER-10 reports/lecture_numbers.json, runs/145892_ccdf_v6, runs/145893_walletdist_v7 via numbers.tex; analysis/review_project_end_analyst.md
+%   S-PAPER-11 analysis/related_work_refs.md (R1-R5)
 \documentclass[11pt]{article}
 
 \usepackage[margin=0.9in]{geometry}
@@ -43,7 +44,6 @@
 \newcommand{\NBins}{10}
 \newcommand{\CiLevel}{95\%}
 \newcommand{\DaysShort}{1}
-\newcommand{\DaysLong}{7}
 \newcommand{\MaxStaleHours}{24}
 \newcommand{\TopOneLabel}{1\%}
 \newcommand{\TopFiveLabel}{5\%}
@@ -77,8 +77,7 @@
   & \csname Bin#2Obs\endcsname & [\csname Bin#2ZLow\endcsname, \csname Bin#2ZHigh\endcsname]
   & \csname Bin#2Diff\endcsname & \csname Bin#2BhP\endcsname}
 \title{When Polymarket Says \HookPct, Does It Happen \HookPct{} of the Time?\\[2pt]
-\large Prediction Accuracy, Trading Concentration, and Statistical Distributions in Prediction Markets\\[4pt]
-\normalsize Version 1: MVP1}
+\large Prediction Accuracy, Trading Concentration, and Statistical Distributions in Prediction Markets}
 \author{Group 1 $|$ Team Brier: Taek Lim, Zhugang Liu (Tony), Francisco Cortez\\
 CS 6344 Introduction to Data Science}
 \date{}
@@ -95,15 +94,15 @@ We keep \NMarketsKept{} of \NMarketsInScope{} markets in scope.
 We read each market's price \DaysShort{} day before its scheduled close.
 The pre-registered chi-square test says the prices are not calibrated as a whole
 ($\chi^2=\QOneChiSq$, $p=\QOneP$).
-The effect is small and runs one way.
 The observed rate of outcome 1, the first-listed outcome, lies below the mean price in \GapNegBinsMain{} of \GapBinsTotal{} bins.
 The net gap is \GapNetDiffMain.
 The largest per-bin gap is \LargestGapAbs.
-We set no size line before the results.
 In the kept markets, the top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker USDC volume,
 far above the 80/20 reference of \TopTwentyReference.
 Mean volume is far above median volume.
 Trade sizes are strongly right skewed.
+The Q1 effect is small and runs one way.
+We set no size line before the results.
 We describe Q2 and Q3 without a verdict.
 A payout check leaves the Q1 verdict unchanged.
 \end{abstract}
@@ -118,7 +117,7 @@ The Polymarket-v1 database records every trade on Polymarket's first exchange.
 It holds \PaperTrades{} trades and \PaperMarkets{} markets from \PaperPeriod{} \citep{qin2026polymarketv1}.
 So we can check each price against what happened.
 
-This paper reports the first stage (MVP1) of a staged study.
+This paper reports the first stage of a staged study.
 % src: S-PAPER-8
 It answers three questions.
 The first question is Q1: is the crowd right?
@@ -143,7 +142,7 @@ The text uses the word wallet for an address on the exchange.
 
 \section{Related Work}\label{sec:related}
 % src: S-PAPER-1
-We build on two references.
+We build on two references from our proposal.
 Snowberg and Wolfers study horse racing \citep{snowberg2010favorite}.
 They show that longshots win less often than their odds say.
 We test the same gap on Polymarket.
@@ -159,8 +158,27 @@ We score all resolved Yes/No markets that pass our filters.
 Finally, the paper reports that the top \TopOneLabel{} of maker addresses hold \PaperTopShare{}
 of maker volume \citep[Table~5]{qin2026polymarketv1}.
 We ask whether a few wallets dominate volume in our kept markets.
-% src: S-PAPER-2
-\todo{owner: related work beyond the two references in the proposal, if the course report needs it}
+% src: S-PAPER-11
+Five further references place our tests in context.
+Wolfers and Zitzewitz review prediction markets \citep{wolfers2004prediction}.
+They report that market forecasts are typically fairly accurate and usually beat moderately sophisticated benchmarks.
+We test this accuracy as calibration of Polymarket prices.
+Page and Clemen find that prediction markets are reasonably well calibrated when time to expiration is short \citep{page2013prediction}.
+They find prices significantly biased for events farther in the future, with a favourite/longshot bias.
+Our longshot check looks at the same bias.
+Le uses 353 million trades on 429{,}000 binary contracts from Kalshi and Polymarket \citep{le2026decomposing}.
+The preprint finds that calibration varies by event domain, time to resolution, and trade size.
+We test all kept markets together and do not split by domain or trade size.
+
+Gneiting and Raftery name sharpness subject to calibration as the goal of probabilistic forecasting \citep{gneiting2007strictly}.
+They list the Brier score among the proper scoring rules.
+Our mean squared residual of the price is this score.
+Clauset, Shalizi, and Newman fit power laws by maximum likelihood \citep{clauset2009power}.
+They test the fit with the Kolmogorov-Smirnov statistic and with likelihood-ratio tests against alternatives.
+On 24 real datasets, the power law fits some and is ruled out for others.
+Like them, we measure the fit with the KS statistic.
+We fix the lower bound at the top \TopTenLabel{} of values and run no likelihood-ratio test.
+\todo{owner: confirm the added references and add any others}
 
 \section{Data}\label{sec:data}
 \subsection{Source and scope}\label{sec:data-source}
@@ -281,12 +299,13 @@ Many trades share one block timestamp, so this rule left their order undefined.
 The new rule is the mean price of the trades at the last timestamp.
 We made the change for determinism, not because of the result.
 It came after we saw a full-data Q1 result, so we report it as an amendment.
-The amendment in \texttt{analysis/prereg\_mvp1.md} records that the verdict did not change.
+The amendment in the pre-registration file records that the verdict did not change.
 All numbers in this paper come from the runs with the amended rule.
 This paper uses an effect size and an interval that differ from the pre-registration: per-bin gaps and the z interval.
-It drops the Gini coefficient named in the class post.
+It drops the Gini coefficient named in our proposal.
 Both changes keep the analysis within the lecture contents.
 The verdict rule and the verdict sentence are unchanged.
+All methods come from the CS 6344 course lectures, except the Lorenz curve, which is outside the lectures.
 
 \subsection{Q1: calibration}\label{sec:methods-q1}
 % src: S-PAPER-2, S-PAPER-3
@@ -299,15 +318,15 @@ The null hypothesis is that the outcome-1 rate equals the mean price.
 The effect size is the per-bin gap, the observed rate minus the mean price.
 The expected outcome-1 count is $E_b=n_b\bar p_b$.
 We test each bin with a binomial test.
-We give a \CiLevel{} z interval for the observed rate $\hat r_b=O_b/n_b$, which is $\hat r_b\pm1.96\sqrt{\hat r_b(1-\hat r_b)/n_b}$ (Lecture 5).
+We give a \CiLevel{} z interval for the observed rate $\hat r_b=O_b/n_b$, which is $\hat r_b\pm1.96\sqrt{\hat r_b(1-\hat r_b)/n_b}$.
 We correct the \NBins{} tests with Bonferroni and with the Benjamini-Hochberg (BH) procedure \citep{benjamini1995controlling}.
-The overall test is the goodness-of-fit form of the Lecture 12 chi-square test: observed against expected counts, with the expected counts taken from the prices.
+The overall test is the goodness-of-fit form of the chi-square test: observed against expected counts, with the expected counts taken from the prices.
 It runs on the bin by \{outcome 1, outcome 0\} table:
 \begin{equation}
 \chi^2=\sum_{b}\left[\frac{(O_b-E_b)^2}{E_b}+\frac{(O_b-E_b)^2}{n_b-E_b}\right].
 \label{eq:chisq}
 \end{equation}
-We also report the mean squared residual of the price, $\frac1n\sum(p-y)^2$, where $n$ is the total market count (Lecture 20).
+We also report the mean squared residual of the price, $\frac1n\sum(p-y)^2$, where $n$ is the total market count.
 The pre-registration calls it the Brier score \citep{brier1950verification}.
 We add the log loss and the mean entropy $H(p)$ in bits.
 We treat the market as a classifier that says outcome 1 wins when $p>\FavoriteLine$.
@@ -322,7 +341,7 @@ Volume is the USDC sum over every trade in the kept markets.
 It includes trades after $T-\DaysShort$ day.
 We did not measure trade-count shares.
 We report the share of role volume held by the top \TopOneLabel, \TopFiveLabel, \TopTenLabel, and \TopTwentyLabel{} of wallets.
-We compare the top \TopTwentyLabel{} share with the 80/20 reference from Lecture 6.
+We compare the top \TopTwentyLabel{} share with the 80/20 reference.
 This is descriptive, with no pre-registered verdict line.
 We draw the complementary CDF (CCDF) of wallet volume on log-log axes.
 We sample its ranks from the top, so the largest wallets get points.
@@ -340,7 +359,7 @@ As a side analysis, we run k-means on wallet features.
 We take the logarithm of the heavy-tailed features, then z-score them.
 We choose $K$ by a fixed rule on the elbow curve.
 The rule takes the point farthest from the line between the first and last points.
-We test cluster against topic category with the chi-square test of independence (Lecture 12).
+We test cluster against topic category with the chi-square test of independence .
 Its effect size is the largest observed minus expected share in one cell.
 This analysis is exploratory.
 
@@ -358,7 +377,7 @@ Trade sizes come from a deterministic sample of \NTradeSizeSample{} trades from 
 % src: S-PAPER-5, S-PAPER-6
 All data queries ran on the UTRGV Cradle cluster (SLURM, CPU only).
 We used Python and DuckDB \citep{raasveldt2019duckdb}.
-The MVP runs are \RunId{} (job \SlurmJobId), with code version \CodeVersion.
+The first-stage run is \RunId{} (job \SlurmJobId), with code version \CodeVersion.
 The hash \CodeSha{} is that of the Q1 script.
 The hash of the whole script set is \CodeSetSha.
 The per-script hashes are in \texttt{\CodeShaFile}.
@@ -440,8 +459,8 @@ So we compare the direction only, not the size.
 
 \begin{figure}[H]
 \centering
-\figorbox{figures/fig4_calibration_z}{\linewidth}
-\caption{Observed outcome-1 rate against mean price per bin with \CiLevel{} z intervals. Why: points on the diagonal mean the price matches the outcome rate. Source: run \RunId.}
+\figorbox{figures/fig4_calibration_gap}{\linewidth}
+\caption{Observed outcome-1 rate against mean price per bin (top), and the per-bin gap in percentage points with \CiLevel{} z intervals (bottom). Why: the lower panel shows the gaps that the diagonal hides. Source: run \RunId{} and the local figure folder runs/local\_fig4gap\_v9.}
 \label{fig:calib}
 \end{figure}
 
@@ -473,7 +492,6 @@ Yes, by USDC volume, the top wallets do most of the trading.
 This holds in the kept markets only, and far beyond the 80/20 reference.
 The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker volume and \TakerTopTwentyShare{} of taker volume.
 The 80/20 rule says \TopTwentyReference.
-The 80/20 rule and the power law come from Lecture 6.
 We describe these numbers without a pre-registered verdict.
 Each row is one wallet and role.
 Volume sums every trade in the kept markets, including trades after $T-\DaysShort$ day.

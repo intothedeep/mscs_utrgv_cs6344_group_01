@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "n_in_scope": 688131,
+  "n_kept_rebuilt": 47948,
+  "n_kept_saved": 47948,
+  "p_1d_null_mismatch": 0,
+  "p_1d_max_abs_diff": 1.1102230246251565e-16,
+  "chi2_rebuilt": 67.98672458887788
+}

@@ -80,3 +80,7 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-11-07 decision: D-036, V-1 settled by a cluster label count, wording rule pre-registered first
 2026-11-07 run: 150296 on gpu011, decision B; outcome 1 is "Yes" in 63.9% of kept markets (Sports 14.0%); reword V-1 to "outcome 1" (runs/150296_v1label/label1_counts.json)
 2026-11-07 wording: D-037 done; paper, report v1 and README say "outcome 1"; Yes-only sentence by macros (30,630 markets, 9 of 9 bins, 0.4 to 5.6 points); paper builds, 17 pages; tips updated with D-035 to D-037 and their reasons; open: fig5_ecdf_yes_no.png text may still say Yes/No
+2026-11-07 review: two-reviewer review page (conference, course professor); fixes started: prereg draft, fig 4 gap panel, related work (D-038, analysis/review_paper_mvp1_two_reviewers.html)
+2026-11-08 run: robustness v3 job 150310 submitted on kimq sxm003, 16 CPU, 200G (prereg aef0808, code 94f7ae6, runs/batch_20261108a.txt)
+2026-11-08 run: 150310 done in 22 min, all 9 stages ran, gate passed; fetched to runs/150310_r3_review_fixes_v6
+2026-11-08 decision: M2 Yes sentence added next to outcome-1 wording (D-040)

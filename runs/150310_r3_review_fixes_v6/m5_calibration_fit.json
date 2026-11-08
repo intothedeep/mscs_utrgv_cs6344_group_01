@@ -1,0 +1,88 @@
+{
+  "a": -0.08875942515763946,
+  "b": 1.0276724002167263,
+  "a_wald_ci": [
+    -0.11632603661936118,
+    -0.06119281369591774
+  ],
+  "b_wald_ci": [
+    1.0053740731737055,
+    1.0499707272597472
+  ],
+  "a_boot_ci": [
+    -0.124293600989661,
+    -0.050892648428027064
+  ],
+  "b_boot_ci": [
+    1.0054932861450345,
+    1.0496040406854206
+  ],
+  "read_proxy": "k1_slug_stem",
+  "n_boot_ok": 2000,
+  "n_boot_failed": 0,
+  "n_clipped": 542,
+  "n": 47948,
+  "delta_table": [
+    {
+      "price": 0.05,
+      "delta": -0.00749415815245473,
+      "ci_low": -0.01030495157249028,
+      "ci_high": -0.004319013168019032,
+      "practically_sized": false
+    },
+    {
+      "price": 0.1,
+      "delta": -0.012678460735833674,
+      "ci_low": -0.01720720537278752,
+      "ci_high": -0.007781845348451848,
+      "practically_sized": false
+    },
+    {
+      "price": 0.25,
+      "delta": -0.021671393035083086,
+      "ci_low": -0.028898792772439848,
+      "ci_high": -0.014103056867039873,
+      "practically_sized": false
+    },
+    {
+      "price": 0.5,
+      "delta": -0.02217529968111087,
+      "ci_low": -0.031033457800489533,
+      "ci_high": -0.012720416670173894,
+      "practically_sized": false
+    },
+    {
+      "price": 0.75,
+      "delta": -0.011100967653258298,
+      "ci_low": -0.01946421742293711,
+      "ci_high": -0.0019230058039618374,
+      "practically_sized": false
+    },
+    {
+      "price": 0.9,
+      "delta": -0.0025444131435117257,
+      "ci_low": -0.008278383180911505,
+      "ci_high": 0.0033275522387820593,
+      "practically_sized": false
+    },
+    {
+      "price": 0.95,
+      "delta": -0.0003469221803776845,
+      "ci_low": -0.004101196832478784,
+      "ci_high": 0.003279159548294191,
+      "practically_sized": false
+    }
+  ],
+  "practical_line_mean_h": 0.01570153594617367,
+  "brier": 0.10707126160833004,
+  "climatology": 0.2319994361365966,
+  "brier_skill_score": 0.5384848196558174,
+  "bss_note": "in-sample climatology",
+  "class_balance_yes": 0.36583381997163594,
+  "majority_accuracy": 0.634166180028364,
+  "accuracy_at_0.5": 0.8343205138900476,
+  "labels": {
+    "logistic_calibration": "outside the lectures (D-039)",
+    "brier_skill_score": "outside the lectures (D-039)"
+  }
+}

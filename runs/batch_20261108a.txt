@@ -1,0 +1,2 @@
+# 2026-11-08 robustness v3, code v6 (94f7ae6), prereg aef0808, kimq -c 16 --mem=200G
+150310 r3_review_fixes_v6

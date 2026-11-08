@@ -1,0 +1,15 @@
+{
+  "taker_direction_values": [
+    "BUY",
+    "SELL"
+  ],
+  "n_trades_seq12": 601934424,
+  "n_trades_other_seq": 0,
+  "n_taker_direction_null": 0,
+  "share_p_event_consistent": 1.0,
+  "d_values": [
+    -1,
+    1
+  ],
+  "mapping_holds": true
+}
