@@ -61,10 +61,11 @@ We also ask who trades (Q2) and what the trades look like (Q3).
 \hd{1. Data and method}
 We use the Polymarket-v1 database, which holds \PaperTrades{} trades and \PaperMarkets{} markets from \PaperPeriod{} \citep{qin2026polymarketv1}.
 Of \NMarketsInScope{} Yes/No markets in scope we keep \NMarketsKept{} (\PctMarketsKept).
-We read each market's price \DaysShort{} day before its scheduled close, because a price after the close can contain the answer.
+We read each market's price \DaysShort{} day before its scheduled close. A price after the close can contain the answer.
 We drop prices older than \MaxStaleHours{} hours and markets with fewer than \MinTrades{} trades.
 We cut the price into \NBins{} equal-width bins.
-We test each bin with a binomial test (Benjamini-Hochberg corrected \citep{benjamini1995controlling}) and all bins with a chi-square test.
+We test each bin with a binomial test (Benjamini-Hochberg corrected \citep{benjamini1995controlling}).
+We test all bins with a chi-square test.
 We fixed the criteria in a pre-registration before any Q1 result.
 We report one later rule change as an amendment (tie rule for the price).
 
@@ -95,14 +96,15 @@ Largest per-bin gap & \LargestGapAbs \\
 \smallskip
 Outcome 1 is priced too high.
 We set no size line before the results, so ``small'' is our reading.
-With the minimum-trade filter, cheap bets pay off less often than priced, which matches horse racing \citep{snowberg2010favorite}.
+With the minimum-trade filter, cheap bets pay off less often than priced.
+This matches horse racing \citep{snowberg2010favorite}.
 Without the filter, the cheapest bin flips above the price.
 
 \smallskip
 \textbf{Review checks} (rows next to the original, no new verdict).
 \begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}\setlength{\topsep}{1pt}\setlength{\leftmargin}{1.2em}
 \item Price rule: with a volume-weighted average price the net gap is \RThreeMOneVwapNetGap{}, and with a trade-based midpoint it is \RThreeMOneMidNetGap{}. So the price rule does not create the gap.
-\item Yes/No markets (n=\RThreeMTwoYesNoN): Yes is priced above its observed rate, net gap \RThreeMTwoYesNoNetGap{}.
+\item Markets labelled Yes/No (n=\RThreeMTwoYesNoN): Yes is priced above its observed rate, net gap \RThreeMTwoYesNoNetGap{}.
 \item Dependent markets: with markets grouped by a proxy event key, the net-gap interval is [\RThreeMThreeKOneNetGapCiLow, \RThreeMThreeKOneNetGapCiHigh]. It stays below 0.
 \item Size: the largest implied gap is \RThreeMFiveMaxAbsDelta{}, against a mean half spread of \RThreeMOneMeanHalfSpread.
 \end{itemize}
@@ -114,14 +116,18 @@ Without the filter, the cheapest bin flips above the price.
 \figorbox{../paper_mvp1/figures/fig6_ccdf_top_sampled_half}{3.504in}
 \captionof{figure}{CCDF of wallet volume, one line per role. Why: the tail bends down, so it is not a power law.}
 \label{fig:ccdf}}
-\textbf{Q2.} The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker and \TakerTopTwentyShare{} of taker USDC volume, against the 80/20 reference of \TopTwentyReference.
+\textbf{Q2.} The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker USDC volume.
+They hold \TakerTopTwentyShare{} of taker USDC volume.
+The 80/20 reference is \TopTwentyReference.
 \end{minipage}\hfill
 \begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
 {\centering
 \figorbox{../paper_mvp1/figures/qq_trade_size_raw_log_half}{3.65in}
 \captionof{figure}{QQ plot of trade size against the normal, raw (left) and log (right). Why: the log points follow the line, so log sizes are closer to normal.}
 \label{fig:qq}}
-\textbf{Q3.} Mean trade size is \TradeSizeMean{} USDC and median is \TradeSizeMedian{} USDC, so sizes are strongly right skewed.
+\textbf{Q3.} Mean trade size is \TradeSizeMean{} USDC.
+The median is \TradeSizeMedian{} USDC.
+So sizes are strongly right skewed.
 \end{minipage}
 
 \hd{4. Limitations}
@@ -129,7 +135,8 @@ Without the filter, the cheapest bin flips above the price.
 \textbf{Selection.} Only \PctMarketsKept{} of markets pass the filters. Kept markets trade more than dropped ones.
 
 \hd{5. Response to feedback}
-\FbAsks{} asks from the proposal feedback: answered \FbAnswered, partly \FbPartly, outside this report (MVP2) \FbMvpTwo, not done \FbNotDone.
+\FbAsks{} asks came from the proposal feedback.
+Answered \FbAnswered, partly \FbPartly, outside this report (MVP2) \FbMvpTwo, not done \FbNotDone.
 \medskip
 
 \footnotesize
@@ -141,11 +148,11 @@ Amanda Aninagyei, Oscar Juarez, Ben Alvarado, Marcelo Cavazos & Which price, and
 \midrule
 Hameem Gorabi & Map the longshot effect & Gap per bin, \NBins{} bins (Figure~\ref{fig:calib}). & Answered \\
 \midrule
-Hameem Gorabi & Volume with odds & Volume terciles. High minus low net gap is \RThreePeerADiff. & Done \\
+Hameem Gorabi & Volume with odds & Volume terciles. High minus low net gap is \RThreePeerADiff. & Answered \\
 \midrule
-Robert Molina & Other periods & Three close periods. In the third, BH $p=\RThreePeerBPeriodThreeBhP$ and net gap \RThreePeerBPeriodThreeNetGap. & Done \\
+Robert Molina & Other periods & Three close periods. In the third, BH $p=\RThreePeerBPeriodThreeBhP$ and net gap \RThreePeerBPeriodThreeNetGap. & Answered \\
 \midrule
-Yusuf Oraby & Group dependent markets & Cluster bootstrap on proxy event keys. The interval widens and stays below 0. Proxies are not event keys. & In part \\
+Yusuf Oraby & Group dependent markets & Cluster bootstrap on proxy event keys. The interval widens and stays below 0. Proxies are not event keys. & Partly \\
 \midrule
 Luis Tapia & Odd resolutions, late swings & \RobROneSplitN{} split payouts, verdict unchanged. Price moves by 0.10 or more in \RobRTwoShareDeltaAtLeastTen{} of markets. & Partly \\
 \midrule

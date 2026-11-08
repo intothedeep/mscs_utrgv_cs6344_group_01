@@ -1,5 +1,7 @@
 # Pre-registration DRAFT: robustness v3 (review fixes M1 to M5, minor 4, peer asks)
 
+- Amendment (2026-11-08): this file was committed as the fixed prereg in aef0808, before code 94f7ae6 and run 150310 (D-039). The "DRAFT" and "pending" lines below are the pre-commit text, kept unchanged.
+
 - Status: DRAFT, 2026-11-07. Written before any v3 result. Not yet a committed prereg.
 - Decision: pending. The main session logs a `DECISIONS.md` row before the job is written.
 - Owner instruction: "go" on the review fixes (2026-11-07). Review: `analysis/review_paper_mvp1_two_reviewers.html` tab 1 (M1 to M7), tab 3.

@@ -82,6 +82,11 @@ def count(n: int) -> str:
     return "\\ensuremath{" + f"{n:,}".replace(",", "{,}") + "}"
 
 
+def median_count(x: float) -> str:
+    """A median of whole counts is an integer or a half; keep the half (292.5), never round it away."""
+    return count(int(x)) if x == int(x) else "\\ensuremath{" + _grouped(x, 1) + "}"
+
+
 def _grouped(x: float, d: int) -> str:
     """Fixed decimals with a thousands separator that also works in math mode."""
     text_ = f"{x:,.{d}f}"
@@ -429,8 +434,8 @@ def add_q2(m: Macros, run: Path) -> None:
         i, s = word(c["cluster"]), f"{src}: kmeans.cluster_summary[cluster={c['cluster']}]"
         m.add(f"Cluster{i}N", count(c["n"]), f"{s}.n")
         m.add(f"Cluster{i}MedianVolume", amount(c["median_volume"]), f"{s}.median_volume")
-        m.add(f"Cluster{i}MedianTrades", count(round(c["median_n_trades"])), f"{s}.median_n_trades")
-        m.add(f"Cluster{i}MedianMarkets", count(round(c["median_n_markets"])), f"{s}.median_n_markets")
+        m.add(f"Cluster{i}MedianTrades", median_count(c["median_n_trades"]), f"{s}.median_n_trades")
+        m.add(f"Cluster{i}MedianMarkets", median_count(c["median_n_markets"]), f"{s}.median_n_markets")
 
 
 def add_q3(m: Macros, run: Path) -> None:
@@ -699,7 +704,7 @@ def add_r3_m4(m: Macros, run: Path) -> None:
               f"{src}: {pre}volume_before_T1d_median")
         m.add(f"RThreeMFour{name}MedianDuration", amount(r[pre + "duration_days_median"]),
               f"{src}: {pre}duration_days_median")
-        m.add(f"RThreeMFour{name}MedianTrades", count(round(r[pre + "n_trades_median"])),
+        m.add(f"RThreeMFour{name}MedianTrades", median_count(r[pre + "n_trades_median"]),
               f"{src}: {pre}n_trades_median")
     _r3_row(m, "MFourStale", r, src, "", "stale_q1_", ("gap", "cilow", "cihigh"))
 

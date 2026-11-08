@@ -12,6 +12,7 @@
 %   S-PAPER-9 analysis/prereg_robustness.md, runs/142123_robust_full_v4 (reports r1, r2) via numbers.tex
 %   S-PAPER-10 reports/lecture_numbers.json, runs/145892_ccdf_v6, runs/145893_walletdist_v7 via numbers.tex; analysis/review_project_end_analyst.md
 %   S-PAPER-11 analysis/related_work_refs.md (R1-R5)
+%   S-PAPER-12 analysis/prereg_review_fixes.md (commit aef0808), runs/150310_r3_review_fixes_v6 via numbers.tex
 \documentclass[11pt]{article}
 
 \usepackage[margin=0.9in]{geometry}
@@ -72,7 +73,7 @@
 \newcommand{\WalletDistRun}{145893\_walletdist\_v7}
 \newcommand{\QqRun}{145897\_q3figs\_v8}
 \newcommand{\RThreeRun}{150310\_r3\_review\_fixes\_v6}
-\newcommand{\RThreeFigRun}{local\_r3figs\_v10}
+\newcommand{\RThreeFigRun}{local\_r3figs\_v12}
 \newcommand{\RThreeCodeVersion}{v6}
 \newcommand{\RThreePreregCommit}{aef0808}
 
@@ -309,7 +310,8 @@ This paper uses an effect size and an interval that differ from the pre-registra
 It drops the Gini coefficient named in our proposal.
 Both changes keep the analysis within the lecture contents.
 The verdict rule and the verdict sentence are unchanged.
-All methods come from the CS 6344 course lectures, except the Lorenz curve, which is outside the lectures.
+These methods are outside the lectures: the Lorenz curve, Wilson intervals, the cluster bootstrap chi-square, logistic calibration, and the Brier skill score.
+All other methods come from the CS 6344 course lectures.
 
 \subsection{Q1: calibration}\label{sec:methods-q1}
 % src: S-PAPER-2, S-PAPER-3
@@ -757,20 +759,22 @@ On the \RobRTwoTradedN{} markets with a trade in the last day, the difference is
 The \CiLevel{} CI is [\RobRTwoTradedCiLow, \RobRTwoTradedCiHigh].
 
 \subsection{Checks requested in review}\label{sec:res-review}
-% src: S-PAPER-9, S-PAPER-8
+% src: S-PAPER-12, S-PAPER-8
 Reviewers asked for further checks.
-We ran them in one run, \RThreeRun, with the rules fixed before the run in \texttt{analysis/prereg\_review\_fixes.md}.
+We ran them in one run, \RThreeRun.
+We fixed the rules before the run in \texttt{analysis/prereg\_review\_fixes.md}.
 All checks are descriptive and add no verdict.
 Each new row sits next to the original Q1 row and does not replace it.
 The pre-registered Q1 verdict and its sentence stay as they are.
 Every check uses the \QOneN{} kept markets, except where stated.
 
-% src: S-PAPER-9
+% src: S-PAPER-12
 Check M1 asks whether the price definition drives the net gap.
 Under the volume-weighted mean price (VWAP), the net gap is \RThreeMOneVwapNetGap{} (\CiLevel{} CI [\RThreeMOneVwapNetGapCiLow, \RThreeMOneVwapNetGapCiHigh]).
 Under the trade-based midpoint, it is \RThreeMOneMidNetGap{} (\CiLevel{} CI [\RThreeMOneMidNetGapCiLow, \RThreeMOneMidNetGapCiHigh]).
 The original row has \GapNetDiffMain.
-Both intervals lie below 0, so the pre-registered reading is that the gap is not an artifact of the price rule.
+Both intervals lie below 0.
+So the pre-registered reading is that the price rule does not create the gap.
 The midpoint is a trade-based proxy and not a quote midpoint.
 It exists for the \RThreeMOneMidN{} markets with both trade sides (\RThreeMOneShareBoth).
 The mean half spread of this proxy is $h=\RThreeMOneMeanHalfSpread$.
@@ -784,31 +788,36 @@ Is the size of the main net gap within $h$? \RThreeMOneGapWithinHalfSpread.
 \label{fig:r3-m1}
 \end{figure}
 
-% src: S-PAPER-9, S-PAPER-8
+% src: S-PAPER-12, S-PAPER-8
 Check M2 splits the markets by label.
-In the Yes/No markets ($n=\RThreeMTwoYesNoN$), Yes is priced above its observed rate.
-The net gap is \RThreeMTwoYesNoNetGap{} (\CiLevel{} CI [\RThreeMTwoYesNoNetGapCiLow, \RThreeMTwoYesNoNetGapCiHigh]), and \RThreeMTwoYesNoBinsBh{} of \NBins{} bins are off after BH.
+In the markets labelled Yes/No ($n=\RThreeMTwoYesNoN$), Yes is priced above its observed rate.
+The net gap is \RThreeMTwoYesNoNetGap{} (\CiLevel{} CI [\RThreeMTwoYesNoNetGapCiLow, \RThreeMTwoYesNoNetGapCiHigh]).
+Of \NBins{} bins, \RThreeMTwoYesNoBinsBh{} are off after BH.
 The other markets show no rejection ($n=\RThreeMTwoOtherN$, $\chi^2=\RThreeMTwoOtherChiSq$, $p=\RThreeMTwoOtherP$).
 Elsewhere we keep the term outcome 1.
-\Cref{fig:r3-m2} shows the Yes/No markets.
+\Cref{fig:r3-m2} shows the markets labelled Yes/No.
 The figure uses Wilson intervals, which are outside the lectures.
 
 \begin{figure}[H]
 \centering
 \figorbox{figures/fig_r3_m2_yes_reliability}{0.55\linewidth}
-\caption{Observed Yes rate against mean Yes price in the Yes/No markets. Why: points below the diagonal mean Yes is priced above its observed rate. Source: runs \RThreeRun{} and \RThreeFigRun.}
+\caption{Observed Yes rate against mean Yes price in the markets labelled Yes/No. Why: points below the diagonal mean Yes is priced above its observed rate. Source: runs \RThreeRun{} and \RThreeFigRun.}
 \label{fig:r3-m2}
 \end{figure}
 
-% src: S-PAPER-9
+% src: S-PAPER-12
 Check M3 asks how much dependence between markets matters.
 The data hold no event key, so we use two proxy keys.
-The first key (\texttt{\RThreeMThreeReadProxy}) is the first three tokens of the market slug, with \RThreeMThreeKOneNClusters{} clusters.
+The reference row k0 treats each market alone, with no cluster, and is not a key.
+The first key is \texttt{\RThreeMThreeReadProxy}.
+It takes the first three tokens of the market slug.
+It has \RThreeMThreeKOneNClusters{} clusters.
 The second key is category by close hour, with \RThreeMThreeKTwoNClusters{} clusters.
 We read the first key because its net gap interval is wider.
 Under it, the \CiLevel{} interval is [\RThreeMThreeKOneNetGapCiLow, \RThreeMThreeKOneNetGapCiHigh], and it still lies below 0.
 Under the second key it is [\RThreeMThreeKTwoNetGapCiLow, \RThreeMThreeKTwoNetGapCiHigh].
-The cluster chi-square is \RThreeMThreeKOneChiSq{} ($p=\RThreeMThreeKOneP$) for the first key and \RThreeMThreeKTwoChiSq{} ($p=\RThreeMThreeKTwoP$) for the second.
+For the first key the cluster chi-square is \RThreeMThreeKOneChiSq{} ($p=\RThreeMThreeKOneP$).
+For the second key it is \RThreeMThreeKTwoChiSq{} ($p=\RThreeMThreeKTwoP$).
 The cluster bootstrap chi-square is outside the lectures.
 The proxies are not true event keys.
 \Cref{fig:r3-m3} compares the intervals.
@@ -820,7 +829,7 @@ The proxies are not true event keys.
 \label{fig:r3-m3}
 \end{figure}
 
-% src: S-PAPER-9
+% src: S-PAPER-12
 Check M4 compares the kept markets with the dropped ones.
 The kept markets have a median volume before $T-\DaysShort$ day of \RThreeMFourKeptMedianVolumeBeforeDay{} USDC.
 The pooled eligible dropped markets have \RThreeMFourDroppedMedianVolumeBeforeDay{} USDC.
@@ -836,7 +845,7 @@ The stale-price markets have a net gap of \RThreeMFourStaleNetGap{} (\CiLevel{} 
 \label{fig:r3-m4}
 \end{figure}
 
-% src: S-PAPER-9
+% src: S-PAPER-12
 Check M5 asks how large the miscalibration is in usable terms.
 We fit a logistic calibration of the outcome on the price, $\mathrm{logit}\,P(y=1)=a+b\,\mathrm{logit}(p)$.
 The intercept is $a=\RThreeMFiveA$ (Wald \CiLevel{} CI [\RThreeMFiveAWaldLow, \RThreeMFiveAWaldHigh]).
@@ -846,7 +855,8 @@ The largest implied gap on the price grid is \RThreeMFiveMaxAbsDelta{} in size.
 Of \RThreeMFiveGridPrices{} grid prices, \RThreeMFivePracticalPrices{} pass the practical line.
 The Brier skill score against climatology is \RThreeMFiveSkill{} (Brier \RThreeMFiveBrier{} against \RThreeMFiveClimatologyBrier).
 The climatology is in sample.
-The majority-class accuracy is \RThreeMFiveMajorityAccuracy{} and the accuracy at the \FavoriteLine{} line is \RThreeMFiveAccuracyHalf.
+The majority-class accuracy is \RThreeMFiveMajorityAccuracy.
+The accuracy at the \FavoriteLine{} line is \RThreeMFiveAccuracyHalf.
 Logistic calibration and the skill score are outside the lectures.
 \Cref{fig:r3-m5} shows the implied gap.
 
@@ -857,16 +867,17 @@ Logistic calibration and the skill score are outside the lectures.
 \label{fig:r3-m5}
 \end{figure}
 
-% src: S-PAPER-9
+% src: S-PAPER-12
 The duplicate-row check removes exact duplicate trade rows.
 They are \RThreeMinorFourDupShare{} of the trade rows of the kept markets.
 Removing them drops \RThreeMinorFourRemoved{} markets from the kept set.
-Then $\chi^2=\RThreeMinorFourChiSq$ against \QOneChiSq{} in the original row, and the net gap is \RThreeMinorFourNetGap{} against \GapNetDiffMain.
+Then $\chi^2=\RThreeMinorFourChiSq$ against \QOneChiSq{} in the original row.
+The net gap is \RThreeMinorFourNetGap{} against \GapNetDiffMain.
 The top \TopOneLabel{} maker share changes by \RThreeMinorFourMakerTopOneDeltaPp{} percentage points.
 The top \TopTwentyLabel{} maker share changes by \RThreeMinorFourMakerTopTwentyDeltaPp.
 For takers the changes are \RThreeMinorFourTakerTopOneDeltaPp{} and \RThreeMinorFourTakerTopTwentyDeltaPp.
 
-% src: S-PAPER-9
+% src: S-PAPER-12
 Two peer questions ask whether the gap depends on volume and on the close period.
 We split the kept markets into volume terciles, by volume before $T-\DaysShort$ day.
 The cut points are \RThreePeerACutLowMid{} and \RThreePeerACutMidHigh{} USDC.
@@ -879,7 +890,7 @@ The high minus low difference is \RThreePeerADiff{} (CI [\RThreePeerADiffCiLow, 
 \begin{figure}[H]
 \centering
 \figorbox{figures/fig_r3_peer_a_volume}{0.8\linewidth}
-\caption{Net gap per volume tercile, with \CiLevel{} intervals. Why: overlapping intervals mean no sign that the gap changes with volume. Source: runs \RThreeRun{} and \RThreeFigRun.}
+\caption{Net gap per volume tercile, with \CiLevel{} intervals. Why: the pre-registered difference test compares the high and low terciles, with high minus low \RThreePeerADiff{} (CI [\RThreePeerADiffCiLow, \RThreePeerADiffCiHigh], $p=\RThreePeerADiffP$). Source: runs \RThreeRun{} and \RThreeFigRun.}
 \label{fig:r3-peer-a}
 \end{figure}
 
@@ -887,7 +898,8 @@ The close periods are \RThreePeerBPeriodOneLabel, \RThreePeerBPeriodTwoLabel, an
 The net gap is \RThreePeerBPeriodOneNetGap{} in \RThreePeerBPeriodOneLabel{} (CI [\RThreePeerBPeriodOneNetGapCiLow, \RThreePeerBPeriodOneNetGapCiHigh], BH $p=\RThreePeerBPeriodOneBhP$, $n=\RThreePeerBPeriodOneN$).
 It is \RThreePeerBPeriodTwoNetGap{} in \RThreePeerBPeriodTwoLabel{} (CI [\RThreePeerBPeriodTwoNetGapCiLow, \RThreePeerBPeriodTwoNetGapCiHigh], BH $p=\RThreePeerBPeriodTwoBhP$, $n=\RThreePeerBPeriodTwoN$).
 In \RThreePeerBPeriodThreeLabel{} the chi-square test does not reject (BH $p=\RThreePeerBPeriodThreeBhP$, $n=\RThreePeerBPeriodThreeN$).
-In the same period the net gap is \RThreePeerBPeriodThreeNetGap, and its \CiLevel{} CI [\RThreePeerBPeriodThreeNetGapCiLow, \RThreePeerBPeriodThreeNetGapCiHigh] excludes 0.
+In the same period the net gap is \RThreePeerBPeriodThreeNetGap.
+Its \CiLevel{} CI [\RThreePeerBPeriodThreeNetGapCiLow, \RThreePeerBPeriodThreeNetGapCiHigh] excludes 0.
 \Cref{fig:r3-peer-b} shows the periods.
 
 \begin{figure}[H]

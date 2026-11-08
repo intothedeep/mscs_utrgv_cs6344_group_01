@@ -122,7 +122,7 @@ LABEL1_PATH = Path(__file__).resolve().parent.parent / "runs" / "150296_v1label"
 ROOT = Path(__file__).resolve().parent.parent
 GAP_PNG = ROOT / "runs" / "local_fig4gap_v9" / "fig4_calibration_gap.png"   # v1 only: two-panel calibration figure, code/fig_calibration_gap.py
 R3_RUN = ROOT / "runs" / "150310_r3_review_fixes_v6"   # v1 only: robustness v3, code v6, analysis/prereg_review_fixes.md (commit aef0808)
-R3_FIGS = ROOT / "runs" / "local_r3figs_v10"   # v1 only: plain redraws of the r3 figures, code/fig_r3_paper.py
+R3_FIGS = ROOT / "runs" / "local_r3figs_v12"   # v1 only: plain redraws of the r3 figures, code/fig_r3_paper.py
 # Dataset paper (main.tex line 66): share of maker volume held by the top 1% of makers. Quoted, not computed here.
 PAPER_TOP1_MAKER = 0.841
 BRIER_NAME = "mean squared residual of the price"
@@ -951,7 +951,7 @@ def pci(lo: float, hi: float) -> str:
 
 
 def r3_figure(P: Page, png: str, what: str, why: str) -> str:
-    return P.figure(png, what, why, R3_FIGS / png, f"runs/local_r3figs_v10/{png}, drawn by code/fig_r3_paper.py from {R3_RUN.name}")
+    return P.figure(png, what, why, R3_FIGS / png, f"runs/local_r3figs_v12/{png}, drawn by code/fig_r3_paper.py from {R3_RUN.name}")
 
 
 def r3_m1(P: Page, R: dict) -> str:
@@ -971,14 +971,14 @@ def r3_m1(P: Page, R: dict) -> str:
 
 def r3_m2(P: Page, R: dict) -> str:
     m = R["m2"]
-    bias = (" In Yes/No markets Yes is priced above its observed rate. The main result keeps the label outcome 1 (D-040)."
+    bias = (" In markets labelled Yes/No, Yes is priced above its observed rate. The main result keeps the label outcome 1 (D-040)."
             if m["yes_bias"] else "")
-    return ("<h3>M2: Yes/No markets</h3>"
-            f"<p>Yes/No markets ({fmt(m['yes_no_n'])}) have net gap {pp(m['yes_no_net_gap'])}, 95% interval "
+    return ("<h3>M2: markets labelled Yes/No</h3>"
+            f"<p>Markets labelled Yes/No ({fmt(m['yes_no_n'])}) have net gap {pp(m['yes_no_net_gap'])}, 95% interval "
             f"{pci(m['yes_no_net_gap_ci_low'], m['yes_no_net_gap_ci_high'])}. Chi-square {fmt(m['yes_no_chi2'])} (df {m['yes_no_df']}), "
             f"p {fp(m['yes_no_p'])}, {m['yes_no_bins_off_bh']} of 10 bins off by Benjamini-Hochberg (BH). "
             f"The other {fmt(m['other_n'])} markets have chi-square p {fp(m['other_p'])} and net gap {pp(m['other_net_gap'])}.{bias}</p>"
-            + r3_figure(P, "fig_r3_m2_yes_reliability.png", "Observed Yes rate against mean Yes price per bin in Yes/No markets, with 95% Wilson intervals.",
+            + r3_figure(P, "fig_r3_m2_yes_reliability.png", "Observed Yes rate against mean Yes price per bin in markets labelled Yes/No, with 95% Wilson intervals.",
                         "points below the diagonal mean Yes happens less often than its price says."))
 
 
@@ -989,12 +989,12 @@ def r3_m3(P: Page, R: dict) -> str:
              fmt(m[f"{k}_x2_cl"]), fp(m[f"{k}_p"]), m[f"{k}_bins_off_bh"]] for k, lab in keys]
     return ("<h3>M3: cluster bootstrap with proxy keys</h3>"
             "<p>Markets on one event are not independent, and the event key is not in the saved tables. "
-            "Three proxy keys group the markets, and the bootstrap resamples whole groups. "
+            "Two proxy keys (slug stem, topic x close hour) group the markets, and the bootstrap resamples whole groups. The each-market row has no clustering. "
             f"The gap interval and the cluster chi-square are {html.escape(m['k1_slug_stem_label'])}. "
-            f"The call is the same for all three keys: {html.escape(m['k1_slug_stem_rule_text'])}</p>"
+            f"The call is the same for all three rows: {html.escape(m['k1_slug_stem_rule_text'])}</p>"
             + P.table("Cluster bootstrap by proxy key. The cluster chi-square ignores covariance between bins inside one cluster.",
                       ["Key", "Clusters", "Net gap", "95% bootstrap interval", "Cluster chi-square", "p", "Bins off (BH)"], rows)
-            + r3_figure(P, "fig_r3_m3_cluster_bootstrap.png", "Net gap with a 95% bootstrap interval for three proxy keys.",
+            + r3_figure(P, "fig_r3_m3_cluster_bootstrap.png", "Net gap with a 95% bootstrap interval for the each-market row and two proxy keys.",
                         "wider intervals for coarser keys show how much dependence between markets could matter."))
 
 
@@ -1005,7 +1005,7 @@ def r3_m4(P: Page, R: dict) -> str:
     return ("<h3>M4: kept against dropped markets</h3>"
             f"<p>Kept markets are {fmt(m['kept_n'])} of {fmt(m['n_in_scope'])} in scope ({pct('kept')}). Dropped: Up/Down {pct('updown')}, no price "
             f"{pct('no_price')}, price too old {pct('stale_price')}, no winner label {pct('no_outcome')}, fewer than 10 trades {pct('below_min_trades')}. "
-            f"Median volume is {fmt(m['kept_volume_usdc_median'])} USDC for kept markets and {fmt(m['eligible_dropped_pooled_volume_usdc_median'])} USDC "
+            f"Median volume over all trades is {fmt(m['kept_volume_usdc_median'])} USDC for kept markets and {fmt(m['eligible_dropped_pooled_volume_usdc_median'])} USDC "
             f"for the eligible dropped markets. Outcome-1 rate is {m['kept_outcome1_rate'] * 100:.1f}% and {m['eligible_dropped_pooled_outcome1_rate'] * 100:.1f}%. "
             f"The old-price group has net gap {pp(cal['stale_price']['net_gap'])} and the few-trades group {pp(cal['below_min_trades']['net_gap'])}.</p>"
             + r3_figure(P, "fig_r3_m4_kept_vs_dropped.png", "Share of the in-scope markets that are kept or dropped by the first failing rule.",
@@ -1022,8 +1022,8 @@ def r3_m5(P: Page, R: dict) -> str:
             f"The implied gap is {pp(d[0.25]['delta'])} at price 0.25 and {pp(d[0.5]['delta'])} at price 0.50. "
             f"The practical line is the mean half-spread {m['practical_line_mean_h'] * 100:.2f} pp, and {n_big} of {len(fit['delta_table'])} grid prices have "
             f"an interval fully beyond it. Brier skill score, {html.escape(lab['brier_skill_score'])}: {m['brier_skill_score']:.3f} against in-sample climatology. Accuracy at 0.5 is {m['accuracy_at_0.5'] * 100:.1f}% against {m['majority_accuracy'] * 100:.1f}% for the majority.</p>"
-            + r3_figure(P, "fig_r3_m5_implied_gap.png", "Implied gap (fitted probability minus price) across prices, with saved 95% cluster bootstrap intervals at seven prices.",
-                        "the gap is largest in the middle of the price range, and the figure shows how it compares with zero."))
+            + r3_figure(P, "fig_r3_m5_implied_gap.png", f"Implied gap (fitted probability minus price) across prices, with saved 95% cluster bootstrap intervals at seven prices, against zero and the practical line (\u00b1 {m['practical_line_mean_h'] * 100:.2f} pp, the mean half spread).",
+                        "the gap is largest in the middle of the price range, and the figure shows how it compares with zero and with the practical line."))
 
 
 def r3_dups(R: dict, P: Page) -> str:
@@ -1062,9 +1062,9 @@ def r3_peer(P: Page, R: dict) -> str:
             + P.table("Calibration by volume tercile and by close period. The interval is a 95% t interval of the net gap.",
                       ["Group", "Markets", "Chi-square (df 10)", "p", "Bins off (BH)", "Net gap", "95% interval"], rows)
             + r3_figure(P, "fig_r3_peer_a_volume.png", "Net gap with a 95% t interval by volume tercile.",
-                        "the net gap is smaller in the most traded markets.")
+                        f"the pre-registered Welch test, high minus low tercile, gives {pp(hl['diff'])}, 95% interval {pci(hl['ci_low'], hl['ci_high'])}, p {fp(hl['p'])}.")
             + r3_figure(P, "fig_r3_peer_b_period.png", "Net gap with a 95% t interval by close period.",
-                        "the net gap shrinks in the newest period."))
+                        "it shows whether the gap moves across close periods."))
 
 
 def sec_r3(P: Page) -> str:
@@ -1080,7 +1080,7 @@ def sec_r3(P: Page) -> str:
             "<code>analysis/prereg_review_fixes.md</code> (commit aef0808). "
             f"Gate: the kept set was rebuilt ({fmt(R['gate']['n_kept_rebuilt'])} markets) and the main chi-square matched "
             f"({fmt(R['gate']['chi2_rebuilt'])}): {'passed' if R['gate']['passed'] else 'failed'}. "
-            "Logistic calibration, Brier skill score and the cluster bootstrap chi-square are outside the lectures (D-039).</p></div>"
+            "The Lorenz curve, Wilson intervals, the cluster bootstrap chi-square, logistic calibration and the Brier skill score are outside the lectures (D-041).</p></div>"
             + r3_m1(P, R) + r3_m2(P, R) + r3_m3(P, R) + r3_m4(P, R) + r3_m5(P, R) + r3_dups(R, P) + r3_peer(P, R))
 
 

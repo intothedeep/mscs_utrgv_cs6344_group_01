@@ -31,6 +31,10 @@ __all__ = ["main"]
 
 DARK, GREY, BAND = "#222222", "#888888", "#bbbbbb"
 GAP_LABEL = "Net gap: mean of (outcome - price), USDC per share"
+# Print widths: article 11pt, letter paper, 0.9 in margins -> linewidth 6.7 in (main.tex \\figorbox 0.8 / 0.55).
+# Figures are drawn at print size so a font size in pt is the printed size (figures.md section 4: 7 pt or more).
+W_WIDE, W_NARROW, FONT_PT, DPI = 0.8 * 6.7, 0.55 * 6.7, 7.5, 300
+plt.rcParams.update({"font.size": FONT_PT, "figure.dpi": DPI})
 FINE_GRID = np.linspace(0.02, 0.98, 49)  # same grid as code/r3_m5.py
 
 
@@ -39,12 +43,12 @@ def fmt_n(n: int) -> str:
 
 
 def save(fig: plt.Figure, out: Path, name: str) -> None:
-    fig.savefig(out / name, dpi=150)
+    fig.savefig(out / name, dpi=DPI)
     plt.close(fig)
 
 
 def forest(rows: list[tuple[str, dict[str, float]]], xlabel: str, out: Path, name: str,
-           ylabel: str | None = None, tick_step: float | None = None, size=(7.5, 4.2)) -> None:
+           ylabel: str | None = None, tick_step: float | None = None, size=(W_WIDE, 3.1)) -> None:
     """One dot and one interval per row. Row label is already wrapped plain words."""
     fig, ax = plt.subplots(figsize=size, layout="constrained")
     for i, (_, r) in enumerate(rows):
@@ -78,7 +82,7 @@ def draw_m1(r3: Path, out: Path, checks: list) -> None:
              ("p_ask", "Buyer-initiated trades"),
              ("p_bid", "Seller-initiated trades")]
     data = [(f"{label}\n(n={fmt_n(rows[k]['n'])})", row(rows[k])) for k, label in names]
-    forest(data, GAP_LABEL, out, "fig_r3_m1_price_definition.png", tick_step=0.005, size=(8, 5.4))
+    forest(data, GAP_LABEL, out, "fig_r3_m1_price_definition.png", tick_step=0.005, size=(W_WIDE, 3.7))
     for k, name in (("p_vwap", "MOneVwap"), ("p_mid", "MOneMid")):
         checks += [(f"{name}NetGap", pct2(rows[k]["net_gap"])), (f"{name}NetGapCiLow", pct2(rows[k]["net_gap_ci_low"])),
                    (f"{name}NetGapCiHigh", pct2(rows[k]["net_gap_ci_high"])), (f"{name}N", count(rows[k]["n"]))]
@@ -88,11 +92,11 @@ def draw_m2(r3: Path, out: Path, checks: list) -> None:
     res = json.loads((r3 / "m2_results.json").read_text())
     bins = pd.read_csv(r3 / "m2_bins_yes_no.csv")
     lo, hi = bins["mean_price"] + bins["wilson_low"], bins["mean_price"] + bins["wilson_high"]  # saved as gap-scale ends
-    fig, ax = plt.subplots(figsize=(6, 6), layout="constrained")
+    fig, ax = plt.subplots(figsize=(W_NARROW, W_NARROW), layout="constrained")
     ax.plot([0, 1], [0, 1], color=GREY, ls="--", label="Perfect calibration")
     err = np.clip(np.vstack([bins["observed_rate"] - lo, hi - bins["observed_rate"]]), 0, None)
     ax.errorbar(bins["mean_price"], bins["observed_rate"], yerr=err, fmt="o", ms=4, capsize=3, color=DARK,
-                label=f"Yes/No markets (n={fmt_n(res['yes_no_n'])}), 95% Wilson interval")
+                label=f"Markets labelled Yes/No (n={fmt_n(res['yes_no_n'])}), 95% Wilson interval")
     ax.set(xlabel="Mean Yes price in bin (USDC per share)", ylabel="Observed Yes rate", xlim=(0, 1), ylim=(0, 1))
     ax.grid(alpha=0.3)
     fig.legend(loc="outside upper center", ncol=1)
@@ -120,14 +124,17 @@ def draw_m5(r3: Path, out: Path, checks: list) -> None:
     grid = fit["delta_table"]
     px = np.array([g["price"] for g in grid])
     lo, hi, mid = (np.array([g[k] for g in grid]) for k in ("ci_low", "ci_high", "delta"))
-    fig, ax = plt.subplots(figsize=(7.5, 4.4), layout="constrained")
+    fig, ax = plt.subplots(figsize=(W_WIDE, 3.2), layout="constrained")
     ax.errorbar(px, mid, yerr=[mid - lo, hi - mid], fmt="none", ecolor=BAND, elinewidth=6, capsize=0,
                 label="Cluster bootstrap 95% interval (7 prices)")
     ax.plot(FINE_GRID, gap(FINE_GRID), color=DARK, label="Implied gap from the fit")
     ax.axhline(0, color=GREY, ls="--", label="Calibrated")
+    half = json.loads((r3 / "m1_results.json").read_text())["mean_h"]  # practical line: mean half spread
+    ax.axhline(half, color=DARK, ls=":", label="Practical line: \u00b1 mean half spread")
+    ax.axhline(-half, color=DARK, ls=":")
     ax.set(xlabel="Price 1 day before close (USDC per share)", ylabel="Implied gap: fitted probability - price")
     ax.grid(alpha=0.3)
-    fig.legend(loc="outside upper center", ncol=3)
+    fig.legend(loc="outside upper center", ncol=2)
     save(fig, out, "fig_r3_m5_implied_gap.png")
     checks.append(("MFiveMaxAbsDelta", pct2(float(np.max(np.abs(mid))))))
     if not np.allclose(gap(px), mid, atol=1e-9):
@@ -161,7 +168,7 @@ def draw_m4(r3: Path, out: Path, checks: list) -> None:
     label = {"kept": "Kept", "updown": "Up/Down", "no_outcome": "No winner\nlabel", "no_price": "No price",
              "stale_price": "Stale price", "below_min_trades": "Under\n10 trades",
              "eligible_dropped_pooled": "All eligible\ndropped"}
-    fig, ax = plt.subplots(figsize=(8, 4.4), layout="constrained")
+    fig, ax = plt.subplots(figsize=(W_WIDE, 3.0), layout="constrained")
     ax.bar([label[g] for g in t["group"]], t["share_of_total"], color="#555555",
            label=f"Share of {fmt_n(total)} in-scope markets")
     ax.set(xlabel="Group (kept or first failing rule)", ylabel="Share of markets")
