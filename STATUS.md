@@ -77,3 +77,4 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-11-02 paper: D-034, independence caveat after the Q1 p-value; departure wording fixed; paper builds, 17 pages (papers/paper_mvp1/main.tex)
 2026-11-07 review: D-035, M1 gate PASS, 0 blocker, 1 major (V-1 "Yes is priced too high" wording), 11 minor; 40 of 40 numbers match; paper builds, 17 pages (analysis/review_mvp1_gate_2026_11_07.md)
 2026-11-07 tips: tips moved from ../tips/group_01/ to tips/; one EN/KO toggle page per topic; ERD, paper decisions and proposal pages made bilingual; rendered at 1040px in both languages (tips/README.md, tips/index.html)
+2026-11-07 decision: D-036, V-1 settled by a cluster label count, wording rule pre-registered first
