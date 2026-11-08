@@ -1,0 +1,489 @@
+{
+  "n_markets": 47948,
+  "base_run": "142082_mvp1_full_v1r3",
+  "normalization": "label_norm = lower(trim(label1)), runs of inner whitespace collapsed to one space; no other change",
+  "overall": {
+    "top_labels": [
+      {
+        "label_norm": "yes",
+        "n": 30630,
+        "share": 0.6388170518061232
+      },
+      {
+        "label_norm": "over",
+        "n": 4256,
+        "share": 0.08876282639526153
+      },
+      {
+        "label_norm": "kings",
+        "n": 89,
+        "share": 0.0018561775256527905
+      },
+      {
+        "label_norm": "thunder",
+        "n": 73,
+        "share": 0.0015224826895803788
+      },
+      {
+        "label_norm": "knicks",
+        "n": 70,
+        "share": 0.0014599149078168016
+      },
+      {
+        "label_norm": "rockets",
+        "n": 67,
+        "share": 0.0013973471260532242
+      },
+      {
+        "label_norm": "celtics",
+        "n": 66,
+        "share": 0.0013764911987986985
+      },
+      {
+        "label_norm": "cavaliers",
+        "n": 65,
+        "share": 0.0013556352715441728
+      },
+      {
+        "label_norm": "nuggets",
+        "n": 64,
+        "share": 0.001334779344289647
+      },
+      {
+        "label_norm": "spurs",
+        "n": 60,
+        "share": 0.0012513556352715441
+      },
+      {
+        "label_norm": "lakers",
+        "n": 59,
+        "share": 0.0012304997080170184
+      },
+      {
+        "label_norm": "pistons",
+        "n": 58,
+        "share": 0.0012096437807624927
+      },
+      {
+        "label_norm": "panthers",
+        "n": 57,
+        "share": 0.001188787853507967
+      },
+      {
+        "label_norm": "magic",
+        "n": 57,
+        "share": 0.001188787853507967
+      },
+      {
+        "label_norm": "suns",
+        "n": 56,
+        "share": 0.0011679319262534412
+      },
+      {
+        "label_norm": "jets",
+        "n": 54,
+        "share": 0.0011262200717443898
+      },
+      {
+        "label_norm": "clippers",
+        "n": 54,
+        "share": 0.0011262200717443898
+      },
+      {
+        "label_norm": "bucks",
+        "n": 54,
+        "share": 0.0011262200717443898
+      },
+      {
+        "label_norm": "76ers",
+        "n": 53,
+        "share": 0.001105364144489864
+      },
+      {
+        "label_norm": "raptors",
+        "n": 53,
+        "share": 0.001105364144489864
+      }
+    ],
+    "n_distinct_label_norm": 2814,
+    "n_yes_like": 30630,
+    "share_yes_like": 0.6388170518061232,
+    "n_no_like": 0,
+    "share_no_like": 0.0
+  },
+  "by_category": {
+    "Crypto": {
+      "n": 11888,
+      "n_yes_like": 11860,
+      "share_yes_like": 0.9976446837146703,
+      "top_labels": [
+        {
+          "label_norm": "yes",
+          "n": 11860,
+          "share": 0.9976446837146703
+        },
+        {
+          "label_norm": "positive",
+          "n": 14,
+          "share": 0.0011776581426648722
+        },
+        {
+          "label_norm": "over",
+          "n": 3,
+          "share": 0.00025235531628532975
+        },
+        {
+          "label_norm": "fvd",
+          "n": 1,
+          "share": 8.411843876177658e-05
+        },
+        {
+          "label_norm": "spieth",
+          "n": 1,
+          "share": 8.411843876177658e-05
+        }
+      ]
+    },
+    "Culture": {
+      "n": 1074,
+      "n_yes_like": 1068,
+      "share_yes_like": 0.994413407821229,
+      "top_labels": [
+        {
+          "label_norm": "yes",
+          "n": 1068,
+          "share": 0.994413407821229
+        },
+        {
+          "label_norm": "over",
+          "n": 1,
+          "share": 0.000931098696461825
+        },
+        {
+          "label_norm": "drake",
+          "n": 1,
+          "share": 0.000931098696461825
+        },
+        {
+          "label_norm": "mariano",
+          "n": 1,
+          "share": 0.000931098696461825
+        },
+        {
+          "label_norm": "bitboy",
+          "n": 1,
+          "share": 0.000931098696461825
+        }
+      ]
+    },
+    "Finance": {
+      "n": 5146,
+      "n_yes_like": 5131,
+      "share_yes_like": 0.997085114652157,
+      "top_labels": [
+        {
+          "label_norm": "yes",
+          "n": 5131,
+          "share": 0.997085114652157
+        },
+        {
+          "label_norm": "no change",
+          "n": 5,
+          "share": 0.000971628449280995
+        },
+        {
+          "label_norm": "usa",
+          "n": 3,
+          "share": 0.000582977069568597
+        },
+        {
+          "label_norm": "kamala",
+          "n": 2,
+          "share": 0.000388651379712398
+        },
+        {
+          "label_norm": "wojtaszek",
+          "n": 1,
+          "share": 0.000194325689856199
+        }
+      ]
+    },
+    "Other": {
+      "n": 2274,
+      "n_yes_like": 1611,
+      "share_yes_like": 0.7084432717678101,
+      "top_labels": [
+        {
+          "label_norm": "yes",
+          "n": 1611,
+          "share": 0.7084432717678101
+        },
+        {
+          "label_norm": "over",
+          "n": 100,
+          "share": 0.04397537379067722
+        },
+        {
+          "label_norm": "trzaskowski",
+          "n": 19,
+          "share": 0.008355321020228672
+        },
+        {
+          "label_norm": "gen.g",
+          "n": 8,
+          "share": 0.003518029903254178
+        },
+        {
+          "label_norm": "indiana",
+          "n": 7,
+          "share": 0.0030782761653474055
+        }
+      ]
+    },
+    "Politics": {
+      "n": 6922,
+      "n_yes_like": 6818,
+      "share_yes_like": 0.984975440624097,
+      "top_labels": [
+        {
+          "label_norm": "yes",
+          "n": 6818,
+          "share": 0.984975440624097
+        },
+        {
+          "label_norm": "harris",
+          "n": 13,
+          "share": 0.0018780699219878647
+        },
+        {
+          "label_norm": "over",
+          "n": 8,
+          "share": 0.0011557353366079169
+        },
+        {
+          "label_norm": "biden",
+          "n": 6,
+          "share": 0.0008668015024559376
+        },
+        {
+          "label_norm": "eintracht frankfurt",
+          "n": 4,
+          "share": 0.0005778676683039584
+        }
+      ]
+    },
+    "Price Action": {
+      "n": 663,
+      "n_yes_like": 663,
+      "share_yes_like": 1.0,
+      "top_labels": [
+        {
+          "label_norm": "yes",
+          "n": 663,
+          "share": 1.0
+        }
+      ]
+    },
+    "Sci-Tech": {
+      "n": 819,
+      "n_yes_like": 788,
+      "share_yes_like": 0.9621489621489622,
+      "top_labels": [
+        {
+          "label_norm": "yes",
+          "n": 788,
+          "share": 0.9621489621489622
+        },
+        {
+          "label_norm": "georgia tech",
+          "n": 3,
+          "share": 0.003663003663003663
+        },
+        {
+          "label_norm": "9z",
+          "n": 3,
+          "share": 0.003663003663003663
+        },
+        {
+          "label_norm": "spain",
+          "n": 3,
+          "share": 0.003663003663003663
+        },
+        {
+          "label_norm": "over",
+          "n": 2,
+          "share": 0.002442002442002442
+        }
+      ]
+    },
+    "Sports": {
+      "n": 19162,
+      "n_yes_like": 2691,
+      "share_yes_like": 0.14043419267299864,
+      "top_labels": [
+        {
+          "label_norm": "over",
+          "n": 4142,
+          "share": 0.2161569773510072
+        },
+        {
+          "label_norm": "yes",
+          "n": 2691,
+          "share": 0.14043419267299864
+        },
+        {
+          "label_norm": "kings",
+          "n": 89,
+          "share": 0.004644609122221062
+        },
+        {
+          "label_norm": "thunder",
+          "n": 73,
+          "share": 0.003809623212608287
+        },
+        {
+          "label_norm": "knicks",
+          "n": 70,
+          "share": 0.003653063354555892
+        }
+      ]
+    }
+  },
+  "by_bin": {
+    "0": {
+      "n": 18209,
+      "n_yes_like": 15516,
+      "share_yes_like": 0.8521061013784392
+    },
+    "1": {
+      "n": 2703,
+      "n_yes_like": 1365,
+      "share_yes_like": 0.5049944506104328
+    },
+    "2": {
+      "n": 2543,
+      "n_yes_like": 1111,
+      "share_yes_like": 0.43688556822650415
+    },
+    "3": {
+      "n": 2769,
+      "n_yes_like": 914,
+      "share_yes_like": 0.3300830624774287
+    },
+    "4": {
+      "n": 3859,
+      "n_yes_like": 1013,
+      "share_yes_like": 0.262503239181135
+    },
+    "5": {
+      "n": 4240,
+      "n_yes_like": 1282,
+      "share_yes_like": 0.30235849056603775
+    },
+    "6": {
+      "n": 2553,
+      "n_yes_like": 1053,
+      "share_yes_like": 0.41245593419506466
+    },
+    "7": {
+      "n": 2301,
+      "n_yes_like": 1017,
+      "share_yes_like": 0.44198174706649285
+    },
+    "8": {
+      "n": 2133,
+      "n_yes_like": 1231,
+      "share_yes_like": 0.577121425222691
+    },
+    "9": {
+      "n": 6638,
+      "n_yes_like": 6128,
+      "share_yes_like": 0.9231696294064478
+    }
+  },
+  "by_bin_yes_only": {
+    "0": {
+      "n": 15516,
+      "n_y1": 155,
+      "mean_price": 0.014318921010341336,
+      "observed_rate": 0.009989688063934004,
+      "diff_obs_minus_price": -0.0043292329464073315
+    },
+    "1": {
+      "n": 1365,
+      "n_y1": 140,
+      "mean_price": 0.1463087596129528,
+      "observed_rate": 0.10256410256410256,
+      "diff_obs_minus_price": -0.04374465704885025
+    },
+    "2": {
+      "n": 1111,
+      "n_y1": 246,
+      "mean_price": 0.2470482644313462,
+      "observed_rate": 0.22142214221422143,
+      "diff_obs_minus_price": -0.025626122217124764
+    },
+    "3": {
+      "n": 914,
+      "n_y1": 267,
+      "mean_price": 0.3479689933049609,
+      "observed_rate": 0.2921225382932166,
+      "diff_obs_minus_price": -0.05584645501174429
+    },
+    "4": {
+      "n": 1013,
+      "n_y1": 408,
+      "mean_price": 0.44859379260115645,
+      "observed_rate": 0.4027640671273445,
+      "diff_obs_minus_price": -0.04582972547381192
+    },
+    "5": {
+      "n": 1282,
+      "n_y1": 673,
+      "mean_price": 0.5455048359166654,
+      "observed_rate": 0.5249609984399376,
+      "diff_obs_minus_price": -0.020543837476727833
+    },
+    "6": {
+      "n": 1053,
+      "n_y1": 623,
+      "mean_price": 0.6451612625396649,
+      "observed_rate": 0.5916429249762583,
+      "diff_obs_minus_price": -0.053518337563406626
+    },
+    "7": {
+      "n": 1017,
+      "n_y1": 720,
+      "mean_price": 0.7467299096201312,
+      "observed_rate": 0.7079646017699115,
+      "diff_obs_minus_price": -0.0387653078502197
+    },
+    "8": {
+      "n": 1231,
+      "n_y1": 1003,
+      "mean_price": 0.8489548005670655,
+      "observed_rate": 0.8147847278635256,
+      "diff_obs_minus_price": -0.03417007270353989
+    },
+    "9": {
+      "n": 6128,
+      "n_y1": 6017,
+      "mean_price": 0.9796423543545716,
+      "observed_rate": 0.9818864229765013,
+      "diff_obs_minus_price": 0.002244068621929718
+    }
+  },
+  "checks": {
+    "n_multi_label1": 0,
+    "n_y_case_mismatch": 40,
+    "n_p1d_on_inner_edge": 1763,
+    "chi2_mirrored": {
+      "chi2": 68.2249601813323,
+      "df": 10,
+      "p": 9.749082808156585e-11,
+      "effect_w": 0.037721277901004116,
+      "chi2_q1_recomputed": 67.9867245888779
+    }
+  },
+  "decision": "B"
+}

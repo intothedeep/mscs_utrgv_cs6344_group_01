@@ -1,0 +1,13 @@
+=== run v1label job 150296 source 142082_mvp1_full_v1r3 host gpu011 dir /home/taeklim01/cs6344_polymarket/runs/150296_v1label start 2026-11-07T21:52:20-06:00 ===
+decision B n 47948 yes_like 30630 share 0.6388
+total 5240
+drwxrwxr-x  3 taeklim01 taeklim01     200 Nov  7 21:54 .
+drwxrwxr-x 15 taeklim01 taeklim01    4096 Nov  7 21:52 ..
+-rw-rw-r--  1 taeklim01 taeklim01    2129 Nov  7 21:52 code.sha256
+drwxrwxr-x  2 taeklim01 taeklim01    4096 Nov  7 21:52 code_snapshot
+lrwxrwxrwx  1 taeklim01 taeklim01      38 Nov  7 21:52 data -> /home/taeklim01/cs6344_polymarket/data
+-rw-rw-r--  1 taeklim01 taeklim01 5332756 Nov  7 21:54 label1_by_market.csv
+-rw-rw-r--  1 taeklim01 taeklim01   10961 Nov  7 21:54 label1_counts.json
+-rw-rw-r--  1 taeklim01 taeklim01     326 Nov  7 21:54 label_check_by_category.csv
+-rw-rw-r--  1 taeklim01 taeklim01     988 Nov  7 21:54 manifest.json
+=== done 2026-11-07T21:54:28-06:00 ===

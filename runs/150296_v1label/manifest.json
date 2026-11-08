@@ -1,0 +1,38 @@
+{
+  "code_version": "v1label-v2",
+  "code_sha": "5f3c3bef5045",
+  "params": {
+    "source": "/home/taeklim01/cs6344_polymarket/runs/142082_mvp1_full_v1r3",
+    "n_bins": 10,
+    "expected_kept": 47948,
+    "share_line": 0.95,
+    "off_bins": [
+      0,
+      1,
+      6,
+      7,
+      8
+    ],
+    "normalization": "label_norm = lower(trim(label1)), runs of inner whitespace collapsed to one space; no other change",
+    "prereg": "analysis/prereg_v1_label_check.md"
+  },
+  "env": {
+    "hostname": "gpu011",
+    "python": "3.13.12",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "slurm_job_id": "150296",
+    "slurm_cpus_per_task": "8",
+    "slurm_mem_per_node": "65536",
+    "duckdb_threads": "8",
+    "duckdb_mem": "48GB"
+  },
+  "metrics": {
+    "n_markets": 47948,
+    "decision": "B",
+    "share_yes_like": 0.6388170518061232,
+    "wall_s": 74.4,
+    "source_markets_parquet_sha256": "37e6b10e4f667cc3b7e2bb503ffc2dbfb862164ea4dd6dda4eaf0bbeaac87a87"
+  }
+}
