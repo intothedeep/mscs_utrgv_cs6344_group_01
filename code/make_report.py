@@ -118,6 +118,7 @@ LORENZ_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "l
 LN_PATH = Path(__file__).resolve().parent.parent / "reports" / "lecture_numbers.json"   # v1 only: written by code/lecture_numbers.py
 WALLET_DIST_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "wallet_dist_panels.png"   # v1 only: code/wallet_dist_figs.py, copied from its run
 CCDF_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "fig6_ccdf_top_sampled.png"   # v1 only: code/ccdf_redraw.py, copied from its run
+LABEL1_PATH = Path(__file__).resolve().parent.parent / "runs" / "150296_v1label" / "label1_counts.json"   # v1 only: share of kept markets whose outcome-1 label is Yes (D-036, rule B)
 Z_PNG = Path(__file__).resolve().parent.parent / "reports" / "figures" / "fig4_calibration_z.png"
 # Dataset paper (main.tex line 66): share of maker volume held by the top 1% of makers. Quoted, not computed here.
 PAPER_TOP1_MAKER = 0.841
@@ -448,7 +449,7 @@ def bins_table(P: Page, rows: list[dict] | None, caption: str, nb: int | None, z
         if "p_bh" in r:
             row += [fp(float(r["p_bh"])), "off" if r["reject_bh"] == "True" else "ok"]
         out.append(row)
-    head = ["Bin", "n", "Mean price", "Observed Yes rate", "Observed minus price", "95% Wilson CI" if z is None else "95% z interval"]
+    head = ["Bin", "n", "Mean price", "Observed Yes rate" if z is None else "Observed rate of outcome 1", "Observed minus price", "95% Wilson CI" if z is None else "95% z interval"]
     if z is not None:
         head.append("Mean price outside it")
     if rows and "p_bh" in rows[0]:
@@ -456,14 +457,15 @@ def bins_table(P: Page, rows: list[dict] | None, caption: str, nb: int | None, z
     return P.table(caption, head, out)
 
 
-def confusion_block(P: Page, m: dict) -> str:
+def confusion_block(P: Page, m: dict, v2: bool) -> str:
     cf = m["confusion_at_0.5"]
-    tab = P.table("Confusion matrix of the main set. Predicted Yes means p_1d > 0.5.",
-                  ["", "Actual Yes", "Actual No", "Total"],
-                  [["Predicted Yes", cf["tp"], cf["fp"], cf["tp"] + cf["fp"]],
-                   ["Predicted No", cf["fn"], cf["tn"], cf["fn"] + cf["tn"]]])
+    one, zero = ("Yes", "No") if v2 else ("outcome 1", "outcome 0")   # v1: D-037, the side coded 1 is not always Yes
+    tab = P.table(f"Confusion matrix of the main set. Predicted {one} means p_1d > 0.5.",
+                  ["", f"Actual {one}", f"Actual {zero}", "Total"],
+                  [[f"Predicted {one}", cf["tp"], cf["fp"], cf["tp"] + cf["fp"]],
+                   [f"Predicted {zero}", cf["fn"], cf["tn"], cf["fn"] + cf["tn"]]])
     return (tab + f"<p>Precision {fmt(cf['precision'])}, recall {fmt(cf['recall'])}, accuracy {fmt(cf['accuracy'])}, "
-                  f"class balance (Yes share) {fmt(m['class_balance_yes'])}.</p>")
+                  f"class balance ({'Yes' if v2 else 'outcome-1'} share) {fmt(m['class_balance_yes'])}.</p>")
 
 
 def long_ci(v: dict) -> str:
@@ -478,7 +480,7 @@ def paper_longshot_block(P: Page, long_main: dict, v2: bool) -> str:
                     ["Bin", "Paper: mean return per token (per trade)", "Ours: observed minus mean price (per market)",
                      "95% CI of ours" if "z_low_diff" not in next(iter(long_main.values()), {}) else "95% z interval of ours", "Our n"], rows)
             + '<p class="note">The units differ. The paper counts every trade and takes payout minus price per token. '
-              "We count every market once and take the observed Yes rate minus the mean price. "
+              "We count every market once and take the observed " + ("Yes rate" if v2 else "rate of outcome 1") + " minus the mean price. "
               + ("Compare the sign and the size, not the digits." if v2 else
                  "So we do not compare their sizes. We read only the direction, the sign.") + "</p>")
 
@@ -489,8 +491,8 @@ def eqfreq_note(z: list[dict], rows: list[dict]) -> str:
     n_z, n_bh = sum(b["price_outside"] for b in z), sum(off)
     diff = [(r["bin"], b["n_yes"], b["n"]) for r, b, o in zip(rows, z, off) if b["price_outside"] != o]
     why = ("The z interval has no correction for ten bins. Its spread comes from the observed rate, "
-           "which is unreliable when a bin has very few Yes outcomes.")
-    where = ("They differ in " + ", ".join(f"bin {b} ({fmt(y)} Yes in {fmt(n)})" for b, y, n in diff) + ". ") if diff else "They mark the same bins. "
+           "which is unreliable when a bin has very few outcome-1 results.")
+    where = ("They differ in " + ", ".join(f"bin {b} ({fmt(y)} outcome-1 in {fmt(n)})" for b, y, n in diff) + ". ") if diff else "They mark the same bins. "
     return (f'<p class="note">In equal-frequency bins the z interval puts the price outside {n_z} bins, and BH marks {n_bh}. '
             + html.escape(where + why) + "</p>")
 
@@ -503,6 +505,7 @@ def q1_bullets_v2() -> list[str]:
 
 
 def q1_bullets_v1(ln: dict, nb: int) -> list[str]:
+    share1 = json.loads(LABEL1_PATH.read_text())["overall"]["share_yes_like"]
     z, gap = ln["z_interval_95"], ln["largest_gap"]
     same = z["bins_outside"] == z["bins_bh_off"]
     out_txt = (f"In {z['n_outside']} of {len(z['bins'])} bins the mean price is outside the z interval: bins {', '.join(map(str, z['bins_outside']))}. "
@@ -510,12 +513,13 @@ def q1_bullets_v1(ln: dict, nb: int) -> list[str]:
                   f"The BH bins off are {', '.join(map(str, z['bins_bh_off']))}."))
     gd, c2, nm = ln["gap_direction"], ln["chi2_largest_contributor"], ln["no_min_filter_longshot_bh"]
     n_all = sum(b["n"] for b in z["bins"])
-    small_txt = (f"The effect is small, and it runs one way. In {gd['main']['n_negative']} of {gd['main']['n_bins']} bins the observed Yes rate "
-                 f"is below the mean price, so Yes is priced too high. The same holds without the minimum-trade filter "
+    small_txt = (f"The effect is small, and it runs one way. In {gd['main']['n_negative']} of {gd['main']['n_bins']} bins the observed rate of outcome 1 "
+                 f"is below the mean price, so outcome 1 is priced too high. Outcome 1 is the first-listed outcome of a market. "
+                 f"Its label is Yes in {share1:.1%} of the kept markets. The same holds without the minimum-trade filter "
                  f"({gd['no_min_filter']['n_negative']} of {gd['no_min_filter']['n_bins']}) and in equal-frequency bins "
                  f"({gd['equal_frequency']['n_negative']} of {gd['equal_frequency']['n_bins']}). "
                  f"Over all {fmt(n_all)} markets the net gap is {100 * gd['main']['net_gap']:+.2f} percentage points, "
-                 f"{fmt(abs(gd['main']['n_yes_minus_expected']), 0)} fewer Yes outcomes than the prices imply. "
+                 f"{fmt(abs(gd['main']['n_yes_minus_expected']), 0)} fewer outcome-1 results than the prices imply. "
                  f"The largest per-bin gap is {gap['diff_obs_minus_price']:+.4f}, in bin {gap['bin']} (price {bin_label(gap['bin'], nb)}). "
                  f"The largest chi-square contributor is bin {c2['bin']} ({c2['share']:.1%} of the chi-square). "
                  "We set no size line before the results, so small is our reading. The p-values assume independent markets, so they are optimistic.")
@@ -562,14 +566,14 @@ def sec_q1(P: Page, D: dict, v2: bool) -> str:
                        "points on the diagonal mean the price matches the outcome rate.")
         bin_cap = "Per bin, main set. BH p is the corrected binomial p. Observed minus price is the effect."
     else:
-        head = ["Set", "Markets", "Yes share", "Mean squared residual of the price", "Log loss", "Mean H(p) bits", "Chi-square", "p",
-                "Bins off (BH / Bonf.)", "Accuracy at 0.5", "KS D Yes vs No", "KS p"]
+        head = ["Set", "Markets", "Outcome-1 share", "Mean squared residual of the price", "Log loss", "Mean H(p) bits", "Chi-square", "p",
+                "Bins off (BH / Bonf.)", "Accuracy at 0.5", "KS D outcome 1 vs outcome 0", "KS p"]
         cap = ("Calibration metrics. The per-bin gaps (next table) are the effect size. Bins off: BH / Bonferroni. "
                "Mean squared residual of the price: Lecture 20.")
         model = ("<p><b>Model:</b> each market's outcome is Bernoulli(p), where p is its price. If prices are calibrated, "
-                 "the Yes count in a bin is binomial(n, mean p). The chi-square test used here is the goodness-of-fit form of the "
+                 "the outcome-1 count in a bin is binomial(n, mean p). The chi-square test used here is the goodness-of-fit form of the "
                  "chi-square test in Lecture 12: observed against expected counts, expected from the prices.</p>")
-        fig = P.figure("fig4_calibration.png", "Observed Yes rate against mean price per bin, with 95% z interval.",
+        fig = P.figure("fig4_calibration.png", "Observed rate of outcome 1 against mean price per bin, with 95% z interval.",
                        "points on the diagonal mean the price matches the outcome rate.", Z_PNG,
                        f"reports/figures/fig4_calibration_z.png, drawn by code/lecture_numbers.py from q1_bins.csv and "
                        f"q1_bins_no_min.csv of {P.run}")
@@ -580,9 +584,9 @@ def sec_q1(P: Page, D: dict, v2: bool) -> str:
             + P.table(cap, head, rows)
             + bins_table(P, D["q1_bins"], bin_cap, nb, zb.get("bins"))
             + fig
-            + P.figure("fig5_ecdf_yes_no.png", "ECDFs of p_1d for Yes-resolved and No-resolved markets.",
+            + P.figure("fig5_ecdf_yes_no.png", "ECDFs of p_1d for Yes-resolved and No-resolved markets." if v2 else "ECDFs of p_1d for markets where outcome 1 won and markets where outcome 0 won.",
                        "the further apart the curves, the better the price separates the outcomes.")
-            + confusion_block(P, main)
+            + confusion_block(P, main, v2)
             + P.table("Longshot bins (price below 0.2): observed rate against mean price.",
                       ["Set", "Bin", "n", "Mean price", "Observed rate", "Observed minus price", "95% CI of the difference" if v2 else "95% z interval of the difference"], long)
             + paper_longshot_block(P, zb["longshot"]["main_with_min_filter"] if ln else main["longshot"], v2)

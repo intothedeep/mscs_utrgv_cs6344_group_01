@@ -255,6 +255,22 @@ def add_pilot(m: Macros, pilot: Path) -> None:
           f"{src}: share_volume_after_close")
 
 
+def add_label1(m: Macros, path: Path) -> None:
+    """D-036 rule B: share of kept markets whose outcome-1 label is Yes."""
+    r = json.loads(path.read_text())
+    m.add("OutcomeOneYesShare", pct(r["overall"]["share_yes_like"]),
+          "label1_counts.json (run 150296_v1label): overall.share_yes_like")
+    src = "label1_counts.json (run 150296_v1label)"
+    m.add("OutcomeOneYesN", count(r["overall"]["n_yes_like"]), f"{src}: overall.n_yes_like")
+    gaps = [r["by_bin_yes_only"][str(b)]["diff_obs_minus_price"] for b in range(9)]   # bins 0 to 8, descriptive
+    m.add("OutcomeOneYesBinsNegative", count(sum(g < 0 for g in gaps)),
+          f"{src}: by_bin_yes_only bins 0 to 8 with diff_obs_minus_price < 0")
+    m.add("OutcomeOneYesGapMin", "\\ensuremath{" + _grouped(100 * min(abs(g) for g in gaps), 1) + "}",
+          f"{src}: by_bin_yes_only bins 0 to 8, smallest |diff_obs_minus_price|, percentage points")
+    m.add("OutcomeOneYesGapMax", "\\ensuremath{" + _grouped(100 * max(abs(g) for g in gaps), 1) + "}",
+          f"{src}: by_bin_yes_only bins 0 to 8, largest |diff_obs_minus_price|, percentage points")
+
+
 DROP_REASONS = ("updown", "no_outcome", "no_price", "stale_price", "below_min_trades")
 
 
@@ -637,11 +653,15 @@ def main() -> None:
     ap.add_argument("--robust", type=Path, help="robustness run dir with r1_results.json, r2_results.json")
     ap.add_argument("--lecture", type=Path, default=Path(__file__).resolve().parent.parent / "reports" / "lecture_numbers.json",
                     help="lecture_numbers.json (code/lecture_numbers.py); used only when it is from --run")
+    ap.add_argument("--label1", type=Path,
+                    default=Path(__file__).resolve().parent.parent / "runs" / "150296_v1label" / "label1_counts.json",
+                    help="label1_counts.json of the label check run (D-036)")
     a = ap.parse_args()
     m = Macros()
     for fn in (add_meta, add_data, add_q1, add_q1a, add_q1b, add_q1c, add_q2, add_q3):
         fn(m, a.run)
     add_lecture(m, a.run, a.lecture)
+    add_label1(m, a.label1)
     add_q1_eqfreq(m, a.run, load(a.run, "verdicts.json")["alpha"], a.q1eqfreq)
     if a.pilot is not None:
         add_pilot(m, a.pilot)

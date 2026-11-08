@@ -95,12 +95,12 @@ html.js .langbar{display:flex}
     <li><span lang="ko">범위는 MVP1(Q1, Q2, Q3)만이다 (D-016, D-019, D-023).</span><span lang="en">The scope is minimum viable product 1 (MVP1) only: Q1, Q2, Q3 (D-016, D-019, D-023).</span></li>
     <li><span lang="ko">방법은 강의 안에서만 쓴다 (D-025, D-026).</span><span lang="en">We use only methods taught in the lecture (D-025, D-026).</span></li>
   </ol>
-  <p class="muted"><span lang="ko">왜: 논문을 읽는 사람이 "왜 이렇게 했나"를 물을 때, 결정과 이유를 한 장으로 보이려고 만들었다. 쓴 데이터: <code>cs6344_group_01/DECISIONS.md</code>(D-001 ~ D-034, 34행), <code>papers/paper_mvp1/main.tex</code>의 절 목록, <code>STATUS.md</code>. "왜 중요한가" 칸은 각 행의 버린 안(Rejected)과 이유를 근거로 썼다.</span><span lang="en">Why: a reader of the paper may ask "why did you do this?". This page shows each decision and its reason on one page. Data used: <code>cs6344_group_01/DECISIONS.md</code> (D-001 to D-034, 34 rows), the section list of <code>papers/paper_mvp1/main.tex</code>, and <code>STATUS.md</code>. The "Why it matters" field comes from the rejected option and its reason in each row.</span></p>
+  <p class="muted"><span lang="ko">왜: 논문을 읽는 사람이 "왜 이렇게 했나"를 물을 때, 결정과 이유를 한 장으로 보이려고 만들었다. 쓴 데이터: <code>cs6344_group_01/DECISIONS.md</code>(D-001 ~ D-037, 37행), <code>papers/paper_mvp1/main.tex</code>의 절 목록, <code>STATUS.md</code>. "왜 중요한가" 칸은 각 행의 버린 안(Rejected)과 이유를 근거로 썼다.</span><span lang="en">Why: a reader of the paper may ask "why did you do this?". This page shows each decision and its reason on one page. Data used: <code>cs6344_group_01/DECISIONS.md</code> (D-001 to D-037, 37 rows), the section list of <code>papers/paper_mvp1/main.tex</code>, and <code>STATUS.md</code>. The "Why it matters" field comes from the rejected option and its reason in each row.</span></p>
 </header>
 
 <nav class="tabs" aria-label="보기 선택 / Choose a view">
   <button data-tab="flow" aria-pressed="true">1 · <span lang="ko">결정 흐름</span><span lang="en">Decision flow</span></button>
-  <button data-tab="cards" aria-pressed="false">2 · <span lang="ko">결정 34개: 왜, 왜 중요한가</span><span lang="en">34 decisions: why, why it matters</span></button>
+  <button data-tab="cards" aria-pressed="false">2 · <span lang="ko">결정 37개: 왜, 왜 중요한가</span><span lang="en">37 decisions: why, why it matters</span></button>
   <button data-tab="paper" aria-pressed="false">3 · <span lang="ko">논문 절 ↔ 결정</span><span lang="en">Paper sections ↔ decisions</span></button>
 </nav>
 
@@ -209,8 +209,24 @@ flowchart LR
   classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
   class D018,D022,D029,D031,D032,D033,D034 fig
 </pre></div>
+    <p class="link-down">▼ <span lang="ko">논문이 17쪽으로 끝난 뒤, 소유자가 검증과 타당성 확인을 한 번 더 요청했다.</span><span lang="en">After the paper reached 17 pages, the owner asked for one more verify and validate pass.</span></p>
+    <div class="lane"><p class="lane-t"><span lang="ko">⑥ 리뷰와 문구 · 2026-11-07</span><span lang="en">6. Review and wording · 2026-11-07</span></p><pre class="mermaid" lang="ko">
+flowchart LR
+  D035["D-035 관문 리뷰 한 번 더<br/>중요 1건: V-1"] --> D036["D-036 레이블을<br/>클러스터에서 세기<br/>규칙은 실행 전에"] --> D037["D-037 이름을<br/>outcome 1로 통일<br/>(끝남)"]
+  classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
+  classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
+  class D035,D037 fig
+  class D036 crit
+</pre><pre class="mermaid" lang="en">
+flowchart LR
+  D035["D-035 one more gate review<br/>1 major: V-1"] --> D036["D-036 count the label<br/>on the cluster<br/>rule fixed before the run"] --> D037["D-037 rename to<br/>outcome 1<br/>(done)"]
+  classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
+  classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
+  class D035,D037 fig
+  class D036 crit
+</pre></div>
     <p class="muted"><span lang="ko">그림에 없는 결정: 환경 D-001, D-002, D-006, D-008, D-015, 마감 D-021, 나중에 바뀐 MVP2 결정 D-009, D-010. 탭 2 카드에 있다.</span><span lang="en">Decisions not in the figure: environment D-001, D-002, D-006, D-008, D-015, deadline D-021, and the MVP2 decisions changed later, D-009 and D-010. They are in the tab 2 cards.</span></p>
-    <p class="muted"><span lang="ko">그림 1. 논문 모양을 바꾼 결정 26개를 다섯 단계로 나눈 순서와 연결. 왜: 한 결정이 다음 결정의 조건이 된 길을 보이면, 논문의 각 선택이 어디서 왔는지 거꾸로 따라갈 수 있다. 출처: <code>cs6344_group_01/DECISIONS.md</code>.</span><span lang="en">Figure 1. The 26 decisions that shaped the paper, in five phases with their links. Why: when one decision is the condition of the next, you can trace each paper choice back to its source. CCDF means complementary cumulative distribution function. Source: <code>cs6344_group_01/DECISIONS.md</code>.</span></p>
+    <p class="muted"><span lang="ko">그림 1. 논문 모양을 바꾼 결정 29개를 여섯 단계로 나눈 순서와 연결. 왜: 한 결정이 다음 결정의 조건이 된 길을 보이면, 논문의 각 선택이 어디서 왔는지 거꾸로 따라갈 수 있다. 출처: <code>cs6344_group_01/DECISIONS.md</code>.</span><span lang="en">Figure 1. The 29 decisions that shaped the paper, in six phases with their links. Why: when one decision is the condition of the next, you can trace each paper choice back to its source. CCDF means complementary cumulative distribution function. Source: <code>cs6344_group_01/DECISIONS.md</code>.</span></p>
   </div>
 
   <div class="panel step">
@@ -357,6 +373,7 @@ const PHASES = [
   ["③ 범위 좁히기 · 2026-11-01", ["D-016","D-017","D-019","D-020","D-021","D-023"]],
   ["④ 강의 방법만 · 2026-11-01 ~ 11-02", ["D-024","D-025","D-026","D-027","D-028","D-030"]],
   ["⑤ 그림과 마무리 · 2026-11-01 ~ 11-02", ["D-018","D-022","D-029","D-031","D-032","D-033","D-034"]],
+  ["⑥ 리뷰와 문구 · 2026-11-07", ["D-035","D-036","D-037"]],
 ];
 const PHASES_EN = [
   "1. Data and criteria · 2026-10-19",
@@ -364,6 +381,7 @@ const PHASES_EN = [
   "3. Narrowing the scope · 2026-11-01",
   "4. Lecture methods only · 2026-11-01 ~ 11-02",
   "5. Figures and wrap-up · 2026-11-01 ~ 11-02",
+  "6. Review and wording · 2026-11-07",
 ];
 const D = {
   "D-001": ["env", "클러스터 환경: uv + Python 3.13.12", "로컬과 같은 Python으로 모든 데이터 질의를 클러스터에서 돌린다", "로컬 코드가 클러스터에서 그대로 돈다. 재현성 절의 근거", "python3.9 venv (문법이 다름)"],
@@ -400,6 +418,9 @@ const D = {
   "D-032": ["fig", "그림은 한 줄에 하나", "두 개는 작아서 읽기 어렵다", "그림이 커졌다. 대신 논문이 18쪽이 됐다 (D-033이 고침)", "합친 그림 유지"],
   "D-033": ["fig", "읽히면 두 그림을 한 줄에 (반 폭으로 다시 그림)", "D-032로 논문이 18쪽", "읽기 쉬움과 쪽수를 함께 맞췄다. 논문 17쪽", "항상 한 줄에 하나"],
   "D-034": ["fig", "Q1 p 값 뒤에 독립성 경고 한 문장", "최종 리뷰 finding 2", "p 값을 과하게 믿지 않게 한다. 초록은 그대로", "한계 절에만 두기"],
+  "D-035": ["fig", "M1 관문 리뷰를 한 번 더 (소유자 요청)", "소유자가 마감(2026-11-15) 전에 MVP1을 verify(맞게 만들었나)와 validate(맞는 것을 만들었나)로 다시 확인해 달라고 했다", "V-1을 찾았다. 앞선 통과 리뷰는 같은 문제를 작은 문제(A10)로 남겼다. 결과: 통과, 막는 문제 0, 중요 1, 작은 것 11, 숫자 40개 모두 일치, 논문 17쪽", "2026-11-02 최종 통과 뒤 리뷰를 더 하지 않기"],
+  "D-036": ["crit", "V-1은 outcome 1의 레이블을 클러스터에서 세어 정함 (규칙은 실행 전에 등록)", "저장된 파일에 outcome 1의 이름이 없어서 문구에 잰 숫자가 필요했다. 규칙을 먼저 정해 결과가 문구를 고르지 못하게 했다", "실행 150296이 규칙 B를 골랐다. 이름이 Yes인 몫은 전체 0.639, Sports 0.140. 뒤집은 Q1 카이제곱은 68.22 대 67.99, 판정은 그대로", "(b) 실행 없이 지금 바로 \"첫 번째로 적힌 결과\"로 고치기"],
+  "D-037": ["fig", "끝남: outcome 1을 뜻하는 모든 이름을 \"outcome 1\"로 바꾸고, Yes 시장 구간 서술 문장 네 개를 더함", "같은 변수가 표마다 \"Yes\"와 \"outcome 1\"로 다르면 독자가 헷갈린다. Yes 문장은 방향이 outcome 1이 진짜 \"Yes\"인 곳에서도 같음을 보인다", "발견이 Sports 이름 효과만이 아님을 보인다. 서술만 하고 새 검정은 없다. Yes인 시장 30,630개에서 구간 0 ~ 8의 9개 구간 모두 관측 비율이 평균 가격보다 0.4 ~ 5.6 퍼센트포인트 낮다. 논문은 17쪽으로 빌드된다", "방향 주장만 두기, Yes 문장 없이 두기"],
 };
 const DE = {
   "D-001": ["Cluster environment: uv + Python 3.13.12", "Every data query runs on the cluster with the same Python as the local machine", "Local code runs on the cluster unchanged. This is the basis of the reproducibility section", "python3.9 venv (different syntax)"],
@@ -436,6 +457,9 @@ const DE = {
   "D-032": ["One figure per row", "Two per row are small and hard to read", "The figures grew. The paper became 18 pages (D-033 fixes this)", "Keep the combined figure"],
   "D-033": ["Two figures per row if readable (redrawn for half width)", "D-032 made the paper 18 pages", "Readability and page count both fit. The paper is 17 pages", "Always one per row"],
   "D-034": ["One independence warning sentence after the Q1 p value", "Final review finding 2", "It stops readers from over-trusting the p value. The abstract is unchanged", "Put it only in the Limitations section"],
+  "D-035": ["One more gate review of M1 (owner request)", "Before the 2026-11-15 deadline, the owner asked to verify (built right) and validate (built the right thing) MVP1", "It found V-1. The earlier PASS reviews left the same issue as a minor one (A10). Result: PASS, 0 blocking, 1 major, 11 minor, all 40 numbers match, paper 17 pages", "No further review after the 2026-11-02 final PASS"],
+  "D-036": ["V-1 is settled by a cluster count of the outcome 1 label (the rule is registered before the run)", "No saved file showed the label of outcome 1, so the wording needed a measured number. The rule was fixed first so the result could not pick the wording", "Run 150296 picked rule B. The Yes-label share is 0.639 overall and 0.140 in Sports. The Q1 chi-square with sides mirrored is 68.22 vs 67.99, and the verdict is unchanged", "(b) Reword now to \"the first-listed outcome\" with no run"],
+  "D-037": ["Done: every label that means outcome 1 is renamed \"outcome 1\", and four descriptive sentences on the Yes-only bins are added", "The same variable must carry one name everywhere, or a reader sees \"Yes\" in one table and \"outcome 1\" in the next. The Yes sentence shows the direction also holds where outcome 1 really is \"Yes\"", "It shows the finding is not only a Sports-label effect. It is descriptive with no new test. Among the 30,630 Yes-labeled markets, the observed rate is below the mean price in 9 of 9 bins (0 to 8), by 0.4 to 5.6 percentage points. The paper builds with 17 pages", "Direction claims only, and no Yes-only sentence"],
 };
 const SUPERSEDED = { "D-009": "D-016", "D-006": "D-008", "D-032": "D-033", "D-001": "D-015" };
 

@@ -79,3 +79,4 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-11-07 tips: tips moved from ../tips/group_01/ to tips/; one EN/KO toggle page per topic; ERD, paper decisions and proposal pages made bilingual; rendered at 1040px in both languages (tips/README.md, tips/index.html)
 2026-11-07 decision: D-036, V-1 settled by a cluster label count, wording rule pre-registered first
 2026-11-07 run: 150296 on gpu011, decision B; outcome 1 is "Yes" in 63.9% of kept markets (Sports 14.0%); reword V-1 to "outcome 1" (runs/150296_v1label/label1_counts.json)
+2026-11-07 wording: D-037 done; paper, report v1 and README say "outcome 1"; Yes-only sentence by macros (30,630 markets, 9 of 9 bins, 0.4 to 5.6 points); paper builds, 17 pages; tips updated with D-035 to D-037 and their reasons; open: fig5_ecdf_yes_no.png text may still say Yes/No

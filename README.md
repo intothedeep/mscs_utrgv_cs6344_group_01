@@ -41,7 +41,7 @@ Source: `PLAN.md`, `STATUS.md`, `00.runs.md`, `DECISIONS.md` D-016, D-017, D-020
 
 ## Results so far
 
-**Q1 says prices are not calibrated as a whole. The effect is small and runs one way: Yes is priced too high. Q2 says the top wallets do most of the trading by USDC volume, far beyond the 80/20 reference. Q2 and Q3 have no pre-registered verdict.**
+**Q1 says prices are not calibrated as a whole. The effect is small and runs one way: outcome 1 (the first-listed outcome) is priced too high. Q2 says the top wallets do most of the trading by USDC volume, far beyond the 80/20 reference. Q2 and Q3 have no pre-registered verdict.**
 
 These results apply to the 47,948 kept markets only. For Q2, volume is in USDC. It sums every trade in those markets, including trades after T - 1 day. Rows are wallet and role. Trade counts were not measured. They do not cover the other markets in scope. The kept markets are resolved Yes/No markets with a fresh price one day before the close and at least 10 trades.
 
@@ -69,7 +69,7 @@ Q1 numbers. Chi-square is the goodness-of-fit form of the Lecture 12 test: obser
 
 How to read the effect:
 
-- The effect is small, and it runs one way. In 9 of 10 bins the Yes rate is below the price, so Yes is priced too high.
+- The effect is small, and it runs one way. In 9 of 10 bins the outcome-1 rate is below the price, so outcome 1 (the first-listed outcome) is priced too high.
 - The largest per-bin gap is 3.29 percent points (bin 7). It is only one number, so read the direction and the net gap with it.
 - We set no size line before the results. So "small" is our reading.
 - Read the gaps before the p-value.

@@ -96,7 +96,7 @@ We read each market's price \DaysShort{} day before its scheduled close.
 The pre-registered chi-square test says the prices are not calibrated as a whole
 ($\chi^2=\QOneChiSq$, $p=\QOneP$).
 The effect is small and runs one way.
-The observed Yes rate lies below the mean price in \GapNegBinsMain{} of \GapBinsTotal{} bins.
+The observed rate of outcome 1, the first-listed outcome, lies below the mean price in \GapNegBinsMain{} of \GapBinsTotal{} bins.
 The net gap is \GapNetDiffMain.
 The largest per-bin gap is \LargestGapAbs.
 We set no size line before the results.
@@ -291,17 +291,18 @@ The verdict rule and the verdict sentence are unchanged.
 \subsection{Q1: calibration}\label{sec:methods-q1}
 % src: S-PAPER-2, S-PAPER-3
 We treat each outcome as a Bernoulli trial with success probability equal to the price.
-So the Yes count in a bin is approximately binomial.
+Outcome 1 is the first-listed outcome of a market, labeled Yes in \OutcomeOneYesShare{} of kept markets.
+So the outcome-1 count in a bin is approximately binomial.
 We form \NBins{} equal-width price bins, and we use equal-frequency bins as a check.
-In bin $b$, $n_b$ is the market count, $\bar p_b$ the mean price, and $O_b$ the Yes count.
-The null hypothesis is that the Yes rate equals the mean price.
+In bin $b$, $n_b$ is the market count, $\bar p_b$ the mean price, and $O_b$ the outcome-1 count.
+The null hypothesis is that the outcome-1 rate equals the mean price.
 The effect size is the per-bin gap, the observed rate minus the mean price.
-The expected Yes count is $E_b=n_b\bar p_b$.
+The expected outcome-1 count is $E_b=n_b\bar p_b$.
 We test each bin with a binomial test.
 We give a \CiLevel{} z interval for the observed rate $\hat r_b=O_b/n_b$, which is $\hat r_b\pm1.96\sqrt{\hat r_b(1-\hat r_b)/n_b}$ (Lecture 5).
 We correct the \NBins{} tests with Bonferroni and with the Benjamini-Hochberg (BH) procedure \citep{benjamini1995controlling}.
 The overall test is the goodness-of-fit form of the Lecture 12 chi-square test: observed against expected counts, with the expected counts taken from the prices.
-It runs on the bin by \{Yes, No\} table:
+It runs on the bin by \{outcome 1, outcome 0\} table:
 \begin{equation}
 \chi^2=\sum_{b}\left[\frac{(O_b-E_b)^2}{E_b}+\frac{(O_b-E_b)^2}{n_b-E_b}\right].
 \label{eq:chisq}
@@ -309,8 +310,8 @@ It runs on the bin by \{Yes, No\} table:
 We also report the mean squared residual of the price, $\frac1n\sum(p-y)^2$, where $n$ is the total market count (Lecture 20).
 The pre-registration calls it the Brier score \citep{brier1950verification}.
 We add the log loss and the mean entropy $H(p)$ in bits.
-We treat the market as a classifier that says Yes when $p>\FavoriteLine$.
-We compare the price distributions of Yes- and No-resolved markets with a Kolmogorov-Smirnov (KS) test.
+We treat the market as a classifier that says outcome 1 wins when $p>\FavoriteLine$.
+We compare the price distributions of markets where outcome 1 won and markets where outcome 0 won with a Kolmogorov-Smirnov (KS) test.
 The KS statistic $D$ is the effect size.
 For the longshot check we look at the two cheapest bins.
 
@@ -375,14 +376,18 @@ The chi-square statistic is \QOneChiSq{} with \QOneDf{} degrees of freedom.
 The p-value is $p=\QOneP$.
 This p-value assumes independent markets, so it may be too small.
 The effect is small and runs one way.
-In \GapNegBinsMain{} of \GapBinsTotal{} bins the observed Yes rate is below the mean price.
-So Yes is priced too high.
+In \GapNegBinsMain{} of \GapBinsTotal{} bins the observed outcome-1 rate is below the mean price.
+So outcome 1 is priced too high.
+Take the \OutcomeOneYesN{} markets where outcome 1 is labeled Yes.
+In \OutcomeOneYesBinsNegative{} of 9 bins (0 to 8), their rate is below the mean price.
+The gaps are \OutcomeOneYesGapMin{} to \OutcomeOneYesGapMax{} percentage points.
+This is descriptive, with no new test.
 Over all \NMarketsKept{} markets the net gap is \GapNetDiffMain.
-That is \GapNetYesShort{} fewer Yes outcomes than the prices imply.
+That is \GapNetYesShort{} fewer outcome-1 wins than the prices imply.
 The largest per-bin gap is \LargestGapAbs{} (bin \LargestGapBin, counting from 0).
 The largest chi-square contributor is bin \ChiTopBin{}, with \ChiTopShare{} of the chi-square.
 We set no size line before the results, so small is our reading.
-\Cref{fig:calib} shows the observed Yes rate against the mean price in each bin.
+\Cref{fig:calib} shows the observed outcome-1 rate against the mean price in each bin.
 \Cref{tab:bins} gives the numbers.
 
 \begin{table}[H]
@@ -416,7 +421,7 @@ After BH correction, \QOneBinsBh{} of the \NBins{} bins are off ($p<\Alpha$).
 After Bonferroni correction, \QOneBinsBonferroni{} bins are off.
 The \CiLevel{} z interval leaves the mean price outside in \ZIntervalBinsOutsideN{} bins: \ZIntervalBinsOutsideList.
 BH marks the bins \ZIntervalBinsBhOffList{} as off, which are the same bins.
-For example, in the bin with mean price \BinSeventyEightyPrice{}, the observed Yes rate is \BinSeventyEightyObs.
+For example, in the bin with mean price \BinSeventyEightyPrice{}, the observed outcome-1 rate is \BinSeventyEightyObs.
 The gap is \BinSeventyEightyDiff{} (BH $p=\BinSeventyEightyBhP$).
 
 The two cheapest bins are the longshot check.
@@ -436,29 +441,29 @@ So we compare the direction only, not the size.
 \begin{figure}[H]
 \centering
 \figorbox{figures/fig4_calibration_z}{\linewidth}
-\caption{Observed Yes rate against mean price per bin with \CiLevel{} z intervals. Why: points on the diagonal mean the price matches the outcome rate. Source: run \RunId.}
+\caption{Observed outcome-1 rate against mean price per bin with \CiLevel{} z intervals. Why: points on the diagonal mean the price matches the outcome rate. Source: run \RunId.}
 \label{fig:calib}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \figorbox{figures/fig5_ecdf_yes_no}{\linewidth}
-\caption{ECDFs of \pOne{} for Yes- and No-resolved markets. Why: the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
+\caption{ECDFs of \pOne{} for markets where outcome 1 won and markets where outcome 0 won. Why: the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
 \label{fig:ecdf}
 \end{figure}
 
 Next come the score measures.
 The mean squared residual of the price is \QOneBrier, the log loss is \QOneLogLoss, and the mean entropy is \QOneEntropy{} bits.
-The Yes rate among kept markets is \QOneYesRate, and the mean price is \PriceOneDayMean.
+The outcome-1 rate among kept markets is \QOneYesRate, and the mean price is \PriceOneDayMean.
 At the \FavoriteLine{} line, the classifier accuracy is \QOneAccuracy.
 Its precision is \QOnePrecision{} and its recall is \QOneRecall.
-The KS statistic between Yes and No prices is $D=\QOneKsD$ (\Cref{fig:ecdf}).
+The KS statistic between the prices of those two groups is $D=\QOneKsD$ (\Cref{fig:ecdf}).
 Without the minimum-trade filter there are \QOneNoMinN{} markets.
 The mean squared residual is then \QOneNoMinBrier{}, with $\chi^2=\QOneNoMinChiSq$ and $p=\QOneNoMinP$.
 The chi-square test also rejects without the filter.
 With \QOneEqFreqBins{} equal-frequency bins, BH marks \QOneEqFreqBinsBh{} bins as off.
 The z interval leaves the price outside \ZIntervalEqFreqOutsideN{} bins, and BH marks \QOneEqFreqBinsBh.
-They differ in the lowest bin, which has very few Yes outcomes.
+They differ in the lowest bin, which has very few outcome-1 wins.
 The z interval has no correction for the \QOneEqFreqBins{} bins.
 Its spread comes from the observed rate, which is unreliable near zero.
 
@@ -669,7 +674,7 @@ Of the kept markets, \RobROneCleanN{} are clean (\RobROneCleanShare).
 \RobROneSplitN{} have a split payout (\RobROneSplitShare).
 \RobROneOtherN{} are of another kind.
 \RobROneMissingN{} is missing from the file.
-Our label marks Yes on \RobROneSplitYesOne{} of the split markets and No on \RobROneSplitYesZero.
+Our label marks outcome 1 as the winner on \RobROneSplitYesOne{} of the split markets and outcome 0 on \RobROneSplitYesZero.
 Our winner label agrees with the resolution file on \RobROneAgreement{} of the \RobROneNClean{} clean markets.
 \RobROneNMismatch{} clean markets disagree.
 \Cref{fig:r1} shows the payout classes and the calibration points with and without the unclear markets.
@@ -732,7 +737,7 @@ The \CiLevel{} CI is [\RobRTwoTradedCiLow, \RobRTwoTradedCiHigh].
 % src: S-PAPER-5, S-PAPER-8, S-PAPER-10
 The answer to Q1 is no.
 At this $n$, the price is not a calibrated probability as a whole.
-The observed Yes rate sits below the price in \GapNegBinsMain{} of \GapBinsTotal{} bins.
+The observed outcome-1 rate sits below the price in \GapNegBinsMain{} of \GapBinsTotal{} bins.
 The effect is small and runs one way.
 The net gap is \GapNetDiffMain.
 The largest per-bin gap is \LargestGapAbs{} below the price, in bin \LargestGapBin{} (\Cref{tab:bins}).
@@ -760,7 +765,7 @@ Prices cluster near the ends, and trade sizes are strongly right skewed.
 Some markets have no usable winner label, and we drop them.
 In our full run this is \NNoOutcome{} of \NMarketsInScope{} markets (\PctNoOutcome).
 Our rule is wider than the dataset paper's.
-It also drops markets whose Yes-side label never traded.
+It also drops markets whose outcome-1 label never traded.
 The paper says only a small subset lacks a winner.
 
 Markets keep trading after \texttt{close\_at}.

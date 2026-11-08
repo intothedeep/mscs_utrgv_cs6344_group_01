@@ -116,9 +116,9 @@ erDiagram
     string condition_id FK "market id"
     string asset_id "outcome token"
     bigint block_timestamp "trade time, sec"
-    bigint outcome_seq "1 = Yes leg"
+    bigint outcome_seq "1 = outcome 1, first listed"
     double price "token price"
-    double p_event "Yes-scale price"
+    double p_event "outcome 1 scale price"
     double usdc_amount "trade size"
     string maker "wallet"
     string taker "wallet"
@@ -135,7 +135,7 @@ erDiagram
     timestamp close_at "T"
     bool is_updown "filter 1"
     bool is_binary "filter 2"
-    int y "1 Yes won, 0 lost"
+    int y "1 outcome 1 won, 0 lost"
     bigint n_trades "all trades"
     double p_1d "price at T-1 day"
     double p_age_h "price age, hours"
@@ -161,7 +161,7 @@ erDiagram
   TRADE_SIZES_SAMPLE {
     string condition_id FK "kept market"
     double usdc_amount "trade size"
-    double p_event "Yes-scale price"
+    double p_event "outcome 1 scale price"
   }
 </pre></div>
   </div>
@@ -294,9 +294,9 @@ erDiagram
         <tr class="flag"><td>condition_id</td><td>VARCHAR</td><td class="v">0x0000dbb9…3d4f</td><td><span lang="ko">시장 id. <code>markets.market_id</code>로 간다</span><span lang="en">Market id. It goes to <code>markets.market_id</code></span></td></tr>
         <tr><td>asset_id</td><td>VARCHAR</td><td class="v">7123…<span lang="ko">(꾸민 값)</span><span lang="en">(made up)</span></td><td><span lang="ko">결과 토큰(outcome token) id. 한 시장에 다리(leg) 둘</span><span lang="en">Outcome token id. One market has two legs</span></td></tr>
         <tr class="flag"><td>block_timestamp</td><td>BIGINT</td><td class="v">1774050333</td><td><span lang="ko">블록(block) 시각, 초. 2026-03-20 23:45:33 UTC</span><span lang="en">Block time, in seconds. 2026-03-20 23:45:33 UTC</span></td></tr>
-        <tr><td>outcome_seq</td><td>BIGINT</td><td class="v">1</td><td><span lang="ko">다리 번호. 1이 Yes 쪽</span><span lang="en">Leg number. 1 is the Yes side</span></td></tr>
+        <tr><td>outcome_seq</td><td>BIGINT</td><td class="v">1</td><td><span lang="ko">다리 번호. 1이 outcome 1(첫 번째로 적힌 결과)</span><span lang="en">Leg number. 1 is outcome 1 (the first-listed outcome)</span></td></tr>
         <tr><td>price</td><td>DOUBLE</td><td class="v">0.15</td><td><span lang="ko">그 다리 토큰의 가격</span><span lang="en">Price of the token of that leg</span></td></tr>
-        <tr class="flag"><td>p_event</td><td>DOUBLE</td><td class="v">0.15</td><td><span lang="ko">Yes 쪽 눈금으로 바꾼 가격. 두 다리를 한 축에 둔다</span><span lang="en">Price converted to the Yes-side scale. It puts both legs on one axis</span></td></tr>
+        <tr class="flag"><td>p_event</td><td>DOUBLE</td><td class="v">0.15</td><td><span lang="ko">outcome 1 쪽 눈금으로 바꾼 가격. 두 다리를 한 축에 둔다</span><span lang="en">Price converted to the outcome 1 scale. It puts both legs on one axis</span></td></tr>
         <tr class="flag"><td>usdc_amount</td><td>DOUBLE</td><td class="v">25.0 <span lang="ko">(꾸민 값)</span><span lang="en">(made up)</span></td><td><span lang="ko">거래 크기, USDC(달러 고정 토큰)</span><span lang="en">Trade size, in USD Coin (USDC), a token fixed to the dollar</span></td></tr>
         <tr><td>fee_usdc</td><td>DOUBLE</td><td class="v">0.0</td><td><span lang="ko">수수료(fee), USDC</span><span lang="en">Fee, in USDC</span></td></tr>
         <tr class="flag"><td>maker</td><td>VARCHAR</td><td class="v">0xA1…<span lang="ko">(꾸민 값)</span><span lang="en">(made up)</span></td><td><span lang="ko">호가를 낸 지갑(maker). 지갑은 주소 하나다. 사람이 아니다</span><span lang="en">The wallet that posted the quote (maker). A wallet is one address, not a person</span></td></tr>
@@ -353,7 +353,7 @@ erDiagram
         <tr><td>close_at = T</td><td class="v">2026-03-22 00:00</td><td class="v">2026-01-10 03:00</td><td><span lang="ko">평가 시각 T</span><span lang="en">Evaluation time T</span></td></tr>
         <tr><td>is_updown</td><td class="v">false</td><td class="v">true</td><td><span lang="ko">규칙 1: Up/Down 시장인가</span><span lang="en">Rule 1: is it an Up/Down market</span></td></tr>
         <tr><td>is_binary</td><td class="v">true</td><td class="v">true</td><td><span lang="ko">규칙 2: 결과 둘, Neg-Risk 아님</span><span lang="en">Rule 2: two outcomes, not Neg-Risk</span></td></tr>
-        <tr class="flag"><td>y</td><td class="v">0</td><td class="v">1</td><td><span lang="ko">결과. 1 = Yes 다리가 이김</span><span lang="en">Result. 1 = the Yes leg won</span></td></tr>
+        <tr class="flag"><td>y</td><td class="v">0</td><td class="v">1</td><td><span lang="ko">결과. 1 = outcome 1 다리가 이김</span><span lang="en">Result. 1 = the outcome 1 leg won</span></td></tr>
         <tr><td>n_trades</td><td class="v">106</td><td class="v">6197</td><td><span lang="ko">전체 거래 수</span><span lang="en">Total number of trades</span></td></tr>
         <tr><td>volume_usdc</td><td class="v">2545.67</td><td class="v">59973.70</td><td><span lang="ko">전체 거래액, USDC</span><span lang="en">Total trade amount, in USDC</span></td></tr>
         <tr><td>first_ts / last_ts</td><td class="v">03-15 00:44 / 03-23 06:59</td><td class="v">01-10 00:45 / 01-10 03:00</td><td><span lang="ko">첫 거래, 마지막 거래</span><span lang="en">First trade, last trade</span></td></tr>
@@ -429,8 +429,8 @@ erDiagram
     <h3><span class="badge">7</span>q1_bins.csv<span class="kind"><span lang="ko">Q1 · 칸 단위 결과</span><span lang="en">Q1 · result per bin</span></span></h3>
     <p lang="ko"><b>무엇:</b> 가격 칸 하나가 한 행. 10행. 47,948개 남은 시장으로 만든다.</p>
     <p lang="en"><b>What:</b> one price bin is one row. 10 rows. It is built from the 47,948 kept markets.</p>
-    <p lang="ko"><b>왜:</b> 칸마다 "평균 가격 = 실제 Yes 비율"인지 이항 검정(binomial test)으로 본다.</p>
-    <p lang="en"><b>Why:</b> a binomial test checks for each bin whether "mean price = actual Yes rate".</p>
+    <p lang="ko"><b>왜:</b> 칸마다 "평균 가격 = outcome 1이 이긴 실제 비율"인지 이항 검정(binomial test)으로 본다.</p>
+    <p lang="en"><b>Why:</b> a binomial test checks for each bin whether "mean price = actual rate at which outcome 1 won".</p>
     <div class="scroll-x"><table>
       <thead><tr><th>bin</th><th>n</th><th>n_yes</th><th>mean_price</th><th>observed_rate</th><th>binom_p</th><th>reject_bonferroni</th></tr></thead>
       <tbody>
@@ -679,8 +679,10 @@ flowchart TB
   <div class="panel">
     <p lang="ko"><b>결론: MVP1 분석은 끝났다. 남은 일은 논문의 소유자 몫과 정리 작업 6개다.</b> 마감은 2026-11-15다(D-021).</p>
     <p lang="en"><b>Conclusion: the MVP1 analysis is done. What remains is the owner's part of the paper and 6 cleanup tasks.</b> The deadline is 2026-11-15 (D-021).</p>
-    <p class="muted" lang="ko">왜: 프로젝트가 어떤 순서로 왔고 지금 어디인지 한 장으로 보려고 만들었다. 쓴 데이터: <code>STATUS.md</code> 로그(2026-10-18 ~ 11-02), <code>PLAN.md</code> 임무 블록(mission block)과 작업 행, <code>RQ.md</code>, <code>DECISIONS.md</code> D-id. 마지막 로그 줄은 2026-11-02다.</p>
-    <p class="muted" lang="en">Why: this page shows on one sheet how the project came here and where it stands now. Data used: the <code>STATUS.md</code> log (2026-10-18 to 11-02), the mission block and task rows of <code>PLAN.md</code>, <code>RQ.md</code>, and the D-ids of <code>DECISIONS.md</code>. The last log line is dated 2026-11-02.</p>
+    <p lang="ko">2026-11-07: 관문 재검토(D-035)가 통과했다. 중요 문제 1건(V-1, "Yes" 문구)은 레이블 세기(D-036)로 풀었다. 논문과 보고서의 이름 통일(D-037)은 끝났다. 논문에 서술 문장 네 개를 더했다. "Yes"인 시장 30,630개에서 구간 0 ~ 8의 9개 구간 모두 관측 비율이 평균 가격보다 0.4 ~ 5.6 퍼센트포인트(percentage point) 낮다. 새 검정은 없다. 남은 것: 그림 <code>fig5_ecdf_yes_no.png</code> 안에 아직 "Yes/No"가 보일 수 있다. 캡션은 이미 outcome 1 이김 / outcome 0 이김으로 바꿨다. 다시 그리려면 클러스터 작업 하나가 필요하고, 소유자가 아직 정하지 않았다.</p>
+    <p lang="en">2026-11-07: the gate re-review (D-035) passed. Its one major issue (V-1, the "Yes" wording) was settled by a label count (D-036). Renaming the labels in the paper and report (D-037) is done. Four short sentences were added to the paper. Among the 30,630 markets where outcome 1 is labeled Yes, the observed rate is below the mean price in 9 of 9 bins (0 to 8), by 0.4 to 5.6 percentage points. There is no new test. Left: the image <code>fig5_ecdf_yes_no.png</code> may still show "Yes/No" inside, while its caption now says outcome 1 won / outcome 0 won. Redrawing it needs one cluster job, and the owner has not decided yet.</p>
+    <p class="muted" lang="ko">왜: 프로젝트가 어떤 순서로 왔고 지금 어디인지 한 장으로 보려고 만들었다. 쓴 데이터: <code>STATUS.md</code> 로그(2026-10-18 ~ 11-07), <code>PLAN.md</code> 임무 블록(mission block)과 작업 행, <code>RQ.md</code>, <code>DECISIONS.md</code> D-id. 마지막 로그 줄은 2026-11-07다.</p>
+    <p class="muted" lang="en">Why: this page shows on one sheet how the project came here and where it stands now. Data used: the <code>STATUS.md</code> log (2026-10-18 to 11-07), the mission block and task rows of <code>PLAN.md</code>, <code>RQ.md</code>, and the D-ids of <code>DECISIONS.md</code>. The last log line is dated 2026-11-07.</p>
     <div class="scroll-x"><table>
       <thead><tr><th><span lang="ko">지표</span><span lang="en">Metric</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th><th><span lang="ko">출처</span><span lang="en">Source</span></th></tr></thead>
       <tbody>
@@ -688,6 +690,8 @@ flowchart TB
         <tr><td><span lang="ko">연구 질문(research question, RQ)</span><span lang="en">Research question (RQ)</span></td><td><span lang="ko">6 답함 · 0 열림 (목표는 RQ1–RQ3)</span><span lang="en">6 answered · 0 open (the goal is RQ1–RQ3)</span></td><td><code>RQ.md</code></td></tr>
         <tr><td><span lang="ko">M1 관문(gate) 리뷰</span><span lang="en">M1 gate review</span></td><td><span lang="ko">세 번째에 PASS · 0 blocker · 0 major · 4 minor</span><span lang="en">PASS on the third try · 0 blocker · 0 major · 4 minor</span></td><td><code>analysis/review_mvp1_rq_r3.md</code></td></tr>
         <tr><td><span lang="ko">최종 리뷰</span><span lang="en">Final review</span></td><td>PASS · 0 blocker · 0 major · 14 minor</td><td><code>analysis/review_final_2026_11_02.md</code></td></tr>
+        <tr><td><span lang="ko">M1 관문 재검토 (2026-11-07)</span><span lang="en">M1 gate re-review (2026-11-07)</span></td><td><span lang="ko">PASS · 0 blocker · 1 major (V-1) · 11 minor · 숫자 40개 중 40개 일치</span><span lang="en">PASS · 0 blocker · 1 major (V-1) · 11 minor · 40 of 40 sampled numbers match</span></td><td><code>analysis/review_mvp1_gate_2026_11_07.md</code></td></tr>
+        <tr><td><span lang="ko">V-1 레이블 세기 (150296)</span><span lang="en">V-1 label count (150296)</span></td><td><span lang="ko">결정 B · "Yes" 몫 0.639 (Sports 0.140)</span><span lang="en">Decision B · Yes-label share 0.639 (Sports 0.140)</span></td><td><code>runs/150296_v1label/label1_counts.json</code></td></tr>
       </tbody>
     </table></div>
     <div class="funnel">
@@ -721,7 +725,10 @@ flowchart TB
   subgraph P5["5 · 마무리 (11-02)"]
     F1["그림 run<br/>145892, 145893, 145897"]:::done --> F2["최종 리뷰 PASS<br/>14 minor"]:::done --> F3["논문 D-034<br/>17쪽 빌드"]:::done
   end
-  subgraph P6["6 · 남은 일 (마감 11-15)"]
+  subgraph P65["6 · 재검토와 문구 (11-07)"]
+    H1["D-035 관문 재검토<br/>PASS, 중요 1건 V-1"]:::done --> H2["D-036 규칙 등록 후<br/>레이블 세기 150296"]:::done --> H3["결정 B<br/>Yes 몫 0.639"]:::done --> H4["D-037 이름 통일<br/>outcome 1 (끝남)"]:::done
+  end
+  subgraph P6["7 · 남은 일 (마감 11-15)"]
     G1["논문 todo 4개<br/>소유자 글"]:::open --> G2["F5 문장 길이<br/>소유자 글 뒤"]:::open
     G3["보고서 v1<br/>소유자 검토"]:::open
     G4["3인 분담 선택<br/>A, B, C"]:::open
@@ -733,11 +740,12 @@ flowchart TB
   C4 --> D1
   D3 --> E1
   E4 --> F1
-  F3 --> G1
-  F3 --> G3
-  F3 --> G4
-  F3 --> G5
-  F3 --> G6
+  F3 --> H1
+  H4 --> G1
+  H4 --> G3
+  H4 --> G4
+  H4 --> G5
+  H4 --> G6
   C1 -.-> X1["MVP2 run<br/>142077, 142078, 142083"]:::dead
   X1 -.-> X2["보고서 v2<br/>목표 밖 D-016"]:::dead
   classDef done fill:#dbe4ff,stroke:#0432ff,color:#111
@@ -764,7 +772,10 @@ flowchart TB
   subgraph P5["5 · Wrap-up (11-02)"]
     F1["Figure runs<br/>145892, 145893, 145897"]:::done --> F2["Final review PASS<br/>14 minor"]:::done --> F3["Paper D-034<br/>17 pages built"]:::done
   end
-  subgraph P6["6 · Open work (deadline 11-15)"]
+  subgraph P65["6 · Re-review and wording (11-07)"]
+    H1["D-035 gate re-review<br/>PASS, 1 major V-1"]:::done --> H2["D-036 rule registered,<br/>then label count 150296"]:::done --> H3["Decision B<br/>Yes share 0.639"]:::done --> H4["D-037 rename labels<br/>outcome 1 (done)"]:::done
+  end
+  subgraph P6["7 · Open work (deadline 11-15)"]
     G1["Paper todo x 4<br/>owner text"]:::open --> G2["F5 sentence length<br/>after owner text"]:::open
     G3["Report v1<br/>owner review"]:::open
     G4["Choose 3-person split<br/>A, B, C"]:::open
@@ -776,11 +787,12 @@ flowchart TB
   C4 --> D1
   D3 --> E1
   E4 --> F1
-  F3 --> G1
-  F3 --> G3
-  F3 --> G4
-  F3 --> G5
-  F3 --> G6
+  F3 --> H1
+  H4 --> G1
+  H4 --> G3
+  H4 --> G4
+  H4 --> G5
+  H4 --> G6
   C1 -.-> X1["MVP2 run<br/>142077, 142078, 142083"]:::dead
   X1 -.-> X2["Report v2<br/>outside goal D-016"]:::dead
   classDef done fill:#dbe4ff,stroke:#0432ff,color:#111
