@@ -130,8 +130,6 @@ A payout check leaves the Q1 verdict unchanged.
 
 \input{sections/09-res-checks}
 
-\input{sections/09-res-robust}
-
 \input{sections/11-discussion}
 
 \input{sections/12-limits}
@@ -144,8 +142,13 @@ A payout check leaves the Q1 verdict unchanged.
 \endgroup
 
 \appendix
-% Appendix files are input in A to G order. Appendix G keeps its letter
-% while A to F are added one row at a time. No effect once A to F exist.
+\crefalias{section}{appendix}
+\crefalias{subsection}{subappendix}
+\crefalias{subsubsection}{subsubappendix}
+% Appendix files are input in A to G order. Each appendix keeps its letter
+% while the others are added one row at a time. No effect once A to G exist.
+\setcounter{section}{5}
+\input{sections/app-f-robust}
 \setcounter{section}{6}
 \input{sections/app-g-review}
 

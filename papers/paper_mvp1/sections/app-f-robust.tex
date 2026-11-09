@@ -1,12 +1,7 @@
-\subsection{Robustness}\label{sec:res-robust}
-% src: S-PAPER-9, S-PAPER-8
-Two checks look at limits of the Q1 setup.
-Both are descriptive.
-They add no primary test and no verdict.
-The pre-registered Q1 verdict stays as it is.
-The sensitivity row below sits next to the original Q1 row and does not replace it.
-Both checks use the \QOneN{} kept markets.
+\section{Robustness}\label{sec:res-robust}
+\Cref{sec:res-checks} introduces these two checks.
 
+\subsection{R1: split payouts}\label{sec:app-r1}
 % src: S-PAPER-9
 Check R1 asks whether the Q1 result holds when markets without a clean payout are removed.
 The resolution file gives each market a payout vector.
@@ -47,6 +42,7 @@ Sensitivity & \RobROneSensN & \RobROneSensChiSq & \RobROneSensP & \RobROneSensBr
 \end{tabular}
 \end{table}
 
+\subsection{R2: price change before the close}\label{sec:app-r2}
 % src: S-PAPER-9
 Check R2 asks how far the price moves from $T-\DaysShort$ day to the last trade before $T$.
 Call the mean price at the last timestamp before $T$ \pT.
