@@ -100,3 +100,36 @@ Without the minimum-trade filter there are \QOneNoMinN{} markets.
 The mean squared residual is then \QOneNoMinBrier{}, with $\chi^2=\QOneNoMinChiSq$ and $p=\QOneNoMinP$.
 The chi-square test also rejects without the filter.
 The equal-frequency bin results are in \Cref{sec:app-q1}.
+
+% Tables 2 and 3 are defined here so they print at the top of the next page and leave room for Table 4 before the Discussion.
+\begin{table*}[t]
+\centering
+\caption{Volume concentration by role, as the share of role volume held by the top wallets. Why: the top shares show how few wallets hold most of the volume. Source: run \RunId.}
+\label{tab:conc}
+\small
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Role & Wallets & Mean (USDC) & Median (USDC) & Top \TopOneLabel{} & Top \TopFiveLabel{} & Top \TopTenLabel{} & Top \TopTwentyLabel \\
+\midrule
+Maker & \MakerNWallets & \MakerMeanVolume & \MakerMedianVolume & \MakerTopOneShare & \MakerTopFiveShare & \MakerTopTenShare & \MakerTopTwentyShare \\
+\midrule
+Taker & \TakerNWallets & \TakerMeanVolume & \TakerMedianVolume & \TakerTopOneShare & \TakerTopFiveShare & \TakerTopTenShare & \TakerTopTwentyShare \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\caption{Distribution fits, with the power law fitted on the tail from $x_{\min}$. Why: a small $D$ means the fitted curve is close to the data. Source: run \RunId.}
+\label{tab:fits}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Variable & Power-law $\alpha$ & $x_{\min}$ (USDC) & KS $D$, power law & KS $D$, normal \\
+\midrule
+Trade size & \TradeSizePowerAlpha & \TradeSizePowerXmin & \TradeSizePowerKsD & \TradeSizeNormalKsD \\
+\midrule
+Wallet volume & \WalletVolumePowerAlpha & \WalletVolumePowerXmin & \WalletVolumePowerKsD & \WalletVolumeNormalKsD \\
+\bottomrule
+\end{tabular}
+\end{table*}
