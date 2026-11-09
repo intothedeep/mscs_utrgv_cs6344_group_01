@@ -917,6 +917,12 @@
 \newcommand{\CatSportsDropStalePriceN}{\ensuremath{66{,}807}}
 % 142123_robust_full_v4/markets.csv: category_refined=Sports, drop_reason=below_min_trades
 \newcommand{\CatSportsDropBelowMinTradesN}{\ensuremath{21{,}497}}
+% m1_results.json: rows.p_1d (main).net_gap_ci_low
+\newcommand{\RThreeQOneNetGapCiLow}{\ensuremath{-1.28}\%}
+% m1_results.json: rows.p_1d (main).net_gap_ci_high
+\newcommand{\RThreeQOneNetGapCiHigh}{\ensuremath{-0.70}\%}
+% m1_results.json: rows.p_vwap.row_agreement
+\newcommand{\RThreeMOneVwapRuleSame}{yes}
 % m1_results.json: rows.p_vwap.n
 \newcommand{\RThreeMOneVwapN}{\ensuremath{47{,}948}}
 % m1_results.json: rows.p_vwap.chi2
@@ -973,6 +979,10 @@
 \newcommand{\RThreeMTwoOtherNetGapCiLow}{\ensuremath{-1.05}\%}
 % m2_results.json: other_net_gap_ci_high
 \newcommand{\RThreeMTwoOtherNetGapCiHigh}{\ensuremath{0.18}\%}
+% m2_results.json: yes_no_row_agreement
+\newcommand{\RThreeMTwoYesNoRuleSame}{yes}
+% m2_results.json: other_row_agreement
+\newcommand{\RThreeMTwoOtherRuleSame}{no}
 % m3_bootstrap.json: proxies.k1_slug_stem.n_clusters
 \newcommand{\RThreeMThreeKOneNClusters}{\ensuremath{16{,}161}}
 % m3_bootstrap.json: proxies.k1_slug_stem.net_gap_ci_low
@@ -993,6 +1003,8 @@
 \newcommand{\RThreeMThreeKTwoChiSq}{\ensuremath{58.5}}
 % m3_bootstrap.json: proxies.k2_category_close_hour.p
 \newcommand{\RThreeMThreeKTwoP}{\ensuremath{7.0\times10^{-9}}}
+% m3_bootstrap.json: proxies.k1_slug_stem.row_agreement
+\newcommand{\RThreeMThreeKOneRuleSame}{yes}
 % m3_bootstrap.json: read_proxy
 \newcommand{\RThreeMThreeReadProxy}{k1\_slug\_stem}
 % m4_results.json: kept_volume_before_T1d_median
@@ -1049,6 +1061,14 @@
 \newcommand{\RThreeMinorFourChiSq}{\ensuremath{67.4}}
 % minor4_dedup.json: q1.net_gap
 \newcommand{\RThreeMinorFourNetGap}{\ensuremath{-0.99}\%}
+% minor4_dedup.json: kept_set.n_out
+\newcommand{\RThreeMinorFourKeptN}{\ensuremath{47{,}809}}
+% minor4_dedup.json: q1.net_gap_ci_low
+\newcommand{\RThreeMinorFourNetGapCiLow}{\ensuremath{-1.28}\%}
+% minor4_dedup.json: q1.net_gap_ci_high
+\newcommand{\RThreeMinorFourNetGapCiHigh}{\ensuremath{-0.69}\%}
+% minor4_dedup.json: q1.row_agreement
+\newcommand{\RThreeMinorFourRuleSame}{yes}
 % minor4_dedup.json: q2.maker.top1_share.delta_pp (percentage points)
 \newcommand{\RThreeMinorFourMakerTopOneDeltaPp}{\ensuremath{-0.16}}
 % minor4_dedup.json: q2.maker.top20_share.delta_pp (percentage points)
@@ -1073,6 +1093,8 @@
 \newcommand{\RThreePeerALowNetGapCiLow}{\ensuremath{-1.66}\%}
 % peer_a_results.json: tercile_low_net_gap_ci_high
 \newcommand{\RThreePeerALowNetGapCiHigh}{\ensuremath{-0.59}\%}
+% peer_a_results.json: tercile_low_row_agreement
+\newcommand{\RThreePeerALowRuleSame}{yes}
 % peer_a_results.json: tercile_mid_n
 \newcommand{\RThreePeerAMidN}{\ensuremath{15{,}982}}
 % peer_a_results.json: tercile_mid_chi2
@@ -1085,6 +1107,8 @@
 \newcommand{\RThreePeerAMidNetGapCiLow}{\ensuremath{-1.97}\%}
 % peer_a_results.json: tercile_mid_net_gap_ci_high
 \newcommand{\RThreePeerAMidNetGapCiHigh}{\ensuremath{-0.89}\%}
+% peer_a_results.json: tercile_mid_row_agreement
+\newcommand{\RThreePeerAMidRuleSame}{yes}
 % peer_a_results.json: tercile_high_n
 \newcommand{\RThreePeerAHighN}{\ensuremath{15{,}983}}
 % peer_a_results.json: tercile_high_chi2
@@ -1097,6 +1121,8 @@
 \newcommand{\RThreePeerAHighNetGapCiLow}{\ensuremath{-0.86}\%}
 % peer_a_results.json: tercile_high_net_gap_ci_high
 \newcommand{\RThreePeerAHighNetGapCiHigh}{\ensuremath{0.03}\%}
+% peer_a_results.json: tercile_high_row_agreement
+\newcommand{\RThreePeerAHighRuleSame}{no}
 % peer_a_results.json: high_vs_low.diff
 \newcommand{\RThreePeerADiff}{\ensuremath{0.71}\%}
 % peer_a_results.json: high_vs_low.ci_low
@@ -1119,6 +1145,8 @@
 \newcommand{\RThreePeerBPeriodOneNetGapCiLow}{\ensuremath{-2.81}\%}
 % peer_b_results.json: period_2022-2024_net_gap_ci_high
 \newcommand{\RThreePeerBPeriodOneNetGapCiHigh}{\ensuremath{-0.62}\%}
+% peer_b_results.json: period_2022-2024_row_agreement
+\newcommand{\RThreePeerBPeriodOneRuleSame}{yes}
 % peer_b_results.json: year_to_period values, period 2 in file order
 \newcommand{\RThreePeerBPeriodTwoLabel}{2025}
 % peer_b_results.json: period_2025_n
@@ -1133,6 +1161,8 @@
 \newcommand{\RThreePeerBPeriodTwoNetGapCiLow}{\ensuremath{-1.84}\%}
 % peer_b_results.json: period_2025_net_gap_ci_high
 \newcommand{\RThreePeerBPeriodTwoNetGapCiHigh}{\ensuremath{-0.89}\%}
+% peer_b_results.json: period_2025_row_agreement
+\newcommand{\RThreePeerBPeriodTwoRuleSame}{yes}
 % peer_b_results.json: year_to_period values, period 3 in file order
 \newcommand{\RThreePeerBPeriodThreeLabel}{2026}
 % peer_b_results.json: period_2026_n
@@ -1147,3 +1177,5 @@
 \newcommand{\RThreePeerBPeriodThreeNetGapCiLow}{\ensuremath{-1.04}\%}
 % peer_b_results.json: period_2026_net_gap_ci_high
 \newcommand{\RThreePeerBPeriodThreeNetGapCiHigh}{\ensuremath{-0.25}\%}
+% peer_b_results.json: period_2026_row_agreement
+\newcommand{\RThreePeerBPeriodThreeRuleSame}{no}

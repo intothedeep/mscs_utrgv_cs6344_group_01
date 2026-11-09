@@ -668,8 +668,18 @@ def _r3_row(m: Macros, name: str, row: dict[str, Any], src: str, path: str, key_
         m.add(f"RThree{name}{suffix}", fmt(row[key_prefix + key]), f"{src}: {path}{key_prefix}{key}")
 
 
+def _rule_same(agreement: str) -> str:
+    """Table word for a row_agreement value: yes for "same", no for "different"."""
+    if agreement not in ("same", "different"):
+        raise ValueError(f"unexpected row_agreement: {agreement!r}")
+    return "yes" if agreement == "same" else "no"
+
+
 def add_r3_m1(m: Macros, run: Path) -> None:
     src, r = "m1_results.json", load(run, "m1_results.json")
+    m.add("RThreeQOneNetGapCiLow", pct2(r["rows"]["p_1d (main)"]["net_gap_ci_low"]), f"{src}: rows.p_1d (main).net_gap_ci_low")
+    m.add("RThreeQOneNetGapCiHigh", pct2(r["rows"]["p_1d (main)"]["net_gap_ci_high"]), f"{src}: rows.p_1d (main).net_gap_ci_high")
+    m.add("RThreeMOneVwapRuleSame", _rule_same(r["rows"]["p_vwap"]["row_agreement"]), f"{src}: rows.p_vwap.row_agreement")
     for key, name in (("p_vwap", "MOneVwap"), ("p_mid", "MOneMid")):
         _r3_row(m, name, r["rows"][key], src, f"rows.{key}.", "", ("n", "chi", "bins") + R3_GAP_CI)
     m.add("RThreeMOneMeanHalfSpread", pct2(r["mean_h"]), f"{src}: mean_h")
@@ -682,6 +692,8 @@ def add_r3_m2(m: Macros, run: Path) -> None:
     src, r = "m2_results.json", load(run, "m2_results.json")
     _r3_row(m, "MTwoYesNo", r, src, "", "yes_no_", ("n", "chi", "p", "bins") + R3_GAP_CI)
     _r3_row(m, "MTwoOther", r, src, "", "other_", ("n", "chi", "p") + R3_GAP_CI)
+    m.add("RThreeMTwoYesNoRuleSame", _rule_same(r["yes_no_row_agreement"]), f"{src}: yes_no_row_agreement")
+    m.add("RThreeMTwoOtherRuleSame", _rule_same(r["other_row_agreement"]), f"{src}: other_row_agreement")
 
 
 def add_r3_m3(m: Macros, run: Path) -> None:
@@ -694,6 +706,8 @@ def add_r3_m3(m: Macros, run: Path) -> None:
         m.add(f"RThree{name}NetGapCiHigh", pct2(p["net_gap_ci_high"]), f"{src}: {s}net_gap_ci_high")
         m.add(f"RThree{name}ChiSq", stat(p["x2_cl"]), f"{src}: {s}x2_cl")
         m.add(f"RThree{name}P", pval(p["p"]), f"{src}: {s}p")
+    m.add("RThreeMThreeKOneRuleSame", _rule_same(r["proxies"]["k1_slug_stem"]["row_agreement"]),
+          f"{src}: proxies.k1_slug_stem.row_agreement")
     m.add("RThreeMThreeReadProxy", text(r["read_proxy"]), f"{src}: read_proxy")
 
 
@@ -735,6 +749,10 @@ def add_r3_minor4(m: Macros, run: Path) -> None:
     m.add("RThreeMinorFourRemoved", count(r["kept_set"]["n_removed"]), f"{src}: kept_set.n_removed")
     m.add("RThreeMinorFourChiSq", stat(r["q1"]["chi2"]), f"{src}: q1.chi2")
     m.add("RThreeMinorFourNetGap", pct2(r["q1"]["net_gap"]), f"{src}: q1.net_gap")
+    m.add("RThreeMinorFourKeptN", count(r["kept_set"]["n_out"]), f"{src}: kept_set.n_out")
+    m.add("RThreeMinorFourNetGapCiLow", pct2(r["q1"]["net_gap_ci_low"]), f"{src}: q1.net_gap_ci_low")
+    m.add("RThreeMinorFourNetGapCiHigh", pct2(r["q1"]["net_gap_ci_high"]), f"{src}: q1.net_gap_ci_high")
+    m.add("RThreeMinorFourRuleSame", _rule_same(r["q1"]["row_agreement"]), f"{src}: q1.row_agreement")
     for role in ("maker", "taker"):
         for top, tag in (("top1_share", "TopOne"), ("top20_share", "TopTwenty")):
             m.add(f"RThreeMinorFour{role.capitalize()}{tag}DeltaPp",
@@ -748,6 +766,7 @@ def add_r3_peer(m: Macros, run: Path) -> None:
     m.add("RThreePeerACutMidHigh", amount(a["cut_mid_high"]), f"{src}: cut_mid_high")
     for t, name in (("low", "Low"), ("mid", "Mid"), ("high", "High")):
         _r3_row(m, f"PeerA{name}", a, src, "", f"tercile_{t}_", ("n", "chi", "pbh") + R3_GAP_CI)
+        m.add(f"RThreePeerA{name}RuleSame", _rule_same(a[f"tercile_{t}_row_agreement"]), f"{src}: tercile_{t}_row_agreement")
     d = a["high_vs_low"]
     m.add("RThreePeerADiff", pct2(d["diff"]), f"{src}: high_vs_low.diff")
     m.add("RThreePeerADiffCiLow", pct2(d["ci_low"]), f"{src}: high_vs_low.ci_low")
@@ -759,6 +778,7 @@ def add_r3_peer(m: Macros, run: Path) -> None:
         name = f"PeerBPeriod{word(i)}"
         m.add(f"RThree{name}Label", text(label), f"{src}: year_to_period values, period {i} in file order")
         _r3_row(m, name, b, src, "", f"period_{label}_", ("n", "chi", "pbh") + R3_GAP_CI)
+        m.add(f"RThree{name}RuleSame", _rule_same(b[f"period_{label}_row_agreement"]), f"{src}: period_{label}_row_agreement")
 
 
 def add_r3(m: Macros, run: Path) -> None:
