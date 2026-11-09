@@ -195,7 +195,7 @@ Rows:
   - AC: in that file, `grep -cE '\["Figure [0-9]+"'` returns 21 and `grep -cE '\["Table [0-9]+"'` returns 6.
   - AC: `grep -cE 'L[0-9]{3}\b' tips/polymarket_paper_summaries_tips.html` returns 0.
   - AC: `grep -c '5.4 Robustness' tips/polymarket_paper_decisions_tips.html` returns 0.
-  - AC: the three pages render at 1040 px with no horizontal scroll and no overlap (`rules/answering.md` §3).
+  - AC: no fixed-width element over 1040 px, every SVG element inside its viewBox, no text boxes overlapping, by a static check of the HTML. No browser (`rules/answering.md` §3, 2026-11-08).
 - [ ] → M5 PL-15 Gate review, cycle 1/2, recovery 0/2. Executor: reviewer. Depends on: PL-14. Commit: the review file, after the verdict.
   - Output: `analysis/review_gate_paper_length.md`.
   - AC: the file has one verdict line, PASS or ISSUE, and one line per invariant I1 to I16.

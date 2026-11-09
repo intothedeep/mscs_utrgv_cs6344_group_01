@@ -152,11 +152,13 @@ A payout check leaves the Q1 verdict unchanged.
 
 \input{sections/13-conclusion}
 
-\begingroup\raggedright
 % References are their own one-column section on a new page (owner, 2026-11-09).
 \onecolumn
+% A two-column page with a wide float leaves the column height reduced after \onecolumn.
+\makeatletter\global\@colht\textheight\global\@colroom\textheight\global\vsize\textheight\makeatother
 \raggedbottom
 \renewcommand{\bibsection}{\section{References}\label{sec:refs}}
+\begingroup\raggedright
 \bibliographystyle{plainnat}
 \bibliography{references}
 \endgroup

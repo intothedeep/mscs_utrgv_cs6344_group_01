@@ -19,3 +19,9 @@ Re-run from `cs6344_group_01/`:
 ```bash
 OMP_NUM_THREADS=1 timeout 300 uv run python code/fig_column_widths.py
 ```
+
+Update: the combined calibration figure is also split in two, for the column layout (same 3.425 in width, 300 dpi, 7.5 pt):
+- `fig4_calibration_rate_col.png`, 3.425 x 2.7 in: rate against price, legend on top.
+- `fig4_calibration_gap_panel_col.png`, 3.425 x 2.1 in: per-bin gap with 95% z intervals. It has its own legend (zero gap, two series) and the same x range (0 to 1) as the rate figure.
+- Same bins, colours and x shift as `fig4_calibration_gap_col.png`, which is unchanged (md5 equal before and after the re-run).
+- Both are copied to `papers/paper_mvp1/figures/`.

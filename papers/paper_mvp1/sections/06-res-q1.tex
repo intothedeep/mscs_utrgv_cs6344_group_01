@@ -67,11 +67,27 @@ Our gaps are per market and the dataset paper's are per trade.
 So we compare the direction only, not the size.
 
 
+% Two floats share one number so each panel can fill free column space.
 \begin{figure}[H]
 \centering
-\figorbox{figures/fig4_calibration_gap_col}{\linewidth}
-\caption{Observed outcome-1 rate against mean price per bin (top), and the per-bin gap in percentage points with \CiLevel{} z intervals (bottom). Why: the lower panel shows the gaps that the diagonal hides. Source: run \RunId{} and the local figure folder runs/local\_column\_figs\_v13.}
+\begin{subfigure}{\linewidth}\centering
+\figorbox{figures/fig4_calibration_rate_col}{\linewidth}
+\caption{Rate against price.}
+\label{fig:calib-rate}
+\end{subfigure}
+\caption{Observed outcome-1 rate against mean price per bin. Why: it shows the fit to the diagonal. Source: run \RunId{} and the local figure folder runs/local\_column\_figs\_v13.}
 \label{fig:calib}
+\end{figure}
+
+\begin{figure}[H]
+\ContinuedFloat
+\centering
+\begin{subfigure}{\linewidth}\centering
+\figorbox{figures/fig4_calibration_gap_panel_col}{\linewidth}
+\caption{Gap per bin.}
+\label{fig:calib-gap}
+\end{subfigure}
+\caption{Continued: the per-bin gap in percentage points with \CiLevel{} z intervals. Why: this panel shows the gaps that the diagonal hides.}
 \end{figure}
 
 Next come the score measures.
