@@ -117,7 +117,7 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
   <h1><span lang="ko">인용한 논문 11편은 무엇을 말하고, 어디에 쓰이나</span><span lang="en">What our 11 cited papers say, and where we use them</span></h1>
   <p class="lede"><span lang="ko">우리 논문의 흐름도와 인용 논문별 요약이다. 아래 탭에서 논문을 고른다.</span><span lang="en">A flowchart of our paper and a summary of each cited paper. Pick a paper in the tabs below.</span></p>
   <div class="verdict"><b><span lang="ko">결론:</span><span lang="en">Result:</span></b>
-    <span lang="ko">11편 중 9편은 확인함(verified)이다. 2편은 일부 확인(partial)이다. 브라이어 1950과 Page와 Clemen 2013이다. 원문과 어긋나던 Sports 표현은 고쳐졌다(main.tex 963행).</span><span lang="en">9 of 11 references are verified. 2 are partial: Brier 1950 and Page and Clemen 2013. One wording that disagreed with its source is now fixed (main.tex line 963).</span></div>
+    <span lang="ko">11편 중 9편은 확인함(verified)이다. 2편은 일부 확인(partial)이다. 브라이어 1950과 Page와 Clemen 2013이다.</span><span lang="en">9 of 11 references are verified. 2 are partial: Brier 1950 and Page and Clemen 2013.</span></div>
   <p class="note"><span lang="ko">노란 칸은 일부 확인이다. 모름(unknown)은 그 부분을 읽지 못했다는 뜻이다.</span><span lang="en">Yellow means partial. Unknown means we did not read that part.</span></p>
 </header>
 
@@ -148,22 +148,35 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
   <figure>
   <svg class="flow" viewBox="0 0 860 500" role="img" aria-label="Flowchart of the paper sections in reading order with the cited papers attached">
     <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#404040"/></marker></defs>
-    <!-- arrows, reading order -->
-    <g class="arr" marker-end="url(#ah)">
-      <path d="M130 59 H148" marker-end="url(#ah)"/><path d="M590 59 H608" marker-end="url(#ah)"/>
-      <path d="M730 108 V123 H88 V136" marker-end="url(#ah)"/>
-      <path d="M166 187 H179" marker-end="url(#ah)"/><path d="M337 187 H350" marker-end="url(#ah)"/><path d="M508 187 H521" marker-end="url(#ah)"/><path d="M679 187 H692" marker-end="url(#ah)"/>
-      <path d="M772 236 V251 H88 V264" marker-end="url(#ah)"/>
-      <path d="M166 315 H179" marker-end="url(#ah)"/><path d="M337 315 H350" marker-end="url(#ah)"/><path d="M508 315 H521" marker-end="url(#ah)"/><path d="M679 315 H692" marker-end="url(#ah)"/>
-      <path d="M772 364 V379 H145 V392" marker-end="url(#ah)"/>
-      <path d="M280 443 H293" marker-end="url(#ah)"/><path d="M565 443 H578" marker-end="url(#ah)"/>
+    <g class="arr">
+      <path d="M130 59 H150" marker-end="url(#ah)"/>
+      <path d="M590 59 H610" marker-end="url(#ah)"/>
+      <path d="M730 108 V123 H88 V138" marker-end="url(#ah)"/>
+      <path d="M166 187 H181" marker-end="url(#ah)"/>
+      <path d="M337 187 H352" marker-end="url(#ah)"/>
+      <path d="M508 187 H523" marker-end="url(#ah)"/>
+      <path d="M679 187 H694" marker-end="url(#ah)"/>
+      <path d="M772 236 V251 H88 V266" marker-end="url(#ah)"/>
+      <path d="M166 315 H181" marker-end="url(#ah)"/>
+      <path d="M337 315 H352" marker-end="url(#ah)"/>
+      <path d="M508 315 H523" marker-end="url(#ah)"/>
+      <path d="M679 315 H694" marker-end="url(#ah)"/>
+      <path d="M772 364 V379 H110 V394" marker-end="url(#ah)"/>
+      <path d="M211 443 H223" marker-end="url(#ah)"/>
+      <path d="M424 443 H436" marker-end="url(#ah)"/>
+      <path d="M637 443 H649" marker-end="url(#ah)"/>
     </g>
-    <!-- Row 1 -->
     <rect class="card" x="10" y="10" width="120" height="98"/>
-    <text class="l1" x="18" y="24">1</text><text class="l2" x="18" y="39" lang="ko">서론</text><text class="l2" x="18" y="39" lang="en">Introduction</text>
-    <g class="chip"><a href="#qin2026polymarketv1"><rect class="cd" x="18" y="50" width="100" height="22"/><text x="68" y="65">Qin 2026</text></a></g>
+    <text class="l1" x="18" y="24">1</text>
+    <text class="l2" x="18" y="39" lang="ko">서론</text>
+    <text class="l2" x="18" y="39" lang="en">Introduction</text>
+    <g class="chip">
+      <a href="#qin2026polymarketv1"><rect class="cd" x="18" y="50" width="100" height="22"/><text x="68" y="65">Qin 2026</text></a>
+    </g>
     <rect class="card" x="150" y="10" width="440" height="98"/>
-    <text class="l1" x="158" y="24">2</text><text class="l2" x="158" y="39" lang="ko">관련 연구</text><text class="l2" x="158" y="39" lang="en">Related work</text>
+    <text class="l1" x="158" y="24">2</text>
+    <text class="l2" x="158" y="39" lang="ko">관련 연구</text>
+    <text class="l2" x="158" y="39" lang="en">Related work</text>
     <g class="chip">
       <a href="#qin2026polymarketv1"><rect class="cd" x="158" y="50" width="100" height="22"/><text x="208" y="65">Qin 2026</text></a>
       <a href="#snowberg2010favorite"><rect class="cc" x="266" y="50" width="100" height="22"/><text x="316" y="65">Snowberg 2010</text></a>
@@ -174,60 +187,119 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
       <a href="#clauset2009power"><rect class="cx" x="374" y="76" width="100" height="22"/><text x="424" y="91">Clauset 2009</text></a>
     </g>
     <rect class="card" x="610" y="10" width="240" height="98"/>
-    <text class="l1" x="618" y="24">3</text><text class="l2" x="618" y="39" lang="ko">데이터</text><text class="l2" x="618" y="39" lang="en">Data</text>
+    <text class="l1" x="618" y="24">3</text>
+    <text class="l2" x="618" y="39" lang="ko">데이터</text>
+    <text class="l2" x="618" y="39" lang="en">Data</text>
     <g class="chip">
       <a href="#qin2026polymarketv1"><rect class="cd" x="618" y="50" width="108" height="22"/><text x="672" y="65">Qin 2026</text></a>
       <a href="#polymarketv1data"><rect class="cd" x="734" y="50" width="108" height="22"/><text x="788" y="65">Qin 2026 data</text></a>
     </g>
-    <!-- Row 2: Methods -->
     <rect class="card none" x="10" y="138" width="156" height="98"/>
-    <text class="l1" x="18" y="152" lang="ko">4 · 방법</text><text class="l1" x="18" y="152" lang="en">4 · Methods</text><text class="l2" x="18" y="167" lang="ko">사전 등록</text><text class="l2" x="18" y="167" lang="en">Preregistration</text>
-    <text class="nt" x="18" y="194" lang="ko">인용 없음</text><text class="nt" x="18" y="194" lang="en">cites nothing</text>
+    <text class="l1" x="18" y="152" lang="ko">4.1 방법</text>
+    <text class="l1" x="18" y="152" lang="en">4.1 Methods</text>
+    <text class="l2" x="18" y="167" lang="ko">사전 등록</text>
+    <text class="l2" x="18" y="167" lang="en">Preregistration</text>
+    <text class="nt" x="18" y="194" lang="ko">인용 없음</text>
+    <text class="nt" x="18" y="194" lang="en">cites nothing</text>
     <rect class="card" x="181" y="138" width="156" height="98"/>
-    <text class="l1" x="189" y="152" lang="ko">5 · 방법</text><text class="l1" x="189" y="152" lang="en">5 · Methods</text><text class="l2" x="189" y="167" lang="ko">Q1 보정</text><text class="l2" x="189" y="167" lang="en">Q1 calibration</text>
+    <text class="l1" x="189" y="152" lang="ko">4.2 방법</text>
+    <text class="l1" x="189" y="152" lang="en">4.2 Methods</text>
+    <text class="l2" x="189" y="167" lang="ko">Q1 보정</text>
+    <text class="l2" x="189" y="167" lang="en">Q1 calibration</text>
     <g class="chip">
       <a href="#benjamini1995controlling"><rect class="ct" x="189" y="178" width="140" height="22"/><text x="259" y="193">Benjamini 1995</text></a>
       <a href="#brier1950verification"><rect class="cs" x="189" y="204" width="140" height="22"/><text x="259" y="219">Brier 1950</text></a>
     </g>
     <rect class="card none" x="352" y="138" width="156" height="98"/>
-    <text class="l1" x="360" y="152" lang="ko">6 · 방법</text><text class="l1" x="360" y="152" lang="en">6 · Methods</text><text class="l2" x="360" y="167" lang="ko">Q2 집중</text><text class="l2" x="360" y="167" lang="en">Q2 concentration</text>
-    <text class="nt" x="360" y="194" lang="ko">인용 없음</text><text class="nt" x="360" y="194" lang="en">cites nothing</text>
+    <text class="l1" x="360" y="152" lang="ko">4.3 방법</text>
+    <text class="l1" x="360" y="152" lang="en">4.3 Methods</text>
+    <text class="l2" x="360" y="167" lang="ko">Q2 집중</text>
+    <text class="l2" x="360" y="167" lang="en">Q2 concentration</text>
+    <text class="nt" x="360" y="194" lang="ko">인용 없음</text>
+    <text class="nt" x="360" y="194" lang="en">cites nothing</text>
     <rect class="card" x="523" y="138" width="156" height="98"/>
-    <text class="l1" x="531" y="152" lang="ko">7 · 방법</text><text class="l1" x="531" y="152" lang="en">7 · Methods</text><text class="l2" x="531" y="167" lang="ko">Q3 분포</text><text class="l2" x="531" y="167" lang="en">Q3 distributions</text>
-    <g class="chip"><a href="#clauset2009power"><rect class="cx" x="531" y="178" width="140" height="22"/><text x="601" y="193">Clauset 2009</text></a></g>
-    <rect class="card" x="694" y="138" width="156" height="98"/>
-    <text class="l1" x="702" y="152" lang="ko">8 · 방법</text><text class="l1" x="702" y="152" lang="en">8 · Methods</text><text class="l2" x="702" y="167" lang="ko">재현성</text><text class="l2" x="702" y="167" lang="en">Reproducibility</text>
-    <g class="chip"><a href="#raasveldt2019duckdb"><rect class="cl" x="702" y="178" width="140" height="22"/><text x="772" y="193">Raasveldt 2019</text></a></g>
-    <!-- Row 3: Results -->
+    <text class="l1" x="531" y="152" lang="ko">4.4 방법</text>
+    <text class="l1" x="531" y="152" lang="en">4.4 Methods</text>
+    <text class="l2" x="531" y="167" lang="ko">Q3 분포</text>
+    <text class="l2" x="531" y="167" lang="en">Q3 distributions</text>
+    <g class="chip">
+      <a href="#clauset2009power"><rect class="cx" x="531" y="178" width="140" height="22"/><text x="601" y="193">Clauset 2009</text></a>
+    </g>
+    <rect class="card none" x="694" y="138" width="156" height="98"/>
+    <text class="l1" x="702" y="152" lang="ko">4.5 방법</text>
+    <text class="l1" x="702" y="152" lang="en">4.5 Methods</text>
+    <text class="l2" x="702" y="167" lang="ko">재현성</text>
+    <text class="l2" x="702" y="167" lang="en">Reproducibility</text>
+    <text class="nt" x="702" y="194" lang="ko">인용 없음</text>
+    <text class="nt" x="702" y="194" lang="en">cites nothing</text>
     <rect class="card" x="10" y="266" width="156" height="98"/>
-    <text class="l1" x="18" y="280" lang="ko">9 · 결과</text><text class="l1" x="18" y="280" lang="en">9 · Results</text><text class="l2" x="18" y="295" lang="ko">Q1 보정</text><text class="l2" x="18" y="295" lang="en">Q1 calibration</text>
-    <g class="chip"><a href="#snowberg2010favorite"><rect class="cc" x="18" y="306" width="140" height="22"/><text x="88" y="321">Snowberg 2010</text></a></g>
+    <text class="l1" x="18" y="280" lang="ko">5.1 결과</text>
+    <text class="l1" x="18" y="280" lang="en">5.1 Results</text>
+    <text class="l2" x="18" y="295" lang="ko">Q1 보정</text>
+    <text class="l2" x="18" y="295" lang="en">Q1 calibration</text>
+    <g class="chip">
+      <a href="#snowberg2010favorite"><rect class="cc" x="18" y="306" width="140" height="22"/><text x="88" y="321">Snowberg 2010</text></a>
+    </g>
     <rect class="card" x="181" y="266" width="156" height="98"/>
-    <text class="l1" x="189" y="280" lang="ko">10 · 결과</text><text class="l1" x="189" y="280" lang="en">10 · Results</text><text class="l2" x="189" y="295" lang="ko">Q2 집중</text><text class="l2" x="189" y="295" lang="en">Q2 concentration</text>
-    <g class="chip"><a href="#qin2026polymarketv1"><rect class="cd" x="189" y="306" width="140" height="22"/><text x="259" y="321">Qin 2026</text></a></g>
+    <text class="l1" x="189" y="280" lang="ko">5.2 결과</text>
+    <text class="l1" x="189" y="280" lang="en">5.2 Results</text>
+    <text class="l2" x="189" y="295" lang="ko">Q2 집중</text>
+    <text class="l2" x="189" y="295" lang="en">Q2 concentration</text>
+    <g class="chip">
+      <a href="#qin2026polymarketv1"><rect class="cd" x="189" y="306" width="140" height="22"/><text x="259" y="321">Qin 2026</text></a>
+    </g>
     <rect class="card none" x="352" y="266" width="156" height="98"/>
-    <text class="l1" x="360" y="280" lang="ko">11 · 결과</text><text class="l1" x="360" y="280" lang="en">11 · Results</text><text class="l2" x="360" y="295" lang="ko">Q3 분포</text><text class="l2" x="360" y="295" lang="en">Q3 distributions</text>
-    <text class="nt" x="360" y="322" lang="ko">인용 없음</text><text class="nt" x="360" y="322" lang="en">cites nothing</text>
+    <text class="l1" x="360" y="280" lang="ko">5.3 결과</text>
+    <text class="l1" x="360" y="280" lang="en">5.3 Results</text>
+    <text class="l2" x="360" y="295" lang="ko">Q3 분포</text>
+    <text class="l2" x="360" y="295" lang="en">Q3 distributions</text>
+    <text class="nt" x="360" y="322" lang="ko">인용 없음</text>
+    <text class="nt" x="360" y="322" lang="en">cites nothing</text>
     <rect class="card none" x="523" y="266" width="156" height="98"/>
-    <text class="l1" x="531" y="280" lang="ko">12 · 결과</text><text class="l1" x="531" y="280" lang="en">12 · Results</text><text class="l2" x="531" y="295" lang="ko">강건성</text><text class="l2" x="531" y="295" lang="en">Robustness</text>
-    <text class="nt" x="531" y="322" lang="ko">인용 없음</text><text class="nt" x="531" y="322" lang="en">cites nothing</text>
+    <text class="l1" x="531" y="280" lang="ko">5.4 결과</text>
+    <text class="l1" x="531" y="280" lang="en">5.4 Results</text>
+    <text class="l2" x="531" y="295" lang="ko">확인 요약</text>
+    <text class="l2" x="531" y="295" lang="en">Checks summary</text>
+    <text class="nt" x="531" y="322" lang="ko">인용 없음</text>
+    <text class="nt" x="531" y="322" lang="en">cites nothing</text>
     <rect class="card none" x="694" y="266" width="156" height="98"/>
-    <text class="l1" x="702" y="280" lang="ko">13 · 결과</text><text class="l1" x="702" y="280" lang="en">13 · Results</text><text class="l2" x="702" y="295" lang="ko">심사 확인</text><text class="l2" x="702" y="295" lang="en">Review checks</text>
-    <text class="nt" x="702" y="322" lang="ko">인용 없음</text><text class="nt" x="702" y="322" lang="en">cites nothing</text>
-    <!-- Row 4 -->
-    <rect class="card none" x="10" y="394" width="270" height="98"/>
-    <text class="l1" x="18" y="408">14</text><text class="l2" x="18" y="423" lang="ko">논의</text><text class="l2" x="18" y="423" lang="en">Discussion</text>
-    <text class="nt" x="18" y="450" lang="ko">인용 없음</text><text class="nt" x="18" y="450" lang="en">cites nothing</text>
-    <rect class="card" x="295" y="394" width="270" height="98"/>
-    <text class="l1" x="303" y="408">15</text><text class="l2" x="303" y="423" lang="ko">한계</text><text class="l2" x="303" y="423" lang="en">Limitations</text>
-    <g class="chip"><a href="#qin2026polymarketv1"><rect class="cd" x="303" y="434" width="140" height="22"/><text x="373" y="449">Qin 2026</text></a></g>
-    <rect class="card none" x="580" y="394" width="270" height="98"/>
-    <text class="l1" x="588" y="408">16</text><text class="l2" x="588" y="423" lang="ko">결론</text><text class="l2" x="588" y="423" lang="en">Conclusion</text>
-    <text class="nt" x="588" y="450" lang="ko">인용 없음</text><text class="nt" x="588" y="450" lang="en">cites nothing</text>
+    <text class="l1" x="702" y="280">6</text>
+    <text class="l2" x="702" y="295" lang="ko">논의</text>
+    <text class="l2" x="702" y="295" lang="en">Discussion</text>
+    <text class="nt" x="702" y="322" lang="ko">인용 없음</text>
+    <text class="nt" x="702" y="322" lang="en">cites nothing</text>
+    <rect class="card" x="10" y="394" width="201" height="98"/>
+    <text class="l1" x="18" y="408">7</text>
+    <text class="l2" x="18" y="423" lang="ko">한계</text>
+    <text class="l2" x="18" y="423" lang="en">Limitations</text>
+    <g class="chip">
+      <a href="#qin2026polymarketv1"><rect class="cd" x="18" y="434" width="140" height="22"/><text x="88" y="449">Qin 2026</text></a>
+    </g>
+    <rect class="card none" x="223" y="394" width="201" height="98"/>
+    <text class="l1" x="231" y="408">8</text>
+    <text class="l2" x="231" y="423" lang="ko">결론</text>
+    <text class="l2" x="231" y="423" lang="en">Conclusion</text>
+    <text class="nt" x="231" y="450" lang="ko">인용 없음</text>
+    <text class="nt" x="231" y="450" lang="en">cites nothing</text>
+    <rect class="card" x="436" y="394" width="201" height="98"/>
+    <text class="l1" x="444" y="408" lang="ko">부록 B.2</text>
+    <text class="l1" x="444" y="408" lang="en">Appendix B.2</text>
+    <text class="l2" x="444" y="423" lang="ko">재현성</text>
+    <text class="l2" x="444" y="423" lang="en">Reproducibility</text>
+    <g class="chip">
+      <a href="#raasveldt2019duckdb"><rect class="cl" x="444" y="434" width="140" height="22"/><text x="514" y="449">Raasveldt 2019</text></a>
+    </g>
+    <rect class="card none" x="649" y="394" width="201" height="98"/>
+    <text class="l1" x="657" y="408" lang="ko">부록</text>
+    <text class="l1" x="657" y="408" lang="en">Appendices</text>
+    <text class="l2" x="657" y="423" lang="ko">A, B.1, C에서 G</text>
+    <text class="l2" x="657" y="423" lang="en">A, B.1, C to G</text>
+    <text class="nt" x="657" y="450" lang="ko">인용 없음</text>
+    <text class="nt" x="657" y="450" lang="en">cites nothing</text>
   </svg>
   <figcaption><span lang="ko">그림 1: 우리 논문의 절을 읽는 순서대로 놓고, 각 절이 인용한 논문을 칩으로 붙였다. 왜: 우리 논증이 어느 바깥 근거 위에 서는지 보인다. 출처: <code>analysis/paper_summaries_refs.md</code> Key map</span><span lang="en">Figure 1: Our paper's sections in reading order, each with its cited papers as chips. Why: you see which outside sources our argument stands on. Source: <code>analysis/paper_summaries_refs.md</code> Key map</span></figcaption>
   </figure>
-  <p class="note"><span lang="ko">절 이름: 사전 등록(pre-registration), 보정(calibration), 집중(concentration), 분포(distribution), 재현성(reproducibility), 강건성(robustness). 심사 확인은 "Checks requested in review"다.</span><span lang="en">"Review checks" is the section "Checks requested in review".</span></p>
+  <p class="note"><span lang="ko">절 이름: 사전 등록(pre-registration), 보정(calibration), 집중(concentration), 분포(distribution), 재현성(reproducibility). 번호는 논문의 절 번호다. 부록 A, B.1, C에서 G는 인용이 없다. 이유: D-042가 상세를 부록으로 옮겼고, 인용은 그 글을 따라 움직였다.</span><span lang="en">The numbers are the section numbers of the paper. Appendices A, B.1 and C to G cite nothing. Why: D-042 moved the details to appendices, and the citations moved with their text.</span></p>
 </section>
 
 <section class="step">
@@ -247,10 +319,10 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
       <tr><td><a href="#gneiting2007strictly">Gneiting 2007</a></td><td><span lang="ko"><a class="t" data-t="scoretheory"></a></span><span lang="en">Forecast scoring theory</span></td><td><span lang="ko">관련 연구</span><span lang="en">Related Work</span></td><td>Q1</td><td><span lang="ko">확인함</span><span lang="en">verified</span></td></tr>
       <tr><td><a href="#benjamini1995controlling">Benjamini 1995</a></td><td><span lang="ko"><a class="t" data-t="statm"></a></span><span lang="en">Statistical method</span></td><td><span lang="ko">방법 Q1</span><span lang="en">Methods Q1</span></td><td><span lang="ko">Q1, 방법</span><span lang="en">Q1, methods</span></td><td><span lang="ko">확인함</span><span lang="en">verified</span></td></tr>
       <tr><td><a href="#clauset2009power">Clauset 2009</a></td><td><span lang="ko"><a class="t" data-t="distfit"></a></span><span lang="en">Distribution fitting</span></td><td><span lang="ko">관련 연구, 방법 Q3</span><span lang="en">Related Work, Methods Q3</span></td><td><span lang="ko">Q3 (Q2의 <a class="t" data-t="ccdf"></a>도)</span><span lang="en">Q3 (also the Q2 complementary cumulative distribution)</span></td><td><span lang="ko">확인함</span><span lang="en">verified</span></td></tr>
-      <tr><td><a href="#raasveldt2019duckdb">Raasveldt 2019</a></td><td><span lang="ko"><a class="t" data-t="tool"></a></span><span lang="en">Tool</span></td><td><span lang="ko">방법 (재현성)</span><span lang="en">Methods (Reproducibility)</span></td><td><span lang="ko">방법</span><span lang="en">methods</span></td><td><span lang="ko">확인함</span><span lang="en">verified</span></td></tr>
+      <tr><td><a href="#raasveldt2019duckdb">Raasveldt 2019</a></td><td><span lang="ko"><a class="t" data-t="tool"></a></span><span lang="en">Tool</span></td><td><span lang="ko">부록 B.2 (재현성)</span><span lang="en">Appendix B.2 (Reproducibility)</span></td><td><span lang="ko">방법</span><span lang="en">methods</span></td><td><span lang="ko">확인함</span><span lang="en">verified</span></td></tr>
     </tbody>
   </table></div>
-  <p class="note"><span lang="ko">출처: <code>analysis/paper_summaries_refs.md</code> Key map. 줄 번호는 각 논문 탭에 있다.</span><span lang="en">Source: <code>analysis/paper_summaries_refs.md</code> Key map. Line numbers are in each paper tab.</span></p>
+  <p class="note"><span lang="ko">출처: <code>analysis/paper_summaries_refs.md</code> Key map. 각 논문 탭이 절 이름으로 인용 위치를 밝힌다.</span><span lang="en">Source: <code>analysis/paper_summaries_refs.md</code> Key map. Each paper tab names the sections where it is cited.</span></p>
 </section>
 
 <section class="step">
@@ -258,12 +330,13 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
   <h3><span lang="ko">아무것도 인용하지 않는 절</span><span lang="en">Sections that cite nothing</span></h3>
   <p><span lang="ko"><b>왜:</b> 인용 없는 절은 우리 자신의 규칙과 실행에 기댄다. 바깥 논문과 맞춰 볼 수 없다.</span><span lang="en"><b>Why:</b> A section with no citation rests on our own rules and runs. No outside paper checks it.</span></p>
   <ul>
-    <li><span lang="ko">데이터: 필터와 제외 사유(L203), 시장 표와 지갑 표(L222). 우리 파이프라인이다.</span><span lang="en">Data: Filters and drop reasons (L203), Market and wallet tables (L222). Our own pipeline.</span></li>
-    <li><span lang="ko">방법: 평가 가격과 사전 등록(L235), Q2 지갑 집중(L344).</span><span lang="en">Methods: Evaluation price and pre-registration (L235), Q2 wallet concentration (L344).</span></li>
-    <li><span lang="ko">결과: Q3(L622), 강건성(L690), 심사 요청 확인(L766).</span><span lang="en">Results: Q3 (L622), Robustness (L690), Checks requested in review (L766).</span></li>
-    <li><span lang="ko">논의(L917)와 결론(L1001).</span><span lang="en">Discussion (L917) and Conclusion (L1001).</span></li>
+    <li><span lang="ko">데이터: 필터와 제외 사유(3.2), 시장 표와 지갑 표(3.3). 우리 파이프라인이다.</span><span lang="en">Data: Filters and drop reasons (3.2), Market and wallet tables (3.3). Our own pipeline.</span></li>
+    <li><span lang="ko">방법: 평가 가격과 사전 등록(4.1), Q2 지갑 집중(4.3), 재현성(4.5).</span><span lang="en">Methods: Evaluation price and pre-registration (4.1), Q2 wallet concentration (4.3), Reproducibility (4.5).</span></li>
+    <li><span lang="ko">결과: Q3(5.3), 확인 요약(5.4).</span><span lang="en">Results: Q3 (5.3), Checks summary (5.4).</span></li>
+    <li><span lang="ko">논의(6)와 결론(8).</span><span lang="en">Discussion (6) and Conclusion (8).</span></li>
+    <li><span lang="ko">부록 A, B.1, C에서 G.</span><span lang="en">Appendices A, B.1, C to G.</span></li>
   </ul>
-  <div class="callout"><p><span lang="ko">Q2 방법은 80/20, <a class="t" data-t="ccdf"></a>, 로렌츠 곡선, Welch t 검정, Spearman 상관, k-means에 출처가 없다. Clauset는 관련 연구(L182)와 방법 Q3(L382)에서 인용된다. Q3에서 x_min을 상위 10%로 고정한 이유는 열린 저자 <code>\todo</code>(L384)다.</span><span lang="en">The Q2 method has no source for 80/20 or the Lorenz curve. It has none for Welch t, Spearman and k-means. It also has none for the complementary cumulative distribution. Clauset is cited in Related Work (L182) and in Methods Q3 (L382). The reason for fixing x_min at the top 10% is an open owner <code>\todo</code> (L384).</span></p></div>
+  <div class="callout"><p><span lang="ko">Q2 방법은 80/20, <a class="t" data-t="ccdf"></a>, 로렌츠 곡선, Welch t 검정, Spearman 상관, k-means에 출처가 없다. Clauset는 관련 연구와 방법 Q3(4.4)에서 인용된다. Q3에서 x_min을 상위 10%로 고정한 이유는 열린 저자 <code>\todo</code>(방법 4.4)다.</span><span lang="en">The Q2 method has no source for 80/20 or the Lorenz curve. It has none for Welch t, Spearman and k-means. It also has none for the complementary cumulative distribution. Clauset is cited in Related Work and in Methods Q3 (4.4). The reason for fixing x_min at the top 10% is an open owner <code>\todo</code> (Methods 4.4).</span></p></div>
   <p class="note"><span lang="ko">Q3 결과의 모든 주장은 우리 실행에 기댄다. 바깥 숫자와 비교하지 않는다. 이것은 파일의 해석(inference)이다.</span><span lang="en">Every Q3 result claim rests on our own runs. No outside number is compared there. This is the source file's reading (inference).</span></p>
 </section>
 </div>
@@ -309,17 +382,16 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 </ul></div>
 <div class="step"><!-- src: S-PS-1, S-PS-2 -->
 <ul>
-<li><span lang="ko">서론 L123: 거래 수와 시장 수 (데이터).</span><span lang="en">Introduction, L123: trade and market counts (data).</span></li>
-<li><span lang="ko">관련 연구 L156~L165: 싼 토큰 편향(Q1), 브라이어 패널(Q1), 상위 1% 메이커 몫(Q2).</span><span lang="en">Related Work, L156 to L165: cheap-token bias (Q1), Brier panel (Q1), top-1% maker share (Q2).</span></li>
-<li><span lang="ko">데이터 출처와 범위 L197, L201: Up/Down 제외 (데이터).</span><span lang="en">Data, Source and scope, L197 and L201: Up/Down exclusion (data).</span></li>
-<li><span lang="ko">결과 Q2 L589: 상위 1% 메이커 몫의 파이프라인 점검 (Q2).</span><span lang="en">Results Q2, L589: pipeline check of the top-1% maker share (Q2).</span></li>
-<li><span lang="ko">한계 L963: Sports 시장과 <a class="t" data-t="negrisk"></a> (데이터).</span><span lang="en">Limitations, L963: Sports markets and Neg-Risk (data).</span></li>
+<li><span lang="ko">서론: 거래 수와 시장 수 (데이터).</span><span lang="en">Introduction: trade and market counts (data).</span></li>
+<li><span lang="ko">관련 연구: 싼 토큰 편향(Q1), 브라이어 패널(Q1), 상위 1% 메이커 몫(Q2).</span><span lang="en">Related Work: cheap-token bias (Q1), Brier panel (Q1), top-1% maker share (Q2).</span></li>
+<li><span lang="ko">데이터, 출처와 범위(3.1): Up/Down 제외 (데이터).</span><span lang="en">Data, Source and scope (3.1): Up/Down exclusion (data).</span></li>
+<li><span lang="ko">결과 Q2(5.2): 상위 1% 메이커 몫의 파이프라인 점검 (Q2).</span><span lang="en">Results Q2 (5.2): pipeline check of the top-1% maker share (Q2).</span></li>
+<li><span lang="ko">한계(7): Sports 시장과 <a class="t" data-t="negrisk"></a> (데이터).</span><span lang="en">Limitations (7): Sports markets and Neg-Risk (data).</span></li>
 </ul>
-<div class="callout"><p><span lang="ko"><b>어긋남 1 (고침, L963):</b> 예전 글은 "most Sports markets are Neg-Risk or Up/Down"이었다. 원문(한계 7)은 "disproportionately fall into"다. 원문에 과반 몫이 없다. 지금 글은 "fall disproportionately into"라서 원문과 맞다.</span><span lang="en"><b>Mismatch 1 (fixed, L963):</b> The old text said "most Sports markets are Neg-Risk or Up/Down". The source (limitation 7) says "disproportionately fall into". The source gives no majority share. The text now reads "fall disproportionately into", which matches.</span></p>
-<p><span lang="ko"><b>메모 2 (L157~L158):</b> 우리 글은 "under 30 cents"와 "0.2 to 0.3 cents less"다. 세 구간은 −0.0023, −0.0019, −0.0032다. 센트로 0.19~0.32이고 반올림하면 맞다. 원문 기준은 "price ≤0.30"이다. 사소하다.</span><span lang="en"><b>Note 2 (L157 to L158):</b> Our text says "under 30 cents". It also says "0.2 to 0.3 cents less". The three bins give −0.0023, −0.0019 and −0.0032. That is 0.19 to 0.32 cents, which holds after rounding. The source cutoff is "price ≤0.30". Minor.</span></p></div></div>
+<div class="callout"><p><span lang="ko"><b>메모 (관련 연구):</b> 우리 글은 "under 30 cents"와 "0.2 to 0.3 cents less"다. 세 구간은 −0.0023, −0.0019, −0.0032다. 센트로 0.19~0.32이고 반올림하면 맞다. 원문 기준은 "price ≤0.30"이다. 사소하다.</span><span lang="en"><b>Note (Related Work):</b> Our text says "under 30 cents". It also says "0.2 to 0.3 cents less". The three bins give −0.0023, −0.0019 and −0.0032. That is 0.19 to 0.32 cents, which holds after rounding. The source cutoff is "price ≤0.30". Minor.</span></p></div></div>
 <div class="step"><p><span lang="ko">이 논문은 우리 데이터의 원 논문이다. 그래서 우리 숫자가 이 논문과 맞아야 한다.</span><span lang="en">It is our data's own paper, so our numbers must agree with it.</span></p></div>
 <div class="step"><!-- src: S-PS-1, S-PS-2 -->
-<p><span lang="ko"><b>확인함(verified).</b> 읽은 것: 초록 쪽 [S-PS-1], HTML 전문 [S-PS-2](요약 도구로 질문을 정해 읽음). 2026-11-08 접근. 어긋났던 것은 Sports 표현뿐이고 L963에서 고쳐졌다.</span><span lang="en"><b>Verified.</b> Read: abstract page [S-PS-1], HTML full text [S-PS-2] through a summarising fetch with targeted questions. Accessed 2026-11-08. Only the Sports wording disagreed with the source. It is fixed at L963.</span></p>
+<p><span lang="ko"><b>확인함(verified).</b> 읽은 것: 초록 쪽 [S-PS-1], HTML 전문 [S-PS-2](요약 도구로 질문을 정해 읽음). 2026-11-08 접근. 우리 글은 이 읽기와 맞는다.</span><span lang="en"><b>Verified.</b> Read: abstract page [S-PS-1], HTML full text [S-PS-2] through a summarising fetch with targeted questions. Accessed 2026-11-08. Our paper text agrees with this reading.</span></p>
 <ul><li>[S-PS-1] <a href="https://arxiv.org/abs/2606.04217">https://arxiv.org/abs/2606.04217</a></li><li>[S-PS-2] <a href="https://arxiv.org/html/2606.04217">https://arxiv.org/html/2606.04217</a></li></ul></div>
 </div>
 
@@ -355,8 +427,8 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 <p><span lang="ko"><a class="t" data-t="ob"></a> 스냅숏이 없다. v1 계약만 있다. 메타데이터는 한 시점의 정적 스냅숏이다.</span><span lang="en">No order-book snapshots, v1 contracts only, static metadata snapshot.</span></p></div>
 <div class="step"><!-- src: S-PS-3 -->
 <ul>
-<li><span lang="ko">데이터 출처와 범위 L194: <code>daily_aligned/</code>에서 릴레이어 기록을 뺀다 (데이터).</span><span lang="en">Data, Source and scope, L194: relayer records removed in <code>daily_aligned/</code> (data).</span></li>
-<li><span lang="ko">데이터 출처와 범위 L199: 데이터 위치와 CC-BY-4.0 라이선스 (데이터).</span><span lang="en">Data, Source and scope, L199: data location and Creative Commons Attribution 4.0 (CC-BY-4.0) license (data).</span></li>
+<li><span lang="ko">데이터, 출처와 범위(3.1): <code>daily_aligned/</code>에서 릴레이어 기록을 뺀다 (데이터).</span><span lang="en">Data, Source and scope (3.1): relayer records removed in <code>daily_aligned/</code> (data).</span></li>
+<li><span lang="ko">데이터, 출처와 범위(3.1): 데이터 위치와 CC-BY-4.0 라이선스 (데이터).</span><span lang="en">Data, Source and scope (3.1): data location and Creative Commons Attribution 4.0 (CC-BY-4.0) license (data).</span></li>
 </ul></div>
 <div class="step"><p><span lang="ko">우리가 질의하는 바로 그 계층이다. 우리 라이선스도 여기서 정해진다.</span><span lang="en">It is the exact layer we query, and it sets our license.</span></p></div>
 <div class="step"><!-- src: S-PS-3 -->
@@ -394,8 +466,8 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 <p><span lang="ko">경마이지 예측 시장이 아니다. 숫자는 2010년 <a class="t" data-t="wp"></a>에서 왔고 저널 인쇄본이 아니다 (파일의 해석).</span><span lang="en">Horse racing, not prediction markets. Numbers are from the 2010 working paper, not the journal print (the file's reading).</span></p></div>
 <div class="step"><!-- src: S-PS-6 -->
 <ul>
-<li><span lang="ko">관련 연구 L152~L154: 약자는 배당이 말하는 것보다 덜 이긴다 (Q1).</span><span lang="en">Related Work, L152 to L154: longshots win less often than their odds say (Q1).</span></li>
-<li><span lang="ko">결과 Q1 L462: 가장 싼 구간의 차이가 같은 방향이다 (Q1).</span><span lang="en">Results Q1, L462: our cheapest-bin gap has the same direction (Q1).</span></li>
+<li><span lang="ko">관련 연구: 약자는 배당이 말하는 것보다 덜 이긴다 (Q1).</span><span lang="en">Related Work: longshots win less often than their odds say (Q1).</span></li>
+<li><span lang="ko">결과 Q1(5.1): 가장 싼 구간의 차이가 같은 방향이다 (Q1).</span><span lang="en">Results Q1 (5.1): our cheapest-bin gap has the same direction (Q1).</span></li>
 </ul></div>
 <div class="step"><p><span lang="ko">싼 베팅이 비싸게 값 매겨진다는 고전적 증거다.</span><span lang="en">It is the classic evidence that cheap bets are overpriced.</span></p></div>
 <div class="step"><!-- src: S-PS-6, S-PS-7 -->
@@ -425,7 +497,7 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 <div class="step"><!-- src: S-PS-14 -->
 <p><span lang="ko">조건부 시장은 인과가 아니라 상관을 보여 준다.</span><span lang="en">Conditional markets show correlation, not causation.</span></p></div>
 <div class="step"><!-- src: S-PS-14 -->
-<p><span lang="ko">관련 연구 L169~L171: 시장이 예측을 잘한다는 배경 주장 (Q1).</span><span lang="en">Related Work, L169 to L171: background claim that markets forecast well (Q1).</span></p></div>
+<p><span lang="ko">관련 연구: 시장이 예측을 잘한다는 배경 주장 (Q1).</span><span lang="en">Related Work: background claim that markets forecast well (Q1).</span></p></div>
 <div class="step"><p><span lang="ko">우리 <a class="t" data-t="calib"></a> 검사가 Polymarket에서 확인하는 바로 그 기준 주장이다.</span><span lang="en">It is the baseline claim that our calibration test checks on Polymarket.</span></p></div>
 <div class="step"><!-- src: S-PS-14 -->
 <p><span lang="ko"><b>확인함(verified).</b> AEA 초록 쪽을 읽었다 [S-PS-14]. 전문은 열지 않았다. 2026-11-08 접근.</span><span lang="en"><b>Verified.</b> Publisher abstract page read [S-PS-14]. Full text not opened. Accessed 2026-11-08.</span></p>
@@ -449,7 +521,7 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 <li><span lang="ko"><a class="t" data-t="flb"></a>: 가능성이 낮은 사건의 값이 높게 매겨진다.</span><span lang="en">Favourite/longshot bias: low-likelihood events are over-priced.</span></li>
 </ul></div>
 <div class="step"><p><span lang="ko"><b>모름(unknown).</b> 초록만으로는 한계를 알 수 없다 (파일의 해석).</span><span lang="en"><b>Unknown.</b> The abstract does not show limitations (the file's reading).</span></p></div>
-<div class="step"><p><span lang="ko">관련 연구 L172~L174: <a class="t" data-t="calib"></a>은 만기까지 남은 시간에 달렸고, 약자 편향도 있다 (Q1).</span><span lang="en">Related Work, L172 to L174: calibration depends on time to expiry, plus longshot bias (Q1).</span></p></div>
+<div class="step"><p><span lang="ko">관련 연구: <a class="t" data-t="calib"></a>은 만기까지 남은 시간에 달렸고, 약자 편향도 있다 (Q1).</span><span lang="en">Related Work: calibration depends on time to expiry, plus longshot bias (Q1).</span></p></div>
 <div class="step"><p><span lang="ko">군중 가격이 언제 맞고 언제 싼 베팅이 오도하는지 알려 준다.</span><span lang="en">It says when crowd prices are right, and when cheap bets mislead.</span></p></div>
 <div class="step"><!-- src: S-PS-11, S-PS-12 -->
 <p><span lang="ko"><b>일부 확인(partial).</b> 초록은 Duke Scholars에서 2026-11-07에 읽었고 다시 읽지 않았다 [S-PS-11]. Wiley 쪽은 오늘 <a class="t" data-t="deny"></a>이었다 [S-PS-12]. 데이터와 방법은 확인하지 못했다. 접근이 필요하다.</span><span lang="en"><b>Partial.</b> Abstract read on Duke Scholars on 2026-11-07 and not re-read [S-PS-11]. The Wiley page returned an access denied response (code 403) today [S-PS-12]. Data and method not checked. Access needed.</span></p>
@@ -480,7 +552,7 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 </ul></div>
 <div class="step"><!-- src: S-PS-16 -->
 <p><span lang="ko"><a class="t" data-t="preprint"></a>이라 동료 심사를 거치지 않았다. 분해는 기술적이다.</span><span lang="en">Preprint, not peer reviewed. The decomposition is descriptive.</span></p></div>
-<div class="step"><p><span lang="ko">관련 연구 L175~L177: <a class="t" data-t="calib"></a>은 분야와 거래 크기에 따라 다르다 (Q1).</span><span lang="en">Related Work, L175 to L177: calibration varies by domain and trade size (Q1).</span></p></div>
+<div class="step"><p><span lang="ko">관련 연구: <a class="t" data-t="calib"></a>은 분야와 거래 크기에 따라 다르다 (Q1).</span><span lang="en">Related Work: calibration varies by domain and trade size (Q1).</span></p></div>
 <div class="step"><p><span lang="ko">모든 시장을 합치면 분야별 <a class="t" data-t="calib"></a> 어긋남이 가려질 수 있다.</span><span lang="en">Pooling all our markets may hide domain-level miscalibration.</span></p></div>
 <div class="step"><!-- src: S-PS-16 -->
 <p><span lang="ko"><b>확인함(verified).</b> arXiv 초록 쪽 v2를 읽었다 [S-PS-16]. 2026-11-08 접근.</span><span lang="en"><b>Verified.</b> arXiv abstract page, version 2, read [S-PS-16]. Accessed 2026-11-08.</span></p>
@@ -505,7 +577,7 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 <div class="callout"><p><span lang="ko">주의 1: 같은 메모가 이것을 Brier 점수의 "slightly modified version"이라 부른다(Sanders, 1963). 주의 2: Brier 원래 형태는 현대 이진 점수의 두 배이고 범위가 0~2일 수 있다. <b>[LOW-CONFIDENCE]</b> 검색 조각에서만 봤다 [S-PS-10].</span><span lang="en">Caution 1: the same note calls it "a slightly modified version" of Brier's (Sanders, 1963). Caution 2: Brier's original form may be twice the modern binary score. Its range may then be 0 to 2. <b>[LOW-CONFIDENCE]</b> Seen only in a search snippet [S-PS-10].</span></p></div></div>
 <div class="step"><p><span lang="ko"><b>모름(unknown).</b> 논문을 읽지 못했다.</span><span lang="en"><b>Unknown.</b> The paper was not read.</span></p></div>
 <div class="step"><p><span lang="ko">한 숫자가 <a class="t" data-t="calib"></a>과 <a class="t" data-t="sharp"></a>을 섞는다 (파일의 해석).</span><span lang="en">One number mixes calibration and sharpness (the file's reading).</span></p></div>
-<div class="step"><p><span lang="ko">방법 Q1 L337: 가격의 <a class="t" data-t="msr"></a>에 이름을 붙인다 (Q1). 서지의 DOI에 &lt; 와 &gt; 가 있다. 우리 서지에 doi 필드가 없어 지금은 문제없다.</span><span lang="en">Methods Q1, L337: it names our mean squared residual of the price (Q1). The Digital Object Identifier (DOI) holds &lt; and &gt;. Our bibliography has no doi field, so nothing breaks today.</span></p></div>
+<div class="step"><p><span lang="ko">방법 Q1(4.2): 가격의 <a class="t" data-t="msr"></a>에 이름을 붙인다 (Q1). 서지의 DOI에 &lt; 와 &gt; 가 있다. 우리 서지에 doi 필드가 없어 지금은 문제없다.</span><span lang="en">Methods Q1 (4.2): it names our mean squared residual of the price (Q1). The Digital Object Identifier (DOI) holds &lt; and &gt;. Our bibliography has no doi field, so nothing breaks today.</span></p></div>
 <div class="step"><p><span lang="ko">시장 가격에 대한 한 숫자짜리 정확도 점수다.</span><span lang="en">It is the one-number accuracy score for our market prices.</span></p></div>
 <div class="step"><!-- src: S-PS-8, S-PS-9, S-PS-10 -->
 <p><span lang="ko"><b>일부 확인(partial).</b> 서지 항목은 Crossref [S-PS-8]에서 왔다. 내용은 읽지 않았다. AMS 쪽은 <a class="t" data-t="deny"></a>이었다. 공식은 1988년 2차 메모 [S-PS-9] 1~2쪽에서 왔다. "두 배" 주장은 검색 조각 [S-PS-10]이다. 접근이 필요하다.</span><span lang="en"><b>Partial.</b> Citation fields come from Crossref [S-PS-8]. Content not read. The page of the American Meteorological Society (AMS) returned an access denied response (code 403). The formula comes from the secondary 1988 note [S-PS-9], pages 1 to 2. The "twice" claim is from a search snippet [S-PS-10]. Access needed.</span></p>
@@ -533,7 +605,7 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 <li><span lang="ko">이 논문은 점수를 보상(높을수록 좋음)으로 본다. 위의 브라이어 점수는 손실이다.</span><span lang="en">The paper treats scores as rewards (higher is better). The Brier score above is a loss.</span></li>
 </ul></div>
 <div class="step"><p><span lang="ko">이론 논문이다. 예측 시장 증거는 없다 (파일의 해석).</span><span lang="en">A theory paper. It gives no prediction-market evidence (the file's reading).</span></p></div>
-<div class="step"><p><span lang="ko">관련 연구 L179~L181: 브라이어 점수는 적절 점수다 (Q1).</span><span lang="en">Related Work, L179 to L181: the Brier score is a proper score (Q1).</span></p></div>
+<div class="step"><p><span lang="ko">관련 연구: 브라이어 점수는 적절 점수다 (Q1).</span><span lang="en">Related Work: the Brier score is a proper score (Q1).</span></p></div>
 <div class="step"><p><span lang="ko">거짓으로 예측해도 우리 가격 점수를 속일 수 없음을 보인다.</span><span lang="en">It shows our price score cannot be gamed by a dishonest forecast.</span></p></div>
 <div class="step"><!-- src: S-PS-13 -->
 <p><span lang="ko"><b>확인함(verified).</b> 본문 1쪽(초록, 키워드, 서론)을 읽었다 [S-PS-13]. 사례 연구 건수는 모른다. 1쪽만 읽었다.</span><span lang="en"><b>Verified.</b> Paper page 1 read (abstract, keywords, introduction) [S-PS-13]. Case-study counts unknown. Only page 1 read.</span></p>
@@ -560,7 +632,7 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 <li><span lang="ko">모의실험은 검정력이 크게 늘어남을 보인다. 정확한 숫자는 초록에 없다.</span><span lang="en">Simulations show a substantial power gain. Exact numbers are not in the abstract.</span></li>
 </ul></div>
 <div class="step"><p><span lang="ko">증명은 독립인 검정 통계량만 다룬다.</span><span lang="en">The proof covers independent test statistics only.</span></p></div>
-<div class="step"><p><span lang="ko">방법 Q1 L329: 구간별 검정 10개를 보정한다 (Q1, 방법).</span><span lang="en">Methods Q1, L329: it corrects the 10 per-bin tests (Q1, methods).</span></p></div>
+<div class="step"><p><span lang="ko">방법 Q1(4.2): 구간별 검정 10개를 보정한다 (Q1, 방법).</span><span lang="en">Methods Q1 (4.2): it corrects the 10 per-bin tests (Q1, methods).</span></p></div>
 <div class="step"><p><span lang="ko">구간 검정 10개가 우연히 거짓 경보를 내지 않게 한다.</span><span lang="en">It keeps 10 bin tests from giving false alarms by chance.</span></p></div>
 <div class="step"><!-- src: S-PS-5 -->
 <p><span lang="ko"><b>확인함(verified).</b> 출판사가 올린 초록을 Crossref 기록으로 읽었다 [S-PS-5]. 전문은 읽지 않았다. 2026-11-08 접근.</span><span lang="en"><b>Verified.</b> Abstract read via the Crossref record, deposited by the publisher [S-PS-5]. Full text not read. Accessed 2026-11-08.</span></p>
@@ -590,10 +662,10 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 <div class="step"><p><span lang="ko">이 방법은 <a class="t" data-t="tail"></a>가 충분해야 멱법칙과 대안을 가를 수 있다 (파일의 해석).</span><span lang="en">The method needs enough tail data to tell power laws from alternatives (the file's reading).</span></p></div>
 <div class="step">
 <ul>
-<li><span lang="ko">관련 연구 L182~L186: 멱법칙 맞춤과 콜모고로프-스미르노프 검사 (Q3, Q2의 <a class="t" data-t="ccdf"></a>).</span><span lang="en">Related Work, L182 to L186: power-law fit and Kolmogorov-Smirnov check for Q3. It also serves the Q2 complementary cumulative distribution.</span></li>
-<li><span lang="ko">방법 Q3 L382: 우리 멱법칙 맞춤이 이 논문의 방법을 따른다고 쓴다.</span><span lang="en">Methods Q3, L382: our power-law fit follows the method of this paper.</span></li>
-<li><span lang="ko">방법 Q3 L383: 우리 x_min은 상위 10%로 고정이고 가장 작은 D로 고르지 않는다. 이유는 열린 저자 <code>\todo</code>(L384)다.</span><span lang="en">Methods Q3, L383: x_min is fixed at the top 10%. It is not chosen by the smallest D. The reason is an open owner <code>\todo</code> (L384).</span></li>
-<li><span lang="ko">관련 연구 L186: 가능도비 검정은 하지 않는다.</span><span lang="en">Related Work, L186: no likelihood-ratio test is run.</span></li>
+<li><span lang="ko">관련 연구: 멱법칙 맞춤과 콜모고로프-스미르노프 검사 (Q3, Q2의 <a class="t" data-t="ccdf"></a>).</span><span lang="en">Related Work: power-law fit and Kolmogorov-Smirnov check for Q3. It also serves the Q2 complementary cumulative distribution.</span></li>
+<li><span lang="ko">방법 Q3(4.4): 우리 멱법칙 맞춤이 이 논문의 방법을 따른다고 쓴다.</span><span lang="en">Methods Q3 (4.4): our power-law fit follows the method of this paper.</span></li>
+<li><span lang="ko">방법 Q3(4.4): 우리 x_min은 상위 10%로 고정이고 가장 작은 D로 고르지 않는다. 이유는 열린 저자 <code>\todo</code>다.</span><span lang="en">Methods Q3 (4.4): x_min is fixed at the top 10%. It is not chosen by the smallest D. The reason is an open owner <code>\todo</code>.</span></li>
+<li><span lang="ko">관련 연구: 가능도비 검정은 하지 않는다.</span><span lang="en">Related Work: no likelihood-ratio test is run.</span></li>
 </ul></div>
 <div class="step"><p><span lang="ko"><a class="t" data-t="loglog"></a>의 곧은 선만으로는 멱법칙이 증명되지 않는다고 알려 준다.</span><span lang="en">It tells us a straight log-log line alone does not prove a power law.</span></p></div>
 <div class="step"><!-- src: S-PS-15 -->
@@ -620,7 +692,7 @@ svg.flow .cd{fill:var(--c-data)}svg.flow .cc{fill:var(--c-cal)}svg.flow .cs{fill
 <p><span lang="ko">쓰던 때 TPC-H 질의는 모두, TPC-DS 질의는 둘을 뺀 모두를 돌렸다.</span><span lang="en">At writing it ran all queries of benchmark H. It ran all but two queries of benchmark DS. Both come from the Transaction Processing Performance Council (TPC).</span></p></div>
 <div class="step"><!-- src: S-PS-4 -->
 <p><span lang="ko">시연 논문이라 벤치마크 숫자가 없다. 그때는 버퍼 관리자가 아직 없었다.</span><span lang="en">A demo paper with no benchmark numbers. The buffer manager was not yet built then.</span></p></div>
-<div class="step"><p><span lang="ko">방법 재현성 L390: 모든 데이터 질의의 도구 (방법).</span><span lang="en">Methods, Reproducibility, L390: the tool for all data queries (methods).</span></p></div>
+<div class="step"><p><span lang="ko">부록 B.2 재현성: 모든 데이터 질의의 도구 (방법). D-042가 이 글을 방법 4.5에서 부록 B.2로 옮겼다.</span><span lang="en">Appendix B.2 Reproducibility: the tool for all data queries (methods). D-042 moved this text from Methods 4.5 to Appendix B.2.</span></p></div>
 <div class="step"><p><span lang="ko">CPU 노드 하나로 수십억 행의 <a class="t" data-t="parquet"></a>를 질의로 훑게 해 준다.</span><span lang="en">It lets one central processing unit (CPU) node scan billions of Parquet rows with queries.</span></p></div>
 <div class="step"><!-- src: S-PS-4 -->
 <p><span lang="ko"><b>확인함(verified).</b> 논문 전문 1~4쪽을 읽었다 [S-PS-4]. 쪽 범위 1981~1984는 우리 서지에서 왔고 읽은 문서에는 없다. 2026-11-08 접근.</span><span lang="en"><b>Verified.</b> Full paper, pages 1 to 4, read [S-PS-4]. The page range 1981 to 1984 comes from our bibliography. The paper we read does not print it. Accessed 2026-11-08.</span></p>
