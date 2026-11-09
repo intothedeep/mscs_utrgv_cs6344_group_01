@@ -1,0 +1,44 @@
+\section{Data}\label{sec:data}
+\subsection{Source and scope}\label{sec:data-source}
+% src: S-PAPER-1, S-PAPER-2
+We use the \texttt{daily\_aligned/} layer of Polymarket-v1.
+This layer holds Standard Binary markets (\texttt{neg\_risk} is false).
+Its relayer records are already removed \citep{polymarketv1data}.
+We keep markets that have a winning outcome label.
+We drop Up/Down markets by the default rule in our code.
+The dataset paper says they settle by a fundamentally different mechanism and should not be pooled with other markets \citep{qin2026polymarketv1}.
+We take the price from the \texttt{p\_event} column, which is on the YES scale.
+The data are at \url{https://huggingface.co/datasets/TimeSeventeen/Polymarket-v1} \citep{polymarketv1data}.
+The dataset card states the license CC-BY-4.0.
+The paper that describes the data is \citep{qin2026polymarketv1}.
+
+\subsection{Filters and drop reasons}\label{sec:data-filters}
+% src: S-PAPER-5
+In the full run, \NMarketsInScope{} markets are in scope.
+We keep \NMarketsKept{} of them (\PctMarketsKept).
+\Cref{fig:drops} counts each dropped market once, by the first rule it fails.
+The rules apply in the order of the bars.
+Up/Down markets are \NUpdown{} (\PctUpdown).
+\NNoOutcome{} markets have no usable winner label (\PctNoOutcome).
+\NNoPrice{} have no price at or before $T-\DaysShort$ day (\PctNoPrice).
+\NStalePrice{} have a price older than \MaxStaleHours{} hours (\PctStalePrice).
+\NBelowMinTrades{} have fewer than \MinTrades{} trades before $T-\DaysShort$ day (\PctBelowMinTrades).
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/drop_reasons}{\linewidth}
+\caption{Markets by first failing rule. Why: it shows which rule removes the most markets. Source: run \RunId.}
+\label{fig:drops}
+\end{figure}
+
+\subsection{Market and wallet tables}\label{sec:data-tables}
+% src: S-PAPER-2, S-PAPER-5
+We build one market table and one wallet table.
+The market table has one row per kept market.
+It holds the category, trade count, volume in USDC, the price \pOne, and the outcome $y\in\{0,1\}$.
+The wallet table has one row per wallet and role (maker or taker).
+It holds volume in USDC, trade count, market count, and mean trade price.
+A wallet is one address.
+The wallet table has \NWalletRoleRows{} wallet-role rows from the kept markets.
+The kept markets hold \NTradesKeptMarkets{} trades.
+We keep duplicate rows because no row identifier separates repeat fills from copies.

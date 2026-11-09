@@ -1,0 +1,39 @@
+\section{Related Work}\label{sec:related}
+% src: S-PAPER-1
+We build on two references from our proposal.
+Snowberg and Wolfers study horse racing \citep{snowberg2010favorite}.
+They show that longshots win less often than their odds say.
+We test the same gap on Polymarket.
+
+The dataset paper reports Polymarket results on cheap tokens \citep[Table~3]{qin2026polymarketv1}.
+Tokens priced under \PaperCheapPrice{} pay out \PaperCheapGap{} less than their price.
+This is counted by trade.
+We count markets, not trades.
+We read this result as the same direction as the horse-racing bias.
+
+The dataset paper also scores \PaperBrierMarkets{} markets with a squared-error score \citep{qin2026polymarketv1}.
+We score all resolved Yes/No markets that pass our filters.
+Finally, the paper reports that the top \TopOneLabel{} of maker addresses hold \PaperTopShare{}
+of maker volume \citep[Table~5]{qin2026polymarketv1}.
+We ask whether a few wallets dominate volume in our kept markets.
+% src: S-PAPER-11
+Five further references place our tests in context.
+Wolfers and Zitzewitz review prediction markets \citep{wolfers2004prediction}.
+They report that market forecasts are typically fairly accurate and usually beat moderately sophisticated benchmarks.
+We test this accuracy as calibration of Polymarket prices.
+Page and Clemen find that prediction markets are reasonably well calibrated when time to expiration is short \citep{page2013prediction}.
+They find prices significantly biased for events farther in the future, with a favourite/longshot bias.
+Our longshot check looks at the same bias.
+Le uses 353 million trades on 429{,}000 binary contracts from Kalshi and Polymarket \citep{le2026decomposing}.
+The preprint finds that calibration varies by event domain, time to resolution, and trade size.
+We test all kept markets together and do not split by domain or trade size.
+
+Gneiting and Raftery name sharpness subject to calibration as the goal of probabilistic forecasting \citep{gneiting2007strictly}.
+They list the Brier score among the proper scoring rules.
+Our mean squared residual of the price is this score.
+Clauset, Shalizi, and Newman fit power laws by maximum likelihood \citep{clauset2009power}.
+They test the fit with the Kolmogorov-Smirnov statistic and with likelihood-ratio tests against alternatives.
+On 24 real datasets, the power law fits some and is ruled out for others.
+Like them, we measure the fit with the KS statistic.
+We fix the lower bound at the top \TopTenLabel{} of values and run no likelihood-ratio test.
+\todo{owner: confirm the added references and add any others}

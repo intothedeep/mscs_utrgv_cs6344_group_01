@@ -1,0 +1,167 @@
+\section{Methods}\label{sec:methods}
+\subsection{Evaluation price and pre-registration}\label{sec:methods-prereg}
+% src: S-PAPER-2, S-PAPER-3
+Each market has a scheduled close time $T$.
+We set $T$ to the \texttt{close\_at} field.
+Trades can continue after the close, often once the answer is known.
+A price taken after the close can then contain the answer.
+Then calibration looks better than it is.
+In a one-month pilot of \PilotNMarkets{} markets, \PilotShareMarketsAfterClose{} had a trade after \texttt{close\_at}.
+Those late trades are \PilotShareVolumeAfterClose{} of the pilot volume.
+So we use the scheduled close and not the last trade.
+
+\Cref{fig:timeline} shows where the evaluation price sits.
+The evaluation price \pOne{} is a mean price.
+It averages the trades at the last timestamp at or before $T-\DaysShort$ day.
+We drop a market if this price is older than \MaxStaleHours{} hours.
+We also drop a market with fewer than \MinTrades{} trades before that time.
+A price from a nearly empty market is not a crowd view.
+We report Q1 with and without this filter.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\small]
+\draw[thick,-{Stealth}] (0,0) -- (12.2,0);
+\draw[thick] (0.2,-0.12) -- (0.2,0.12) node[above] {market opens};
+\draw[thick,blue!60!black] (7.0,-0.2) -- (7.0,0.2) node[above] {$T-\DaysShort$ day};
+\draw[thick] (9.2,-0.12) -- (9.2,0.12) node[above] {$T$ = \texttt{close\_at}};
+\foreach \x in {10.0,10.5,11.0,11.5} \draw[red!70!black,thick] (\x,-0.15) -- (\x,0.15);
+\node[below=6pt,blue!60!black,align=center] at (7.0,0) {evaluation price \pOne};
+\node[below=6pt,red!70!black,align=center] at (10.75,0) {trades after the close};
+\end{tikzpicture}
+\caption{Where the evaluation price sits in a market's life (illustrative). Why: a price taken after the close can already contain the answer. Source: pre-registration, \texttt{analysis/prereg\_mvp1.md}.}
+\label{fig:timeline}
+\end{figure}
+
+The criteria were fixed before any Q1 result.
+\Cref{tab:prereg} lists them.
+The verdict applies to the full-data run with the same parameters.
+
+\begin{table}[H]
+\centering
+\caption{Pre-registered choices and Q1 criteria. Why: fixing the rules first keeps the result from choosing the rule. Source: \texttt{analysis/prereg\_mvp1.md}.}
+\label{tab:prereg}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+Item & Value \\
+\midrule
+Close time $T$ & \texttt{close\_at} \\
+\midrule
+Evaluation price & mean price at the last timestamp (after the amendment below) at or before $T-\DaysShort$ day, at most \MaxStaleHours{} hours old \\
+\midrule
+Minimum trades & \MinTrades{} before $T-\DaysShort$ day. Q1 is also reported without it \\
+\midrule
+Bins and level & \NBins{} equal-width bins, $\alpha=\Alpha$ \\
+\midrule
+Primary metric & chi-square goodness of fit over the \NBins{} bins. The line is $p<\Alpha$ \\
+\midrule
+Per-bin call & binomial test per bin, Benjamini-Hochberg (BH) corrected at \Alpha{} \\
+\midrule
+Effect size & observed rate minus mean price per bin, with a \CiLevel{} z interval here. Also the mean squared residual of the price \\
+\midrule
+Failure condition & no bin off after BH and chi-square $p\ge\Alpha$: no evidence of miscalibration at this $n$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% src: S-PAPER-3
+One rule changed after we saw a full-data Q1 result.
+The original rule was the last price at or before $T-\DaysShort$ day.
+Many trades share one block timestamp, so this rule left their order undefined.
+The new rule is the mean price of the trades at the last timestamp.
+We made the change for determinism, not because of the result.
+It came after we saw a full-data Q1 result, so we report it as an amendment.
+The amendment in the pre-registration file records that the verdict did not change.
+All numbers in this paper come from the runs with the amended rule.
+This paper uses an effect size and an interval that differ from the pre-registration: per-bin gaps and the z interval.
+It drops the Gini coefficient named in our proposal.
+Both changes keep the analysis within the lecture contents.
+The verdict rule and the verdict sentence are unchanged.
+These methods are outside the lectures: the Lorenz curve, Wilson intervals, the cluster bootstrap chi-square, logistic calibration, and the Brier skill score.
+All other methods come from the CS 6344 course lectures.
+
+\subsection{Q1: calibration}\label{sec:methods-q1}
+% src: S-PAPER-2, S-PAPER-3
+We treat each outcome as a Bernoulli trial with success probability equal to the price.
+Outcome 1 is the first-listed outcome of a market, labeled Yes in \OutcomeOneYesShare{} of kept markets.
+So the outcome-1 count in a bin is approximately binomial.
+We form \NBins{} equal-width price bins, and we use equal-frequency bins as a check.
+In bin $b$, $n_b$ is the market count, $\bar p_b$ the mean price, and $O_b$ the outcome-1 count.
+The null hypothesis is that the outcome-1 rate equals the mean price.
+The effect size is the per-bin gap, the observed rate minus the mean price.
+The expected outcome-1 count is $E_b=n_b\bar p_b$.
+We test each bin with a binomial test.
+We give a \CiLevel{} z interval for the observed rate $\hat r_b=O_b/n_b$, which is $\hat r_b\pm1.96\sqrt{\hat r_b(1-\hat r_b)/n_b}$.
+We correct the \NBins{} tests with Bonferroni and with the Benjamini-Hochberg (BH) procedure \citep{benjamini1995controlling}.
+The overall test is the goodness-of-fit form of the chi-square test: observed against expected counts, with the expected counts taken from the prices.
+It runs on the bin by \{outcome 1, outcome 0\} table:
+\begin{equation}
+\chi^2=\sum_{b}\left[\frac{(O_b-E_b)^2}{E_b}+\frac{(O_b-E_b)^2}{n_b-E_b}\right].
+\label{eq:chisq}
+\end{equation}
+We also report the mean squared residual of the price, $\frac1n\sum(p-y)^2$, where $n$ is the total market count.
+The pre-registration calls it the Brier score \citep{brier1950verification}.
+We add the log loss and the mean entropy $H(p)$ in bits.
+We treat the market as a classifier that says outcome 1 wins when $p>\FavoriteLine$.
+We compare the price distributions of markets where outcome 1 won and markets where outcome 0 won with a Kolmogorov-Smirnov (KS) test.
+The KS statistic $D$ is the effect size.
+For the longshot check we look at the two cheapest bins.
+
+\subsection{Q2: wallet concentration}\label{sec:methods-q2}
+% src: S-PAPER-2, S-PAPER-10
+We work with wallet volume in USDC, by role.
+Volume is the USDC sum over every trade in the kept markets.
+It includes trades after $T-\DaysShort$ day.
+We did not measure trade-count shares.
+We report the share of role volume held by the top \TopOneLabel, \TopFiveLabel, \TopTenLabel, and \TopTwentyLabel{} of wallets.
+We compare the top \TopTwentyLabel{} share with the 80/20 reference.
+This is descriptive, with no pre-registered verdict line.
+We draw the complementary CDF (CCDF) of wallet volume on log-log axes.
+We sample its ranks from the top, so the largest wallets get points.
+We also draw the wallet distribution, the volume distribution, and the Lorenz curve of each role.
+Each is split at the top \TopTwentyLabel{} of wallets.
+The Lorenz curve is outside the lectures.
+We use it only to show how the top shares build up.
+As a pipeline check, we compare our top \TopOneLabel{} maker share with the dataset paper's.
+We test the log volume of makers against takers with a Welch t-test and a KS test.
+The effect size is the difference of the mean log10 volume.
+We report Spearman's $\rho$ between trade count and volume.
+
+% src: S-PAPER-2, S-PAPER-6
+As a side analysis, we run k-means on wallet features.
+We take the logarithm of the heavy-tailed features, then z-score them.
+We choose $K$ by a fixed rule on the elbow curve.
+The rule takes the point farthest from the line between the first and last points.
+We test cluster against topic category with the chi-square test of independence .
+Its effect size is the largest observed minus expected share in one cell.
+This analysis is exploratory.
+
+\subsection{Q3: distributions}\label{sec:methods-q3}
+% src: S-PAPER-2, S-PAPER-5
+We summarise price, trade size, and wallet volume with their mean and median.
+We plot histograms of the price \pOne{} and of trade size.
+We draw QQ plots of trade size and of wallet volume, before and after a log transform.
+We fit a normal, an exponential, and a power law to trade size and wallet volume.
+The power law is fitted on the top \TopTenLabel{} of values only, above a lower bound $x_{\min}$.
+We measure each fit with the KS statistic $D$ against the data.
+% src: S-PAPER-13
+This follows the power-law method of \citet{clauset2009power}.
+Unlike that method, we fix $x_{\min}$ at the top \TopTenLabel{} and do not choose it by the smallest $D$.
+\todo{owner: why $x_{\min}$ is fixed at the top \TopTenLabel{} instead of chosen by the smallest $D$}
+Trade sizes come from a deterministic sample of \NTradeSizeSample{} trades from the kept markets.
+
+\subsection{Reproducibility}\label{sec:methods-repro}
+% src: S-PAPER-5, S-PAPER-6
+All data queries ran on the UTRGV Cradle cluster (SLURM, CPU only).
+We used Python and DuckDB \citep{raasveldt2019duckdb}.
+The first-stage run is \RunId{} (job \SlurmJobId), with code version \CodeVersion.
+The hash \CodeSha{} is that of the Q1 script.
+The hash of the whole script set is \CodeSetSha.
+The per-script hashes are in \texttt{\CodeShaFile}.
+The robustness run is \RobustRun, with code version \RobustCodeVersion{} (hash \RobustCodeSha).
+An earlier review found three sources of small differences between reruns.
+They were tie order inside one block, a random sample, and row order.
+Code version \CodeVersion{} fixes these.
+The pre-registered criteria did not change, and no verdict flipped.
+The review-fix run is \RThreeRun, with code version \RThreeCodeVersion{} and the pre-registration in commit \RThreePreregCommit.

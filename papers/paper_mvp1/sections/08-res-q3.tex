@@ -1,0 +1,67 @@
+\subsection{Q3: what does the data look like?}\label{sec:res-q3}
+% src: S-PAPER-5
+We describe the distributions without a verdict.
+\Cref{fig:hist} shows the price histogram and the trade-size histogram.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/hist_price_p1d}{\linewidth}
+\caption{Price \pOne{} over the kept markets.}
+\label{fig:hist-price}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/hist_trade_size}{\linewidth}
+\caption{Trade size on a log axis. The largest sampled trade falls past the last bin edge by float rounding, so it is not plotted.}
+\label{fig:hist-size}
+\end{subfigure}
+\caption{Histograms of the price and of trade size. Why: the price shape shows where the crowd is confident, and the trade-size shape shows how uneven bets are. Source: run \QqRun.}
+\label{fig:hist}
+\end{figure}
+
+The price \pOne{} has a mean of \PriceOneDayMean{} and a median of \PriceOneDayMedian.
+Prices pile up near both ends of the scale.
+The trade size has a mean of \TradeSizeMean{} USDC and a median of \TradeSizeMedian{} USDC.
+So trade sizes are strongly right skewed.
+\Cref{fig:qq-size,fig:qq-wallet} show the QQ plots.
+Points on the straight line mean the values are close to normal.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/qq_trade_size_raw_log}{\linewidth}
+\caption{QQ plot of trade size against the normal, raw (left) and after a log transform (right). Why: the raw points bend away from the line and the log points follow it, so the log values are closer to normal. Source: run \QqRun.}
+\label{fig:qq-size}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/qq_wallet_volume_raw_log}{\linewidth}
+\caption{QQ plot of wallet volume against the normal, raw (left) and after a log transform (right). Why: the comparison shows whether the log values are closer to normal than the raw values. Source: run \QqRun.}
+\label{fig:qq-wallet}
+\end{figure}
+
+\Cref{tab:fits} gives the fit statistics.
+The KS statistic $D$ is the effect size.
+KS p-values are too large here because the parameters are fitted on the same data.
+So a rejection stands, and a pass would not.
+The normal fit is poor for both variables.
+The power-law fit covers the tail only, so its $D$ is not directly comparable.
+We do not rank the three fits: the normal and exponential fits use all data, and the power law uses the tail.
+We did not compare a lognormal.
+The exponential fit has $D=\TradeSizeExponentialKsD$ for trade size and $D=\WalletVolumeExponentialKsD$ for wallet volume.
+
+\begin{table}[H]
+\centering
+\caption{Distribution fits, with the power law fitted on the tail from $x_{\min}$. Why: a small $D$ means the fitted curve is close to the data. Source: run \RunId.}
+\label{tab:fits}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Variable & Power-law $\alpha$ & $x_{\min}$ (USDC) & KS $D$, power law & KS $D$, normal \\
+\midrule
+Trade size & \TradeSizePowerAlpha & \TradeSizePowerXmin & \TradeSizePowerKsD & \TradeSizeNormalKsD \\
+\midrule
+Wallet volume & \WalletVolumePowerAlpha & \WalletVolumePowerXmin & \WalletVolumePowerKsD & \WalletVolumeNormalKsD \\
+\bottomrule
+\end{tabular}
+\end{table}

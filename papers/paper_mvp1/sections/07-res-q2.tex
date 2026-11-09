@@ -1,0 +1,120 @@
+\subsection{Q2: who is the crowd? Do a few wallets do most of the trading?}\label{sec:res-q2}
+% src: S-PAPER-5, S-PAPER-10
+Yes, by USDC volume, the top wallets do most of the trading.
+This holds in the kept markets only, and far beyond the 80/20 reference.
+The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker volume and \TakerTopTwentyShare{} of taker volume.
+The 80/20 rule says \TopTwentyReference.
+We describe these numbers without a pre-registered verdict.
+Each row is one wallet and role.
+Volume sums every trade in the kept markets, including trades after $T-\DaysShort$ day.
+Trade-count shares were not measured.
+\Cref{tab:conc} gives the top shares by role.
+\Cref{fig:ccdf} shows the CCDF.
+\Cref{fig:wd-maker,fig:wd-taker} show the wallet and volume distributions.
+\Cref{fig:lorenz} shows the Lorenz curves.
+The Lorenz curves are outside the lectures.
+
+\begin{table}[H]
+\centering
+\caption{Volume concentration by role, as the share of role volume held by the top wallets. Why: the top shares show how few wallets hold most of the volume. Source: run \RunId.}
+\label{tab:conc}
+\small
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Role & Wallets & Mean (USDC) & Median (USDC) & Top \TopOneLabel{} & Top \TopFiveLabel{} & Top \TopTenLabel{} & Top \TopTwentyLabel \\
+\midrule
+Maker & \MakerNWallets & \MakerMeanVolume & \MakerMedianVolume & \MakerTopOneShare & \MakerTopFiveShare & \MakerTopTenShare & \MakerTopTwentyShare \\
+\midrule
+Taker & \TakerNWallets & \TakerMeanVolume & \TakerMedianVolume & \TakerTopOneShare & \TakerTopFiveShare & \TakerTopTenShare & \TakerTopTwentyShare \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig6_ccdf_top_sampled}{\linewidth}
+\caption{CCDF of wallet volume on log-log axes, one line per role. Why: the tail bends downward, so it is not a straight line. Source: run \CcdfRun.}
+\label{fig:ccdf}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_dist_maker_count}{\linewidth}
+\caption{Share of maker wallets per decade of volume.}
+\label{fig:wd-maker-count}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_dist_maker_volume}{\linewidth}
+\caption{Share of maker volume per decade of wallet volume.}
+\label{fig:wd-maker-volume}
+\end{subfigure}
+\caption{Wallet and volume distributions of makers, split at the top \TopTwentyLabel{} of wallets. Why: the area is the share of wallets in (a) and the share of volume in (b). Source: run \WalletDistRun.}
+\label{fig:wd-maker}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_dist_taker_count}{\linewidth}
+\caption{Share of taker wallets per decade of volume.}
+\label{fig:wd-taker-count}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_dist_taker_volume}{\linewidth}
+\caption{Share of taker volume per decade of wallet volume.}
+\label{fig:wd-taker-volume}
+\end{subfigure}
+\caption{Wallet and volume distributions of takers, split at the top \TopTwentyLabel{} of wallets. Why: the area is the share of wallets in (a) and the share of volume in (b). Source: run \WalletDistRun.}
+\label{fig:wd-taker}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_lorenz_maker}{\linewidth}
+\caption{Makers.}
+\label{fig:lorenz-maker}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\linewidth}\centering
+\figorbox{figures/wallet_lorenz_taker}{\linewidth}
+\caption{Takers.}
+\label{fig:lorenz-taker}
+\end{subfigure}
+\caption{Lorenz curves of volume, with the 80/20 point. Why: the height is the volume share of the lowest wallets.  Source: run \WalletDistRun.}
+\label{fig:lorenz}
+\end{figure}
+
+The mean volume is far above the median volume in both roles.
+As a pipeline check, the dataset paper reports that the top \TopOneLabel{} of makers hold \PaperTopShare{} of maker volume \citep{qin2026polymarketv1}.
+Ours is \MakerTopOneShare.
+The populations differ.
+The paper covers the full data, and our wallets come from the kept markets.
+We use the paper's value as a reference only.
+
+The top \TopTenLabel{} tail of wallet volume has a fitted power-law exponent $\alpha=\WalletVolumePowerAlpha$.
+The fit uses \WalletVolumePowerNTail{} wallet-role rows, with both roles pooled.
+The KS test rejects an exact power law ($D=\WalletVolumePowerKsD$, $p=\WalletVolumePowerKsP$).
+The fit uses the same data, so the KS $p$ is too large, not too small.
+So the rejection stands.
+The CCDF tail in \Cref{fig:ccdf} bends downward at the largest wallets.
+So it is not a straight line on log-log axes.
+We do not say wallet volume follows a power law.
+We set no line for how close it is.
+
+The Welch test on log volume gives $t=\RoleWelchT$ with $p\,\RoleWelchP$, a float-underflow bound.
+The effect size is the difference of mean log10 volume, makers minus takers: \RoleLogTenDiff{} (\RoleLogTenMaker{} against \RoleLogTenTaker).
+The KS statistic is $D=\RoleKsD$.
+Trade count and volume have a Spearman correlation of $\rho=\SpearmanTradesVolumeRho$.
+
+In the side analysis, the fixed elbow-curve rule picks $K=\KmeansK$.
+The sample has \KmeansNSample{} wallet-role rows, and a wallet in both roles gives two rows.
+The \KmeansK{} clusters have \ClusterZeroN, \ClusterOneN, \ClusterTwoN, and \ClusterThreeN{} rows.
+Their median volumes run from \ClusterTwoMedianVolume{} to \ClusterOneMedianVolume{} USDC.
+An ANOVA of mean trade price across clusters gives $\mathrm{SSB}/(\mathrm{SSB}+\mathrm{SSW})=\KmeansPriceSsbRatio$.
+Its permutation $p$ is at the floor, $1/(\KmeansNPerm+1)$.
+The cluster by category test gives $\chi^2=\KmeansCategoryChi$ with \KmeansCategoryDf{} degrees of freedom.
+Its $p\,\KmeansCategoryP$ is a float-underflow bound, on \KmeansNSample{} rows.
+The largest cell gap is in cluster \ClusterCategoryGapCluster, category \ClusterCategoryGapCategory.
+Its observed share is \ClusterCategoryGapObs{} of the sample, against \ClusterCategoryGapExp{} expected.
+The gap is \ClusterCategoryGapDiff.

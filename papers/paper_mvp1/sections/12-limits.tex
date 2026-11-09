@@ -1,0 +1,56 @@
+\section{Limitations}\label{sec:limits}
+% src: S-PAPER-1, S-PAPER-2, S-PAPER-3, S-PAPER-6, S-PAPER-10
+Some markets have no usable winner label, and we drop them.
+In our full run this is \NNoOutcome{} of \NMarketsInScope{} markets (\PctNoOutcome).
+Our rule is wider than the dataset paper's.
+It also drops markets whose outcome-1 label never traded.
+The paper says only a small subset lacks a winner.
+
+Markets keep trading after \texttt{close\_at}.
+We avoid this by pricing one day before the scheduled close.
+But the choice rests on a one-month pilot.
+
+Sports is the largest topic in scope and in the kept markets.
+It is \SportsShareInScope{} of the \NMarketsInScope{} markets in scope and \SportsShareKept{} of the kept markets.
+Its survival is \CatSportsSurvival{} against \PctKept{} overall.
+So Sports is slightly under-represented against its scope.
+Sports loses markets mainly to no price (\CatSportsDropNoPriceN) or a stale price (\CatSportsDropStalePriceN).
+Both are measured \DaysShort{} day before the close.
+It loses almost none to the Up/Down rule (\CatSportsDropUpdownN).
+The dataset paper notes that Sports markets fall disproportionately into Neg-Risk or Up/Down \citep{qin2026polymarketv1}.
+Neg-Risk markets are outside the layer we use.
+
+Our selection is narrow.
+Only \NMarketsKept{} of \NMarketsInScope{} markets pass the filters.
+\NNoPrice{} markets have no price \DaysShort{} day before the close (\PctNoPrice).
+The minimum-trade filter is a choice, and we show the result without it.
+\Cref{sec:res-review} compares kept and dropped markets (M4).
+Markets on one event move together.
+The binomial and chi-square tests assume independent markets, so the p-values are optimistic.
+The z intervals use the same assumption, so they may be too narrow.
+The role tests compare groups that share addresses and trades.
+No event key exists in the data, so we cannot size this dependence exactly.
+Two proxy keys address it in part (\Cref{sec:res-review}).
+The proxies are not true event keys.
+With this many rows, a tiny gap can give a tiny p-value.
+So we read the effect sizes first.
+The intervals do not escape the independence assumption.
+
+The k-means result is exploratory.
+The clusters describe the sample.
+A wallet is an address, and one owner may control many addresses.
+Volume concentration is not the same as the power to set prices.
+
+We changed one pre-registered rule after seeing a full Q1 result.
+This is the tie rule in \Cref{sec:methods-prereg}.
+We report it as an amendment.
+The amendment records that the verdict did not change.
+
+The two robustness checks in \Cref{sec:res-robust} speak to two limits.
+In R1, only \RobROneSplitN{} kept markets have a split payout and \RobROneMissingN{} is missing from the file.
+Our label agrees with the resolution file on \RobROneAgreement{} of clean markets.
+The Q1 rule result is the same without the unclear markets.
+In R2, the price moves by at least \DeltaA{} in \RobRTwoShareDeltaAtLeastTen{} of markets.
+This is the move between \pOne{} and the last trade.
+So \pOne{} is not the price at the close.
+Also \RobRTwoShareNoTrade{} of markets have no trade in the last day.

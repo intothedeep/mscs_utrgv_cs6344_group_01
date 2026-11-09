@@ -1,0 +1,26 @@
+\section{Discussion}\label{sec:discussion}
+% src: S-PAPER-5, S-PAPER-8, S-PAPER-10
+The answer to Q1 is no.
+At this $n$, the price is not a calibrated probability as a whole.
+The observed outcome-1 rate sits below the price in \GapNegBinsMain{} of \GapBinsTotal{} bins.
+The effect is small and runs one way.
+The net gap is \GapNetDiffMain.
+The largest per-bin gap is \LargestGapAbs{} below the price, in bin \LargestGapBin{} (\Cref{tab:bins}).
+We set no size line before the results.
+With the minimum-trade filter, the longshot gap points the same way as the horse-racing bias.
+Without the filter, the cheapest bin does not.
+\todo{owner: interpretation of why prices run high, and what the gaps mean in practice for a reader of the price}
+
+The answer to Q2 is descriptive.
+Yes, by USDC volume, the top wallets do most of the trading.
+This holds in the kept markets, in both roles, far beyond the 80/20 reference.
+Our top \TopOneLabel{} maker share is \MakerTopOneShare, against \PaperTopShare{} in the dataset paper.
+The populations differ.
+We measure concentration of volume.
+We do not test who sets the prices.
+The k-means clusters are a side view and carry no claim.
+The wallet volume includes trades after $T-\DaysShort$ day.
+
+The answer to Q3 is descriptive too.
+Prices cluster near the ends, and trade sizes are strongly right skewed.
+\todo{owner: wider interpretation or policy implications, if the course report needs them}

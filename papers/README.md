@@ -11,6 +11,7 @@ Each folder holds:
 
 - `numbers.tex`: generated macros, one `\newcommand` per number. Do not edit by hand.
 - `figures/`: PNG copies from the run folder, same names.
+- `sections/`: one `NN-slug.tex` per section, `\input` from `main.tex` (`paper_mvp1` only).
 - `figkit.sty`: copy of `.claude/skills/latex-figkit/figkit.sty`.
 
 ## Regenerate numbers.tex

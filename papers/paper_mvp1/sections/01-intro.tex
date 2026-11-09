@@ -1,0 +1,32 @@
+\section{Introduction}\label{sec:intro}
+% src: S-PAPER-1
+A Polymarket YES share pays \PayoutDollar{} if the event happens.
+At a price of \HookPrice, the price is read as a \HookPct{} chance.
+Is that chance right?
+If we collect every event priced at \HookPct, about \HookPct{} of them should have happened.
+The Polymarket-v1 database records every trade on Polymarket's first exchange.
+It holds \PaperTrades{} trades and \PaperMarkets{} markets from \PaperPeriod{} \citep{qin2026polymarketv1}.
+So we can check each price against what happened.
+
+This paper reports the first stage of a staged study.
+% src: S-PAPER-8
+It answers three questions.
+The first question is Q1: is the crowd right?
+% src: S-PAPER-1
+We test calibration one price range at a time.
+We use binomial and chi-square tests, confidence intervals, and the mean squared residual of the price.
+We also ask whether cheap longshot bets are a trap.
+The second question is Q2: who is the crowd?
+We ask whether a small group of wallets does most of the trading.
+We use top shares of wallet volume, the 80/20 rule, and a power-law check.
+We also group wallets by k-means, as a side analysis.
+The third question is Q3: what does betting look like?
+We describe trade sizes, wallet volumes, and prices with histograms and distribution fits.
+
+% src: S-PAPER-3, S-PAPER-5
+Our contributions are these.
+We fix the evaluation rules before we see any Q1 result.
+We report one rule change made afterwards.
+We score all \NMarketsKept{} kept markets, not a small panel.
+We report an effect size next to every p-value, such as the per-bin gap.
+The text uses the word wallet for an address on the exchange.

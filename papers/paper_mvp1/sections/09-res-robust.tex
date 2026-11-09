@@ -1,0 +1,75 @@
+\subsection{Robustness}\label{sec:res-robust}
+% src: S-PAPER-9, S-PAPER-8
+Two checks look at limits of the Q1 setup.
+Both are descriptive.
+They add no primary test and no verdict.
+The pre-registered Q1 verdict stays as it is.
+The sensitivity row below sits next to the original Q1 row and does not replace it.
+Both checks use the \QOneN{} kept markets.
+
+% src: S-PAPER-9
+Check R1 asks whether the Q1 result holds when markets without a clean payout are removed.
+The resolution file gives each market a payout vector.
+A market is clean when one outcome pays one and the other pays zero.
+Of the kept markets, \RobROneCleanN{} are clean (\RobROneCleanShare).
+\RobROneSplitN{} have a split payout (\RobROneSplitShare).
+\RobROneOtherN{} are of another kind.
+\RobROneMissingN{} is missing from the file.
+Our label marks outcome 1 as the winner on \RobROneSplitYesOne{} of the split markets and outcome 0 on \RobROneSplitYesZero.
+Our winner label agrees with the resolution file on \RobROneAgreement{} of the \RobROneNClean{} clean markets.
+\RobROneNMismatch{} clean markets disagree.
+\Cref{fig:r1} shows the payout classes and the calibration points with and without the unclear markets.
+\Cref{tab:r1} puts the sensitivity row next to the original row.
+We remove split, other, and mismatching markets, which is \RobROneNExcluded{} markets.
+The Q1 rule result is the same in both rows: \RobROneRuleOriginal{}
+The chi-square statistic moves from \QOneChiSq{} to \RobROneSensChiSq.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r1_split_payout}{\linewidth}
+\caption{Kept markets by payout class (log scale), and the Q1 calibration points with and without the unclear markets. Why: points that overlap mean the unclear markets do not move the result. Source: run \RobustRun.}
+\label{fig:r1}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Q1 original row and R1 sensitivity row. Why: close rows mean the unclear markets do not drive the Q1 result. Source: runs \RunId{} and \RobustRun.}
+\label{tab:r1}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Row & Markets & $\chi^2$ & $p$ & Mean sq. residual & Bins off (BH) \\
+\midrule
+Q1 original & \QOneN & \QOneChiSq & \QOneP & \QOneBrier & \QOneBinsBh \\
+\midrule
+Sensitivity & \RobROneSensN & \RobROneSensChiSq & \RobROneSensP & \RobROneSensBrier & \RobROneSensBinsBh \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% src: S-PAPER-9
+Check R2 asks how far the price moves from $T-\DaysShort$ day to the last trade before $T$.
+Call the mean price at the last timestamp before $T$ \pT.
+The median absolute change from \pOne{} to \pT{} is \RobRTwoMedianAbsDelta.
+The change is at least \DeltaA{} in \RobRTwoShareDeltaAtLeastTen{} of markets.
+It is at least \DeltaB{} in \RobRTwoShareDeltaAtLeastTwentyFive{} and at least \DeltaC{} in \RobRTwoShareDeltaAtLeastFifty.
+The price crosses \FavoriteLine{} in \RobRTwoShareCrossing{} of markets.
+This compares the two end points and not the path.
+\RobRTwoShareNoTrade{} of markets have no trade in the last day, and for them \pT{} equals \pOne.
+\Cref{fig:r2} shows the distribution of the absolute change.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r2_price_path}{\linewidth}
+\caption{ECDF of the absolute price change from \pOne{} to \pT. Why: a curve near one at small values means \pOne{} is close to the last price. Source: run \RobustRun.}
+\label{fig:r2}
+\end{figure}
+
+The price \pT{} is the price just before the close.
+So its mean squared residual is not a one-day-ahead forecast.
+The mean squared residual is \RobRTwoAllBrierOneDay{} at \pOne{} and \RobRTwoAllBrierAtClose{} at \pT.
+The paired difference (\pT{} minus \pOne) is \RobRTwoAllMeanDiff{}
+(\CiLevel{} CI [\RobRTwoAllCiLow, \RobRTwoAllCiHigh], $p\,\RobRTwoAllP$).
+A negative difference means \pT{} is closer to the outcome than \pOne.
+On the \RobRTwoTradedN{} markets with a trade in the last day, the difference is \RobRTwoTradedMeanDiff.
+The \CiLevel{} CI is [\RobRTwoTradedCiLow, \RobRTwoTradedCiHigh].

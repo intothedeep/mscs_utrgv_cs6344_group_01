@@ -1,0 +1,97 @@
+\subsection{Q1: is the crowd right?}\label{sec:res-q1}
+% src: S-PAPER-3, S-PAPER-5, S-PAPER-10
+The pre-registered rule gives this verdict: \VerdictQOne{}
+The chi-square statistic is \QOneChiSq{} with \QOneDf{} degrees of freedom.
+The p-value is $p=\QOneP$.
+This p-value assumes independent markets, so it may be too small.
+The effect is small and runs one way.
+In \GapNegBinsMain{} of \GapBinsTotal{} bins the observed outcome-1 rate is below the mean price.
+So outcome 1 is priced too high.
+Take the \OutcomeOneYesN{} markets where outcome 1 is labeled Yes.
+In \OutcomeOneYesBinsNegative{} of 9 bins (0 to 8), their rate is below the mean price.
+The gaps are \OutcomeOneYesGapMin{} to \OutcomeOneYesGapMax{} percentage points.
+This is descriptive, with no new test.
+Over all \NMarketsKept{} markets the net gap is \GapNetDiffMain.
+That is \GapNetYesShort{} fewer outcome-1 wins than the prices imply.
+The largest per-bin gap is \LargestGapAbs{} (bin \LargestGapBin, counting from 0).
+The largest chi-square contributor is bin \ChiTopBin{}, with \ChiTopShare{} of the chi-square.
+We set no size line before the results, so small is our reading.
+\Cref{fig:calib} shows the observed outcome-1 rate against the mean price in each bin.
+\Cref{tab:bins} gives the numbers.
+
+\begin{table}[H]
+\centering
+\caption{Calibration by price bin, with the gap as observed rate minus mean price in percent points. Why: the gap and its interval show where prices are off. Source: run \RunId.}
+\label{tab:bins}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrcrr}
+\toprule
+Bin & $n$ & Mean price & Observed & \CiLevel{} CI & Gap & BH $p$ \\
+\midrule
+\binrow{0 to 10\%}{ZeroTen}\\ \midrule
+\binrow{10 to 20\%}{TenTwenty}\\ \midrule
+\binrow{20 to 30\%}{TwentyThirty}\\ \midrule
+\binrow{30 to 40\%}{ThirtyForty}\\ \midrule
+\binrow{40 to 50\%}{FortyFifty}\\ \midrule
+\binrow{50 to 60\%}{FiftySixty}\\ \midrule
+\binrow{60 to 70\%}{SixtySeventy}\\ \midrule
+\binrow{70 to 80\%}{SeventyEighty}\\ \midrule
+\binrow{80 to 90\%}{EightyNinety}\\ \midrule
+\binrow{90 to 100\%}{NinetyHundred}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The observed rate is below the mean price in every bin except the top one.
+Without the minimum-trade filter the count is \GapNegBinsNoMin{} of \GapBinsTotal.
+In equal-frequency bins it is \GapNegBinsEqFreq{} of \GapBinsTotal.
+After BH correction, \QOneBinsBh{} of the \NBins{} bins are off ($p<\Alpha$).
+After Bonferroni correction, \QOneBinsBonferroni{} bins are off.
+The \CiLevel{} z interval leaves the mean price outside in \ZIntervalBinsOutsideN{} bins: \ZIntervalBinsOutsideList.
+BH marks the bins \ZIntervalBinsBhOffList{} as off, which are the same bins.
+For example, in the bin with mean price \BinSeventyEightyPrice{}, the observed outcome-1 rate is \BinSeventyEightyObs.
+The gap is \BinSeventyEightyDiff{} (BH $p=\BinSeventyEightyBhP$).
+
+The two cheapest bins are the longshot check.
+In the cheapest bin the gap is \BinZeroTenDiff{} (BH $p=\BinZeroTenBhP$).
+In the next bin the gap is \BinTenTwentyDiff{} (BH $p=\BinTenTwentyBhP$).
+With the minimum-trade filter, cheap bets pay off less often than their price says.
+The direction matches the horse-racing result \citep{snowberg2010favorite}.
+Without the filter, the cheapest bin flips above the price.
+Its gap is \NoMinBinZeroDiff{} (BH $p=\NoMinBinZeroPBh$).
+The next bin has a gap of \NoMinBinOneDiff{} (BH $p=\NoMinBinOnePBh$).
+Neither bin is off after BH.
+So the longshot statement holds only with the filter.
+Our gaps are per market and the dataset paper's are per trade.
+So we compare the direction only, not the size.
+
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig4_calibration_gap}{\linewidth}
+\caption{Observed outcome-1 rate against mean price per bin (top), and the per-bin gap in percentage points with \CiLevel{} z intervals (bottom). Why: the lower panel shows the gaps that the diagonal hides. Source: run \RunId{} and the local figure folder runs/local\_fig4gap\_v9.}
+\label{fig:calib}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig5_ecdf_yes_no}{\linewidth}
+\caption{ECDFs of \pOne{} for markets where outcome 1 won and markets where outcome 0 won. Why: the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
+\label{fig:ecdf}
+\end{figure}
+
+Next come the score measures.
+The mean squared residual of the price is \QOneBrier, the log loss is \QOneLogLoss, and the mean entropy is \QOneEntropy{} bits.
+The outcome-1 rate among kept markets is \QOneYesRate, and the mean price is \PriceOneDayMean.
+At the \FavoriteLine{} line, the classifier accuracy is \QOneAccuracy.
+Its precision is \QOnePrecision{} and its recall is \QOneRecall.
+The KS statistic between the prices of those two groups is $D=\QOneKsD$ (\Cref{fig:ecdf}).
+Without the minimum-trade filter there are \QOneNoMinN{} markets.
+The mean squared residual is then \QOneNoMinBrier{}, with $\chi^2=\QOneNoMinChiSq$ and $p=\QOneNoMinP$.
+The chi-square test also rejects without the filter.
+With \QOneEqFreqBins{} equal-frequency bins, BH marks \QOneEqFreqBinsBh{} bins as off.
+The z interval leaves the price outside \ZIntervalEqFreqOutsideN{} bins, and BH marks \QOneEqFreqBinsBh.
+They differ in the lowest bin, which has very few outcome-1 wins.
+The z interval has no correction for the \QOneEqFreqBins{} bins.
+Its spread comes from the observed rate, which is unreliable near zero.
