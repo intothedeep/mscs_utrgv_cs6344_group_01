@@ -1,6 +1,16 @@
 \section{Robustness}\label{sec:res-robust}
 \Cref{sec:res-checks} introduces these two checks, and \Cref{tab:checks} sums them up.
 
+% src: S-PAPER-1, S-PAPER-2, S-PAPER-3, S-PAPER-6, S-PAPER-10
+The two robustness checks in \Cref{sec:res-robust} speak to two limits.
+In R1, only \RobROneSplitN{} kept markets have a split payout and \RobROneMissingN{} is missing from the file.
+Our label agrees with the resolution file on \RobROneAgreement{} of clean markets.
+The Q1 rule result is the same without the unclear markets.
+In R2, the price moves by at least \DeltaA{} in \RobRTwoShareDeltaAtLeastTen{} of markets.
+This is the move between \pOne{} and the last trade.
+So \pOne{} is not the price at the close.
+Also \RobRTwoShareNoTrade{} of markets have no trade in the last day.
+
 \subsection{R1: split payouts}\label{sec:app-r1}
 % src: S-PAPER-9
 Check R1 asks whether the Q1 result holds when markets without a clean payout are removed.
