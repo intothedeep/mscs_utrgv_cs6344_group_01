@@ -1,13 +1,7 @@
-\subsection{Checks requested in review}\label{sec:res-review}
-% src: S-PAPER-12, S-PAPER-8
-Reviewers asked for further checks.
-We ran them in one run, \RThreeRun.
-We fixed the rules before the run in \texttt{analysis/prereg\_review\_fixes.md}.
-All checks are descriptive and add no verdict.
-Each new row sits next to the original Q1 row and does not replace it.
-The pre-registered Q1 verdict and its sentence stay as they are.
-Every check uses the \QOneN{} kept markets, except where stated.
+\section{Checks requested in review}\label[appendix]{sec:res-review}
+\Cref{sec:res-checks} states how we ran these checks.
 
+\subsection{M1: price definition}\label{sec:app-m1}
 % src: S-PAPER-12
 Check M1 asks whether the price definition drives the net gap.
 Under the volume-weighted mean price (VWAP), the net gap is \RThreeMOneVwapNetGap{} (\CiLevel{} CI [\RThreeMOneVwapNetGapCiLow, \RThreeMOneVwapNetGapCiHigh]).
@@ -28,6 +22,7 @@ Is the size of the main net gap within $h$? \RThreeMOneGapWithinHalfSpread.
 \label{fig:r3-m1}
 \end{figure}
 
+\subsection{M2: markets labelled Yes/No}\label{sec:app-m2}
 % src: S-PAPER-12, S-PAPER-8
 Check M2 splits the markets by label.
 In the markets labelled Yes/No ($n=\RThreeMTwoYesNoN$), Yes is priced above its observed rate.
@@ -45,6 +40,7 @@ The figure uses Wilson intervals, which are outside the lectures.
 \label{fig:r3-m2}
 \end{figure}
 
+\subsection{M3: dependence between markets}\label{sec:app-m3}
 % src: S-PAPER-12
 Check M3 asks how much dependence between markets matters.
 The data hold no event key, so we use two proxy keys.
@@ -69,6 +65,7 @@ The proxies are not true event keys.
 \label{fig:r3-m3}
 \end{figure}
 
+\subsection{M4: kept and dropped markets}\label{sec:app-m4}
 % src: S-PAPER-12
 Check M4 compares the kept markets with the dropped ones.
 The kept markets have a median volume before $T-\DaysShort$ day of \RThreeMFourKeptMedianVolumeBeforeDay{} USDC.
@@ -85,6 +82,7 @@ The stale-price markets have a net gap of \RThreeMFourStaleNetGap{} (\CiLevel{} 
 \label{fig:r3-m4}
 \end{figure}
 
+\subsection{M5: size of the miscalibration}\label{sec:app-m5}
 % src: S-PAPER-12
 Check M5 asks how large the miscalibration is in usable terms.
 We fit a logistic calibration of the outcome on the price, $\mathrm{logit}\,P(y=1)=a+b\,\mathrm{logit}(p)$.
@@ -107,6 +105,7 @@ Logistic calibration and the skill score are outside the lectures.
 \label{fig:r3-m5}
 \end{figure}
 
+\subsection{Duplicate trade rows}\label{sec:app-dup}
 % src: S-PAPER-12
 The duplicate-row check removes exact duplicate trade rows.
 They are \RThreeMinorFourDupShare{} of the trade rows of the kept markets.
@@ -117,8 +116,11 @@ The top \TopOneLabel{} maker share changes by \RThreeMinorFourMakerTopOneDeltaPp
 The top \TopTwentyLabel{} maker share changes by \RThreeMinorFourMakerTopTwentyDeltaPp.
 For takers the changes are \RThreeMinorFourTakerTopOneDeltaPp{} and \RThreeMinorFourTakerTopTwentyDeltaPp.
 
+\subsection{Peer questions}\label{sec:app-peer}
 % src: S-PAPER-12
 Two peer questions ask whether the gap depends on volume and on the close period.
+\subsubsection{Peer question a: volume}\label{sec:app-peer-a}
+% src: S-PAPER-12
 We split the kept markets into volume terciles, by volume before $T-\DaysShort$ day.
 The cut points are \RThreePeerACutLowMid{} and \RThreePeerACutMidHigh{} USDC.
 The net gap is \RThreePeerALowNetGap{} in the low tercile (CI [\RThreePeerALowNetGapCiLow, \RThreePeerALowNetGapCiHigh], BH $p=\RThreePeerALowBhP$).
@@ -134,6 +136,7 @@ The high minus low difference is \RThreePeerADiff{} (CI [\RThreePeerADiffCiLow, 
 \label{fig:r3-peer-a}
 \end{figure}
 
+\subsubsection{Peer question b: close period}\label{sec:app-peer-b}
 The close periods are \RThreePeerBPeriodOneLabel, \RThreePeerBPeriodTwoLabel, and \RThreePeerBPeriodThreeLabel.
 The net gap is \RThreePeerBPeriodOneNetGap{} in \RThreePeerBPeriodOneLabel{} (CI [\RThreePeerBPeriodOneNetGapCiLow, \RThreePeerBPeriodOneNetGapCiHigh], BH $p=\RThreePeerBPeriodOneBhP$, $n=\RThreePeerBPeriodOneN$).
 It is \RThreePeerBPeriodTwoNetGap{} in \RThreePeerBPeriodTwoLabel{} (CI [\RThreePeerBPeriodTwoNetGapCiLow, \RThreePeerBPeriodTwoNetGapCiHigh], BH $p=\RThreePeerBPeriodTwoBhP$, $n=\RThreePeerBPeriodTwoN$).

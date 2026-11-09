@@ -176,8 +176,10 @@ Rows:
   - `tips/polymarket_paper_flow_tips.html`: page bar (`#sec-pages`), section start pages, F and T counts, the `figs:` arrays, `pg:` lines, new appendix sections.
   - `tips/polymarket_paper_summaries_tips.html`: the section map and its 28 `L###` `main.tex` line locators. Use section names.
   - `tips/polymarket_paper_decisions_tips.html`: the Figure 2 section map, "5.4 Robustness", and "Robustness section" wording.
-  - Unchanged: `polymarket_paper_review_tips.html`. It is a dated record of the D-041 review.
-  - Unchanged: `class_questions`, `feedback_answers`, `proposal`, `mvp1_preprocessing`, `research_flow` pages and `polymarket_plan_detailed.md`. Their "Figure N" numbers are their own captions or the report's.
+  - Scope widened by D-044: every other tips page is updated to the current paper and project state, with old content removed: `polymarket_paper_review_tips.html`, `class_questions`, `feedback_answers`, `mvp1_preprocessing`, `research_flow`, `data_erd`, `polymarket_plan_detailed.md`, `index.html` notes, `README.md`.
+  - Remove stale counts, superseded plans, old figure numbers, and open items already done. Do not add history notes.
+  - Exception: `polymarket_proposal_tips.html` keeps the proposal as posted, plus one line linking to the current state (D-044).
+  - AC: every "Figure N" or "Table N" that names a paper float matches the final `main.aux`. `grep -l "17쪽\|17-page\|22쪽\|22 pages" tips/*` prints nothing.
   - AC: `grep -c '22 pages' tips/polymarket_paper_flow_tips.html` returns 0. `grep -c '22쪽' tips/polymarket_paper_flow_tips.html` returns 0.
   - Keep the `figs:` arrays at one entry per line, one entry per float.
   - AC: in that file, `grep -cE '\["Figure [0-9]+"'` returns 21 and `grep -cE '\["Table [0-9]+"'` returns 6.

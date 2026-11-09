@@ -128,9 +128,9 @@ A payout check leaves the Q1 verdict unchanged.
 
 \input{sections/08-res-q3}
 
-\input{sections/09-res-robust}
+\input{sections/09-res-checks}
 
-\input{sections/10-res-review}
+\input{sections/09-res-robust}
 
 \input{sections/11-discussion}
 
@@ -142,5 +142,11 @@ A payout check leaves the Q1 verdict unchanged.
 \bibliographystyle{plainnat}
 \bibliography{references}
 \endgroup
+
+\appendix
+% Appendix files are input in A to G order. Appendix G keeps its letter
+% while A to F are added one row at a time. No effect once A to F exist.
+\setcounter{section}{6}
+\input{sections/app-g-review}
 
 \end{document}
