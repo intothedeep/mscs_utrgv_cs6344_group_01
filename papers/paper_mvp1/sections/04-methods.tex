@@ -129,13 +129,7 @@ The effect size is the difference of the mean log10 volume.
 We report Spearman's $\rho$ between trade count and volume.
 
 % src: S-PAPER-2, S-PAPER-6
-As a side analysis, we run k-means on wallet features.
-We take the logarithm of the heavy-tailed features, then z-score them.
-We choose $K$ by a fixed rule on the elbow curve.
-The rule takes the point farthest from the line between the first and last points.
-We test cluster against topic category with the chi-square test of independence .
-Its effect size is the largest observed minus expected share in one cell.
-This analysis is exploratory.
+As a side analysis, we run k-means on wallet features (\Cref{sec:app-kmeans}).
 
 \subsection{Q3: distributions}\label{sec:methods-q3}
 % src: S-PAPER-2, S-PAPER-5

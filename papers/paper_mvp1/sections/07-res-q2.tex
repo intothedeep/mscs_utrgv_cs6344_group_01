@@ -10,8 +10,8 @@ Volume sums every trade in the kept markets, including trades after $T-\DaysShor
 Trade-count shares were not measured.
 \Cref{tab:conc} gives the top shares by role.
 \Cref{fig:ccdf} shows the CCDF.
-\Cref{fig:wd-maker,fig:wd-taker} show the wallet and volume distributions.
-\Cref{fig:lorenz} shows the Lorenz curves.
+\Cref{fig:wd-maker,fig:wd-taker} show the wallet and volume distributions (\Cref{sec:app-q2-dist}).
+\Cref{fig:lorenz} shows the Lorenz curves (\Cref{sec:app-q2-dist}).
 The Lorenz curves are outside the lectures.
 
 \begin{table}[H]
@@ -37,54 +37,6 @@ Taker & \TakerNWallets & \TakerMeanVolume & \TakerMedianVolume & \TakerTopOneSha
 \label{fig:ccdf}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{0.49\linewidth}\centering
-\figorbox{figures/wallet_dist_maker_count}{\linewidth}
-\caption{Share of maker wallets per decade of volume.}
-\label{fig:wd-maker-count}
-\end{subfigure}\hfill
-\begin{subfigure}[t]{0.49\linewidth}\centering
-\figorbox{figures/wallet_dist_maker_volume}{\linewidth}
-\caption{Share of maker volume per decade of wallet volume.}
-\label{fig:wd-maker-volume}
-\end{subfigure}
-\caption{Wallet and volume distributions of makers, split at the top \TopTwentyLabel{} of wallets. Why: the area is the share of wallets in (a) and the share of volume in (b). Source: run \WalletDistRun.}
-\label{fig:wd-maker}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{0.49\linewidth}\centering
-\figorbox{figures/wallet_dist_taker_count}{\linewidth}
-\caption{Share of taker wallets per decade of volume.}
-\label{fig:wd-taker-count}
-\end{subfigure}\hfill
-\begin{subfigure}[t]{0.49\linewidth}\centering
-\figorbox{figures/wallet_dist_taker_volume}{\linewidth}
-\caption{Share of taker volume per decade of wallet volume.}
-\label{fig:wd-taker-volume}
-\end{subfigure}
-\caption{Wallet and volume distributions of takers, split at the top \TopTwentyLabel{} of wallets. Why: the area is the share of wallets in (a) and the share of volume in (b). Source: run \WalletDistRun.}
-\label{fig:wd-taker}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{0.49\linewidth}\centering
-\figorbox{figures/wallet_lorenz_maker}{\linewidth}
-\caption{Makers.}
-\label{fig:lorenz-maker}
-\end{subfigure}\hfill
-\begin{subfigure}[t]{0.49\linewidth}\centering
-\figorbox{figures/wallet_lorenz_taker}{\linewidth}
-\caption{Takers.}
-\label{fig:lorenz-taker}
-\end{subfigure}
-\caption{Lorenz curves of volume, with the 80/20 point. Why: the height is the volume share of the lowest wallets.  Source: run \WalletDistRun.}
-\label{fig:lorenz}
-\end{figure}
-
 The mean volume is far above the median volume in both roles.
 As a pipeline check, the dataset paper reports that the top \TopOneLabel{} of makers hold \PaperTopShare{} of maker volume \citep{qin2026polymarketv1}.
 Ours is \MakerTopOneShare.
@@ -106,15 +58,3 @@ The Welch test on log volume gives $t=\RoleWelchT$ with $p\,\RoleWelchP$, a floa
 The effect size is the difference of mean log10 volume, makers minus takers: \RoleLogTenDiff{} (\RoleLogTenMaker{} against \RoleLogTenTaker).
 The KS statistic is $D=\RoleKsD$.
 Trade count and volume have a Spearman correlation of $\rho=\SpearmanTradesVolumeRho$.
-
-In the side analysis, the fixed elbow-curve rule picks $K=\KmeansK$.
-The sample has \KmeansNSample{} wallet-role rows, and a wallet in both roles gives two rows.
-The \KmeansK{} clusters have \ClusterZeroN, \ClusterOneN, \ClusterTwoN, and \ClusterThreeN{} rows.
-Their median volumes run from \ClusterTwoMedianVolume{} to \ClusterOneMedianVolume{} USDC.
-An ANOVA of mean trade price across clusters gives $\mathrm{SSB}/(\mathrm{SSB}+\mathrm{SSW})=\KmeansPriceSsbRatio$.
-Its permutation $p$ is at the floor, $1/(\KmeansNPerm+1)$.
-The cluster by category test gives $\chi^2=\KmeansCategoryChi$ with \KmeansCategoryDf{} degrees of freedom.
-Its $p\,\KmeansCategoryP$ is a float-underflow bound, on \KmeansNSample{} rows.
-The largest cell gap is in cluster \ClusterCategoryGapCluster, category \ClusterCategoryGapCategory.
-Its observed share is \ClusterCategoryGapObs{} of the sample, against \ClusterCategoryGapExp{} expected.
-The gap is \ClusterCategoryGapDiff.
