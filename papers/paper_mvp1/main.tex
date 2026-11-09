@@ -41,6 +41,11 @@
 % Visible placeholder for text or numbers the sources do not give.
 \DeclareRobustCommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
 
+% No hyphenation inside narrow figure boxes.
+\makeatletter
+\newcommand{\nohyph}{\hyphenpenalty=\@M \exhyphenpenalty=\@M }
+\makeatother
+
 \input{numbers}
 
 % --- Design constants and literature facts. Not measured by our runs. ---
@@ -147,6 +152,14 @@ A payout check leaves the Q1 verdict unchanged.
 \crefalias{section}{appendix}
 \crefalias{subsection}{subappendix}
 \crefalias{subsubsection}{subsubappendix}
+% Appendix headings read "Appendix A. Title". Subsection numbers stay A.1.
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname @seccntfmt@#1\endcsname}
+\newcommand{\@seccntfmt@section}{Appendix \thesection.\ }
+\newcommand{\@seccntfmt@subsection}{\thesubsection\quad}
+\newcommand{\@seccntfmt@subsubsection}{\thesubsubsection\quad}
+\newcommand{\@seccntfmt@paragraph}{\theparagraph\quad}
+\makeatother
 % Each appendix section starts on a new page. Appendix files are input in A to G order.
 \AddToHook{cmd/section/before}{\clearpage}
 \input{sections/app-a-data}

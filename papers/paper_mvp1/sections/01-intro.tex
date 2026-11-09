@@ -22,6 +22,7 @@ We use top shares of wallet volume, the 80/20 rule, and a power-law check.
 We also group wallets by k-means, as a side analysis.
 The third question is Q3: what does betting look like?
 We describe trade sizes, wallet volumes, and prices with histograms and distribution fits.
+\Cref{fig:flow} shows the study flow.
 
 % src: S-PAPER-3, S-PAPER-5
 Our contributions are these.
@@ -30,3 +31,20 @@ We report one rule change made afterwards.
 We score all \NMarketsKept{} kept markets, not a small panel.
 We report an effect size next to every p-value, such as the per-bin gap.
 The text uses the word wallet for an address on the exchange.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[box/.style={flowbox, text width=2.6cm, font=\footnotesize, execute at begin node=\nohyph}, node distance=0.5cm]
+\node[box] (db) {Polymarket-v1\\ \NMarketsInScope{} markets in scope};
+\node[box, right=of db] (filt) {Filters\\ Up/Down, no winner, no price, stale price, fewer than \MinTrades{} trades};
+\node[box, right=of filt] (kept) {\NMarketsKept{} kept markets\\ price \pOne{}};
+\node[box, right=of kept] (qs) {Q1 calibration\\ Q2 wallets\\ Q3 distributions};
+\node[box, right=of qs] (chk) {Checks\\ R1, R2, M1 to M5, duplicate rows, peer a, peer b};
+\draw[flowarrow] (db) -- (filt);
+\draw[flowarrow] (filt) -- (kept);
+\draw[flowarrow] (kept) -- (qs);
+\draw[flowarrow] (qs) -- (chk);
+\end{tikzpicture}
+\caption{Study flow from the database to the checks. Why: it shows which markets reach each question and which checks follow. Source: run \RunId.}
+\label{fig:flow}
+\end{figure}
