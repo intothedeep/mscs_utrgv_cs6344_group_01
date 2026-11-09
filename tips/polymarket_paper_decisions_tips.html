@@ -117,7 +117,7 @@ html.js .langbar{display:flex}
       <span><span class="sw" style="background:var(--k-method);border-color:var(--k-method-l)"></span><span lang="ko">방법</span><span lang="en">Method</span></span>
       <span><span class="sw" style="background:var(--k-fig);border-color:var(--k-fig-l)"></span><span lang="ko">그림과 글</span><span lang="en">Figures and text</span></span>
     </div>
-    <div class="lane"><p class="lane-t"><span lang="ko">① 데이터와 기준 · 2026-10-19</span><span lang="en">1. Data and criteria · 2026-10-19</span></p><pre class="mermaid" lang="ko">
+    <div class="lane"><p class="lane-t"><span lang="ko">1. 데이터와 기준 · 2026-10-19</span><span lang="en">1. Data and criteria · 2026-10-19</span></p><pre class="mermaid" lang="ko">
 flowchart LR
   Q(["질문: 가격을<br/>확률로 읽어도 되나?"]) --> D003["D-003<br/>daily_aligned 층"] --> D004["D-004 파일럿<br/>2025-06 마감 시장"] --> D005["D-005 벽<br/>Job A는 검사만"] --> D007["D-007 T = close_at<br/>10 trades, 중복 유지"]
   classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
@@ -129,7 +129,7 @@ flowchart LR
   class D003,D004,D005,D007 crit
 </pre></div>
     <p class="link-down">▼ <span lang="ko">D-007의 기준 위에서 실행하고 리뷰했다. 기준은 그 뒤로 바뀌지 않았다.</span><span lang="en">We ran and reviewed on the D-007 criteria. The criteria did not change after that.</span></p>
-    <div class="lane"><p class="lane-t"><span lang="ko">② 실행, 리뷰, 논문 틀 · 2026-10-19</span><span lang="en">2. Runs, review, paper frame · 2026-10-19</span></p><pre class="mermaid" lang="ko">
+    <div class="lane"><p class="lane-t"><span lang="ko">2. 실행, 리뷰, 논문 틀 · 2026-10-19</span><span lang="en">2. Runs, review, paper frame · 2026-10-19</span></p><pre class="mermaid" lang="ko">
 flowchart LR
   D011["D-011 리뷰 수정<br/>같은 시각은 평균, 해시 표본"] --> D013["D-013 강건성 R1, R2<br/>판정은 안 바꿈"]
   D012["D-012<br/>임무, 비전"] --> D014["D-014 LaTeX 논문<br/>숫자는 numbers.tex"]
@@ -151,7 +151,7 @@ flowchart LR
   class D014 fig
 </pre></div>
     <p class="link-down">▼ <span lang="ko">마감(D-021)을 앞두고 논문 범위를 좁혔다.</span><span lang="en">Before the deadline (D-021), we narrowed the paper scope.</span></p>
-    <div class="lane"><p class="lane-t"><span lang="ko">③ 범위 좁히기 · 2026-11-01</span><span lang="en">3. Narrowing the scope · 2026-11-01</span></p><pre class="mermaid" lang="ko">
+    <div class="lane"><p class="lane-t"><span lang="ko">3. 범위 좁히기 · 2026-11-01</span><span lang="en">3. Narrowing the scope · 2026-11-01</span></p><pre class="mermaid" lang="ko">
 flowchart LR
   D016["D-016<br/>목표는 MVP1만"] --> D017["D-017 MVP2<br/>→ future_work"]
   D016 --> D019["D-019 임무 =<br/>검사한 시장만"]
@@ -169,7 +169,7 @@ flowchart LR
   class D016,D017,D019,D020,D023 scope
 </pre></div>
     <p class="link-down">▼ <span lang="ko">좁힌 범위 안에서, 방법도 강의 안으로 좁혔다.</span><span lang="en">Inside the narrowed scope, we also narrowed the methods to the lecture.</span></p>
-    <div class="lane"><p class="lane-t"><span lang="ko">④ 강의 방법만 · 2026-11-01 ~ 11-02</span><span lang="en">4. Lecture methods only · 2026-11-01 ~ 11-02</span></p><pre class="mermaid" lang="ko">
+    <div class="lane"><p class="lane-t"><span lang="ko">4. 강의 방법만 · 2026-11-01 ~ 11-02</span><span lang="en">4. Lecture methods only · 2026-11-01 ~ 11-02</span></p><pre class="mermaid" lang="ko">
 flowchart LR
   D024["D-024 80/20은<br/>참고선, 판정선 아님"] --> D025["D-025 강의 방법만<br/>멱법칙도 기술만"] --> D026["D-026 이름 바꿈, 제거<br/>Brier, w, Wilson, Gini"]
   D025 --> D027["D-027 lognormal<br/>향후 연구 한 줄"]
@@ -187,7 +187,7 @@ flowchart LR
   class D024,D025,D026,D027,D028,D030 method
 </pre></div>
     <p class="link-down">▼ <span lang="ko">남은 방법으로 그림을 다시 그리고, 리뷰를 거쳐 논문을 마무리했다.</span><span lang="en">We redrew the figures with the remaining methods, passed review, and finished the paper.</span></p>
-    <div class="lane"><p class="lane-t"><span lang="ko">⑤ 그림과 마무리 · 2026-11-01 ~ 11-02</span><span lang="en">5. Figures and wrap-up · 2026-11-01 ~ 11-02</span></p><pre class="mermaid" lang="ko">
+    <div class="lane"><p class="lane-t"><span lang="ko">5. 그림과 마무리 · 2026-11-01 ~ 11-02</span><span lang="en">5. Figures and wrap-up · 2026-11-01 ~ 11-02</span></p><pre class="mermaid" lang="ko">
 flowchart LR
   D029["D-029 CCDF 다시<br/>꼬리 표본"] --> D031["D-031 지갑 분포<br/>+ 전체 Lorenz"]
   D018["D-018 상자그림<br/>저장 파일로"] --> D033
@@ -211,7 +211,7 @@ flowchart LR
   class D018,D022,D029,D031,D032,D033,D034 fig
 </pre></div>
     <p class="link-down">▼ <span lang="ko">논문 틀이 끝난 뒤, 소유자가 검증과 타당성 확인을 한 번 더 요청했다.</span><span lang="en">After the paper frame was done, the owner asked for one more verify and validate pass.</span></p>
-    <div class="lane"><p class="lane-t"><span lang="ko">⑥ 리뷰와 문구 · 2026-11-07</span><span lang="en">6. Review and wording · 2026-11-07</span></p><pre class="mermaid" lang="ko">
+    <div class="lane"><p class="lane-t"><span lang="ko">6. 리뷰와 문구 · 2026-11-07</span><span lang="en">6. Review and wording · 2026-11-07</span></p><pre class="mermaid" lang="ko">
 flowchart LR
   D035["D-035 관문 리뷰 한 번 더<br/>중요 1건: V-1"] --> D036["D-036 레이블을<br/>클러스터에서 세기<br/>규칙은 실행 전에"] --> D037["D-037 이름을<br/>outcome 1로 통일<br/>(끝남)"]
   classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
@@ -227,7 +227,7 @@ flowchart LR
   class D036 crit
 </pre></div>
     <p class="link-down">▼ <span lang="ko">두 심사자가 확인을 더 하고 학회 길이를 요청했다. 확인을 더한 뒤, 상세를 부록으로 옮기고 문서를 맞췄다.</span><span lang="en">Two reviewers asked for more checks and a conference-length paper. We added the checks, moved the details to appendices, and updated the docs.</span></p>
-    <div class="lane"><p class="lane-t"><span lang="ko">⑦ 심사 확인, 길이, 문서 · 2026-11-07 ~ 11-08</span><span lang="en">7. Review checks, length, docs · 2026-11-07 ~ 11-08</span></p><pre class="mermaid" lang="ko">
+    <div class="lane"><p class="lane-t"><span lang="ko">7. 심사 확인, 길이, 문서 · 2026-11-07 ~ 11-08</span><span lang="en">7. Review checks, length, docs · 2026-11-07 ~ 11-08</span></p><pre class="mermaid" lang="ko">
 flowchart LR
   D038["D-038 두 심사자의 심사<br/>강건성 v3 한 번"] --> D039["D-039 v3 사전 등록<br/>결과 전에 규칙"] --> D040["D-040 outcome 1 유지<br/>Yes 문장 하나"] --> D041["D-041 관문 리뷰 수정<br/>F1에서 F14"]
   D038 --> D042["D-042 상세는 부록으로<br/>본문에 요약 표"] --> D043["D-043 핵심 흐름 그림<br/>서론 끝"] --> D045["D-045 본문 2단<br/>부록 1단"]
@@ -285,7 +285,7 @@ flowchart LR
     S1["1 Introduction"]
     S3["3 Data"]
     S4["4 Methods"]
-    S5["5 Results, 5.4 Checks summary"]
+    S5["5 Results, 5.4 Checks: summary"]
     S6["6-7 Discussion, Limitations"]
     SA["Appendices A to G"]
   end
@@ -311,7 +311,7 @@ flowchart LR
     S1["1 Introduction"]
     S3["3 Data"]
     S4["4 Methods"]
-    S5["5 Results, 5.4 Checks summary"]
+    S5["5 Results, 5.4 Checks: summary"]
     S6["6-7 Discussion, Limitations"]
     SA["Appendices A to G"]
   end
@@ -405,13 +405,13 @@ const KIND_NAME = { crit: "기준과 데이터", scope: "범위", method: "방�
 const KIND_NAME_EN = { crit: "Criteria and data", scope: "Scope", method: "Method", fig: "Figures and text", env: "Environment" };
 const L = (ko, en) => `<span lang="ko">${ko}</span><span lang="en">${en}</span>`;
 const PHASES = [
-  ["① 데이터와 기준 · 2026-10-19", ["D-001","D-002","D-003","D-004","D-005","D-006","D-007","D-008"]],
-  ["② 실행, 리뷰, 논문 틀 · 2026-10-19 ~ 10-21", ["D-009","D-010","D-011","D-012","D-013","D-014","D-015"]],
-  ["③ 범위 좁히기 · 2026-11-01", ["D-016","D-017","D-019","D-020","D-021","D-023"]],
-  ["④ 강의 방법만 · 2026-11-01 ~ 11-02", ["D-024","D-025","D-026","D-027","D-028","D-030"]],
-  ["⑤ 그림과 마무리 · 2026-11-01 ~ 11-02", ["D-018","D-022","D-029","D-031","D-032","D-033","D-034"]],
-  ["⑥ 리뷰와 문구 · 2026-11-07", ["D-035","D-036","D-037"]],
-  ["⑦ 심사 확인, 길이, 문서 · 2026-11-07 ~ 11-08", ["D-038","D-039","D-040","D-041","D-042","D-043","D-044","D-045","D-046"]],
+  ["1. 데이터와 기준 · 2026-10-19", ["D-001","D-002","D-003","D-004","D-005","D-006","D-007","D-008"]],
+  ["2. 실행, 리뷰, 논문 틀 · 2026-10-19 ~ 10-21", ["D-009","D-010","D-011","D-012","D-013","D-014","D-015"]],
+  ["3. 범위 좁히기 · 2026-11-01", ["D-016","D-017","D-019","D-020","D-021","D-023"]],
+  ["4. 강의 방법만 · 2026-11-01 ~ 11-02", ["D-024","D-025","D-026","D-027","D-028","D-030"]],
+  ["5. 그림과 마무리 · 2026-11-01 ~ 11-02", ["D-018","D-022","D-029","D-031","D-032","D-033","D-034"]],
+  ["6. 리뷰와 문구 · 2026-11-07", ["D-035","D-036","D-037"]],
+  ["7. 심사 확인, 길이, 문서 · 2026-11-07 ~ 11-08", ["D-038","D-039","D-040","D-041","D-042","D-043","D-044","D-045","D-046"]],
 ];
 const PHASES_EN = [
   "1. Data and criteria · 2026-10-19",
