@@ -118,48 +118,45 @@ a{color:var(--signal-plan)}
 <header>
   <div class="eyebrow"><span lang="ko">CS 6344 데이터 과학 입문 · 1조 프로젝트 · 제안서 피드백</span><span lang="en">CS 6344 Intro to Data Science · Group 1 project · proposal feedback</span></div>
   <h1><span lang="ko">제안서에 받은 피드백, 그리고 우리 논문이 답한 것</span><span lang="en">Feedback on our proposal, and what our paper answers</span></h1>
-  <p class="lede"><span lang="ko">목적: 질문마다 논문(<code>main.tex</code>)에 답이 있는지 솔직하게 센다. 8단계로 주제별로 본다.</span><span lang="en">Purpose: for each ask, state honestly whether the paper (<code>main.tex</code>) answers it. 8 steps, one theme each.</span></p>
+  <p class="lede"><span lang="ko">목적: 질문마다 논문(<code>papers/paper_mvp1</code>)에 답이 있는지 솔직하게 센다. 8단계로 주제별로 본다.</span><span lang="en">Purpose: for each ask, state honestly whether the paper (<code>papers/paper_mvp1</code>) answers it. 8 steps, one theme each.</span></p>
   <div class="result">
-    <p lang="ko"><b>결과:</b> 12개 글에서 질문 18개를 셌다. 논문이 답한 것 6개, 일부 3개, 실행했으나 논문 밖(MVP2) 6개, 안 한 것 3개. 가장 큰 열린 점은 서로 의존하는 시장(Yusuf Oraby)이다.</p>
-    <p lang="en"><b>Result:</b> We counted 18 asks in 12 posts. The paper answers 6 and answers 3 partly. We ran 6 more but kept them outside the paper (MVP2). 3 are not done. The biggest open point is dependent markets (Yusuf Oraby).</p>
+    <p lang="ko"><b>결과:</b> 12개 글에서 질문 18개를 셌다. 논문이 답한 것 8개, 일부 5개, 범위 밖(MVP2) 5개. 일부 중 가장 큰 구멍은 서로 의존하는 시장(Yusuf Oraby)이다.</p>
+    <p lang="en"><b>Result:</b> We counted 18 asks in 12 posts. The paper answers 8 and answers 5 partly. 5 are out of scope (MVP2). Among the partial ones, the biggest hole is dependent markets (Yusuf Oraby).</p>
   </div>
   <div class="chart">
     <svg viewBox="0 0 760 64" role="img" aria-labelledby="hko hen">
-      <title id="hko" lang="ko">상태별 질문 수. 논문이 답함 6, 일부 3, 실행했으나 논문 밖 6, 안 함 3. 합 18.</title>
-      <title id="hen" lang="en">Asks by status. Answered in the paper 6, partly 3, run but outside the paper 6, not done 3. Total 18.</title>
-      <rect x="10" y="8" width="240" height="36" fill="var(--primary)"/>
-      <rect x="250" y="8" width="120" height="36" fill="var(--signal-flag-fill)" stroke="var(--signal-flag-line)"/>
-      <rect x="370" y="8" width="240" height="36" fill="var(--signal-dead-fill)" stroke="var(--signal-dead-ink)" stroke-dasharray="4 3"/>
-      <rect x="610" y="8" width="120" height="36" fill="var(--card)" stroke="var(--signal-instruction)" stroke-width="2"/>
+      <title id="hko" lang="ko">상태별 질문 수. 논문이 답함 8, 일부 5, 범위 밖 5. 합 18.</title>
+      <title id="hen" lang="en">Asks by status. Answered in the paper 8, partly 5, out of scope 5. Total 18.</title>
+      <rect x="10" y="8" width="320" height="36" fill="var(--primary)"/>
+      <rect x="330" y="8" width="200" height="36" fill="var(--signal-flag-fill)" stroke="var(--signal-flag-line)"/>
+      <rect x="530" y="8" width="200" height="36" fill="var(--signal-dead-fill)" stroke="var(--signal-dead-ink)" stroke-dasharray="4 3"/>
       <g font-size="12" font-weight="600">
-        <text lang="ko" x="130" y="31" text-anchor="middle" fill="var(--primary-foreground)">6 논문이 답함</text><text lang="en" x="130" y="31" text-anchor="middle" fill="var(--primary-foreground)">6 Answered</text>
-        <text lang="ko" x="310" y="31" text-anchor="middle" fill="var(--foreground)">3 일부</text><text lang="en" x="310" y="31" text-anchor="middle" fill="var(--foreground)">3 Partly</text>
-        <text lang="ko" x="490" y="31" text-anchor="middle" fill="var(--signal-dead-ink)">6 논문 밖 (MVP2)</text><text lang="en" x="490" y="31" text-anchor="middle" fill="var(--signal-dead-ink)">6 Outside paper (MVP2)</text>
-        <text lang="ko" x="670" y="31" text-anchor="middle" fill="var(--signal-instruction)">3 안 함</text><text lang="en" x="670" y="31" text-anchor="middle" fill="var(--signal-instruction)">3 Not done</text>
+        <text lang="ko" x="170" y="31" text-anchor="middle" fill="var(--primary-foreground)">8 논문이 답함</text><text lang="en" x="170" y="31" text-anchor="middle" fill="var(--primary-foreground)">8 Answered</text>
+        <text lang="ko" x="430" y="31" text-anchor="middle" fill="var(--foreground)">5 일부</text><text lang="en" x="430" y="31" text-anchor="middle" fill="var(--foreground)">5 Partly</text>
+        <text lang="ko" x="630" y="31" text-anchor="middle" fill="var(--signal-dead-ink)">5 범위 밖 (MVP2)</text><text lang="en" x="630" y="31" text-anchor="middle" fill="var(--signal-dead-ink)">5 Out of scope (MVP2)</text>
       </g>
       <text x="10" y="60" font-size="10.5" fill="var(--muted-foreground)"><tspan lang="ko">막대 폭은 질문 수에 비례한다. 18개 중.</tspan><tspan lang="en">Bar width is proportional to the count, out of 18.</tspan></text>
     </svg>
   </div>
   <div class="tablewrap"><table>
     <tr><th><span lang="ko">상태</span><span lang="en">Status</span></th><th><span lang="ko">수</span><span lang="en">Count</span></th><th><span lang="ko">누구의 질문</span><span lang="en">Whose ask</span></th></tr>
-    <tr><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td class="num">6</td><td>Amanda Aninagyei, Ben Alvarado (<span lang="ko">기록 시점</span><span lang="en">when</span>), Oscar Juarez, Marcelo Cavazos (<span lang="ko">시점</span><span lang="en">timing</span>), Hameem Gorabi (<span lang="ko">구간 지도</span><span lang="en">odds map</span>), Robert Molina (<span lang="ko">군중 크기</span><span lang="en">crowd size</span>)</td></tr>
-    <tr><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td class="num">3</td><td>Luis Tapia (<span lang="ko">해결 기준</span><span lang="en">resolution</span>), Luis Tapia (<span lang="ko">마감 직전 변동</span><span lang="en">swings</span>), Edgar Pelayo Jr</td></tr>
-    <tr><td><span class="st m"><span lang="ko">실행했으나 논문 밖 (MVP2)</span><span lang="en">Run, but outside the paper (MVP2)</span></span></td><td class="num">6</td><td>Luis Tapia (<span lang="ko">주제</span><span lang="en">topic</span>), Ben Alvarado (<span lang="ko">시점 비교</span><span lang="en">horizons</span>), Victor Alvarez (<span lang="ko">주제</span><span lang="en">topics</span>, <span lang="ko">가까울수록 정확?</span><span lang="en">closer is better?</span>), Siyi Chen, Marcelo Cavazos (<span lang="ko">간격 비교</span><span lang="en">intervals</span>)</td></tr>
-    <tr><td><span class="st n"><span lang="ko">안 함</span><span lang="en">Not done</span></span></td><td class="num">3</td><td>Yusuf Oraby, Hameem Gorabi (<span lang="ko">거래량 × 확률</span><span lang="en">volume × odds</span>), Robert Molina (<span lang="ko">기간 비교</span><span lang="en">periods</span>)</td></tr>
+    <tr><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td class="num">8</td><td>Amanda Aninagyei, Ben Alvarado (<span lang="ko">기록 시점</span><span lang="en">when</span>), Oscar Juarez, Marcelo Cavazos (<span lang="ko">시점</span><span lang="en">timing</span>), Hameem Gorabi (<span lang="ko">구간 지도</span><span lang="en">odds map</span>), Robert Molina (<span lang="ko">군중 크기</span><span lang="en">crowd size</span>, <span lang="ko">기간 비교</span><span lang="en">periods</span>), Siyi Chen</td></tr>
+    <tr><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td class="num">5</td><td>Luis Tapia (<span lang="ko">해결 기준</span><span lang="en">resolution</span>), Luis Tapia (<span lang="ko">마감 직전 변동</span><span lang="en">swings</span>), Edgar Pelayo Jr, Yusuf Oraby (<span lang="ko">의존성</span><span lang="en">dependence</span>), Hameem Gorabi (<span lang="ko">거래량 × 확률</span><span lang="en">volume × odds</span>)</td></tr>
+    <tr><td><span class="st m"><span lang="ko">범위 밖 (MVP2)</span><span lang="en">Out of scope (MVP2)</span></span></td><td class="num">5</td><td>Luis Tapia (<span lang="ko">주제</span><span lang="en">topic</span>), Ben Alvarado (<span lang="ko">시점 비교</span><span lang="en">horizons</span>), Victor Alvarez (<span lang="ko">주제</span><span lang="en">topics</span>, <span lang="ko">가까울수록 정확?</span><span lang="en">closer is better?</span>), Marcelo Cavazos (<span lang="ko">간격 비교</span><span lang="en">intervals</span>)</td></tr>
   </table></div>
-  <p class="note" lang="ko">Md A Rahman의 글은 칭찬이고 질문이 없다. 합계에 넣지 않았다. MVP2는 목표가 아니다(D-016).</p>
-  <p class="note" lang="en">Md A Rahman's post is praise with no ask. It is not in the total. MVP2 is not a target (D-016).</p>
+  <p class="note" lang="ko">Md A Rahman의 글은 칭찬이고 질문이 없다. 합계에 넣지 않았다. MVP2는 범위 밖이다. 이유: 소유자가 목표를 MVP1로 정했다(D-016).</p>
+  <p class="note" lang="en">Md A Rahman's post is praise with no ask. It is not in the total. MVP2 is out of scope. Reason: the owner set the target to MVP1 (D-016).</p>
 </header>
 
 <section id="s1">
   <div class="eyebrow">Step 1 of 8</div>
   <h2><span lang="ko">시점: 어느 때의 가격을 쓰나</span><span lang="en">Timing: which price do we use?</span></h2>
-  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> 네 사람이 "언제의 가격인가"를 물었다. 논문은 마감 하루 전(T − 1일) 한 시점을 쓴다. 여러 시점의 비교는 논문에 없다.</p></div>
-  <div class="add" lang="en"><p><b>Purpose:</b> Four people asked "which time's price?". The paper uses one point, T − 1 day. A comparison across several horizons is not in the paper.</p></div>
+  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> 네 사람이 "언제의 가격인가"를 물었다. 논문은 마감 하루 전(T − 1일) 한 시점을 쓴다. 여러 시점의 비교는 범위 밖이다(MVP2).</p></div>
+  <div class="add" lang="en"><p><b>Purpose:</b> Four people asked "which time's price?". The paper uses one point, T − 1 day. A comparison across several horizons is out of scope (MVP2).</p></div>
   <div class="chart">
     <svg viewBox="0 0 760 130" role="img" aria-labelledby="t1ko t1en">
-      <title id="t1ko" lang="ko">시간선. 7일 전은 MVP2, T − 1일은 논문의 평가 가격, 마감 직전 가격은 R2만, 마감 뒤 거래는 빨강.</title>
-      <title id="t1en" lang="en">Timeline. 7 days before is MVP2, T − 1 day is the paper's evaluation price, the price just before close is R2 only, trades after close are red.</title>
+      <title id="t1ko" lang="ko">시간선. 7일 전은 범위 밖, T − 1일은 논문의 평가 가격, 마감 직전 가격은 R2만, 마감 뒤 거래는 빨강.</title>
+      <title id="t1en" lang="en">Timeline. 7 days before is out of scope, T − 1 day is the paper's evaluation price, the price just before close is R2 only, trades after close are red.</title>
       <line x1="30" y1="60" x2="730" y2="60" stroke="var(--muted-foreground)" stroke-width="1.5"/>
       <line x1="150" y1="40" x2="150" y2="80" stroke="var(--signal-dead-ink)" stroke-dasharray="4 3" stroke-width="2"/>
       <line x1="470" y1="36" x2="470" y2="84" stroke="var(--signal-plan)" stroke-width="2.5"/>
@@ -167,7 +164,7 @@ a{color:var(--signal-plan)}
       <line x1="600" y1="40" x2="600" y2="80" stroke="var(--foreground)" stroke-width="1.5"/>
       <g fill="var(--signal-instruction)"><circle cx="635" cy="60" r="4"/><circle cx="665" cy="60" r="4"/><circle cx="695" cy="60" r="4"/></g>
       <g font-size="11" text-anchor="middle" fill="var(--foreground)">
-        <text lang="ko" x="150" y="30" fill="var(--signal-dead-ink)">T − 7일 (MVP2, 목표 아님)</text><text lang="en" x="150" y="30" fill="var(--signal-dead-ink)">T − 7 days (MVP2, not a target)</text>
+        <text lang="ko" x="150" y="30" fill="var(--signal-dead-ink)">T − 7일 (범위 밖)</text><text lang="en" x="150" y="30" fill="var(--signal-dead-ink)">T − 7 days (out of scope)</text>
         <text lang="ko" x="470" y="24" fill="var(--signal-plan)" font-weight="600">T − 1일: 논문의 가격</text><text lang="en" x="470" y="24" fill="var(--signal-plan)" font-weight="600">T − 1 day: the paper's price</text>
         <text lang="ko" x="545" y="106">마감 직전 (R2만)</text><text lang="en" x="545" y="106">just before close (R2 only)</text>
         <text x="610" y="40">T = close_at</text>
@@ -175,8 +172,8 @@ a{color:var(--signal-plan)}
       </g>
     </svg>
   </div>
-  <p class="note" lang="ko">그림 1. 질문에 나온 시점들이 시간선의 어디인가. 왜: 파란 선 하나만 논문의 평가 가격이다. 설명용 그림이며 점 위치는 실제 값이 아니다. 출처: <code>main.tex</code> 방법 절의 그림.</p>
-  <p class="note" lang="en">Figure 1. Where the horizons in the asks sit on the timeline. Why: only the blue line is the paper's evaluation price. Illustration, dot positions are not real values. Source: the timeline figure in the Methods of <code>main.tex</code>.</p>
+  <p class="note" lang="ko">그림 1. 질문에 나온 시점들이 시간선의 어디인가. 왜: 파란 선 하나만 논문의 평가 가격이다. 설명용 그림이며 점 위치는 실제 값이 아니다. 출처: 논문 그림 2.</p>
+  <p class="note" lang="en">Figure 1. Where the horizons in the asks sit on the timeline. Why: only the blue line is the paper's evaluation price. Illustration, dot positions are not real values. Source: Figure 2 of the paper.</p>
   <div class="tablewrap"><table>
     <tr><th><span lang="ko">누가</span><span lang="en">Who</span></th><th><span lang="ko">질문 (원문 일부)</span><span lang="en">Ask (exact phrase)</span></th><th><span lang="ko">상태</span><span lang="en">Status</span></th><th><span lang="ko">논문의 어디, 무슨 숫자</span><span lang="en">Where in the paper, which number</span></th></tr>
     <tr><td>Amanda Aninagyei</td><td class="q">"Are you planning to use the price from a set time before the market closes?"</td>
@@ -197,30 +194,23 @@ a{color:var(--signal-plan)}
   <h3><span lang="ko">시점끼리 비교하라는 질문</span><span lang="en">The ask to compare horizons</span></h3>
   <div class="tablewrap"><table>
     <tr><th><span lang="ko">누가</span><span lang="en">Who</span></th><th><span lang="ko">질문 (원문 일부)</span><span lang="en">Ask (exact phrase)</span></th><th><span lang="ko">상태</span><span lang="en">Status</span></th></tr>
-    <tr><td>Ben Alvarado</td><td class="q">"Would you compare prices at consistent time points, such as one day or one week before the event?"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td></tr>
-    <tr><td>Marcelo Cavazos</td><td class="q">"comparing prediction accuracy at fixed intervals before resolution"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td></tr>
-    <tr><td>Victor Alvarez</td><td class="q">"predictions made closer to an events outcome are more accurate"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td></tr>
+    <tr><td>Ben Alvarado</td><td class="q">"Would you compare prices at consistent time points, such as one day or one week before the event?"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td></tr>
+    <tr><td>Marcelo Cavazos</td><td class="q">"comparing prediction accuracy at fixed intervals before resolution"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td></tr>
+    <tr><td>Victor Alvarez</td><td class="q">"predictions made closer to an events outcome are more accurate"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td></tr>
   </table></div>
   <h3><span lang="ko">논문에 있는 가장 가까운 것: 하루 전 가격과 마감 직전 가격</span><span lang="en">The closest thing in the paper: the price 1 day before and just before close</span></h3>
   <div class="tablewrap"><table>
-    <tr><th><span lang="ko">가격</span><span lang="en">Price</span></th><th><span lang="ko">제곱 오차 평균 (Brier score)</span><span lang="en">Mean squared residual (Brier score)</span></th><th><span lang="ko">시장 수</span><span lang="en">Markets</span></th></tr>
+    <tr><th><span lang="ko">가격</span><span lang="en">Price</span></th><th><span lang="ko">가격의 평균 제곱 잔차</span><span lang="en">Mean squared residual of the price</span></th><th><span lang="ko">시장 수</span><span lang="en">Markets</span></th></tr>
     <tr><td>p<sub>1d</sub> (T − 1 <span lang="ko">일</span><span lang="en">day</span>)</td><td class="num">0.107</td><td class="num">47,948</td></tr>
     <tr><td>p<sub>T</sub> (<span lang="ko">마감 직전</span><span lang="en">just before close</span>)</td><td class="num">0.075</td><td class="num">47,948</td></tr>
     <tr><td><span lang="ko">차이 p<sub>T</sub> − p<sub>1d</sub>, 95% 신뢰구간</span><span lang="en">Difference p<sub>T</sub> − p<sub>1d</sub>, 95% CI</span></td><td class="num">−0.032 [−0.033, −0.031]</td><td class="num">47,948</td></tr>
     <tr><td><span lang="ko">마지막 하루에 거래가 있는 시장만</span><span lang="en">Only markets with a trade in the last day</span></td><td class="num">0.112 → 0.078</td><td class="num">45,112</td></tr>
   </table></div>
-  <p lang="ko">논문 결과 절의 로버스트니스(robustness, 결과가 설정에 흔들리지 않는지 보는 확인) R2 숫자다. 논문은 스스로 선을 긋는다. p<sub>T</sub>는 마감 직전 가격이라서 "하루 앞선 예측"이 아니다. 그래서 이 표는 Ben, Marcelo, Victor의 질문에 대한 답이 아니다. 7일과 1일의 비교가 그 답이고, 그것은 MVP2에 있다.</p>
-  <p lang="en">These are the numbers of Robustness R2 in the paper. The paper draws its own line. p<sub>T</sub> is the price just before close, so it is not a "one-day-ahead forecast". This table therefore does not answer Ben, Marcelo or Victor. The 7-day against 1-day comparison does, and it sits in MVP2.</p>
-  <div class="mvp2">
-    <span class="tag"><span lang="ko">MVP2, 목표 아님, D-016. 논문에 없다</span><span lang="en">MVP2, not a target, D-016. Not in the paper</span></span>
-    <ul>
-      <li><span lang="ko">Q1b: 7일 전과 1일 전을 같은 시장 11,005개에서 비교했다. 7일 전 제곱 오차 평균 0.0959, 1일 전 0.0702.</span><span lang="en">Q1b: we compared 7 days before and 1 day before on the same 11,005 markets. Mean squared residual 0.0959 at 7 days, 0.0702 at 1 day.</span></li>
-      <li><span lang="ko">평균 차이 0.0257, 95% 신뢰구간 [0.0232, 0.0282], Cohen's d 0.19. 판정: "Better near the deadline."</span><span lang="en">Mean difference 0.0257, 95% CI [0.0232, 0.0282], Cohen's d 0.19. Verdict: "Better near the deadline."</span></li>
-      <li><span lang="ko">한 달 전(Marcelo)은 어떤 실행에도 없다.</span><span lang="en">The one-month horizon (Marcelo) was not run anywhere.</span></li>
-    </ul>
-  </div>
-  <p class="src" lang="ko">출처: <code>cs6344_group_01/papers/paper_mvp1/main.tex</code>, <code>numbers.tex</code>, <code>runs/142123_robust_full_v4/r2_results.json</code>, <code>future_work/runs/142083_mvp2_full_v2r3/verdicts.json</code>, <code>report_q1b_deadline.md</code>. 수업 질문 쪽지: <a href="polymarket_class_questions_tips.html#q1">질문 1</a>.</p>
-  <p class="src" lang="en">Sources: <code>cs6344_group_01/papers/paper_mvp1/main.tex</code>, <code>numbers.tex</code>, <code>runs/142123_robust_full_v4/r2_results.json</code>, <code>future_work/runs/142083_mvp2_full_v2r3/verdicts.json</code>, <code>report_q1b_deadline.md</code>. Class questions page: <a href="polymarket_class_questions_tips.html#q1">question 1</a>.</p>
+  <p lang="ko">논문 부록 F.2의 로버스트니스(robustness, 결과가 설정에 흔들리지 않는지 보는 확인) R2 숫자다. 논문은 스스로 선을 긋는다. p<sub>T</sub>는 마감 직전 가격이라서 "하루 앞선 예측"이 아니다. 그래서 이 표는 Ben, Marcelo, Victor의 질문에 대한 답이 아니다. 7일과 1일의 비교가 그 답이고, 범위 밖이다.</p>
+  <p lang="en">These are the numbers of Robustness R2 in Appendix F.2 of the paper. The paper draws its own line. p<sub>T</sub> is the price just before close, so it is not a "one-day-ahead forecast". This table therefore does not answer Ben, Marcelo or Victor. The 7-day against 1-day comparison would, and it is out of scope.</p>
+  <p class="note"><span lang="ko">7일과 1일의 비교(Q1b)와 한 달 전 비교는 범위 밖이다. 이유: 소유자가 목표를 MVP1로 정했다(D-016, D-020).</span><span lang="en">The 7-day against 1-day comparison (Q1b) and a one-month comparison are out of scope. Reason: the owner set the target to MVP1 (D-016, D-020).</span></p>
+  <p class="src" lang="ko">출처: <code>papers/paper_mvp1/numbers.tex</code>, <code>runs/142123_robust_full_v4/r2_results.json</code>. 수업 질문 쪽지: <a href="polymarket_class_questions_tips.html#q1">질문 1</a>.</p>
+  <p class="src" lang="en">Sources: <code>papers/paper_mvp1/numbers.tex</code>, <code>runs/142123_robust_full_v4/r2_results.json</code>. Class questions page: <a href="polymarket_class_questions_tips.html#q1">question 1</a>.</p>
 </section>
 <section id="s2">
   <div class="eyebrow">Step 2 of 8</div>
@@ -233,7 +223,7 @@ a{color:var(--signal-plan)}
       <td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td>
       <td><ul>
         <li><span lang="ko">데이터 절 "Filters and drop reasons": 승자 라벨이 없는 시장 62,718개(9.1%)를 뺀다 (<code>tables_summary.json</code>).</span><span lang="en">Data "Filters and drop reasons": the 62,718 markets (9.1%) with no usable winner label are dropped (<code>tables_summary.json</code>).</span></li>
-        <li><span lang="ko">결과 절 "Robustness" R1: 남은 47,948개 중 47,940개는 깨끗한 지급, 7개는 반반 지급(split), 1개는 파일에 없다.</span><span lang="en">Results "Robustness" R1: of 47,948 kept markets, 47,940 pay cleanly, 7 have a split payout, 1 is missing from the file.</span></li>
+        <li><span lang="ko">부록 F.1 "R1: split payouts": 남은 47,948개 중 47,940개는 깨끗한 지급, 7개는 반반 지급(split), 1개는 파일에 없다.</span><span lang="en">Appendix F.1 "R1: split payouts": of 47,948 kept markets, 47,940 pay cleanly, 7 have a split payout, 1 is missing from the file.</span></li>
         <li><span lang="ko">우리 라벨은 깨끗한 시장의 99.92%에서 해결 파일과 같고, 40개가 다르다.</span><span lang="en">Our label agrees with the resolution file on 99.92% of clean markets. 40 differ.</span></li>
         <li><span lang="ko">47개를 빼도 Q1 판정은 같다: 카이제곱 68.0 → 64.3, BH로 어긋난 구간 5 → 4 (<code>r1_results.json</code>).</span><span lang="en">Removing 47 markets leaves the Q1 verdict the same: chi-square 68.0 → 64.3, bins off after BH 5 → 4 (<code>r1_results.json</code>).</span></li></ul></td>
       <td><ul>
@@ -243,7 +233,7 @@ a{color:var(--signal-plan)}
       <td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td>
       <td><ul>
         <li><span lang="ko">방법 절: 마지막 하루를 피해 T − 1일 가격을 쓴다.</span><span lang="en">Methods: we avoid the last day and price at T − 1 day.</span></li>
-        <li><span lang="ko">결과 절 R2: T − 1일에서 마지막 거래까지 가격 변화의 중앙값(절댓값) 0.015.</span><span lang="en">Results R2: the median absolute price change from T − 1 day to the last trade is 0.015.</span></li>
+        <li><span lang="ko">부록 F.2 R2: T − 1일에서 마지막 거래까지 가격 변화의 중앙값(절댓값) 0.015.</span><span lang="en">Appendix F.2 R2: the median absolute price change from T − 1 day to the last trade is 0.015.</span></li>
         <li><span lang="ko">0.10 이상 움직인 시장 18.98%, 0.50선을 넘은 시장 8.02%, 마지막 하루에 거래가 없는 시장 5.9% (<code>r2_results.json</code>).</span><span lang="en">Markets that move by 0.10 or more: 18.98%. Markets that cross 0.50: 8.02%. Markets with no trade in the last day: 5.9% (<code>r2_results.json</code>).</span></li>
         <li><span lang="ko">한계 절: p<sub>1d</sub>는 마감 때 가격이 아니다.</span><span lang="en">Limitations: p<sub>1d</sub> is not the price at the close.</span></li></ul></td>
       <td><span lang="ko">논문의 말: R2는 "두 끝점을 비교하고 경로는 비교하지 않는다". 중간의 출렁임은 재지 않았다.</span><span lang="en">In the paper's words, R2 "compares the two end points and not the path". Swings in between are not measured.</span></td></tr>
@@ -257,38 +247,30 @@ a{color:var(--signal-plan)}
         <li><span lang="ko">시장 시작 시각을 확인하지 않았다. 그래서 T − 1일 가격에 일부 시장은 진행 중인 경기의 가격이 들어 있을 수 있다.</span><span lang="en">No market start time was checked. So the T − 1 day price may include live prices for some markets.</span></li>
         <li><span lang="ko">"경기 전 가격"이라고 말할 수 없다. 논문은 실시간 변화와 자연스러운 변화를 나누지 않는다.</span><span lang="en">We cannot call it a pre-game price. The paper does not separate live changes from natural drift.</span></li></ul></td></tr>
   </table></div>
-  <p class="src" lang="ko">출처: <code>main.tex</code>(데이터, 방법, 결과 R1과 R2, 한계 절), <code>numbers.tex</code>, <code>runs/142123_robust_full_v4/r1_results.json</code>, <code>r2_results.json</code>, <code>report_r2_price_path.md</code>. 수업 질문 쪽지: <a href="polymarket_class_questions_tips.html#q2">질문 2</a>, <a href="polymarket_class_questions_tips.html#q3">질문 3</a>.</p>
-  <p class="src" lang="en">Sources: <code>main.tex</code> (Data, Methods, Results R1 and R2, Limitations), <code>numbers.tex</code>, <code>runs/142123_robust_full_v4/r1_results.json</code>, <code>r2_results.json</code>, <code>report_r2_price_path.md</code>. Class questions page: <a href="polymarket_class_questions_tips.html#q2">question 2</a>, <a href="polymarket_class_questions_tips.html#q3">question 3</a>.</p>
+  <p class="src" lang="ko">출처: 논문(데이터, 방법, 부록 F의 R1과 R2, 한계 절), <code>numbers.tex</code>, <code>runs/142123_robust_full_v4/r1_results.json</code>, <code>r2_results.json</code>, <code>report_r2_price_path.md</code>. 수업 질문 쪽지: <a href="polymarket_class_questions_tips.html#q2">질문 2</a>, <a href="polymarket_class_questions_tips.html#q3">질문 3</a>.</p>
+  <p class="src" lang="en">Sources: the paper (Data, Methods, R1 and R2 in Appendix F, Limitations), <code>numbers.tex</code>, <code>runs/142123_robust_full_v4/r1_results.json</code>, <code>r2_results.json</code>, <code>report_r2_price_path.md</code>. Class questions page: <a href="polymarket_class_questions_tips.html#q2">question 2</a>, <a href="polymarket_class_questions_tips.html#q3">question 3</a>.</p>
 </section>
 <section id="s3">
   <div class="eyebrow">Step 3 of 8</div>
   <h2><span lang="ko">주제: 정치, 크립토, 스포츠는 다른가</span><span lang="en">Topic: do politics, crypto and sports differ?</span></h2>
-  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> 두 사람이 주제별 비교를 원했다. 논문에는 주제별 결과가 없다. 실행은 했지만 MVP2에 있다.</p></div>
-  <div class="add" lang="en"><p><b>Purpose:</b> Two people wanted a comparison by topic. The paper has no per-topic result. We ran it, but it sits in MVP2.</p></div>
+  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> 두 사람이 주제별 비교를 원했다. 논문에는 주제별 결과가 없다. 주제별 비교는 MVP2이고 범위 밖이다(D-016).</p></div>
+  <div class="add" lang="en"><p><b>Purpose:</b> Two people wanted a comparison by topic. The paper has no per-topic result. A comparison by topic is MVP2 and out of scope (D-016).</p></div>
   <div class="tablewrap"><table>
     <tr><th><span lang="ko">누가</span><span lang="en">Who</span></th><th><span lang="ko">질문 (원문 일부)</span><span lang="en">Ask (exact phrase)</span></th><th><span lang="ko">상태</span><span lang="en">Status</span></th></tr>
-    <tr><td>Luis Tapia</td><td class="q">"the favorite-longshot bias changes much depending on the topic"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td></tr>
-    <tr><td>Victor Alvarez</td><td class="q">"compare different categories of events"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td></tr>
+    <tr><td>Luis Tapia</td><td class="q">"the favorite-longshot bias changes much depending on the topic"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td></tr>
+    <tr><td>Victor Alvarez</td><td class="q">"compare different categories of events"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td></tr>
   </table></div>
   <p lang="ko">논문이 주제에 대해 말하는 것은 하나다. 스포츠가 범위의 49.7%, 남은 시장의 40.0%라는 점이다 (한계 절, <code>tables_summary.json</code>). 주제별 결론은 없다.</p>
   <p lang="en">The paper says one thing about topic. Sports is 49.7% of the markets in scope and 40.0% of the kept markets (Limitations, <code>tables_summary.json</code>). It draws no per-topic conclusion.</p>
-  <div class="mvp2">
-    <span class="tag"><span lang="ko">MVP2, 목표 아님, D-016. 논문에 없다</span><span lang="en">MVP2, not a target, D-016. Not in the paper</span></span>
-    <ul>
-      <li><span lang="ko">Q1a: 주제 8개, 시장 47,948개. 카이제곱 3,203.8 (자유도 7), Cramér's V 0.258. 파일의 p는 0.0이다(부동소수점 하한).</span><span lang="en">Q1a: 8 topics, 47,948 markets. Chi-square 3,203.8 (df 7), Cramér's V 0.258. The file shows p = 0.0 (float floor).</span></li>
-      <li><span lang="ko">판정: "Accuracy depends on the topic at this n." 우세한 쪽이 이긴 비율은 스포츠 72.18%, 크립토 94.75%.</span><span lang="en">Verdict: "Accuracy depends on the topic at this n." The favorite won 72.18% in Sports and 94.75% in Crypto.</span></li>
-      <li><span lang="ko">이 검정도 시장이 서로 독립이라고 가정한다 (5단계 참고).</span><span lang="en">This test also assumes independent markets (see step 5).</span></li>
-    </ul>
-    <p><span lang="ko">주제별 약한 쪽 베팅(longshot) 표는 여기서 복사하지 않는다. <a href="polymarket_class_questions_tips.html#q4">수업 질문 4</a>에 있다.</span><span lang="en">We do not copy the per-topic longshot table. It is in <a href="polymarket_class_questions_tips.html#q4">class question 4</a>.</span></p>
-  </div>
-  <p class="src" lang="ko">출처: <code>main.tex</code> 한계 절, <code>future_work/runs/142083_mvp2_full_v2r3/verdicts.json</code>, <code>report_q1a_category.md</code>, <code>q1a_bins_by_category.csv</code>.</p>
-  <p class="src" lang="en">Sources: <code>main.tex</code> Limitations, <code>future_work/runs/142083_mvp2_full_v2r3/verdicts.json</code>, <code>report_q1a_category.md</code>, <code>q1a_bins_by_category.csv</code>.</p>
+  <p class="note"><span lang="ko">주제별 약한 쪽 베팅(longshot)은 <a href="polymarket_class_questions_tips.html#q4">수업 질문 4</a>가 모든 주제를 합쳐 보인다.</span><span lang="en">The longshot result pooled over all topics is in <a href="polymarket_class_questions_tips.html#q4">class question 4</a>.</span></p>
+  <p class="src" lang="ko">출처: 논문 한계 절, <code>tables_summary.json</code>.</p>
+  <p class="src" lang="en">Sources: paper Limitations, <code>tables_summary.json</code>.</p>
 </section>
 <section id="s4">
   <div class="eyebrow">Step 4 of 8</div>
   <h2><span lang="ko">거래량, 그리고 확률 구간을 따라 본 지도</span><span lang="en">Volume, and the map along the odds</span></h2>
-  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> Hameem은 확률 구간별 차이를 보자고 했고, Siyi와 Hameem은 거래량이 정확도를 바꾸는지 물었다. 구간 지도는 논문에 있다. 거래량은 논문에 없다.</p></div>
-  <div class="add" lang="en"><p><b>Purpose:</b> Hameem asked for the gap along the odds. Siyi and Hameem asked whether volume changes accuracy. The odds map is in the paper. Volume is not.</p></div>
+  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> Hameem은 확률 구간별 차이를 보자고 했고, Siyi와 Hameem은 거래량이 정확도를 바꾸는지 물었다. 구간 지도와 거래량 3분위는 논문에 있다. 거래량 × 확률 격자는 없다.</p></div>
+  <div class="add" lang="en"><p><b>Purpose:</b> Hameem asked for the gap along the odds. Siyi and Hameem asked whether volume changes accuracy. The odds map and the volume terciles are in the paper. A volume × odds grid is not.</p></div>
   <h3><span lang="ko">논문에서 답함: 구간별 차이 (Hameem Gorabi)</span><span lang="en">Answered in the paper: the gap per bin (Hameem Gorabi)</span></h3>
   <p class="q">"directly map the 'most-to-least' longshot effect"</p>
   <div class="chart">
@@ -318,37 +300,37 @@ a{color:var(--signal-plan)}
   <p class="note" lang="ko">그림 2. 가격 구간별 차이(관측 비율 − 평균 가격, 퍼센트 포인트). 진한 막대는 BH 보정 뒤 어긋난 구간 5개(0, 1, 6, 7, 8번). 왜: 차이가 구간을 따라 매끄러운 기울기가 아니라 들쭉날쭉하다는 것이 보인다. 출처: <code>numbers.tex</code>의 구간 매크로, <code>q1_bins.csv</code>.</p>
   <p class="note" lang="en">Figure 2. Gap per price bin (observed rate minus mean price, percent points). Dark bars are the 5 bins off after BH correction (bins 0, 1, 6, 7, 8). Why: the gap is jagged along the bins and not a smooth slope. Source: the bin macros in <code>numbers.tex</code>, <code>q1_bins.csv</code>.</p>
   <ul>
-    <li><span lang="ko">결과 절 Q1 표(Table "Calibration by price bin")가 구간 10개의 차이와 신뢰구간을 모두 보인다.</span><span lang="en">The Q1 table in Results ("Calibration by price bin") shows the gap and the confidence interval for all 10 bins.</span></li>
+    <li><span lang="ko">논문 표 1("Calibration by price bin")이 구간 10개의 차이와 신뢰구간을 모두 보인다.</span><span lang="en">Table 1 of the paper ("Calibration by price bin") shows the gap and the confidence interval for all 10 bins.</span></li>
     <li><span lang="ko">10개 중 9개 구간에서 관측 비율이 가격보다 낮다. 전체 순차이는 −0.99%포인트, 가장 큰 차이는 70–80% 구간의 −3.29%포인트다.</span><span lang="en">In 9 of 10 bins the observed rate is below the price. The net gap is −0.99 points. The largest gap is −3.29 points, in the 70–80% bin.</span></li>
     <li><span lang="ko">논문은 추세선을 맞추지 않았고 크기 기준도 정하지 않았다.</span><span lang="en">The paper fits no trend line and sets no size line.</span></li>
   </ul>
-  <h3><span lang="ko">논문 밖과 안 함: 거래량</span><span lang="en">Outside the paper, and not done: volume</span></h3>
+  <h3><span lang="ko">논문에서 답함: 거래량 3분위 (Siyi Chen)</span><span lang="en">Answered in the paper: volume terciles (Siyi Chen)</span></h3>
+  <p class="q">"compare the prediction accuracy of markets with high and low trading volumes"</p>
+  <p><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></p>
   <div class="tablewrap"><table>
-    <tr><th><span lang="ko">누가</span><span lang="en">Who</span></th><th><span lang="ko">질문 (원문 일부)</span><span lang="en">Ask (exact phrase)</span></th><th><span lang="ko">상태</span><span lang="en">Status</span></th></tr>
-    <tr><td>Siyi Chen</td><td class="q">"compare the prediction accuracy of markets with high and low trading volumes"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td></tr>
-    <tr><td>Hameem Gorabi</td><td class="q">"big volume small odds predictions, small volume high odds predictions"</td><td><span class="st n"><span lang="ko">안 함</span><span lang="en">Not done</span></span></td></tr>
+    <tr><th><span lang="ko">거래량 3분위 (부록 G.7.1)</span><span lang="en">Volume tercile (Appendix G.7.1)</span></th><th><span lang="ko">순격차</span><span lang="en">Net gap</span></th><th><span lang="ko">95% 구간</span><span lang="en">95% CI</span></th><th><span lang="ko">Q1과 같은 규칙 결과?</span><span lang="en">Same Q1 rule result?</span></th></tr>
+    <tr><td><span lang="ko">낮음 (15,983개)</span><span lang="en">Low (15,983)</span></td><td class="num">−1.12%</td><td class="num">[−1.66%, −0.59%]</td><td><span lang="ko">예</span><span lang="en">Yes</span></td></tr>
+    <tr><td><span lang="ko">중간 (15,982개)</span><span lang="en">Mid (15,982)</span></td><td class="num">−1.43%</td><td class="num">[−1.97%, −0.89%]</td><td><span lang="ko">예</span><span lang="en">Yes</span></td></tr>
+    <tr><td><span lang="ko">높음 (15,983개)</span><span lang="en">High (15,983)</span></td><td class="num">−0.42%</td><td class="num">[−0.86%, 0.03%]</td><td><span lang="ko">아니오</span><span lang="en">No</span></td></tr>
+    <tr><td><span lang="ko">높음 − 낮음</span><span lang="en">High − low</span></td><td class="num">0.71%</td><td class="num">[0.01%, 1.40%]</td><td>p = 0.046</td></tr>
   </table></div>
-  <div class="mvp2">
-    <span class="tag"><span lang="ko">MVP2, 목표 아님, D-016. 논문에 없다</span><span lang="en">MVP2, not a target, D-016. Not in the paper</span></span>
-    <ul>
-      <li><span lang="ko">Q1c: log 거래량과 시장별 오차의 스피어만 순위상관(Spearman rho) +0.226, 95% 신뢰구간 [0.217, 0.235], 시장 47,948개.</span><span lang="en">Q1c: Spearman rho between log volume and per-market error is +0.226, 95% CI [0.217, 0.235], 47,948 markets.</span></li>
-      <li><span lang="ko">부호가 양수다. 거래가 많은 시장의 오차가 더 크다. 판정: "No evidence that busier markets are more accurate at this n."</span><span lang="en">The sign is positive: busier markets have larger error. Verdict: "No evidence that busier markets are more accurate at this n."</span></li>
-      <li><span lang="ko">거래량 10분위 평균 오차는 가장 낮은 분위 0.0419에서 가장 높은 분위 0.1641까지 오른다 (<code>q1c_binned.csv</code>).</span><span lang="en">Mean error by volume decile rises from 0.0419 in the lowest decile to 0.1641 in the highest (<code>q1c_binned.csv</code>).</span></li>
-      <li><span lang="ko">주의: 거래량은 T − 1일 이후 거래까지 모두 더한 값이다 (<code>report_q1c_volume.md</code>).</span><span lang="en">Caution: volume sums all trades, including those after T − 1 day (<code>report_q1c_volume.md</code>).</span></li>
-    </ul>
-  </div>
-  <p lang="ko">Hameem의 거래량 × 확률 격자는 돌리지 않았다. <code>q1c_binned.csv</code>는 거래량 10분위와 평균 오차만 있고 확률 축이 없다.</p>
-  <p lang="en">Hameem's volume × odds grid was not run. <code>q1c_binned.csv</code> has volume deciles and mean error only, with no odds axis.</p>
-  <p class="src" lang="ko">출처: <code>main.tex</code> 결과 Q1 표, <code>numbers.tex</code>, <code>future_work/runs/142083_mvp2_full_v2r3/verdicts.json</code>, <code>q1c_binned.csv</code>, <code>report_q1c_volume.md</code>.</p>
-  <p class="src" lang="en">Sources: <code>main.tex</code> Results Q1 table, <code>numbers.tex</code>, <code>future_work/runs/142083_mvp2_full_v2r3/verdicts.json</code>, <code>q1c_binned.csv</code>, <code>report_q1c_volume.md</code>.</p>
+  <ul>
+    <li><span lang="ko">거래량이 많은 시장일수록 격차가 작다. 차이의 구간은 0에 가깝다.</span><span lang="en">The gap is smaller in high-volume markets. The interval of the difference is close to 0.</span></li>
+    <li><span lang="ko">주의: 이 거래량은 사전에 정한 분할이다. 거래량은 T − 1일 이후 거래까지 모두 더한 값일 수 있다.</span><span lang="en">Caution: volume may sum all trades, including those after T − 1 day.</span></li>
+  </ul>
+  <h3><span lang="ko">일부: 거래량 × 확률 (Hameem Gorabi)</span><span lang="en">Partly: volume × odds (Hameem Gorabi)</span></h3>
+  <p class="q">"big volume small odds predictions, small volume high odds predictions"</p>
+  <p><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span> <span lang="ko">거래량 3분위는 위 표에 있다. 거래량 × 확률 격자는 돌리지 않았다.</span><span lang="en">The volume terciles are in the table above. A volume × odds grid was not run.</span></p>
+  <p class="src" lang="ko">출처: 논문 표 1과 부록 G.7.1, <code>numbers.tex</code>, <code>runs/150310_r3_review_fixes_v6/</code>.</p>
+  <p class="src" lang="en">Sources: paper Table 1 and Appendix G.7.1, <code>numbers.tex</code>, <code>runs/150310_r3_review_fixes_v6/</code>.</p>
 </section>
 <section id="s5">
   <div class="eyebrow">Step 5 of 8</div>
   <h2><span lang="ko">의존성: 시장이 서로 독립이 아니다</span><span lang="en">Dependence: markets are not independent</span></h2>
-  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> Yusuf Oraby는 서로 의존하는 시장 때문에 p값이 실제보다 더 유의하게 보일 수 있다고 했다. 논문은 이 한계를 적었다. 시장을 묶는 일은 하지 않았다.</p></div>
-  <div class="add" lang="en"><p><b>Purpose:</b> Yusuf Oraby said dependent markets can make the p-values look more significant than they are. The paper states this limit. Grouping the markets was not done.</p></div>
-  <div class="open" lang="ko"><p><b>가장 큰 열린 점.</b> 상태: <span class="st n">안 함</span> 질문 원문: <span class="q">"grouping the dependent markets together before running the tests might help"</span></p></div>
-  <div class="open" lang="en"><p><b>Biggest open point.</b> Status: <span class="st n">Not done</span> Exact phrase: <span class="q">"grouping the dependent markets together before running the tests might help"</span></p></div>
+  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> Yusuf Oraby는 서로 의존하는 시장 때문에 p값이 실제보다 더 유의하게 보일 수 있다고 했다. 논문은 이 한계를 적고, 대리 키로 묶은 재검정을 부록 G.3에 실었다. 진짜 사건 키는 없다.</p></div>
+  <div class="add" lang="en"><p><b>Purpose:</b> Yusuf Oraby said dependent markets can make the p-values look more significant than they are. The paper states this limit and re-tests with proxy keys in Appendix G.3. No true event key exists.</p></div>
+  <div class="open" lang="ko"><p><b>일부에서 가장 큰 구멍.</b> 상태: <span class="st p">일부</span> 질문 원문: <span class="q">"grouping the dependent markets together before running the tests might help"</span></p></div>
+  <div class="open" lang="en"><p><b>Biggest hole among the partial ones.</b> Status: <span class="st p">Partly</span> Exact phrase: <span class="q">"grouping the dependent markets together before running the tests might help"</span></p></div>
   <div class="chart">
     <svg viewBox="0 0 760 120" role="img" aria-labelledby="d1ko d1en">
       <title id="d1ko" lang="ko">설명용 그림. 같은 사건의 시장 3개는 검정에서 독립인 3개로 센다. 실제로는 사건 1개에 묶여 함께 움직인다.</title>
@@ -365,25 +347,29 @@ a{color:var(--signal-plan)}
   </div>
   <p class="note" lang="ko">그림 3. 독립 가정과 실제의 차이. 왜: 같은 사건의 시장이 함께 움직이면 검정이 "관측 수"를 실제보다 많이 센다.</p>
   <p class="note" lang="en">Figure 3. The independence assumption against the real case. Why: when markets on one event move together, the test counts more independent observations than there are.</p>
-  <h3><span lang="ko">논문이 쓴 것 (한계 절, 그대로)</span><span lang="en">What the paper says (Limitations, verbatim)</span></h3>
+  <h3><span lang="ko">논문이 한 것: 대리 키로 묶은 군집 부트스트랩 (부록 G.3, M3)</span><span lang="en">What the paper did: a cluster bootstrap over proxy keys (Appendix G.3, M3)</span></h3>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">대리 키</span><span lang="en">Proxy key</span></th><th><span lang="ko">군집 수</span><span lang="en">Clusters</span></th><th><span lang="ko">순격차의 95% 구간</span><span lang="en">Net gap 95% CI</span></th><th><span lang="ko">카이제곱, p</span><span lang="en">Chi-square, p</span></th></tr>
+    <tr><td><span lang="ko">첫 키</span><span lang="en">First key</span></td><td class="num">16,161</td><td class="num">[−1.41%, −0.58%]</td><td class="num">62.8, 1.1 × 10<sup>−9</sup></td></tr>
+    <tr><td><span lang="ko">둘째 키</span><span lang="en">Second key</span></td><td class="num">6,181</td><td class="num">[−1.39%, −0.58%]</td><td class="num">58.5, 7.0 × 10<sup>−9</sup></td></tr>
+  </table></div>
+  <h3><span lang="ko">논문이 쓴 한계 (한계 절)</span><span lang="en">What the paper says (Limitations)</span></h3>
   <ul>
     <li class="q">"Markets on one event move together."</li>
     <li class="q">"The binomial and chi-square tests assume independent markets, so the p-values are optimistic."</li>
     <li class="q">"The z intervals use the same assumption, so they may be too narrow."</li>
-    <li class="q">"The role tests compare groups that share addresses and trades."</li>
-    <li class="q">"No event-level count is saved, so we cannot size this dependence."</li>
-    <li class="q">"With this many rows, a tiny gap can give a tiny p-value. So we read the effect sizes first."</li>
+    <li class="q">"No event key exists in the data, so we cannot size this dependence exactly."</li>
+    <li class="q">"Two proxy keys address it in part."</li>
+    <li class="q">"The proxies are not true event keys."</li>
   </ul>
   <h3><span lang="ko">p값에 이것이 뜻하는 것</span><span lang="en">What this means for the p-values</span></h3>
   <ul>
-    <li><span lang="ko">논문은 p값을 "낙관적(optimistic)"이라 부른다. 얼마나 그런지는 모른다.</span><span lang="en">The paper calls the p-values "optimistic". It does not know by how much.</span></li>
-    <li><span lang="ko">논문은 판정이 뒤집힌다고도, 유지된다고도 쓰지 않았다. 우리도 그 이상은 말하지 않는다.</span><span lang="en">The paper does not say the verdict would flip or hold. We claim nothing beyond that.</span></li>
-    <li><span lang="ko">시장을 사건별로 묶은 검정은 어떤 run에도 없다.</span><span lang="en">No run groups markets by event.</span></li>
-    <li><span lang="ko">이 주의는 한계 절에만 있다. 초록과 결과 절은 p = 1.1 × 10<sup>−10</sup> 판정을 이 주의 없이 쓴다.</span><span lang="en">The caution sits in Limitations only. The abstract and Results state the p = 1.1 × 10<sup>−10</sup> verdict without it.</span></li>
-    <li><span lang="ko">논문이 더 믿는 것은 효과 크기다. 순차이 −0.99%포인트, 가장 큰 구간 차이 −3.29%포인트.</span><span lang="en">The paper leans on effect sizes. The net gap is −0.99 points. The largest bin gap is −3.29 points.</span></li>
+    <li><span lang="ko">첫 키에서 구간은 여전히 0 아래다. 대리 키가 진짜 사건 키는 아니다.</span><span lang="en">Under the first key, the interval stays below 0. The proxies are not true event keys.</span></li>
+    <li><span lang="ko">그래서 p값이 얼마나 낙관적인지는 여전히 정확히 모른다.</span><span lang="en">So we still do not know exactly how optimistic the p-values are.</span></li>
+    <li><span lang="ko">논문이 더 믿는 것은 효과 크기다. 순격차 −0.99%포인트, 가장 큰 구간 차이 −3.29%포인트.</span><span lang="en">The paper leans on effect sizes. The net gap is −0.99 points. The largest bin gap is −3.29 points.</span></li>
   </ul>
-  <p class="src" lang="ko">출처: <code>main.tex</code> 한계 절과 초록, <code>numbers.tex</code> (<code>q1_results.json</code> chi2_gof.p, <code>lecture_numbers.json</code> gap_direction).</p>
-  <p class="src" lang="en">Sources: <code>main.tex</code> Limitations and abstract, <code>numbers.tex</code> (<code>q1_results.json</code> chi2_gof.p, <code>lecture_numbers.json</code> gap_direction).</p>
+  <p class="src" lang="ko">출처: 논문 한계 절과 부록 G.3, <code>numbers.tex</code>, <code>runs/150310_r3_review_fixes_v6/</code>. 결정: D-039.</p>
+  <p class="src" lang="en">Sources: paper Limitations and Appendix G.3, <code>numbers.tex</code>, <code>runs/150310_r3_review_fixes_v6/</code>. Decision: D-039.</p>
 </section>
 <section id="s6">
   <div class="eyebrow">Step 6 of 8</div>
@@ -406,16 +392,16 @@ a{color:var(--signal-plan)}
     <li><span lang="ko">논문의 문장: "A wallet is an address, and one owner may control many addresses." 지갑 수는 사람 수가 아니다.</span><span lang="en">The paper says: "A wallet is an address, and one owner may control many addresses." A wallet count is not a head count.</span></li>
     <li><span lang="ko">논문은 거래량 집중이 가격을 정하는 힘과 같다고 말하지 않는다.</span><span lang="en">The paper does not say volume concentration equals the power to set prices.</span></li>
   </ul>
-  <p class="src" lang="ko">출처: <code>main.tex</code>(데이터, 결과 Q2, 한계 절), <code>numbers.tex</code>, <code>runs/142082_mvp1_full_v1r3/q2_results.json</code>.</p>
-  <p class="src" lang="en">Sources: <code>main.tex</code> (Data, Results Q2, Limitations), <code>numbers.tex</code>, <code>runs/142082_mvp1_full_v1r3/q2_results.json</code>.</p>
+  <p class="src" lang="ko">출처: 논문(데이터, 결과 Q2, 한계 절), <code>numbers.tex</code>, <code>runs/142082_mvp1_full_v1r3/q2_results.json</code>.</p>
+  <p class="src" lang="en">Sources: the paper (Data, Results Q2, Limitations), <code>numbers.tex</code>, <code>runs/142082_mvp1_full_v1r3/q2_results.json</code>.</p>
 </section>
 <section id="s7">
   <div class="eyebrow">Step 7 of 8</div>
-  <h2><span lang="ko">기간: 시기별 비교는 안 했다</span><span lang="en">Time periods: no comparison across periods</span></h2>
-  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> Robert Molina는 다른 기간과 비교하면 확률이 안정적인지 알 수 있다고 했다. 우리는 기간을 나누지 않았다.</p></div>
-  <div class="add" lang="en"><p><b>Purpose:</b> Robert Molina said comparing periods would show whether the probability stays steady. We did not split by period.</p></div>
+  <h2><span lang="ko">기간: 마감 시기별로 나눠 비교했다</span><span lang="en">Time periods: we split by close period</span></h2>
+  <div class="add" lang="ko"><p><b>무엇을 알려고:</b> Robert Molina는 다른 기간과 비교하면 확률이 안정적인지 알 수 있다고 했다. 논문은 마감 시기를 셋으로 나눠 Q1을 다시 봤다(부록 G.7.2).</p></div>
+  <div class="add" lang="en"><p><b>Purpose:</b> Robert Molina said comparing periods would show whether the probability stays steady. The paper splits the close period in three and reruns Q1 (Appendix G.7.2).</p></div>
   <p class="q">"make comparisons to other periods"</p>
-  <p><span class="st n"><span lang="ko">안 함</span><span lang="en">Not done</span></span></p>
+  <p><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></p>
   <div class="chart">
     <svg viewBox="0 0 760 90" role="img" aria-labelledby="p1ko p1en">
       <title id="p1ko" lang="ko">2022년 11월부터 2026년 4월까지 하나의 막대. 기간을 나누지 않고 합쳐서 본다.</title>
@@ -427,14 +413,20 @@ a{color:var(--signal-plan)}
       </g>
     </svg>
   </div>
-  <p class="note" lang="ko">그림 4. 데이터셋의 기간(논문 서론). 왜: 모든 검정이 이 기간의 시장을 한꺼번에 쓴다. 남은 시장 47,948개가 이 중 어느 달에 걸쳐 있는지는 읽은 파일에서 찾지 못했다.</p>
-  <p class="note" lang="en">Figure 4. The dataset period (paper Introduction). Why: every test uses the markets of this whole span at once. We found no file in what we read that gives the months covered by the 47,948 kept markets.</p>
+  <p class="note" lang="ko">그림 4. 데이터셋의 기간(논문 서론). 왜: 마감 시기 구분은 이 기간 안에서 나눈 것이다.</p>
+  <p class="note" lang="en">Figure 4. The dataset period (paper Introduction). Why: the close periods split this span.</p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">마감 시기 (부록 G.7.2)</span><span lang="en">Close period (Appendix G.7.2)</span></th><th><span lang="ko">시장 수</span><span lang="en">Markets</span></th><th><span lang="ko">순격차</span><span lang="en">Net gap</span></th><th><span lang="ko">95% 구간</span><span lang="en">95% CI</span></th><th><span lang="ko">Q1과 같은 규칙 결과?</span><span lang="en">Same Q1 rule result?</span></th></tr>
+    <tr><td>2022-2024</td><td class="num">3,444</td><td class="num">−1.71%</td><td class="num">[−2.81%, −0.62%]</td><td><span lang="ko">예</span><span lang="en">Yes</span></td></tr>
+    <tr><td>2025</td><td class="num">17,816</td><td class="num">−1.36%</td><td class="num">[−1.84%, −0.89%]</td><td><span lang="ko">예</span><span lang="en">Yes</span></td></tr>
+    <tr><td>2026</td><td class="num">26,688</td><td class="num">−0.65%</td><td class="num">[−1.04%, −0.25%]</td><td><span lang="ko">아니오</span><span lang="en">No</span></td></tr>
+  </table></div>
   <ul>
-    <li><span lang="ko">논문에는 기간별 결과가 없다. 기간은 서론에서 데이터셋 설명으로만 나온다.</span><span lang="en">The paper has no per-period result. The period appears only in the Introduction, as a fact about the dataset.</span></li>
-    <li><span lang="ko">그래서 "확률이 시간이 지나도 안정적인가"는 모른다.</span><span lang="en">So we do not know whether the probability stays steady over time.</span></li>
+    <li><span lang="ko">2026에서는 카이제곱이 기각하지 않는다. 그래도 구간은 0을 제외한다.</span><span lang="en">In 2026 the chi-square does not reject. Still, the interval excludes 0.</span></li>
+    <li><span lang="ko">구간이 겹쳐서 시기에 따라 격차가 변한다는 표시는 없다.</span><span lang="en">The intervals overlap, so there is no sign that the gap changes with the period.</span></li>
   </ul>
-  <p class="src" lang="ko">출처: <code>main.tex</code> 서론과 전체(기간별 분석 없음).</p>
-  <p class="src" lang="en">Sources: <code>main.tex</code> Introduction and the whole text (no per-period analysis).</p>
+  <p class="src" lang="ko">출처: 논문 부록 G.7.2, <code>numbers.tex</code>, <code>runs/150310_r3_review_fixes_v6/</code>.</p>
+  <p class="src" lang="en">Sources: paper Appendix G.7.2, <code>numbers.tex</code>, <code>runs/150310_r3_review_fixes_v6/</code>.</p>
 </section>
 <section id="s8">
   <div class="eyebrow">Step 8 of 8</div>
@@ -442,45 +434,45 @@ a{color:var(--signal-plan)}
   <div class="add" lang="ko"><p><b>무엇을 알려고:</b> 이 쪽에서 본 것으로 다음 답글을 쓸 때의 습관을 뽑는다.</p></div>
   <div class="add" lang="en"><p><b>Purpose:</b> Practices for the next reply, drawn only from what this page showed.</p></div>
   <ol>
-    <li><span lang="ko">상태를 한 단어로 분명히 쓴다. 이 쪽은 네 단어를 썼다.</span><span lang="en">State the status plainly in one word. This page used four.</span></li>
+    <li><span lang="ko">상태를 한 단어로 분명히 쓴다. 이 쪽은 세 단어를 썼다.</span><span lang="en">State the status plainly in one word. This page used three.</span></li>
     <li><span lang="ko">"답했다"는 논문이 말하는 것으로 판단한다. 계획 문서가 아니다.</span><span lang="en">Judge "answered" by what the paper says, not by the plan.</span></li>
     <li><span lang="ko">논문의 절 이름과 실제 숫자를 적는다. 숫자 옆에 파일 이름을 둔다.</span><span lang="en">Name the paper section and the real number. Put the file name next to the number.</span></li>
     <li><span lang="ko">질문은 원문 그대로 짧게 따온다. 더 강한 주장으로 바꾸지 않는다.</span><span lang="en">Quote the ask in a short exact phrase. Do not turn it into a stronger claim.</span></li>
     <li><span lang="ko">남은 구멍을 같은 줄에 쓴다. 예: 경로는 재지 않았다.</span><span lang="en">Write the remaining hole on the same row. Example: the path was not measured.</span></li>
-    <li><span lang="ko">실행했지만 논문에 없는 결과는 따로 표시한다. 이 쪽은 "MVP2, 목표 아님, D-016"을 붙였다.</span><span lang="en">Mark results that were run but are not in the paper. This page used "MVP2, not a target, D-016".</span></li>
-    <li><span lang="ko">안 한 일은 "안 함"이라고 쓴다. 가장 큰 열린 점을 맨 앞에 둔다.</span><span lang="en">Write "Not done" for work not done. Put the biggest open point first.</span></li>
+    <li><span lang="ko">실행했지만 논문에 없는 결과는 따로 표시한다. 이 쪽은 "범위 밖 (MVP2, D-016)"을 붙였다.</span><span lang="en">Mark results that were run but are not in the paper. This page used "Out of scope (MVP2, D-016)".</span></li>
+    <li><span lang="ko">남은 구멍은 "일부" 줄에 쓴다. 가장 큰 구멍을 맨 앞에 둔다.</span><span lang="en">Write the remaining hole on a "Partly" row. Put the biggest hole first.</span></li>
     <li><span lang="ko">이미 쓴 답은 링크한다. 복사하지 않는다.</span><span lang="en">Link an answer that already exists. Do not copy it.</span></li>
   </ol>
   <h3><span lang="ko">전체 글 12개</span><span lang="en">All 12 posts</span></h3>
   <div class="tablewrap"><table id="all">
     <tr><th><span lang="ko">날짜</span><span lang="en">Date</span></th><th><span lang="ko">누가</span><span lang="en">Who</span></th><th><span lang="ko">질문</span><span lang="en">Ask</span></th><th><span lang="ko">상태</span><span lang="en">Status</span></th><th><span lang="ko">어디</span><span lang="en">Where</span></th></tr>
     <tr data-status="a"><td>2026-10-18</td><td>Amanda Aninagyei</td><td class="q">"use the price from a set time before the market closes"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">방법 "Evaluation price and pre-registration": T − 1일</span><span lang="en">Methods "Evaluation price and pre-registration": T − 1 day</span></td></tr>
-    <tr data-status="p"><td>2026-10-18</td><td>Luis Tapia</td><td class="q">"weird or ambiguous resolution criteria"</td><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td><span lang="ko">데이터 필터 절, 결과 R1 (7개 반반 지급). 질문 문구는 안 봄</span><span lang="en">Data filters, Results R1 (7 split payouts). Question wording not judged</span></td></tr>
-    <tr data-status="p"><td>2026-10-18</td><td>Luis Tapia</td><td class="q">"prices that swing wildly right before a market closes"</td><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td><span lang="ko">결과 R2 (0.10 이상 이동 18.98%). 경로는 안 잼</span><span lang="en">Results R2 (18.98% move by 0.10 or more). Path not measured</span></td></tr>
-    <tr data-status="m"><td>2026-10-18</td><td>Luis Tapia</td><td class="q">"favorite-longshot bias changes much depending on the topic"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td><td><code>q1a_results.json</code></td></tr>
+    <tr data-status="p"><td>2026-10-18</td><td>Luis Tapia</td><td class="q">"weird or ambiguous resolution criteria"</td><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td><span lang="ko">데이터 필터 절, 부록 F.1 R1 (7개 반반 지급). 질문 문구는 안 봄</span><span lang="en">Data filters, Appendix F.1 R1 (7 split payouts). Question wording not judged</span></td></tr>
+    <tr data-status="p"><td>2026-10-18</td><td>Luis Tapia</td><td class="q">"prices that swing wildly right before a market closes"</td><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td><span lang="ko">부록 F.2 R2 (0.10 이상 이동 18.98%). 경로는 안 잼</span><span lang="en">Appendix F.2 R2 (18.98% move by 0.10 or more). Path not measured</span></td></tr>
+    <tr data-status="m"><td>2026-10-18</td><td>Luis Tapia</td><td class="q">"favorite-longshot bias changes much depending on the topic"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td><td><span lang="ko">MVP2 (범위 밖)</span><span lang="en">MVP2 (out of scope)</span></td></tr>
     <tr data-status="x"><td>2026-10-19</td><td>Md A Rahman</td><td class="q">"I really like how you framed this project around one simple question"</td><td><span class="st x"><span lang="ko">질문 없음 (칭찬)</span><span lang="en">No ask (praise)</span></span></td><td></td></tr>
     <tr data-status="a"><td>2026-10-20</td><td>Ben Alvarado</td><td class="q">"when you will record each market’s probability"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">방법 "Evaluation price and pre-registration"</span><span lang="en">Methods "Evaluation price and pre-registration"</span></td></tr>
-    <tr data-status="m"><td>2026-10-20</td><td>Ben Alvarado</td><td class="q">"one day or one week before the event"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td><td><code>q1b_results.json</code>: 0.0959 → 0.0702</td></tr>
-    <tr data-status="n"><td>2026-10-20</td><td>Yusuf Oraby</td><td class="q">"grouping the dependent markets together"</td><td><span class="st n"><span lang="ko">안 함</span><span lang="en">Not done</span></span></td><td><span lang="ko">한계 절만: p값은 "optimistic"</span><span lang="en">Limitations only: p-values "optimistic"</span></td></tr>
-    <tr data-status="m"><td>2026-10-21</td><td>Victor Alvarez</td><td class="q">"compare different categories of events"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td><td><code>q1a_results.json</code>: V 0.258</td></tr>
-    <tr data-status="m"><td>2026-10-21</td><td>Victor Alvarez</td><td class="q">"predictions made closer to an events outcome are more accurate"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td><td><code>q1b_results.json</code></td></tr>
-    <tr data-status="m"><td>2026-10-22</td><td>Siyi Chen</td><td class="q">"markets with high and low trading volumes"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td><td><code>q1c_results.json</code>: rho +0.226</td></tr>
+    <tr data-status="m"><td>2026-10-20</td><td>Ben Alvarado</td><td class="q">"one day or one week before the event"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td><td><span lang="ko">MVP2 (범위 밖)</span><span lang="en">MVP2 (out of scope)</span></td></tr>
+    <tr data-status="p"><td>2026-10-20</td><td>Yusuf Oraby</td><td class="q">"grouping the dependent markets together"</td><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td><span lang="ko">한계 절 + 부록 G.3: 대리 키 군집 부트스트랩. 진짜 사건 키 없음</span><span lang="en">Limitations + Appendix G.3: cluster bootstrap over proxy keys. No true event key</span></td></tr>
+    <tr data-status="m"><td>2026-10-21</td><td>Victor Alvarez</td><td class="q">"compare different categories of events"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td><td><span lang="ko">MVP2 (범위 밖)</span><span lang="en">MVP2 (out of scope)</span></td></tr>
+    <tr data-status="m"><td>2026-10-21</td><td>Victor Alvarez</td><td class="q">"predictions made closer to an events outcome are more accurate"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td><td><span lang="ko">MVP2 (범위 밖)</span><span lang="en">MVP2 (out of scope)</span></td></tr>
+    <tr data-status="a"><td>2026-10-22</td><td>Siyi Chen</td><td class="q">"markets with high and low trading volumes"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">부록 G.7.1: 높음 − 낮음 0.71%, p = 0.046</span><span lang="en">Appendix G.7.1: high − low 0.71%, p = 0.046</span></td></tr>
     <tr data-status="a"><td>2026-10-24</td><td>Oscar Juarez</td><td class="q">"which price you use for each market"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">방법: 마감 뒤 가격에 답이 들어 있을 수 있다</span><span lang="en">Methods: a price after close can contain the answer</span></td></tr>
-    <tr data-status="a"><td>2026-10-24</td><td>Hameem Gorabi</td><td class="q">"directly map the 'most-to-least' longshot effect"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">결과 Q1 구간 표: 10개 구간의 차이</span><span lang="en">Results Q1 bin table: gap in 10 bins</span></td></tr>
-    <tr data-status="n"><td>2026-10-24</td><td>Hameem Gorabi</td><td class="q">"big volume small odds predictions, small volume high odds predictions"</td><td><span class="st n"><span lang="ko">안 함</span><span lang="en">Not done</span></span></td><td><span lang="ko">거래량 × 확률 격자 없음</span><span lang="en">No volume × odds grid</span></td></tr>
+    <tr data-status="a"><td>2026-10-24</td><td>Hameem Gorabi</td><td class="q">"directly map the 'most-to-least' longshot effect"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">표 1: 10개 구간의 차이</span><span lang="en">Table 1: gap in 10 bins</span></td></tr>
+    <tr data-status="p"><td>2026-10-24</td><td>Hameem Gorabi</td><td class="q">"big volume small odds predictions, small volume high odds predictions"</td><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td><span lang="ko">거래량 3분위는 부록 G.7.1. 거래량 × 확률 격자 없음</span><span lang="en">Volume terciles in Appendix G.7.1. No volume × odds grid</span></td></tr>
     <tr data-status="a"><td>2026-10-25</td><td>Marcelo Cavazos</td><td class="q">"account for the timing of predictions"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">방법 "Evaluation price and pre-registration"</span><span lang="en">Methods "Evaluation price and pre-registration"</span></td></tr>
-    <tr data-status="m"><td>2026-10-25</td><td>Marcelo Cavazos</td><td class="q">"fixed intervals before resolution"</td><td><span class="st m"><span lang="ko">논문 밖 (MVP2, 목표 아님, D-016)</span><span lang="en">Outside the paper (MVP2, not a target, D-016)</span></span></td><td><span lang="ko">7일만. 한 달은 안 돌림</span><span lang="en">7 days only. One month not run</span></td></tr>
-    <tr data-status="p"><td>2026-10-25</td><td>Edgar Pelayo Jr</td><td class="q">"how the event is taking place"</td><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td><span lang="ko">결과 R2. 시작 시각 미확인, "경기 전"이라 말할 수 없음</span><span lang="en">Results R2. Start time unchecked, cannot say pre-game</span></td></tr>
-    <tr data-status="a"><td>2026-10-25</td><td>Robert Molina</td><td class="q">"what the crowd size actually is"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">Q2 표: 지갑 581,435 / 1,535,977 (사람 수 아님)</span><span lang="en">Q2 table: 581,435 / 1,535,977 wallets (not people)</span></td></tr>
-    <tr data-status="n"><td>2026-10-25</td><td>Robert Molina</td><td class="q">"comparisons to other periods"</td><td><span class="st n"><span lang="ko">안 함</span><span lang="en">Not done</span></span></td><td><span lang="ko">2022-11부터 2026-04까지 합침</span><span lang="en">Pooled, 2022-11 to 2026-04</span></td></tr>
+    <tr data-status="m"><td>2026-10-25</td><td>Marcelo Cavazos</td><td class="q">"fixed intervals before resolution"</td><td><span class="st m"><span lang="ko">범위 밖 (MVP2, D-016)</span><span lang="en">Out of scope (MVP2, D-016)</span></span></td><td><span lang="ko">MVP2 (범위 밖)</span><span lang="en">MVP2 (out of scope)</span></td></tr>
+    <tr data-status="p"><td>2026-10-25</td><td>Edgar Pelayo Jr</td><td class="q">"how the event is taking place"</td><td><span class="st p"><span lang="ko">일부</span><span lang="en">Partly</span></span></td><td><span lang="ko">부록 F.2 R2. 시작 시각 미확인, "경기 전"이라 말할 수 없음</span><span lang="en">Appendix F.2 R2. Start time unchecked, cannot say pre-game</span></td></tr>
+    <tr data-status="a"><td>2026-10-25</td><td>Robert Molina</td><td class="q">"what the crowd size actually is"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">표 2: 지갑 581,435 / 1,535,977 (사람 수 아님)</span><span lang="en">Table 2: 581,435 / 1,535,977 wallets (not people)</span></td></tr>
+    <tr data-status="a"><td>2026-10-25</td><td>Robert Molina</td><td class="q">"comparisons to other periods"</td><td><span class="st a"><span lang="ko">논문에서 답함</span><span lang="en">Answered in the paper</span></span></td><td><span lang="ko">부록 G.7.2: 2022-2024, 2025, 2026</span><span lang="en">Appendix G.7.2: 2022-2024, 2025, 2026</span></td></tr>
   </table></div>
-  <p class="note" lang="ko">글 12개, 질문 18개, 칭찬 1개(질문 없음). MVP2 줄은 모두 목표가 아니다(D-016).</p>
-  <p class="note" lang="en">12 posts, 18 asks, 1 praise with no ask. Every MVP2 row is not a target (D-016).</p>
+  <p class="note" lang="ko">글 12개, 질문 18개, 칭찬 1개(질문 없음). 범위 밖 줄은 모두 MVP2다(D-016).</p>
+  <p class="note" lang="en">12 posts, 18 asks, 1 praise with no ask. Every out-of-scope row is MVP2 (D-016).</p>
   <p class="src" lang="ko">출처: <code>hw020_feedback/discussions/01_mygroup.txt</code>(날짜와 원문), 위 1~7단계의 파일.</p>
   <p class="src" lang="en">Sources: <code>hw020_feedback/discussions/01_mygroup.txt</code> (dates and exact phrases), the files named in steps 1 to 7.</p>
 </section>
 
-<footer><span lang="ko">숫자는 저장된 산출물에서 읽었다. 논문에 답이 있는지는 <code>main.tex</code>가 말하는 것만 센다. 계획 문서는 세지 않는다.</span><span lang="en">Numbers come from saved outputs. "In the paper" counts only what <code>main.tex</code> says. Plan documents do not count.</span></footer>
+<footer><span lang="ko">숫자는 저장된 산출물에서 읽었다. 논문에 답이 있는지는 논문이 말하는 것만 센다. 계획 문서는 세지 않는다.</span><span lang="en">Numbers come from saved outputs. "In the paper" counts only what the paper says. Plan documents do not count.</span></footer>
 </main>
 
 <script>

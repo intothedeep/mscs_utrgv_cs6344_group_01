@@ -149,8 +149,8 @@ a{color:var(--signal-plan)}
   </div>
   <p class="note" lang="ko">그림 1. 거래 데이터에서 세 질문까지의 흐름. 왜: 시장 하나가 가격 하나와 결과 하나로 줄어야 가격과 실제 결과를 짝지어 비교할 수 있다.</p>
   <p class="note" lang="en">Figure 1. Flow from trade data to the three questions. Why: one price and one outcome per market let us pair prices with real results.</p>
-  <p class="note" lang="ko">범위: MVP1(Q1, Q2, Q3)만 다룬다. MVP2(Q1a, Q1b, Q1c)는 목표가 아니다.</p>
-  <p class="note" lang="en">Scope: MVP1 only (Q1, Q2, Q3). MVP2 (Q1a, Q1b, Q1c) is not a target.</p>
+  <p class="note" lang="ko">범위: MVP1(Q1, Q2, Q3)만 다룬다. MVP2(Q1a, Q1b, Q1c)는 범위 밖이다. 이유: 소유자가 목표를 MVP1로 정했다(D-016).</p>
+  <p class="note" lang="en">Scope: MVP1 only (Q1, Q2, Q3). MVP2 (Q1a, Q1b, Q1c) is out of scope. Reason: the owner set the target to MVP1 (D-016).</p>
   <p class="src" lang="ko">출처: <code>tips/polymarket_plan_detailed.md</code> 0절, <code>DECISIONS.md</code> D-016.</p>
   <p class="src" lang="en">Sources: <code>tips/polymarket_plan_detailed.md</code> section 0, <code>DECISIONS.md</code> D-016.</p>
 </section>
@@ -167,12 +167,12 @@ a{color:var(--signal-plan)}
       <td><ul><li><span lang="ko">1,248개 파일, 13.2 GB를 클러스터에 한 번 내려받는다.</span><span lang="en">Download 1,248 files, 13.2 GB, to the cluster once.</span></li><li><span lang="ko"><code>neg_risk = false</code> 시장만 쓴다.</span><span lang="en">Use markets with <code>neg_risk = false</code> only.</span></li></ul></td>
       <td><span lang="ko">중계 기록이 이미 빠져 있어, 우리가 따로 거를 필요가 없다</span><span lang="en">Relayer records are already gone, so we need no extra filter.</span></td></tr>
     <tr><td><code>p_event</code></td>
-      <td><span lang="ko">Yes 쪽 가격. 거래마다 한 값</span><span lang="en">Price of the Yes side. One value per trade.</span></td>
+      <td><span lang="ko">outcome 1 쪽 가격. 거래마다 한 값</span><span lang="en">Price of the outcome 1 side. One value per trade.</span></td>
       <td><span lang="ko">다시 계산하지 않고 그대로 읽는다</span><span lang="en">Read it as is. Do not recompute it.</span></td>
       <td><span lang="ko">가격 척도가 하나로 정해진다. 계획이 다시 계산하지 말라고 정했다</span><span lang="en">One price scale. The plan says not to recompute it.</span></td></tr>
     <tr><td><code>winning_outcome_label</code></td>
       <td><span lang="ko">시장의 승자 라벨</span><span lang="en">The winner label of the market.</span></td>
-      <td><span lang="ko">Yes 쪽 라벨과 같으면 결과 y = 1, 아니면 0</span><span lang="en">If it equals the Yes-side label, outcome y = 1. Otherwise y = 0.</span></td>
+      <td><span lang="ko">outcome 1 쪽 라벨과 같으면 결과 y = 1, 아니면 0. 이유: 같은 변수에 이름 하나만 쓴다(D-037)</span><span lang="en">If it equals the outcome 1 label, outcome y = 1. Otherwise y = 0. Reason: one variable carries one name (D-037).</span></td>
       <td><span lang="ko">결과가 없으면 가격이 맞았는지 비교할 수 없다</span><span lang="en">Without an outcome we cannot check whether the price was right.</span></td></tr>
     <tr><td><code>maker</code>, <code>taker</code></td>
       <td><span lang="ko">거래의 두 지갑(wallet, 블록체인 주소) 열</span><span lang="en">The two wallet columns of a trade. A wallet is a blockchain address.</span></td>
@@ -234,6 +234,8 @@ a{color:var(--signal-plan)}
   </div>
   <p class="note" lang="ko">그림 2. 필터마다 제외한 시장 수. 막대 길이는 수에 비례한다(0건은 가는 선). 왜: 어느 필터가 가장 많이 거르는지 한눈에 보인다. 출처 폴더: <code>runs/142082_mvp1_full_v1r3/</code>.</p>
   <p class="note" lang="en">Figure 2. Markets dropped per filter. Bar length is proportional to the count (a thin line for 0). Why: it shows at a glance which filter drops the most. Source folder: <code>runs/142082_mvp1_full_v1r3/</code>.</p>
+  <p class="note" lang="ko">뺀 시장이 결과를 바꾸는지는 논문 부록 G.4(M4)가 본다. 남긴 시장의 T − 1일 전 거래량 중앙값은 1,790.0 USDC, 뺀 시장은 69.0 USDC다.</p>
+  <p class="note" lang="en">Appendix G.4 (M4) of the paper checks whether the dropped markets matter. Median volume before T − 1 day is 1,790.0 USDC for kept markets and 69.0 USDC for dropped ones.</p>
   <div class="tablewrap"><table>
     <tr><th><span lang="ko">필터</span><span lang="en">Filter</span></th><th><span lang="ko">제외 수</span><span lang="en">Dropped</span></th><th><span lang="ko">왜</span><span lang="en">Why</span></th><th><span lang="ko">어떻게</span><span lang="en">How</span></th><th><span lang="ko">왜 중요한가</span><span lang="en">Why it matters</span></th></tr>
     <tr><td><span lang="ko">Up/Down 시장</span><span lang="en">Up/Down markets</span></td><td class="num">255,420</td>
@@ -245,11 +247,11 @@ a{color:var(--signal-plan)}
     <tr><td><span lang="ko">이진 시장 아님</span><span lang="en">Not a binary market</span></td><td class="num">0</td>
       <td><span lang="ko">데이터셋 논문: Neg-Risk 시장은 별도 정규화가 필요하고, 다른 시장과 합치면 안 된다(§6, 한계 5).</span><span lang="en">Dataset paper: Neg-Risk markets "require a separate normalization" and should not be pooled (section 6, limitation 5).</span></td>
       <td><span lang="ko">후보가 여럿인 시장은 <code>daily_aligned_multi/</code>에 따로 있고 쓰지 않는다</span><span lang="en">Markets with several candidates sit in <code>daily_aligned_multi/</code>. We do not use them.</span></td>
-      <td><span lang="ko">후보가 여럿이면 Yes 가격 하나로 읽을 수 없다. 집계 파일에는 이 이유의 칸이 없고 순서 목록에만 있다</span><span lang="en">With several candidates, one Yes price cannot be read alone. The summary file has no field for this reason. It appears only in the order list.</span></td></tr>
+      <td><span lang="ko">후보가 여럿이면 가격 하나로 읽을 수 없다. 집계 파일에는 이 이유의 칸이 없고 순서 목록에만 있다</span><span lang="en">With several candidates, one price cannot be read alone. The summary file has no field for this reason. It appears only in the order list.</span></td></tr>
     <tr><td><span lang="ko">승자 라벨 없음</span><span lang="en">No winner label</span></td><td class="num">62,718</td>
       <td><span lang="ko">결과 y를 모르면 가격이 맞았는지 비교할 수 없다</span><span lang="en">Without outcome y we cannot check whether the price was right.</span></td>
       <td><span lang="ko">뺀다. 결과를 채우지 않는다</span><span lang="en">Drop it. Do not fill in the outcome.</span></td>
-      <td><span lang="ko">우리 규칙은 논문보다 넓다. Yes 쪽 라벨이 거래된 적 없는 시장도 뺀다</span><span lang="en">Our rule is wider than the paper's. It also drops markets whose Yes-side label never traded.</span></td></tr>
+      <td><span lang="ko">우리 규칙은 논문보다 넓다. outcome 1 쪽 라벨이 거래된 적 없는 시장도 뺀다</span><span lang="en">Our rule is wider than the paper's. It also drops markets whose outcome 1 label never traded.</span></td></tr>
     <tr><td><span lang="ko">T − 1일 가격 없음</span><span lang="en">No price at T − 1 day</span></td><td class="num">215,289</td>
       <td><span lang="ko">평가 가격은 T − 1일 이전 마지막 시각의 평균 거래 가격이다. 그때까지 거래가 없으면 가격이 없다</span><span lang="en">The evaluation price is the mean trade price at the last timestamp at or before T − 1 day. With no trade by then, there is no price.</span></td>
       <td><span lang="ko">뺀다. 가격을 채우지 않는다</span><span lang="en">Drop it. Do not fill in the price.</span></td>
@@ -267,9 +269,9 @@ a{color:var(--signal-plan)}
   <div class="tablewrap"><table>
     <tr><th><span lang="ko">처리</span><span lang="en">Handling</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th><th><span lang="ko">왜</span><span lang="en">Why</span></th></tr>
     <tr><td><span lang="ko">거래 10건 규칙 없이 남는 시장</span><span lang="en">Markets kept without the 10-trade rule</span></td><td class="num">74,474</td><td><span lang="ko">Q1을 이 규칙 있이와 없이 함께 보고하려고 센다</span><span lang="en">We count them so we can report Q1 with and without this rule.</span></td></tr>
-    <tr><td><span lang="ko">중복 행(duplicate)</span><span lang="en">Duplicate rows</span></td><td><span lang="ko">남긴다</span><span lang="en">Keep</span></td><td><span lang="ko">행마다 고유 번호가 없다. 같은 블록의 반복 체결인지 복사본인지 가릴 수 없다</span><span lang="en">Rows have no unique id. We cannot tell repeated fills in one block from copies.</span></td></tr>
+    <tr><td><span lang="ko">중복 행(duplicate)</span><span lang="en">Duplicate rows</span></td><td><span lang="ko">남긴다</span><span lang="en">Keep</span></td><td><span lang="ko">행마다 고유 번호가 없다. 같은 블록의 반복 체결인지 복사본인지 가릴 수 없다. 논문 부록 G가 제거 검정을 한다: 47,809개 시장, 순격차 −0.99%</span><span lang="en">Rows have no unique id. We cannot tell repeated fills in one block from copies. Appendix G of the paper tests their removal: 47,809 markets, net gap −0.99%.</span></td></tr>
     <tr><td><span lang="ko">결측값(missing value)</span><span lang="en">Missing values</span></td><td><span lang="ko">채우지 않는다</span><span lang="en">Do not impute</span></td><td><span lang="ko">가격이나 결과를 만들어 넣으면 없는 정보를 지어낸다. 뺀 수를 보고한다</span><span lang="en">Filling in a price or outcome invents information. We report the dropped counts.</span></td></tr>
-    <tr><td><span lang="ko">가격 척도</span><span lang="en">Price scale</span></td><td><code>p_event</code> <span lang="ko">하나</span><span lang="en">only</span></td><td><span lang="ko">Yes 쪽 가격 하나로 통일한다. 다시 계산하지 않는다</span><span lang="en">One Yes-side price for all. Do not recompute it.</span></td></tr>
+    <tr><td><span lang="ko">가격 척도</span><span lang="en">Price scale</span></td><td><code>p_event</code> <span lang="ko">하나</span><span lang="en">only</span></td><td><span lang="ko">outcome 1 쪽 가격 하나로 통일한다. 다시 계산하지 않는다</span><span lang="en">One outcome 1 side price for all. Do not recompute it.</span></td></tr>
   </table></div>
   <p class="src" lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code>(수), <code>runs/142041_pilotA_2025_06/updown_check.csv</code>(Crypto 259/282), <code>cs6344_group_01/analysis/prereg_mvp1.md</code>, <code>DECISIONS.md</code> D-007, <code>tips/polymarket_plan_detailed.md</code> 0절.</p>
   <p class="src" lang="en">Sources: <code>runs/142082_mvp1_full_v1r3/tables_summary.json</code> (counts), <code>runs/142041_pilotA_2025_06/updown_check.csv</code> (Crypto 259/282), <code>cs6344_group_01/analysis/prereg_mvp1.md</code>, <code>DECISIONS.md</code> D-007, <code>tips/polymarket_plan_detailed.md</code> section 0.</p>

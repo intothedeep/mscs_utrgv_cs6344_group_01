@@ -458,8 +458,8 @@ erDiagram
         <tr><td>taker</td><td>1,535,977</td><td>86.57</td><td>0.759</td><td>0.980</td><td>0.963</td></tr>
       </tbody>
     </table></div>
-    <p class="muted" lang="ko">top1_share: 상위 1% 지갑의 거래액 몫. 지니 계수(Gini coefficient): 0 고름 ~ 1 한 곳 집중. 다른 열: <code>mean</code>, <code>mean_over_median</code>, <code>top5_share</code>, <code>top10_share</code>. 출처: <code>runs/142082_mvp1_full_v1r3/q2_concentration.csv</code>.</p>
-    <p class="muted" lang="en">top1_share: the share of trade amount held by the top 1% of wallets. Gini coefficient: 0 is even, 1 is all in one place. Other columns: <code>mean</code>, <code>mean_over_median</code>, <code>top5_share</code>, <code>top10_share</code>. Source: <code>runs/142082_mvp1_full_v1r3/q2_concentration.csv</code>.</p>
+    <p class="muted" lang="ko">top1_share: 상위 1% 지갑의 거래액 몫. 지니 계수(Gini coefficient): 0 고름 ~ 1 한 곳 집중. 파일에는 있지만 논문은 쓰지 않는다(D-026). 다른 열: <code>mean</code>, <code>mean_over_median</code>, <code>top5_share</code>, <code>top10_share</code>. 출처: <code>runs/142082_mvp1_full_v1r3/q2_concentration.csv</code>.</p>
+    <p class="muted" lang="en">top1_share: the share of trade amount held by the top 1% of wallets. Gini coefficient: 0 is even, 1 is all in one place. It is in the file but the paper does not use it (D-026). Other columns: <code>mean</code>, <code>mean_over_median</code>, <code>top5_share</code>, <code>top10_share</code>. Source: <code>runs/142082_mvp1_full_v1r3/q2_concentration.csv</code>.</p>
   </div>
 
   <!-- 9 -->
@@ -677,34 +677,32 @@ flowchart TB
 <!-- ============ TAB 4: PROGRESS ============ -->
 <section class="tab" id="tab-progress" hidden>
   <div class="panel">
-    <p lang="ko"><b>결론: MVP1 분석은 끝났다. 남은 일은 논문의 소유자 몫과 정리 작업 6개다.</b> 마감은 2026-11-15다(D-021).</p>
-    <p lang="en"><b>Conclusion: the MVP1 analysis is done. What remains is the owner's part of the paper and 6 cleanup tasks.</b> The deadline is 2026-11-15 (D-021).</p>
-    <p lang="ko">2026-11-07: 관문 재검토(D-035)가 통과했다. 중요 문제 1건(V-1, "Yes" 문구)은 레이블 세기(D-036)로 풀었다. 논문과 보고서의 이름 통일(D-037)은 끝났다. 논문에 서술 문장 네 개를 더했다. "Yes"인 시장 30,630개에서 구간 0 ~ 8의 9개 구간 모두 관측 비율이 평균 가격보다 0.4 ~ 5.6 퍼센트포인트(percentage point) 낮다. 새 검정은 없다. 남은 것: 그림 <code>fig5_ecdf_yes_no.png</code> 안에 아직 "Yes/No"가 보일 수 있다. 캡션은 이미 outcome 1 이김 / outcome 0 이김으로 바꿨다. 다시 그리려면 클러스터 작업 하나가 필요하고, 소유자가 아직 정하지 않았다.</p>
-    <p lang="en">2026-11-07: the gate re-review (D-035) passed. Its one major issue (V-1, the "Yes" wording) was settled by a label count (D-036). Renaming the labels in the paper and report (D-037) is done. Four short sentences were added to the paper. Among the 30,630 markets where outcome 1 is labeled Yes, the observed rate is below the mean price in 9 of 9 bins (0 to 8), by 0.4 to 5.6 percentage points. There is no new test. Left: the image <code>fig5_ecdf_yes_no.png</code> may still show "Yes/No" inside, while its caption now says outcome 1 won / outcome 0 won. Redrawing it needs one cluster job, and the owner has not decided yet.</p>
-    <p class="muted" lang="ko">왜: 프로젝트가 어떤 순서로 왔고 지금 어디인지 한 장으로 보려고 만들었다. 쓴 데이터: <code>STATUS.md</code> 로그(2026-10-18 ~ 11-07), <code>PLAN.md</code> 임무 블록(mission block)과 작업 행, <code>RQ.md</code>, <code>DECISIONS.md</code> D-id. 마지막 로그 줄은 2026-11-07다.</p>
-    <p class="muted" lang="en">Why: this page shows on one sheet how the project came here and where it stands now. Data used: the <code>STATUS.md</code> log (2026-10-18 to 11-07), the mission block and task rows of <code>PLAN.md</code>, <code>RQ.md</code>, and the D-ids of <code>DECISIONS.md</code>. The last log line is dated 2026-11-07.</p>
+    <p lang="ko"><b>결론: MVP1 분석과 논문 재구성은 끝났다. 남은 일은 논문의 소유자 몫과 정리 작업 7개다.</b> 마감은 2026-11-15다(D-021).</p>
+    <p lang="en"><b>Conclusion: the MVP1 analysis and the paper restructure are done. What remains is the owner's part of the paper and 7 cleanup tasks.</b> The deadline is 2026-11-15 (D-021).</p>
+    <p lang="ko">논문은 본문(1~8절, 두 열), 참고문헌(9절), 부록 A~G로 나뉜다. 이유: 본문을 학회 길이에 가깝게 하고 Q1에 집중하기 위해서다(D-042, D-045). 남은 것: 그림 <code>fig5_ecdf_yes_no.png</code> 안에 아직 "Yes/No"가 보일 수 있다. 다시 그리려면 클러스터 작업 하나가 필요하고, 소유자가 아직 정하지 않았다.</p>
+    <p lang="en">The paper has a body (Sections 1 to 8, two columns), References (Section 9) and Appendices A to G. Reason: bring the body near conference length and keep Q1 as the focus (D-042, D-045). Left: the image <code>fig5_ecdf_yes_no.png</code> may still show "Yes/No" inside. Redrawing it needs one cluster job, and the owner has not decided yet.</p>
+    <p class="muted" lang="ko">왜: 프로젝트가 어떤 순서로 왔고 지금 어디인지 한 장으로 보려고 만들었다. 쓴 데이터: <code>STATUS.md</code> 로그, <code>PLAN.md</code> 임무 블록(mission block)과 작업 행, <code>RQ.md</code>, <code>DECISIONS.md</code> D-id.</p>
+    <p class="muted" lang="en">Why: this page shows on one sheet how the project came here and where it stands now. Data used: the <code>STATUS.md</code> log, the mission block and task rows of <code>PLAN.md</code>, <code>RQ.md</code>, and the D-ids of <code>DECISIONS.md</code>.</p>
     <div class="scroll-x"><table>
       <thead><tr><th><span lang="ko">지표</span><span lang="en">Metric</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th><th><span lang="ko">출처</span><span lang="en">Source</span></th></tr></thead>
       <tbody>
-        <tr><td><span lang="ko">PLAN 작업 행</span><span lang="en">PLAN task rows</span></td><td><b><span lang="ko">18 닫힘 · 6 열림</span><span lang="en">18 closed · 6 open</span></b></td><td><code>PLAN.md</code> <code>[x]</code> / <code>[ ]</code> <span lang="ko">개수</span><span lang="en">count</span></td></tr>
+        <tr><td><span lang="ko">PLAN 열린 작업 행</span><span lang="en">PLAN open task rows</span></td><td><b><span lang="ko">6 열림 (+ 논문 관문 검토 1)</span><span lang="en">6 open (+ 1 paper gate review)</span></b></td><td><code>PLAN.md</code> <code>[ ]</code></td></tr>
         <tr><td><span lang="ko">연구 질문(research question, RQ)</span><span lang="en">Research question (RQ)</span></td><td><span lang="ko">6 답함 · 0 열림 (목표는 RQ1–RQ3)</span><span lang="en">6 answered · 0 open (the goal is RQ1–RQ3)</span></td><td><code>RQ.md</code></td></tr>
         <tr><td><span lang="ko">M1 관문(gate) 리뷰</span><span lang="en">M1 gate review</span></td><td><span lang="ko">세 번째에 PASS · 0 blocker · 0 major · 4 minor</span><span lang="en">PASS on the third try · 0 blocker · 0 major · 4 minor</span></td><td><code>analysis/review_mvp1_rq_r3.md</code></td></tr>
-        <tr><td><span lang="ko">최종 리뷰</span><span lang="en">Final review</span></td><td>PASS · 0 blocker · 0 major · 14 minor</td><td><code>analysis/review_final_2026_11_02.md</code></td></tr>
-        <tr><td><span lang="ko">M1 관문 재검토 (2026-11-07)</span><span lang="en">M1 gate re-review (2026-11-07)</span></td><td><span lang="ko">PASS · 0 blocker · 1 major (V-1) · 11 minor · 숫자 40개 중 40개 일치</span><span lang="en">PASS · 0 blocker · 1 major (V-1) · 11 minor · 40 of 40 sampled numbers match</span></td><td><code>analysis/review_mvp1_gate_2026_11_07.md</code></td></tr>
-        <tr><td><span lang="ko">V-1 레이블 세기 (150296)</span><span lang="en">V-1 label count (150296)</span></td><td><span lang="ko">결정 B · "Yes" 몫 0.639 (Sports 0.140)</span><span lang="en">Decision B · Yes-label share 0.639 (Sports 0.140)</span></td><td><code>runs/150296_v1label/label1_counts.json</code></td></tr>
+        <tr><td><span lang="ko">M1 관문 재검토 (D-035)</span><span lang="en">M1 gate re-review (D-035)</span></td><td><span lang="ko">PASS · 0 blocker · 1 major (V-1) · 11 minor · 숫자 40개 중 40개 일치</span><span lang="en">PASS · 0 blocker · 1 major (V-1) · 11 minor · 40 of 40 sampled numbers match</span></td><td><code>analysis/review_mvp1_gate_2026_11_07.md</code></td></tr>
+        <tr><td><span lang="ko">V-1 레이블 세기 (150296)</span><span lang="en">V-1 label count (150296)</span></td><td><span lang="ko">결정 B · 이름이 "Yes"인 몫 0.639 (Sports 0.140)</span><span lang="en">Decision B · Yes-label share 0.639 (Sports 0.140)</span></td><td><code>runs/150296_v1label/label1_counts.json</code></td></tr>
+        <tr><td><span lang="ko">두 심사자 점검 (150310)</span><span lang="en">Two-reviewer checks (150310)</span></td><td><span lang="ko">M1 ~ M5, 중복 행, 동료 질문 a, b · 모든 단계 성공</span><span lang="en">M1 to M5, duplicate rows, peer asks a and b · all stages ran</span></td><td><code>runs/150310_r3_review_fixes_v6/</code></td></tr>
+        <tr><td><span lang="ko">관문 검토 r3 (D-041)</span><span lang="en">Gate review r3 (D-041)</span></td><td>PASS · <span lang="ko">주기 1/2 · 고침 F1 ~ F14</span><span lang="en">cycle 1/2 · fixes F1 to F14</span></td><td><code>analysis/review_gate_mvp1_r3.md</code></td></tr>
       </tbody>
     </table></div>
-    <div class="funnel">
-      <div class="frow"><span><span lang="ko">작업 진행</span><span lang="en">Task progress</span></span><div><div class="bar keep" style="width:75%"></div></div><span class="n">18 / 24</span></div>
-    </div>
   </div>
 
   <div class="panel step">
     <p class="label">Step 1 of 3</p>
-    <h2 lang="ko">단계별 흐름: 제안서에서 최종 리뷰까지</h2>
-    <h2 lang="en">Flow by phase: from the proposal to the final review</h2>
-    <p class="muted" lang="ko">위에서 아래로 시간 순서다. 상자 안 숫자는 클러스터 run 번호(job ID)다. M1–M4는 마일스톤(milestone: 관문이 있는 단계)이다.</p>
-    <p class="muted" lang="en">Time runs from top to bottom. A number in a box is a cluster run number (job ID). M1–M4 are milestones (a milestone is a phase with a gate).</p>
+    <h2 lang="ko">단계별 흐름: 제안서에서 논문 재구성까지</h2>
+    <h2 lang="en">Flow by phase: from the proposal to the paper restructure</h2>
+    <p class="muted" lang="ko">위에서 아래로 시간 순서다. 상자 안 숫자는 클러스터 run 번호(job ID)다. M1, M3~M5는 마일스톤(milestone: 관문이 있는 단계)이다.</p>
+    <p class="muted" lang="en">Time runs from top to bottom. A number in a box is a cluster run number (job ID). M1 and M3 to M5 are milestones (a milestone is a phase with a gate).</p>
     <div class="scroll-x" lang="ko"><pre class="mermaid">
 flowchart TB
   subgraph P0["0 · 준비 (10-18 ~ 10-19)"]
@@ -714,26 +712,30 @@ flowchart TB
     B1["Job A 142041<br/>데이터 검사만"]:::done --> B2["사전 등록 prereg<br/>T = close_at, 10 trades"]:::done --> B3["Job B 142056<br/>첫 end-to-end, 판정 없음"]:::done
   end
   subgraph P2["2 · M1: MVP1 전체 실행 (10-19)"]
-    C1["전체 run 142057<br/>688,131 → 47,948"]:::done --> C2["보고서 v1"]:::done --> C3["리뷰 1<br/>0 blocker, 8 major"]:::done --> C4["코드 v3 재실행<br/>142082, 판정 같음"]:::done
+    C1["전체 run 142057<br/>688,131 → 47,948"]:::done --> C3["리뷰 1<br/>0 blocker, 8 major"]:::done --> C4["코드 v3 재실행<br/>142082, 판정 같음"]:::done
   end
-  subgraph P3["3 · M3, M4: 강건성과 논문 (10-19)"]
-    D1["강건성 142123<br/>R1, R2"]:::done --> D2["논문 초안<br/>관문 PASS"]:::done --> D3["코드 v5, 142140<br/>BH p 저장"]:::done
+  subgraph P3["3 · M3: 강건성 (10-19)"]
+    D1["강건성 142123<br/>R1, R2"]:::done --> D3["코드 v5, 142140<br/>BH p 저장"]:::done
   end
   subgraph P4["4 · 범위 정리와 M1 관문 (11-01)"]
-    E1["D-016 MVP1만 목표<br/>MVP2 → future_work"]:::done --> E2["M1 관문 ISSUE<br/>G1 등 수정"]:::done --> E3["세 번째 관문 PASS"]:::done --> E4["강의 방법 감사<br/>D-024 ~ D-028"]:::done
+    E1["D-016 MVP1만 목표"]:::done --> E2["M1 관문 ISSUE<br/>G1 등 수정"]:::done --> E3["세 번째 관문 PASS"]:::done --> E4["강의 방법 감사<br/>D-024 ~ D-028"]:::done
   end
   subgraph P5["5 · 마무리 (11-02)"]
-    F1["그림 run<br/>145892, 145893, 145897"]:::done --> F2["최종 리뷰 PASS<br/>14 minor"]:::done --> F3["논문 D-034<br/>17쪽 빌드"]:::done
+    F1["그림 run<br/>145892, 145893, 145897"]:::done --> F2["최종 리뷰 PASS<br/>14 minor"]:::done --> F3["논문 D-034<br/>독립 가정 문장"]:::done
   end
   subgraph P65["6 · 재검토와 문구 (11-07)"]
-    H1["D-035 관문 재검토<br/>PASS, 중요 1건 V-1"]:::done --> H2["D-036 규칙 등록 후<br/>레이블 세기 150296"]:::done --> H3["결정 B<br/>Yes 몫 0.639"]:::done --> H4["D-037 이름 통일<br/>outcome 1 (끝남)"]:::done
+    H1["D-035 관문 재검토<br/>PASS, 중요 1건 V-1"]:::done --> H2["D-036 규칙 등록 후<br/>레이블 세기 150296"]:::done --> H3["결정 B<br/>Yes 몫 0.639"]:::done --> H4["D-037 이름 통일<br/>outcome 1"]:::done
   end
-  subgraph P6["7 · 남은 일 (마감 11-15)"]
-    G1["논문 todo 4개<br/>소유자 글"]:::open --> G2["F5 문장 길이<br/>소유자 글 뒤"]:::open
+  subgraph P7["7 · 점검과 재구성 (11-07 ~ 11-09)"]
+    K1["D-038 두 심사자 검토<br/>150310, M1 ~ M5"]:::done --> K2["D-040 M2 문장"]:::done --> K3["D-041 관문 r3<br/>PASS, F1 ~ F14"]:::done --> K4["D-042 ~ D-045 재구성<br/>본문 두 열, 부록 A ~ G"]:::done
+  end
+  subgraph P6["8 · 남은 일 (마감 11-15)"]
+    G1["논문 todo 5개<br/>소유자 글"]:::open --> G2["F5 문장 길이<br/>소유자 글 뒤"]:::open
     G3["보고서 v1<br/>소유자 검토"]:::open
     G4["3인 분담 선택<br/>A, B, C"]:::open
     G5["markets 해시 비교<br/>클러스터"]:::open
     G6["make_report.py 분할"]:::open
+    G7["재구성 논문 관문 검토<br/>PL-15"]:::open
   end
   A4 --> B1
   B3 --> C1
@@ -741,13 +743,14 @@ flowchart TB
   D3 --> E1
   E4 --> F1
   F3 --> H1
-  H4 --> G1
-  H4 --> G3
-  H4 --> G4
-  H4 --> G5
-  H4 --> G6
-  C1 -.-> X1["MVP2 run<br/>142077, 142078, 142083"]:::dead
-  X1 -.-> X2["보고서 v2<br/>목표 밖 D-016"]:::dead
+  H4 --> K1
+  K4 --> G1
+  K4 --> G3
+  K4 --> G4
+  K4 --> G5
+  K4 --> G6
+  K4 --> G7
+  C1 -.-> X1["MVP2는 범위 밖<br/>D-016, future_work/"]:::dead
   classDef done fill:#dbe4ff,stroke:#0432ff,color:#111
   classDef open fill:#fff3a0,stroke:#d40000,stroke-width:2px,color:#111
   classDef dead fill:#e4e4e2,stroke:#999,color:#666
@@ -758,29 +761,33 @@ flowchart TB
     A1["Proposal v3<br/>sourced facts only"]:::done --> A2["Cradle cluster<br/>CPU work environment"]:::done --> A3["Data download<br/>daily_aligned 1,248 files"]:::done --> A4["Code v1<br/>Job A, Job B"]:::done
   end
   subgraph P1["1 · Pilot and pre-registration (10-19)"]
-    B1["Job A 142041<br/>data check only"]:::done --> B2["Pre-registration prereg<br/>T = close_at, 10 trades"]:::done --> B3["Job B 142056<br/>first end-to-end, no verdict"]:::done
+    B1["Job A 142041<br/>data inspection only"]:::done --> B2["Pre-registration<br/>T = close_at, 10 trades"]:::done --> B3["Job B 142056<br/>first end-to-end, no verdict"]:::done
   end
-  subgraph P2["2 · M1: full MVP1 run (10-19)"]
-    C1["Full run 142057<br/>688,131 → 47,948"]:::done --> C2["Report v1"]:::done --> C3["Review 1<br/>0 blocker, 8 major"]:::done --> C4["Code v3 rerun<br/>142082, same verdicts"]:::done
+  subgraph P2["2 · M1: MVP1 full run (10-19)"]
+    C1["Full run 142057<br/>688,131 → 47,948"]:::done --> C3["Review 1<br/>0 blocker, 8 major"]:::done --> C4["Code v3 rerun<br/>142082, same verdict"]:::done
   end
-  subgraph P3["3 · M3, M4: robustness and paper (10-19)"]
-    D1["Robustness 142123<br/>R1, R2"]:::done --> D2["Paper draft<br/>gate PASS"]:::done --> D3["Code v5, 142140<br/>BH p saved"]:::done
+  subgraph P3["3 · M3: robustness (10-19)"]
+    D1["Robustness 142123<br/>R1, R2"]:::done --> D3["Code v5, 142140<br/>BH p saved"]:::done
   end
-  subgraph P4["4 · Scope cleanup and M1 gate (11-01)"]
-    E1["D-016 MVP1 only goal<br/>MVP2 → future_work"]:::done --> E2["M1 gate ISSUE<br/>G1 and others fixed"]:::done --> E3["Third gate PASS"]:::done --> E4["Lecture method audit<br/>D-024 to D-028"]:::done
+  subgraph P4["4 · Scope and M1 gate (11-01)"]
+    E1["D-016 MVP1 only goal"]:::done --> E2["M1 gate ISSUE<br/>G1 and others fixed"]:::done --> E3["Third gate PASS"]:::done --> E4["Lecture method audit<br/>D-024 to D-028"]:::done
   end
   subgraph P5["5 · Wrap-up (11-02)"]
-    F1["Figure runs<br/>145892, 145893, 145897"]:::done --> F2["Final review PASS<br/>14 minor"]:::done --> F3["Paper D-034<br/>17 pages built"]:::done
+    F1["Figure runs<br/>145892, 145893, 145897"]:::done --> F2["Final review PASS<br/>14 minor"]:::done --> F3["Paper D-034<br/>independence sentence"]:::done
   end
   subgraph P65["6 · Re-review and wording (11-07)"]
-    H1["D-035 gate re-review<br/>PASS, 1 major V-1"]:::done --> H2["D-036 rule registered,<br/>then label count 150296"]:::done --> H3["Decision B<br/>Yes share 0.639"]:::done --> H4["D-037 rename labels<br/>outcome 1 (done)"]:::done
+    H1["D-035 gate re-review<br/>PASS, 1 major V-1"]:::done --> H2["D-036 rule registered,<br/>then label count 150296"]:::done --> H3["Decision B<br/>Yes share 0.639"]:::done --> H4["D-037 rename labels<br/>outcome 1"]:::done
   end
-  subgraph P6["7 · Open work (deadline 11-15)"]
-    G1["Paper todo x 4<br/>owner text"]:::open --> G2["F5 sentence length<br/>after owner text"]:::open
+  subgraph P7["7 · Checks and restructure (11-07 to 11-09)"]
+    K1["D-038 two-reviewer review<br/>150310, M1 to M5"]:::done --> K2["D-040 M2 sentence"]:::done --> K3["D-041 gate r3<br/>PASS, F1 to F14"]:::done --> K4["D-042 to D-045 restructure<br/>two-column body, Appendices A to G"]:::done
+  end
+  subgraph P6["8 · Open work (deadline 11-15)"]
+    G1["Paper todo x 5<br/>owner text"]:::open --> G2["F5 sentence length<br/>after owner text"]:::open
     G3["Report v1<br/>owner review"]:::open
     G4["Choose 3-person split<br/>A, B, C"]:::open
     G5["markets hash compare<br/>cluster"]:::open
     G6["Split make_report.py"]:::open
+    G7["Gate review of the<br/>restructured paper, PL-15"]:::open
   end
   A4 --> B1
   B3 --> C1
@@ -788,13 +795,14 @@ flowchart TB
   D3 --> E1
   E4 --> F1
   F3 --> H1
-  H4 --> G1
-  H4 --> G3
-  H4 --> G4
-  H4 --> G5
-  H4 --> G6
-  C1 -.-> X1["MVP2 run<br/>142077, 142078, 142083"]:::dead
-  X1 -.-> X2["Report v2<br/>outside goal D-016"]:::dead
+  H4 --> K1
+  K4 --> G1
+  K4 --> G3
+  K4 --> G4
+  K4 --> G5
+  K4 --> G6
+  K4 --> G7
+  C1 -.-> X1["MVP2 is out of scope<br/>D-016, future_work/"]:::dead
   classDef done fill:#dbe4ff,stroke:#0432ff,color:#111
   classDef open fill:#fff3a0,stroke:#d40000,stroke-width:2px,color:#111
   classDef dead fill:#e4e4e2,stroke:#999,color:#666
@@ -802,7 +810,7 @@ flowchart TB
     <div class="legend muted">
       <span style="color:#0432ff"><span lang="ko">■ 파랑</span><span lang="en">■ Blue</span></span><span lang="ko">끝남</span><span lang="en">Done</span>
       <span style="color:#d40000"><span lang="ko">■ 노랑, 빨간 테두리</span><span lang="en">■ Yellow, red border</span></span><span lang="ko">열림: 아직 할 일</span><span lang="en">Open: work still to do</span>
-      <span><span lang="ko">■ 회색, 점선</span><span lang="en">■ Gray, dotted</span></span><span lang="ko">목표 밖: MVP2, <code>future_work/</code>에 보관</span><span lang="en">Outside the goal: MVP2, kept in <code>future_work/</code></span>
+      <span><span lang="ko">■ 회색, 점선</span><span lang="en">■ Gray, dotted</span></span><span lang="ko">범위 밖: MVP2, <code>future_work/</code>에 보관</span><span lang="en">Out of scope: MVP2, kept in <code>future_work/</code></span>
     </div>
   </div>
 
@@ -814,30 +822,32 @@ flowchart TB
       <thead><tr><th><span lang="ko">마일스톤</span><span lang="en">Milestone</span></th><th><span lang="ko">무엇</span><span lang="en">What</span></th><th><span lang="ko">상태</span><span lang="en">Status</span></th><th><span lang="ko">근거</span><span lang="en">Evidence</span></th></tr></thead>
       <tbody>
         <tr><td>M1</td><td>MVP1: Q1, Q2, Q3</td><td><span lang="ko">끝남 · 관문 PASS (세 번째)</span><span lang="en">Done · gate PASS (third try)</span></td><td><code>runs/142082_mvp1_full_v1r3</code>, <code>reports/report_v1.html</code></td></tr>
-        <tr class="dead"><td>M2</td><td>MVP2: Q1a, Q1b, Q1c</td><td><span lang="ko">실행은 끝남 · 목표 밖 (D-016)</span><span lang="en">Run done · outside the goal (D-016)</span></td><td><code>future_work/runs/142083_mvp2_full_v2r3</code></td></tr>
+        <tr class="dead"><td>M2</td><td>MVP2: Q1a, Q1b, Q1c</td><td><span lang="ko">범위 밖 (D-016)</span><span lang="en">Out of scope (D-016)</span></td><td><code>future_work/</code></td></tr>
         <tr><td>M3</td><td><span lang="ko">강건성(robustness): R1, R2</span><span lang="en">Robustness: R1, R2</span></td><td><span lang="ko">끝남</span><span lang="en">Done</span></td><td><code>runs/142123_robust_full_v4</code></td></tr>
-        <tr class="flag"><td>M4</td><td><span lang="ko">논문 v1</span><span lang="en">Paper v1</span></td><td><span lang="ko">관문 PASS · 열린 행 3개</span><span lang="en">Gate PASS · 3 open rows</span></td><td><code>papers/paper_mvp1</code>, <code>analysis/review_papers.md</code></td></tr>
+        <tr class="flag"><td>M4</td><td><span lang="ko">논문</span><span lang="en">Paper</span></td><td><span lang="ko">관문 PASS · 소유자 todo 5개 열림</span><span lang="en">Gate PASS · 5 owner todo items open</span></td><td><code>papers/paper_mvp1</code>, <code>analysis/review_gate_mvp1_r3.md</code></td></tr>
+        <tr class="flag"><td>M5</td><td><span lang="ko">논문 길이 재구성 (D-042)</span><span lang="en">Paper length restructure (D-042)</span></td><td><span lang="ko">재구성 끝남 · 관문 검토 PL-15 열림</span><span lang="en">Restructure done · gate review PL-15 open</span></td><td><code>paper_length.plan.md</code></td></tr>
       </tbody>
     </table></div>
   </div>
 
   <div class="panel step">
     <p class="label">Step 3 of 3</p>
-    <h2 lang="ko">열린 작업 6개: 누가, 무엇을 기다리나</h2>
-    <h2 lang="en">6 open tasks: who waits for what</h2>
+    <h2 lang="ko">열린 작업 7개: 누가, 무엇을 기다리나</h2>
+    <h2 lang="en">7 open tasks: who waits for what</h2>
     <div class="scroll-x"><table>
       <thead><tr><th>#</th><th><span lang="ko">작업</span><span lang="en">Task</span></th><th><span lang="ko">마일스톤</span><span lang="en">Milestone</span></th><th><span lang="ko">누가</span><span lang="en">Who</span></th><th><span lang="ko">닫히는 조건(acceptance criteria, AC)</span><span lang="en">Closing condition (acceptance criteria, AC)</span></th></tr></thead>
       <tbody>
-        <tr class="flag"><td>1</td><td><span lang="ko">논문 <code>\todo{owner}</code> 4개: 관련 연구, 해석, 넓은 의미, 맺음</span><span lang="en">4 paper <code>\todo{owner}</code> items: related work, interpretation, wider meaning, closing</span></td><td>M4</td><td><span lang="ko">소유자</span><span lang="en">Owner</span></td><td><span lang="ko"><code>todo{owner</code> 0개</span><span lang="en">0 <code>todo{owner</code> left</span></td></tr>
+        <tr class="flag"><td>1</td><td><span lang="ko">논문 <code>\todo{owner}</code> 5개: 관련 연구, x_min 선택, 해석, 넓은 의미, 맺음</span><span lang="en">5 paper <code>\todo{owner}</code> items: related work, x_min choice, interpretation, wider meaning, closing</span></td><td>M4</td><td><span lang="ko">소유자</span><span lang="en">Owner</span></td><td><span lang="ko"><code>todo{owner</code> 0개</span><span lang="en">0 <code>todo{owner</code> left</span></td></tr>
         <tr><td>2</td><td><span lang="ko">F5: 15단어 넘는 문장 정리 (1번 뒤)</span><span lang="en">F5: fix sentences longer than 15 words (after task 1)</span></td><td>M4</td><td>writer</td><td><span lang="ko">15단어 초과 0개, 빌드 오류 0</span><span lang="en">0 sentences over 15 words, 0 build errors</span></td></tr>
         <tr class="flag"><td>3</td><td><span lang="ko">3인 분담 선택: A 안정, B 확장, C 최신</span><span lang="en">Pick the 3-person split: A stable, B extended, C latest</span></td><td>M4</td><td><span lang="ko">소유자</span><span lang="en">Owner</span></td><td><span lang="ko"><code>DECISIONS.md</code> 행</span><span lang="en">A row in <code>DECISIONS.md</code></span></td></tr>
         <tr class="flag"><td>4</td><td><span lang="ko">보고서 v1 검토</span><span lang="en">Review report v1</span></td><td>M1</td><td><span lang="ko">소유자</span><span lang="en">Owner</span></td><td><span lang="ko">소유자 메모가 <code>STATUS.md</code>에</span><span lang="en">Owner note is in <code>STATUS.md</code></span></td></tr>
         <tr><td>5</td><td><span lang="ko">142082와 142140의 <code>markets.parquet</code> 해시 비교</span><span lang="en">Compare the hash of <code>markets.parquet</code> from 142082 and 142140</span></td><td>M1</td><td><span lang="ko">메인 세션, 클러스터</span><span lang="en">Main session, cluster</span></td><td><span lang="ko"><code>00.runs.md</code>에 같음/다름</span><span lang="en">Same or different, in <code>00.runs.md</code></span></td></tr>
         <tr><td>6</td><td><span lang="ko"><code>code/make_report.py</code>(약 800줄) 분할</span><span lang="en">Split <code>code/make_report.py</code> (about 800 lines)</span></td><td>M1</td><td>developer</td><td><span lang="ko">같은 HTML, 바이트 단위</span><span lang="en">Same HTML, byte for byte</span></td></tr>
+        <tr><td>7</td><td><span lang="ko">재구성한 논문의 관문 검토 (PL-15)</span><span lang="en">Gate review of the restructured paper (PL-15)</span></td><td>M5</td><td>reviewer</td><td><span lang="ko">PASS 한 줄과 불변식 I1 ~ I16 한 줄씩</span><span lang="en">One PASS line and one line per invariant I1 to I16</span></td></tr>
       </tbody>
     </table></div>
-    <p class="muted" lang="ko">노란 행은 소유자가 정하거나 써야 하는 일이다. 1번이 끝나야 2번을 할 수 있다. 출처: <code>PLAN.md</code> "Open tasks".</p>
-    <p class="muted" lang="en">A yellow row is work the owner must decide or write. Task 2 can start only after task 1. Source: "Open tasks" in <code>PLAN.md</code>.</p>
+    <p class="muted" lang="ko">노란 행은 소유자가 정하거나 써야 하는 일이다. 1번이 끝나야 2번을 할 수 있다. 출처: <code>PLAN.md</code> "Open tasks", <code>paper_length.plan.md</code>.</p>
+    <p class="muted" lang="en">A yellow row is work the owner must decide or write. Task 2 can start only after task 1. Source: "Open tasks" in <code>PLAN.md</code>, <code>paper_length.plan.md</code>.</p>
   </div>
 </section>
 
