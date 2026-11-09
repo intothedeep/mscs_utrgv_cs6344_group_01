@@ -173,7 +173,7 @@ Rows:
   - AC: STD. Body figures print at `\linewidth`. The first appendix page is one column.
 - [ ] → M5 PL-13 Final build and page count (S11). Executor: main session. Depends on: PL-01 to PL-12. Commit: only if files changed.
   - Run `BUILD`. N is the `REFPAGE` output, the page where References starts.
-  - Body pages B = N − 1 if `pdftotext -f N -l N main.pdf - | head -1` is "References". Otherwise B = N.
+  - Body pages B = N − 1 if `pdftotext -f N -l N main.pdf - | head -2` holds the heading "References", with or without its section number (owner, 2026-11-09: numbered section on a new page). Otherwise B = N.
   - Record B in `STATUS.md`.
   - Build `../course_report_mvp1` once with `latexmk -C && latexmk -pdf main.tex`. Then `git restore` its `main.pdf`.
   - AC: STD on the final tree.
