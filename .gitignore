@@ -272,3 +272,6 @@ future_work/papers/refs/
 papers/**/*.xdv
 papers/**/*.synctex.gz
 runs/**/label1_by_market.csv
+
+# etc
+x_*
