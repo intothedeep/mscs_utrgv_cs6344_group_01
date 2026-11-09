@@ -37,7 +37,7 @@ def set_font() -> None:
                          "xtick.labelsize": FONT, "ytick.labelsize": FONT})
 
 
-def draw_calibration(main: pd.DataFrame, nomin: pd.DataFrame, png: Path) -> None:
+def draw_calibration(main: pd.DataFrame, nomin: pd.DataFrame, png: Path, legend_ncol: int = 3) -> None:
     fig, (ax, gx) = plt.subplots(2, 1, figsize=(W_CALIB, H_CALIB), sharex=True, layout="constrained",
                                  gridspec_kw={"height_ratios": [1.3, 1]})
     series = [("With trade filter (main)", main, "#222222", 0.0), ("No filter", nomin, "#aa5500", 0.008)]
@@ -52,7 +52,7 @@ def draw_calibration(main: pd.DataFrame, nomin: pd.DataFrame, png: Path) -> None
            title="Gap (dashed line: zero gap)")
     ax.grid(alpha=0.3)
     gx.grid(alpha=0.3)
-    fig.legend(*ax.get_legend_handles_labels(), loc="outside upper center", ncol=3, columnspacing=1.0, handletextpad=0.4)
+    fig.legend(*ax.get_legend_handles_labels(), loc="outside upper center", ncol=legend_ncol, columnspacing=1.0, handletextpad=0.4)
     fig.savefig(png, dpi=DPI)
     plt.close(fig)
 
