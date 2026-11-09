@@ -12,8 +12,8 @@ Points on the straight line mean the values are close to normal.
 
 \begin{figure}[H]
 \centering
-\figorbox{figures/qq_trade_size_raw_log}{\linewidth}
-\caption{QQ plot of trade size against the normal, raw (left) and after a log transform (right). Why: the raw points bend away from the line and the log points follow it, so the log values are closer to normal. Source: run \QqRun.}
+\figorbox{figures/qq_trade_size_raw_log_col}{\linewidth}
+\caption{QQ plot of trade size against the normal, raw (left) and after a log transform (right). Why: the raw points bend away from the line and the log points follow it, so the log values are closer to normal. Source: run \QqRun{} and the local figure folder runs/local\_column\_figs\_v13.}
 \label{fig:qq-size}
 \end{figure}
 
@@ -27,7 +27,7 @@ We do not rank the three fits: the normal and exponential fits use all data, and
 We did not compare a lognormal.
 The exponential fit has $D=\TradeSizeExponentialKsD$ for trade size and $D=\WalletVolumeExponentialKsD$ for wallet volume.
 
-\begin{table}[H]
+\begin{table*}[t]
 \centering
 \caption{Distribution fits, with the power law fitted on the tail from $x_{\min}$. Why: a small $D$ means the fitted curve is close to the data. Source: run \RunId.}
 \label{tab:fits}
@@ -41,4 +41,4 @@ Trade size & \TradeSizePowerAlpha & \TradeSizePowerXmin & \TradeSizePowerKsD & \
 Wallet volume & \WalletVolumePowerAlpha & \WalletVolumePowerXmin & \WalletVolumePowerKsD & \WalletVolumeNormalKsD \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}

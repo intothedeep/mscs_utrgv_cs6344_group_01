@@ -14,9 +14,10 @@
 %   S-PAPER-11 analysis/related_work_refs.md (R1-R5)
 %   S-PAPER-12 analysis/prereg_review_fixes.md (commit aef0808), runs/150310_r3_review_fixes_v6 via numbers.tex
 %   S-PAPER-13 analysis/paper_summaries_refs.md (clauset2009power, x_min rule checked in arXiv 0706.1062 sec. 3.3)
-\documentclass[11pt]{article}
+\documentclass[10pt,twocolumn]{article}
 
-\usepackage[margin=0.9in]{geometry}
+\usepackage[margin=0.7in]{geometry}
+\setlength{\columnsep}{0.25in}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{microtype}
@@ -33,6 +34,9 @@
 
 \captionsetup{font=small,labelfont=bf}
 \setlength{\emergencystretch}{2em}
+% Wide floats may fill most of a page top in the two-column body.
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\dblfloatpagefraction}{0.7}
 \setlength{\intextsep}{6pt plus 2pt minus 2pt}
 \setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
 \setlength{\floatsep}{6pt plus 2pt minus 2pt}
@@ -96,6 +100,9 @@ CS 6344 Introduction to Data Science}
 \date{}
 
 \begin{document}
+% Title and abstract span both columns.
+\makeatletter
+\twocolumn[\begin{@twocolumnfalse}
 \maketitle
 
 \begin{abstract}
@@ -119,6 +126,8 @@ We set no size line before the results.
 We describe Q2 and Q3 without a verdict.
 A payout check leaves the Q1 verdict unchanged.
 \end{abstract}
+\end{@twocolumnfalse}]
+\makeatother
 
 \input{sections/01-intro}
 
@@ -149,6 +158,7 @@ A payout check leaves the Q1 verdict unchanged.
 \endgroup
 
 \appendix
+\onecolumn
 \crefalias{section}{appendix}
 \crefalias{subsection}{subappendix}
 \crefalias{subsubsection}{subsubappendix}

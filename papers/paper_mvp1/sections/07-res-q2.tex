@@ -14,7 +14,7 @@ Trade-count shares were not measured.
 \Cref{fig:lorenz} shows the Lorenz curves (\Cref{sec:app-q2-dist}).
 The Lorenz curves are outside the lectures.
 
-\begin{table}[H]
+\begin{table*}[t]
 \centering
 \caption{Volume concentration by role, as the share of role volume held by the top wallets. Why: the top shares show how few wallets hold most of the volume. Source: run \RunId.}
 \label{tab:conc}
@@ -28,12 +28,12 @@ Maker & \MakerNWallets & \MakerMeanVolume & \MakerMedianVolume & \MakerTopOneSha
 Taker & \TakerNWallets & \TakerMeanVolume & \TakerMedianVolume & \TakerTopOneShare & \TakerTopFiveShare & \TakerTopTenShare & \TakerTopTwentyShare \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \begin{figure}[H]
 \centering
-\figorbox{figures/fig6_ccdf_top_sampled}{\linewidth}
-\caption{CCDF of wallet volume on log-log axes, one line per role. Why: the tail bends downward, so it is not a straight line. Source: run \CcdfRun.}
+\figorbox{figures/fig6_ccdf_top_sampled_col}{\linewidth}
+\caption{CCDF of wallet volume on log-log axes, one line per role. Why: the tail bends downward, so it is not a straight line. Source: run \CcdfRun{} and the local figure folder runs/local\_column\_figs\_v13.}
 \label{fig:ccdf}
 \end{figure}
 

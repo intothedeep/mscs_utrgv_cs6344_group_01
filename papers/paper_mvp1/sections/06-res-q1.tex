@@ -19,7 +19,7 @@ We set no size line before the results, so small is our reading.
 \Cref{fig:calib} shows the observed outcome-1 rate against the mean price in each bin.
 \Cref{tab:bins} gives the numbers.
 
-\begin{table}[H]
+\begin{table*}[t]
 \centering
 \caption{Calibration by price bin, with the gap as observed rate minus mean price in percent points. Why: the gap and its interval show where prices are off. Source: run \RunId.}
 \label{tab:bins}
@@ -41,7 +41,7 @@ Bin & $n$ & Mean price & Observed & \CiLevel{} CI & Gap & BH $p$ \\
 \binrow{90 to 100\%}{NinetyHundred}\\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 The observed rate is below the mean price in every bin except the top one.
 Without the minimum-trade filter the count is \GapNegBinsNoMin{} of \GapBinsTotal.
@@ -69,8 +69,8 @@ So we compare the direction only, not the size.
 
 \begin{figure}[H]
 \centering
-\figorbox{figures/fig4_calibration_gap}{\linewidth}
-\caption{Observed outcome-1 rate against mean price per bin (top), and the per-bin gap in percentage points with \CiLevel{} z intervals (bottom). Why: the lower panel shows the gaps that the diagonal hides. Source: run \RunId{} and the local figure folder runs/local\_fig4gap\_v9.}
+\figorbox{figures/fig4_calibration_gap_col}{\linewidth}
+\caption{Observed outcome-1 rate against mean price per bin (top), and the per-bin gap in percentage points with \CiLevel{} z intervals (bottom). Why: the lower panel shows the gaps that the diagonal hides. Source: run \RunId{} and the local figure folder runs/local\_column\_figs\_v13.}
 \label{fig:calib}
 \end{figure}
 

@@ -18,7 +18,7 @@ We also drop a market with fewer than \MinTrades{} trades before that time.
 A price from a nearly empty market is not a crowd view.
 We report Q1 with and without this filter.
 
-\begin{figure}[H]
+\begin{figure*}[t]
 \centering
 \begin{tikzpicture}[font=\small]
 \draw[thick,-{Stealth}] (0,0) -- (12.2,0);
@@ -31,7 +31,7 @@ We report Q1 with and without this filter.
 \end{tikzpicture}
 \caption{Where the evaluation price sits in a market's life (illustrative). Why: a price taken after the close can already contain the answer. Source: pre-registration, \texttt{analysis/prereg\_mvp1.md}.}
 \label{fig:timeline}
-\end{figure}
+\end{figure*}
 
 The criteria were fixed before any Q1 result.
 \Cref{tab:prereg} lists them (\Cref{sec:app-prereg}).
