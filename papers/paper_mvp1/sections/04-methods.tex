@@ -120,5 +120,6 @@ Trade sizes come from a deterministic sample of \NTradeSizeSample{} trades from 
 \subsection{Reproducibility}\label{sec:methods-repro}
 % src: S-PAPER-5, S-PAPER-6
 All data queries ran on the UTRGV Cradle cluster (SLURM, CPU only).
-The first-stage run is \RunId{} (job \SlurmJobId), with code version \CodeVersion.
+The first-stage queries come from one saved run with one fixed code version.
+% src: first-stage run \RunId{}, job \SlurmJobId, code version \CodeVersion.
 The software and code hashes are in \Cref{sec:app-repro}.

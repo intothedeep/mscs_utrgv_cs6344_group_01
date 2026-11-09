@@ -79,17 +79,6 @@ So we compare the direction only, not the size.
 \label{fig:calib}
 \end{figure}
 
-\begin{figure}[H]
-\ContinuedFloat
-\centering
-\begin{subfigure}{\linewidth}\centering
-\figorbox{figures/fig4_calibration_gap_panel_col}{\linewidth}
-\caption{Gap per bin.}
-\label{fig:calib-gap}
-\end{subfigure}
-\caption{Continued: the per-bin gap in percentage points with \CiLevel{} z intervals. Why: this panel shows the gaps that the diagonal hides.}
-\end{figure}
-
 Next come the score measures.
 The mean squared residual of the price is \QOneBrier, the log loss is \QOneLogLoss, and the mean entropy is \QOneEntropy{} bits.
 The outcome-1 rate among kept markets is \QOneYesRate, and the mean price is \PriceOneDayMean.
@@ -100,6 +89,17 @@ Without the minimum-trade filter there are \QOneNoMinN{} markets.
 The mean squared residual is then \QOneNoMinBrier{}, with $\chi^2=\QOneNoMinChiSq$ and $p=\QOneNoMinP$.
 The chi-square test also rejects without the filter.
 The equal-frequency bin results are in \Cref{sec:app-q1}.
+
+\begin{figure}[H]
+\ContinuedFloat
+\centering
+\begin{subfigure}{\linewidth}\centering
+\figorbox{figures/fig4_calibration_gap_panel_col}{\linewidth}
+\caption{Gap per bin.}
+\label{fig:calib-gap}
+\end{subfigure}
+\caption{Continued: the per-bin gap in percentage points with \CiLevel{} z intervals. Why: this panel shows the gaps that the diagonal hides.}
+\end{figure}
 
 % Tables 2 and 3 are defined here so they print at the top of the next page and leave room for Table 4 before the Discussion.
 \begin{table*}[t]
