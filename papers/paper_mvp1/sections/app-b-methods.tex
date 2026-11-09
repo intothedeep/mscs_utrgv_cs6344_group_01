@@ -34,12 +34,14 @@ Failure condition & no bin off after BH and chi-square $p\ge\Alpha$: no evidence
 We used Python and DuckDB \citep{raasveldt2019duckdb}.
 The hash \CodeSha{} is that of the Q1 script.
 The hash of the whole script set is \CodeSetSha.
-The per-script hashes are in \texttt{\CodeShaFile}.
-The robustness run is \RobustRun, with code version \RobustCodeVersion{} (hash \RobustCodeSha).
+The per-script hashes are saved with the run.
+% Source: file \CodeShaFile.
+The robustness run has its own code version, \RobustCodeVersion{} (hash \RobustCodeSha).
+% Source: run \RobustRun.
 An earlier review found three sources of small differences between reruns.
 They were tie order inside one block, a random sample, and row order.
 Code version \CodeVersion{} fixes these.
 The pre-registered criteria did not change, and no verdict flipped.
 The review-fix checks come from one saved run with one fixed code version.
 The rules were pre-registered before that run.
-% src: run \RThreeRun, code version \RThreeCodeVersion, pre-registration commit \RThreePreregCommit.
+% Source: run \RThreeRun, code version \RThreeCodeVersion, pre-registration commit \RThreePreregCommit.
