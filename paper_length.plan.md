@@ -28,6 +28,7 @@ What D-043 and the dispatch change in the design:
 - Labels follow the design, not the table design: `tab:checks` and `sec:app-*`.
 - `tab:checks-summary` and every `app:` label are never created (`rules/writing/latex.md` §10).
 - `tab:checks` has 11 rows: row 0 (original Q1) plus the 10 checks.
+- Owner, 2026-11-08: each appendix (A to G) starts on a new page. Applied once in `main.tex` after `\appendix`. PL-13 and PL-15 check it.
 - Design S9 runs before design S8. The Limitations pointer needs `tab:checks` to exist.
 
 Shared checks, run from `papers/paper_mvp1/` in bash:

@@ -1,29 +1,13 @@
 \subsection{Q3: what does the data look like?}\label{sec:res-q3}
 % src: S-PAPER-5
 We describe the distributions without a verdict.
-\Cref{fig:hist} shows the price histogram and the trade-size histogram.
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{0.49\linewidth}\centering
-\figorbox{figures/hist_price_p1d}{\linewidth}
-\caption{Price \pOne{} over the kept markets.}
-\label{fig:hist-price}
-\end{subfigure}\hfill
-\begin{subfigure}[t]{0.49\linewidth}\centering
-\figorbox{figures/hist_trade_size}{\linewidth}
-\caption{Trade size on a log axis. The largest sampled trade falls past the last bin edge by float rounding, so it is not plotted.}
-\label{fig:hist-size}
-\end{subfigure}
-\caption{Histograms of the price and of trade size. Why: the price shape shows where the crowd is confident, and the trade-size shape shows how uneven bets are. Source: run \QqRun.}
-\label{fig:hist}
-\end{figure}
+\Cref{fig:hist} shows the price histogram and the trade-size histogram (\Cref{sec:app-q3}).
 
 The price \pOne{} has a mean of \PriceOneDayMean{} and a median of \PriceOneDayMedian.
-Prices pile up near both ends of the scale.
+Prices pile up near both ends of the scale (\Cref{fig:hist-price}).
 The trade size has a mean of \TradeSizeMean{} USDC and a median of \TradeSizeMedian{} USDC.
 So trade sizes are strongly right skewed.
-\Cref{fig:qq-size,fig:qq-wallet} show the QQ plots.
+\Cref{fig:qq-size,fig:qq-wallet} show the QQ plots (\Cref{sec:app-q3}).
 Points on the straight line mean the values are close to normal.
 
 \begin{figure}[H]
@@ -31,13 +15,6 @@ Points on the straight line mean the values are close to normal.
 \figorbox{figures/qq_trade_size_raw_log}{\linewidth}
 \caption{QQ plot of trade size against the normal, raw (left) and after a log transform (right). Why: the raw points bend away from the line and the log points follow it, so the log values are closer to normal. Source: run \QqRun.}
 \label{fig:qq-size}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\figorbox{figures/qq_wallet_volume_raw_log}{\linewidth}
-\caption{QQ plot of wallet volume against the normal, raw (left) and after a log transform (right). Why: the comparison shows whether the log values are closer to normal than the raw values. Source: run \QqRun.}
-\label{fig:qq-wallet}
 \end{figure}
 
 \Cref{tab:fits} gives the fit statistics.
