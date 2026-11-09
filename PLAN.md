@@ -15,6 +15,7 @@
 - M2 → S1: MVP2, not a target (D-016); exit: Q1a, Q1b, Q1c each with a pre-registered verdict; done 2026-10-19 (run `future_work/runs/142083_mvp2_full_v2r3`, `future_work/reports/report_v2.html`); cycle 1/2; recovery 0/2.
 - M3 → S1: robustness cycle (D-013); exit: R1 and R2 stage reports from run `142123_robust_full_v4` and the Q1 sensitivity row; done 2026-10-19 (`runs/142123_robust_full_v4/report_r1_split_payout.md`, `report_r2_price_path.md`, `r1_results.json` `q1_sensitivity`); cycle 1/2; recovery 0/2.
 - M4 → S1: paper v1 (D-014, D-023); exit: reviewer gate PASS (`analysis/review_papers.md`), `papers/paper_mvp1` builds clean, every measured number is a `numbers.tex` macro; gate PASS with 3 major and 17 minor findings, review fixes closed 2026-11-01, residual rows open below; cycle 1/2; recovery 0/2.
+- M5 → S1: paper length restructure (D-042, D-043); exit: reviewer gate PASS (`analysis/review_gate_paper_length.md`), `papers/paper_mvp1` builds clean, invariants I1 to I16 hold as amended in the section below, core flow readable in the body, course report still 2 pages, body page count recorded; cycle 1/2; recovery 0/2.
 
 ## Detail
 
@@ -63,8 +64,8 @@ Scope: MVP1 only (D-016). No MVP2 task (D-017). Dispatches that may touch code c
   - AC: `git diff --quiet -- runs/142082_mvp1_full_v1r3/verdicts.json` exits 0.
 - [x] → M1 Update `00.runs.md` (G11, G12). Closed 2026-11-01. Pilots 142056 and 142077 have no recorded CPU count, and the ledger says so. AC G12: the ledger names partition, CPU count and env for each run, and cites D-015. AC G11: row `142140_q1eqfreq_v5` says the 142083 table matches by construction. That sentence cites the `build_tables.py` sha from `code.sha256`. Main session writes it.
 - [ ] → M1 Compare the `markets.parquet` hash of run 142082 with `runs/142140_q1eqfreq_v5/input.sha256` (G11 optional, design page W1). Main session runs it on the cluster. AC: row `142140_q1eqfreq_v5` records equal or not equal. Not equal: stop and report to the owner.
-- [ ] → M4 Owner writes or removes the 4 `\todo{owner: ...}` in `papers/paper_mvp1/main.tex`: related work, interpretation, wider implications, closing. AC: `grep -c 'todo{owner' papers/paper_mvp1/main.tex` returns 0.
-- [ ] → M4 Finish F5 in `papers/paper_mvp1/main.tex`, after the owner's text is in. AC: a word count by `rules/writing/style.md` §2 lists 0 sentences over 15 words. AC build: exit 0, 0 errors, 0 overfull boxes.
+- [ ] → M4 Owner writes or removes the 5 `\todo{owner: ...}` in `papers/paper_mvp1/main.tex` and `papers/paper_mvp1/sections/*.tex`: related work, x_min choice, interpretation, wider implications, closing. AC: `cat papers/paper_mvp1/main.tex papers/paper_mvp1/sections/*.tex | grep -c 'todo{owner'` returns 0.
+- [ ] → M4 Finish F5 in `papers/paper_mvp1/main.tex` and `papers/paper_mvp1/sections/*.tex`, after the owner's text is in. AC: a word count by `rules/writing/style.md` §2 lists 0 sentences over 15 words. AC build: exit 0, 0 errors, 0 overfull boxes.
 - [ ] → M4 Owner picks the 3-person split (`docs/team_split_design.html` Steps 2 and 7). Options: A stable, B scalable, C cutting-edge. Answers to U2 to U10 feed the pick. AC: owner decides, and the pick is logged in `DECISIONS.md`.
 
 The G5 prereg row and the G5, G13 paper row moved to the next section, merged with the D-026 work.
@@ -130,3 +131,8 @@ A kept mention sits in the departure note (cites a D-id), a rename sentence ("kn
 
 - [x] → M4 Owner decides whether the paper states the independence limit beside the p-value in results, not only in limitations (finding 2). AC: owner decides, and `main.tex` matches. Closed 2026-11-02: one sentence after the p-value in results (owner, D-034).
 - [x] → M4 Replace "names" in the departure sentence: the z interval is a different formula (finding 6, A12). AC: `main.tex` and report v1 say the interval changed, not just its name. Closed 2026-11-02.
+
+### Paper length restructure: split out (2026-11-08)
+
+> Current state: 15 open, 0 in progress (→ M5, D-042, D-043). Gate is PL-15, cycle 1/2, recovery 0/2.
+> Detail: [paper_length.plan.md](./paper_length.plan.md)
