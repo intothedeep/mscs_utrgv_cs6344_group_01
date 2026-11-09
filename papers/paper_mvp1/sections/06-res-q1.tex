@@ -74,24 +74,13 @@ So we compare the direction only, not the size.
 \label{fig:calib}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\figorbox{figures/fig5_ecdf_yes_no}{\linewidth}
-\caption{ECDFs of \pOne{} for markets where outcome 1 won and markets where outcome 0 won. Why: the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
-\label{fig:ecdf}
-\end{figure}
-
 Next come the score measures.
 The mean squared residual of the price is \QOneBrier, the log loss is \QOneLogLoss, and the mean entropy is \QOneEntropy{} bits.
 The outcome-1 rate among kept markets is \QOneYesRate, and the mean price is \PriceOneDayMean.
 At the \FavoriteLine{} line, the classifier accuracy is \QOneAccuracy.
 Its precision is \QOnePrecision{} and its recall is \QOneRecall.
-The KS statistic between the prices of those two groups is $D=\QOneKsD$ (\Cref{fig:ecdf}).
+The KS statistic between the prices of those two groups is $D=\QOneKsD$ (\Cref{fig:ecdf,sec:app-q1}).
 Without the minimum-trade filter there are \QOneNoMinN{} markets.
 The mean squared residual is then \QOneNoMinBrier{}, with $\chi^2=\QOneNoMinChiSq$ and $p=\QOneNoMinP$.
 The chi-square test also rejects without the filter.
-With \QOneEqFreqBins{} equal-frequency bins, BH marks \QOneEqFreqBinsBh{} bins as off.
-The z interval leaves the price outside \ZIntervalEqFreqOutsideN{} bins, and BH marks \QOneEqFreqBinsBh.
-They differ in the lowest bin, which has very few outcome-1 wins.
-The z interval has no correction for the \QOneEqFreqBins{} bins.
-Its spread comes from the observed rate, which is unreliable near zero.
+The equal-frequency bin results are in \Cref{sec:app-q1}.

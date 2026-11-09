@@ -1,0 +1,14 @@
+\section{Q1 further results}\label{sec:app-q1}
+% src: S-PAPER-3, S-PAPER-5, S-PAPER-10
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig5_ecdf_yes_no}{\linewidth}
+\caption{ECDFs of \pOne{} for markets where outcome 1 won and markets where outcome 0 won. Why: the farther apart the ECDFs, the better the price separates the outcomes. Source: run \RunId.}
+\label{fig:ecdf}
+\end{figure}
+
+With \QOneEqFreqBins{} equal-frequency bins, BH marks \QOneEqFreqBinsBh{} bins as off.
+The z interval leaves the price outside \ZIntervalEqFreqOutsideN{} bins, and BH marks \QOneEqFreqBinsBh.
+They differ in the lowest bin, which has very few outcome-1 wins.
+The z interval has no correction for the \QOneEqFreqBins{} bins.
+Its spread comes from the observed rate, which is unreliable near zero.
