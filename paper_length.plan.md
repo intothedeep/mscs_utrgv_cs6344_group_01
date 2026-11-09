@@ -187,6 +187,7 @@ Rows:
   - `tips/polymarket_paper_decisions_tips.html`: the Figure 2 section map, "5.4 Robustness", and "Robustness section" wording.
   - Scope widened by D-044: every other tips page is updated to the current paper and project state, with old content removed: `polymarket_paper_review_tips.html`, `class_questions`, `feedback_answers`, `mvp1_preprocessing`, `research_flow`, `data_erd`, `polymarket_plan_detailed.md`, `index.html` notes, `README.md`.
   - Remove stale counts, superseded plans, old figure numbers, and open items already done. Do not add history notes.
+  - D-046: the same update covers the project docs, and every page keeps why we did it. Each changed step or section says the reason in one line, citing the D-row. No history notes beyond that.
   - Exception: `polymarket_proposal_tips.html` keeps the proposal as posted, plus one line linking to the current state (D-044).
   - AC: every "Figure N" or "Table N" that names a paper float matches the final `main.aux`. `grep -l "17쪽\|17-page\|22쪽\|22 pages" tips/*` prints nothing.
   - AC: `grep -c '22 pages' tips/polymarket_paper_flow_tips.html` returns 0. `grep -c '22쪽' tips/polymarket_paper_flow_tips.html` returns 0.
