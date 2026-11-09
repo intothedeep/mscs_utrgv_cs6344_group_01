@@ -153,6 +153,10 @@ A payout check leaves the Q1 verdict unchanged.
 \input{sections/13-conclusion}
 
 \begingroup\raggedright
+% References are their own one-column section on a new page (owner, 2026-11-09).
+\onecolumn
+\raggedbottom
+\renewcommand{\bibsection}{\section{References}\label{sec:refs}}
 \bibliographystyle{plainnat}
 \bibliography{references}
 \endgroup
