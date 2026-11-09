@@ -13,6 +13,7 @@
 %   S-PAPER-10 reports/lecture_numbers.json, runs/145892_ccdf_v6, runs/145893_walletdist_v7 via numbers.tex; analysis/review_project_end_analyst.md
 %   S-PAPER-11 analysis/related_work_refs.md (R1-R5)
 %   S-PAPER-12 analysis/prereg_review_fixes.md (commit aef0808), runs/150310_r3_review_fixes_v6 via numbers.tex
+%   S-PAPER-13 analysis/paper_summaries_refs.md (clauset2009power, x_min rule checked in arXiv 0706.1062 sec. 3.3)
 \documentclass[11pt]{article}
 
 \usepackage[margin=0.9in]{geometry}
@@ -377,6 +378,10 @@ We draw QQ plots of trade size and of wallet volume, before and after a log tran
 We fit a normal, an exponential, and a power law to trade size and wallet volume.
 The power law is fitted on the top \TopTenLabel{} of values only, above a lower bound $x_{\min}$.
 We measure each fit with the KS statistic $D$ against the data.
+% src: S-PAPER-13
+This follows the power-law method of \citet{clauset2009power}.
+Unlike that method, we fix $x_{\min}$ at the top \TopTenLabel{} and do not choose it by the smallest $D$.
+\todo{owner: why $x_{\min}$ is fixed at the top \TopTenLabel{} instead of chosen by the smallest $D$}
 Trade sizes come from a deterministic sample of \NTradeSizeSample{} trades from the kept markets.
 
 \subsection{Reproducibility}\label{sec:methods-repro}
@@ -955,7 +960,7 @@ So Sports is slightly under-represented against its scope.
 Sports loses markets mainly to no price (\CatSportsDropNoPriceN) or a stale price (\CatSportsDropStalePriceN).
 Both are measured \DaysShort{} day before the close.
 It loses almost none to the Up/Down rule (\CatSportsDropUpdownN).
-The dataset paper notes that most Sports markets are Neg-Risk or Up/Down \citep{qin2026polymarketv1}.
+The dataset paper notes that Sports markets fall disproportionately into Neg-Risk or Up/Down \citep{qin2026polymarketv1}.
 Neg-Risk markets are outside the layer we use.
 
 Our selection is narrow.

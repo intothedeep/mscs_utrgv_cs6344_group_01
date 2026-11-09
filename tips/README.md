@@ -15,5 +15,6 @@ Explainer pages for the group project. Each page holds English and Korean. Click
 | `polymarket_feedback_answers_tips.html` | Classmates' proposal feedback and what the paper answers |
 | `polymarket_class_questions_tips.html` | Answers to 4 class questions |
 | `polymarket_paper_review_tips.html` | What a conference reviewer and the course professor will ask, what we changed, what is open |
+| `polymarket_paper_summaries_tips.html` | The 11 cited papers: flowchart of our paper and one summary per paper |
 | `polymarket_proposal_tips.html` | The proposal in seven steps, as posted on 2026-10-18 |
 | `polymarket_plan_detailed.md` | Detailed plan (English) |
