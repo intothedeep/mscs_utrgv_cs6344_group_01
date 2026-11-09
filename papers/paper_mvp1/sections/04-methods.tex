@@ -34,36 +34,8 @@ We report Q1 with and without this filter.
 \end{figure}
 
 The criteria were fixed before any Q1 result.
-\Cref{tab:prereg} lists them.
+\Cref{tab:prereg} lists them (\Cref{sec:app-prereg}).
 The verdict applies to the full-data run with the same parameters.
-
-\begin{table}[H]
-\centering
-\caption{Pre-registered choices and Q1 criteria. Why: fixing the rules first keeps the result from choosing the rule. Source: \texttt{analysis/prereg\_mvp1.md}.}
-\label{tab:prereg}
-\footnotesize
-\begin{tabularx}{\linewidth}{@{}lX@{}}
-\toprule
-Item & Value \\
-\midrule
-Close time $T$ & \texttt{close\_at} \\
-\midrule
-Evaluation price & mean price at the last timestamp (after the amendment below) at or before $T-\DaysShort$ day, at most \MaxStaleHours{} hours old \\
-\midrule
-Minimum trades & \MinTrades{} before $T-\DaysShort$ day. Q1 is also reported without it \\
-\midrule
-Bins and level & \NBins{} equal-width bins, $\alpha=\Alpha$ \\
-\midrule
-Primary metric & chi-square goodness of fit over the \NBins{} bins. The line is $p<\Alpha$ \\
-\midrule
-Per-bin call & binomial test per bin, Benjamini-Hochberg (BH) corrected at \Alpha{} \\
-\midrule
-Effect size & observed rate minus mean price per bin, with a \CiLevel{} z interval here. Also the mean squared residual of the price \\
-\midrule
-Failure condition & no bin off after BH and chi-square $p\ge\Alpha$: no evidence of miscalibration at this $n$ \\
-\bottomrule
-\end{tabularx}
-\end{table}
 
 % src: S-PAPER-3
 One rule changed after we saw a full-data Q1 result.
@@ -148,14 +120,5 @@ Trade sizes come from a deterministic sample of \NTradeSizeSample{} trades from 
 \subsection{Reproducibility}\label{sec:methods-repro}
 % src: S-PAPER-5, S-PAPER-6
 All data queries ran on the UTRGV Cradle cluster (SLURM, CPU only).
-We used Python and DuckDB \citep{raasveldt2019duckdb}.
 The first-stage run is \RunId{} (job \SlurmJobId), with code version \CodeVersion.
-The hash \CodeSha{} is that of the Q1 script.
-The hash of the whole script set is \CodeSetSha.
-The per-script hashes are in \texttt{\CodeShaFile}.
-The robustness run is \RobustRun, with code version \RobustCodeVersion{} (hash \RobustCodeSha).
-An earlier review found three sources of small differences between reruns.
-They were tie order inside one block, a random sample, and row order.
-Code version \CodeVersion{} fixes these.
-The pre-registered criteria did not change, and no verdict flipped.
-The review-fix run is \RThreeRun, with code version \RThreeCodeVersion{} and the pre-registration in commit \RThreePreregCommit.
+The software and code hashes are in \Cref{sec:app-repro}.

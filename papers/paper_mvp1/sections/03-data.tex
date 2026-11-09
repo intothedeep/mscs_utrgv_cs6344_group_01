@@ -16,20 +16,12 @@ The paper that describes the data is \citep{qin2026polymarketv1}.
 % src: S-PAPER-5
 In the full run, \NMarketsInScope{} markets are in scope.
 We keep \NMarketsKept{} of them (\PctMarketsKept).
-\Cref{fig:drops} counts each dropped market once, by the first rule it fails.
-The rules apply in the order of the bars.
+\Cref{fig:drops} shows the drops by rule (\Cref{sec:app-data}).
 Up/Down markets are \NUpdown{} (\PctUpdown).
 \NNoOutcome{} markets have no usable winner label (\PctNoOutcome).
 \NNoPrice{} have no price at or before $T-\DaysShort$ day (\PctNoPrice).
 \NStalePrice{} have a price older than \MaxStaleHours{} hours (\PctStalePrice).
 \NBelowMinTrades{} have fewer than \MinTrades{} trades before $T-\DaysShort$ day (\PctBelowMinTrades).
-
-\begin{figure}[H]
-\centering
-\figorbox{figures/drop_reasons}{\linewidth}
-\caption{Markets by first failing rule. Why: it shows which rule removes the most markets. Source: run \RunId.}
-\label{fig:drops}
-\end{figure}
 
 \subsection{Market and wallet tables}\label{sec:data-tables}
 % src: S-PAPER-2, S-PAPER-5

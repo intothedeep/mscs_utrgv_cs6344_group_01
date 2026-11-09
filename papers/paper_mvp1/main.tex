@@ -145,17 +145,14 @@ A payout check leaves the Q1 verdict unchanged.
 \crefalias{section}{appendix}
 \crefalias{subsection}{subappendix}
 \crefalias{subsubsection}{subsubappendix}
-% Appendix files are input in A to G order. Each appendix keeps its letter
-% while the others are added one row at a time. No effect once A to G exist.
-\setcounter{section}{2}
+% Each appendix section starts on a new page. Appendix files are input in A to G order.
+\AddToHook{cmd/section/before}{\clearpage}
+\input{sections/app-a-data}
+\input{sections/app-b-methods}
 \input{sections/app-c-q1}
-\setcounter{section}{3}
 \input{sections/app-d-q2}
-\setcounter{section}{4}
 \input{sections/app-e-q3}
-\setcounter{section}{5}
 \input{sections/app-f-robust}
-\setcounter{section}{6}
 \input{sections/app-g-review}
 
 \end{document}

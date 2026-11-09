@@ -163,6 +163,14 @@ Rows:
   - AC: `grep -c 'newlabel{fig:flow}{{1}' main.aux` returns 1.
   - AC: `grep -c 'Cref{fig:flow}' sections/*intro*.tex` returns 1.
   - AC: in the `tikzpicture` block, a digit appears only in a check or question ID, a TikZ length, or the name `Polymarket-v1` (I5).
+- [ ] → M5 PL-12a Redraw the body figures at column width (D-045). Executor: developer. Depends on: PL-12. Commit: yes.
+  - Figures: `fig:calib`, `fig:ccdf`, `fig:qq-size`, and `fig:timeline` if it is an image. Column width is 3.425 in (8.5 - 2 x 0.7 - 0.25, then halved).
+  - Draw from saved outputs only, at print size, 300 dpi, text at 7 pt or more. New run folder under `runs/local_*`. New file names, so the course report figures stay as they are.
+  - AC: the course report figures (`*_half.png`) are byte-identical to the last commit.
+- [ ] → M5 PL-12b Set the body in two columns (D-045). Executor: sonnet-writer. Depends on: PL-12a. Commit: yes.
+  - `\documentclass[10pt,twocolumn]{article}`, margins 0.7 in, column gap 0.25 in. Appendices switch to `\onecolumn` right after `\appendix`.
+  - Column floats keep `[H]`. `fig:flow` and `tab:checks` use `figure*` and `table*` with `[t]`. Any other table too wide for a column spans both columns.
+  - AC: STD. Body figures print at `\linewidth`. The first appendix page is one column.
 - [ ] → M5 PL-13 Final build and page count (S11). Executor: main session. Depends on: PL-01 to PL-12. Commit: only if files changed.
   - Run `BUILD`. N is the `REFPAGE` output, the page where References starts.
   - Body pages B = N − 1 if `pdftotext -f N -l N main.pdf - | head -1` is "References". Otherwise B = N.
