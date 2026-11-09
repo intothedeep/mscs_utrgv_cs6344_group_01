@@ -58,13 +58,13 @@ STD, the AC of every LaTeX row:
 
 Rows:
 
-- [ ] → M5 PL-01 Save the pending work and the baseline. Executor: main session. Depends on: none. Commit: yes, first.
+- [x] → M5 PL-01 Save the pending work and the baseline. Executor: main session. Depends on: none. Commit: yes, first.
   - Commit the "0 to 10%" labels in `main.tex`, `tips/polymarket_paper_flow_tips.html`, its `index.html` and README rows, D-042, D-043, `PLAN.md`, this file, and the two design files.
   - Then run `BUILD`. Copy `main.tex`, `main.aux`, `main.log`, `numbers.tex` to `$BASE`. Run `pdftotext main.pdf $BASE/main.txt`.
   - AC: `git status --short` is empty, with `$BASE` ignored.
   - AC: `grep -c '0 to 10' $BASE/main.tex` returns at least 1. `grep -c 'D-043' ../../DECISIONS.md` returns at least 1.
   - AC: `grep 'Output written' $BASE/main.log` shows the page count. All later page checks compare with it.
-- [ ] → M5 PL-02 Split `main.tex` (design S1). Executor: sonnet-writer. Depends on: PL-01. Commit: yes, alone.
+- [x] → M5 PL-02 Split `main.tex` (design S1). Executor: sonnet-writer. Depends on: PL-01. Commit: yes, alone.
   - One `sections/NN-slug.tex` per `\section`. Each Results `\subsection` gets its own file. Preamble, title, abstract and bibliography stay in `main.tex`.
   - Each slug repeats its label, for example `sec:intro` gives `01-intro.tex` and `sec:limits` gives `limits`.
   - Add one `sections/` line to "Each folder holds" in `papers/README.md`. No other edit. No other agent touches `main.tex` meanwhile.
@@ -73,7 +73,7 @@ Rows:
   - AC: `pdftotext main.pdf - | diff - $BASE/main.txt` is empty. The `Output written` page count equals `$BASE/main.log`.
   - AC: `grep -cE '\\(sub)?section\{' main.tex` returns 0. `grep -l 'label{sec:res-q[123]}' sections/*.tex | wc -l` returns 3.
   - AC: `grep -c sections/ ../README.md` returns at least 1.
-- [ ] → M5 PL-03 Add the 16 table macros to `code/make_paper_numbers.py`. Executor: developer. Depends on: PL-02. Commit: yes.
+- [x] → M5 PL-03 Add the 16 table macros to `code/make_paper_numbers.py`. Executor: developer. Depends on: PL-02. Commit: yes.
   - Source: `runs/150310_r3_review_fixes_v6`, in the `--r3` path only. Each macro has a comment with file and key.
   - Rule macros print "yes" for "same" and "no" for "different", like `\RobROneRuleSame`.
   - `m1_results.json`: `RThreeQOneNetGapCiLow`, `RThreeQOneNetGapCiHigh` (`rows.p_1d.net_gap_ci_low`, `_high`), `RThreeMOneVwapRuleSame` (`rows.p_vwap.row_agreement`).
@@ -90,7 +90,7 @@ Rows:
   - AC: `grep -cE 'newcommand\{.RThree(QOneNetGapCi(Low|High)|MinorFourKeptN|MinorFourNetGapCi(Low|High))\}' numbers.tex` returns 5.
   - AC: `git diff --quiet -- ../../future_work/papers/paper_mvp2/numbers.tex` exits 0.
   - AC: STD, and `pdftotext main.pdf - | diff - $BASE/main.txt` is empty. New macros are unused, so the text must not change.
-- [ ] → M5 PL-04 Move the review checks to Appendix G (S2). Executor: sonnet-writer. Depends on: PL-02. Commit: yes.
+- [x] → M5 PL-04 Move the review checks to Appendix G (S2). Executor: sonnet-writer. Depends on: PL-02. Commit: yes.
   - Add `\appendix` in `main.tex` after the bibliography group. Add `sections/app-g-review.tex`. Appendix files are `\input` in A to G order.
   - Keep `sec:res-review`. Add `sec:app-m1` to `sec:app-m5`, `sec:app-dup`, `sec:app-peer`, and subsubsections `sec:app-peer-a`, `sec:app-peer-b`.
   - Create body `\subsection{Checks: summary}\label{sec:res-checks}` with framing lines 768 to 774 and one pointer to `sec:res-review`.
@@ -98,19 +98,19 @@ Rows:
   - AC: STD.
   - AC: `grep -c 'label{sec:app-' sections/app-g-review.tex` returns 9. `cat $BODY | grep -c 'label{sec:res-checks}'` returns 1.
   - AC: `pdftotext main.pdf - | grep -c 'Appendix G'` returns at least 1.
-- [ ] → M5 PL-05 Move R1, R2 to Appendix F (S3). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
+- [x] → M5 PL-05 Move R1, R2 to Appendix F (S3). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
   - Add `sections/app-f-robust.tex`. Keep `sec:res-robust`. Add `sec:app-r1`, `sec:app-r2`.
   - Move framing lines 692 to 697 to body `sec:res-checks`. F opens with one back-pointer to `sec:res-checks`.
   - AC: STD.
   - AC: `cat $BODY | grep -c 'sensitivity row below'` returns 1.
   - AC: `grep -cE 'label\{(fig:r1|tab:r1|fig:r2)\}' sections/app-f-robust.tex` returns 3.
-- [ ] → M5 PL-06 Q1 moves (S4, F4). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
+- [x] → M5 PL-06 Q1 moves (S4, F4). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
   - Move `fig:ecdf` and equal-frequency lines 495 to 499 to `sections/app-c-q1.tex`, label `sec:app-q1`. Lines 492 to 494 stay.
   - Line 491 keeps `\QOneKsD` and points to `sec:app-q1`. F4 leaves one pointer sentence.
   - AC: STD.
   - AC: `grep -c 'label{fig:ecdf}' sections/app-c-q1.tex` returns 1. `cat $BODY | grep -c QOneKsD` returns at least 1.
   - AC: `cat $BODY | grep -c 'label{fig:calib}'` returns 1. `cat $BODY | grep -c 'label{tab:bins}'` returns 1.
-- [ ] → M5 PL-07 Q2 moves (S5, F1). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
+- [x] → M5 PL-07 Q2 moves (S5, F1). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
   - Move `fig:wd-maker`, `fig:wd-taker`, `fig:lorenz` to D.1 `sec:app-q2-dist` in `sections/app-d-q2.tex`, label `sec:app-q2`.
   - Move k-means lines 366 to 371 and 610 to 620 to D.2 `sec:app-kmeans`. Line 365 stays, with a pointer.
   - Pointers at 513, 514. Each moved method keeps its outside-lecture label sentence (I15).
@@ -119,14 +119,14 @@ Rows:
   - AC: `cat $BODY | grep -c 'label{fig:ccdf}'` returns 1. `cat $BODY | grep -c 'label{tab:conc}'` returns 1.
   - AC: `grep -cE 'label\{fig:(wd-maker|wd-taker|lorenz)\}' sections/app-d-q2.tex` returns 3.
   - AC: `cat $TEX | grep -c 'sec:app-q2-roles'` returns 0.
-- [ ] → M5 PL-08 Q3 moves (S6). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
+- [x] → M5 PL-08 Q3 moves (S6). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
   - Move `fig:hist` and `fig:qq-wallet` to `sections/app-e-q3.tex`, label `sec:app-q3`.
   - Pointers at 625 and 647. Line 644 gets `(\Cref{fig:hist-price})`, with its words unchanged.
   - AC: STD.
   - AC: `cat $BODY | grep -c 'label{fig:qq-size}'` returns 1. `cat $BODY | grep -c 'label{tab:fits}'` returns 1.
   - AC: `grep -cE 'label\{fig:(hist|qq-wallet)\}' sections/app-e-q3.tex` returns 2.
   - AC: `cat $BODY | grep -c 'Prices pile up near both ends'` returns 1.
-- [ ] → M5 PL-09 Data and Methods moves (S7, F3). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
+- [x] → M5 PL-09 Data and Methods moves (S7, F3). Executor: sonnet-writer. Depends on: PL-04. Commit: yes.
   - Move `fig:drops` to `sections/app-a-data.tex`, label `sec:app-data`. Its two describing lines move too.
   - Move `tab:prereg` to B.1 `sec:app-prereg` and Reproducibility lines 390, 392 to 400 to B.2 `sec:app-repro`, in `sections/app-b-methods.tex`, label `sec:app-methods`.
   - Lines 389, 391 stay, plus one pointer. Pointers at 207, 270.
@@ -134,7 +134,7 @@ Rows:
   - AC: `grep -c 'label{fig:drops}' sections/app-a-data.tex` returns 1. `grep -c 'label{tab:prereg}' sections/app-b-methods.tex` returns 1.
   - AC: `cat $TEX | grep -c 'sec:app-sports'` returns 0.
   - AC: after PL-06 to PL-09, `grep -n 'input{sections/app-' main.tex` lists a, b, c, d, e, f, g in that order.
-- [ ] → M5 PL-10 Insert `tab:checks` in body 5.4 (S9). Executor: sonnet-writer. Depends on: PL-03, PL-04, PL-05. Commit: yes.
+- [x] → M5 PL-10 Insert `tab:checks` in body 5.4 (S9). Executor: sonnet-writer. Depends on: PL-03, PL-04, PL-05. Commit: yes.
   - Use the table design §7 skeleton, option A, with the §2 column widths and §5 caption.
   - Labels change: `tab:checks`, and each `\Cref{app:x}` becomes `\Cref{sec:app-x}`.
   - Replace every `[NEEDS MACRO]` with the PL-03 macros.
@@ -147,7 +147,7 @@ Rows:
   - AC: `cat $TEX | grep -c 'NEEDS MACRO'` returns 0. `grep -c 'too large' main.log` returns 0.
   - AC: the table block has 10 `\Cref{sec:app-` and 11 data rows. `cat $TEX | grep -c RThreePeerAHighRuleSame` returns 1.
   - AC: in the `tabularx` block, a digit appears only in a check or question ID, a column width, a `\tabcolsep` length, `\chi^2`, or the reused words "below 0" and "excludes 0" (I5).
-- [ ] → M5 PL-11 Limitations pointers and F5 (S8). Executor: sonnet-writer. Depends on: PL-04, PL-05, PL-10. Commit: yes.
+- [x] → M5 PL-11 Limitations pointers and F5 (S8). Executor: sonnet-writer. Depends on: PL-04, PL-05, PL-10. Commit: yes.
   - Retarget line 970 to `sec:app-m4` and line 976 to `sec:app-m3`.
   - Move paragraph 992 to 999 to the F intro. The body keeps one pointer sentence to `tab:checks`.
   - The Sports paragraph (lines 956 to 964) stays.
@@ -155,7 +155,7 @@ Rows:
   - AC: `cat $BODY | grep -c 'Cref{sec:app-m4}'` and the same for `sec:app-m3` each return at least 1.
   - AC: `grep -c 'Cref{tab:checks}' sections/*limit*.tex` returns 1.
   - AC: `grep -c 'Sports is the largest topic' sections/*limit*.tex` returns 1.
-- [ ] → M5 PL-12 Add `fig:flow` at the end of the Introduction (S10). Executor: sonnet-writer. Depends on: PL-10. Commit: yes.
+- [x] → M5 PL-12 Add `fig:flow` at the end of the Introduction (S10). Executor: sonnet-writer. Depends on: PL-10. Commit: yes.
   - One-row TikZ pipeline, design §4.2. No figure script is needed. Style from `figkit.sty`.
   - Float `[H]`, caption below with "Why:", then `\label{fig:flow}`. Add the pointer sentence "`\Cref{fig:flow}` shows the study flow."
   - Counts use `\NMarketsInScope`, `\NMarketsKept`, `\MinTrades`, `\DaysShort`, `\pOne` only.
@@ -163,15 +163,15 @@ Rows:
   - AC: `grep -c 'newlabel{fig:flow}{{1}' main.aux` returns 1.
   - AC: `grep -c 'Cref{fig:flow}' sections/*intro*.tex` returns 1.
   - AC: in the `tikzpicture` block, a digit appears only in a check or question ID, a TikZ length, or the name `Polymarket-v1` (I5).
-- [ ] → M5 PL-12a Redraw the body figures at column width (D-045). Executor: developer. Depends on: PL-12. Commit: yes.
+- [x] → M5 PL-12a Redraw the body figures at column width (D-045). Executor: developer. Depends on: PL-12. Commit: yes.
   - Figures: `fig:calib`, `fig:ccdf`, `fig:qq-size`, and `fig:timeline` if it is an image. Column width is 3.425 in (8.5 - 2 x 0.7 - 0.25, then halved).
   - Draw from saved outputs only, at print size, 300 dpi, text at 7 pt or more. New run folder under `runs/local_*`. New file names, so the course report figures stay as they are.
   - AC: the course report figures (`*_half.png`) are byte-identical to the last commit.
-- [ ] → M5 PL-12b Set the body in two columns (D-045). Executor: sonnet-writer. Depends on: PL-12a. Commit: yes.
+- [x] → M5 PL-12b Set the body in two columns (D-045). Executor: sonnet-writer. Depends on: PL-12a. Commit: yes.
   - `\documentclass[10pt,twocolumn]{article}`, margins 0.7 in, column gap 0.25 in. Appendices switch to `\onecolumn` right after `\appendix`.
   - Column floats keep `[H]`. `fig:flow` and `tab:checks` use `figure*` and `table*` with `[t]`. Any other table too wide for a column spans both columns.
   - AC: STD. Body figures print at `\linewidth`. The first appendix page is one column.
-- [ ] → M5 PL-13 Final build and page count (S11). Executor: main session. Depends on: PL-01 to PL-12. Commit: only if files changed.
+- [x] → M5 PL-13 Final build and page count (S11). Executor: main session. Depends on: PL-01 to PL-12. Commit: only if files changed.
   - Run `BUILD`. N is the `REFPAGE` output, the page where References starts.
   - Body pages B = N − 1 if `pdftotext -f N -l N main.pdf - | head -2` holds the heading "References", with or without its section number (owner, 2026-11-09: numbered section on a new page). Otherwise B = N.
   - Record B in `STATUS.md`.
@@ -180,7 +180,7 @@ Rows:
   - AC: the course report log shows `(2 pages`. `git status --short ../course_report_mvp1/` is empty (I14).
   - AC: `STATUS.md` holds B. The main session reports B to the owner as information.
   - AC: no text cut and no layout change is made at any B (D-043).
-- [ ] → M5 PL-14 Update the tips pages about the paper. Executor: sonnet-writer. Depends on: PL-13. Commit: yes.
+- [x] → M5 PL-14 Update the tips pages about the paper. Executor: sonnet-writer. Depends on: PL-13. Commit: yes.
   - Read every number from the final `main.aux` and `REFPAGE`. Update both `lang="ko"` and `lang="en"` text.
   - `tips/polymarket_paper_flow_tips.html`: page bar (`#sec-pages`), section start pages, F and T counts, the `figs:` arrays, `pg:` lines, new appendix sections.
   - `tips/polymarket_paper_summaries_tips.html`: the section map and its 28 `L###` `main.tex` line locators. Use section names.
@@ -196,7 +196,7 @@ Rows:
   - AC: `grep -cE 'L[0-9]{3}\b' tips/polymarket_paper_summaries_tips.html` returns 0.
   - AC: `grep -c '5.4 Robustness' tips/polymarket_paper_decisions_tips.html` returns 0.
   - AC: no fixed-width element over 1040 px, every SVG element inside its viewBox, no text boxes overlapping, by a static check of the HTML. No browser (`rules/answering.md` §3, 2026-11-08).
-- [ ] → M5 PL-15 Gate review, cycle 1/2, recovery 0/2. Executor: reviewer. Depends on: PL-14. Commit: the review file, after the verdict.
+- [x] → M5 PL-15 Gate review, cycle 2/2, recovery 0/2, PASS (`analysis/review_gate_paper_length.md`). Executor: reviewer. Depends on: PL-14. Commit: the review file, after the verdict.
   - Output: `analysis/review_gate_paper_length.md`.
   - AC: the file has one verdict line, PASS or ISSUE, and one line per invariant I1 to I16.
   - AC: STD passes on the reviewer's own build. The file states B, computed as in PL-13.

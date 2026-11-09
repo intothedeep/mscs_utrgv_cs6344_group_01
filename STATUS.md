@@ -87,3 +87,4 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 2026-11-08 deliverables: paper section 'Checks requested in review' (22 pages), report_v1.html Robustness v3 step, 2-page course report papers/course_report_mvp1 (2 pages, clean build), tips/polymarket_paper_review_tips.html updated (D-040)
 - 2026-11-08 gate review analysis/review_gate_mvp1_r3.md: PASS cycle 2/2, F1 to F14 closed (D-041), C2-1 to C2-3 fixed by main session; paper 22 pages, course report 2 pages, 0 warnings
 - 2026-11-09 paper restructure (D-042 to D-045): body B = 7 pages in two columns, References as Section 9 on page 8 in one column, appendices A to G on pages 9 to 21 in one column, 21 pages total; course report still 2 pages (PL-13)
+- 2026-11-09 gate review analysis/review_gate_paper_length.md: PASS cycle 2/2, M5 closed; findings fixed, cycle 2 residuals fixed by writer and checked by build, no third review (bound of 2)

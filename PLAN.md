@@ -15,7 +15,7 @@
 - M2 → S1: MVP2, not a target (D-016); exit: Q1a, Q1b, Q1c each with a pre-registered verdict; done 2026-10-19 (run `future_work/runs/142083_mvp2_full_v2r3`, `future_work/reports/report_v2.html`); cycle 1/2; recovery 0/2.
 - M3 → S1: robustness cycle (D-013); exit: R1 and R2 stage reports from run `142123_robust_full_v4` and the Q1 sensitivity row; done 2026-10-19 (`runs/142123_robust_full_v4/report_r1_split_payout.md`, `report_r2_price_path.md`, `r1_results.json` `q1_sensitivity`); cycle 1/2; recovery 0/2.
 - M4 → S1: paper v1 (D-014, D-023); exit: reviewer gate PASS (`analysis/review_papers.md`), `papers/paper_mvp1` builds clean, every measured number is a `numbers.tex` macro; gate PASS with 3 major and 17 minor findings, review fixes closed 2026-11-01, residual rows open below; cycle 1/2; recovery 0/2.
-- M5 → S1: paper length restructure (D-042, D-043); exit: reviewer gate PASS (`analysis/review_gate_paper_length.md`), `papers/paper_mvp1` builds clean, invariants I1 to I16 hold as amended in the section below, core flow readable in the body, course report still 2 pages, body page count recorded; cycle 1/2; recovery 0/2.
+- M5 → S1: paper length restructure (D-042, D-043); exit: reviewer gate PASS (`analysis/review_gate_paper_length.md`), `papers/paper_mvp1` builds clean, invariants I1 to I16 hold as amended in the section below, core flow readable in the body, course report still 2 pages, body page count recorded; gate PASS 2026-11-09; cycle 2/2; recovery 0/2.
 
 ## Detail
 
@@ -134,5 +134,5 @@ A kept mention sits in the departure note (cites a D-id), a rename sentence ("kn
 
 ### Paper length restructure: split out (2026-11-08)
 
-> Current state: 15 open, 0 in progress (→ M5, D-042, D-043). Gate is PL-15, cycle 1/2, recovery 0/2.
+> Current state: 0 open, 0 in progress (→ M5, D-042, D-043). Gate PL-15 PASS, cycle 2/2, recovery 0/2.
 > Detail: [paper_length.plan.md](./paper_length.plan.md)
