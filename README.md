@@ -303,7 +303,7 @@ Why this section exists: it shows what was done in what order, and why. The Q1 c
 - What: a reviewer checked the paper and the report. Result: PASS (cycle 1/2). Fixes F1 to F14 are text, figure and format fixes with no new run.
 - Why: it keeps the paper and report matching the runs.
 - Output file: `analysis/review_gate_mvp1_r3.md`.
-- The paper labels five methods outside the lectures: Lorenz curve, Wilson intervals, cluster bootstrap chi-square, logistic calibration, Brier skill score.
+- The paper labels four methods outside the lectures (D-047 dropped the Wilson interval): Lorenz curve, cluster bootstrap chi-square, logistic calibration, Brier skill score.
 
 ### Step 19. Paper restructure (D-042 to D-045)
 
@@ -523,7 +523,7 @@ Source: `analysis/prereg_mvp1.md`, `analysis/prereg_robustness.md`, `analysis/pr
 | Constraint | Source |
 | --- | --- |
 | All analysis stays within lecture contents. k-means is a side analysis, under 1/10 of the report | owner, 2026-10-18; D-025, D-026 (2026-11-01); plan Q2 |
-| A method outside the lectures is renamed or replaced, or labeled in the paper (five methods, D-041). The cluster chi-square test has a share-gap effect size (D-030) | D-026, D-028, D-041 |
+| A method outside the lectures is renamed or replaced, or labeled in the paper (four methods, D-047). The cluster chi-square test has a share-gap effect size (D-030) | D-026, D-028, D-041 |
 | Every fact in a class post has a source. No source, no claim | owner, 2026-10-18; plan "Facts in the class post" |
 | All data queries run on the cluster. The laptop only draws figures from saved outputs | root `CLAUDE.md`, 2026-10-18 |
 | T, the minimum-trade cutoff and the Q1 criteria are fixed before any Q1 result | D-005, D-007 |

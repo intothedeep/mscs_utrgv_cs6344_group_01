@@ -91,12 +91,12 @@ def draw_m1(r3: Path, out: Path, checks: list) -> None:
 def draw_m2(r3: Path, out: Path, checks: list) -> None:
     res = json.loads((r3 / "m2_results.json").read_text())
     bins = pd.read_csv(r3 / "m2_bins_yes_no.csv")
-    lo, hi = bins["mean_price"] + bins["wilson_low"], bins["mean_price"] + bins["wilson_high"]  # saved as gap-scale ends
+    lo, hi = bins["mean_price"] + bins["z_low"], bins["mean_price"] + bins["z_high"]  # saved as gap-scale ends (D-047)
     fig, ax = plt.subplots(figsize=(W_NARROW, W_NARROW), layout="constrained")
     ax.plot([0, 1], [0, 1], color=GREY, ls="--", label="Perfect calibration")
     err = np.clip(np.vstack([bins["observed_rate"] - lo, hi - bins["observed_rate"]]), 0, None)
     ax.errorbar(bins["mean_price"], bins["observed_rate"], yerr=err, fmt="o", ms=4, capsize=3, color=DARK,
-                label=f"Markets labelled Yes/No (n={fmt_n(res['yes_no_n'])}), 95% Wilson interval")
+                label=f"Markets labelled Yes/No (n={fmt_n(res['yes_no_n'])}), 95% z interval")
     ax.set(xlabel="Mean Yes price in bin (USDC per share)", ylabel="Observed Yes rate", xlim=(0, 1), ylim=(0, 1))
     ax.grid(alpha=0.3)
     fig.legend(loc="outside upper center", ncol=1)

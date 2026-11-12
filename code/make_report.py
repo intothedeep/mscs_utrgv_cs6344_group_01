@@ -978,7 +978,7 @@ def r3_m2(P: Page, R: dict) -> str:
             f"{pci(m['yes_no_net_gap_ci_low'], m['yes_no_net_gap_ci_high'])}. Chi-square {fmt(m['yes_no_chi2'])} (df {m['yes_no_df']}), "
             f"p {fp(m['yes_no_p'])}, {m['yes_no_bins_off_bh']} of 10 bins off by Benjamini-Hochberg (BH). "
             f"The other {fmt(m['other_n'])} markets have chi-square p {fp(m['other_p'])} and net gap {pp(m['other_net_gap'])}.{bias}</p>"
-            + r3_figure(P, "fig_r3_m2_yes_reliability.png", "Observed Yes rate against mean Yes price per bin in markets labelled Yes/No, with 95% Wilson intervals.",
+            + r3_figure(P, "fig_r3_m2_yes_reliability.png", "Observed Yes rate against mean Yes price per bin in markets labelled Yes/No, with 95% z intervals.",
                         "points below the diagonal mean Yes happens less often than its price says."))
 
 
@@ -1080,7 +1080,7 @@ def sec_r3(P: Page) -> str:
             "<code>analysis/prereg_review_fixes.md</code> (commit aef0808). "
             f"Gate: the kept set was rebuilt ({fmt(R['gate']['n_kept_rebuilt'])} markets) and the main chi-square matched "
             f"({fmt(R['gate']['chi2_rebuilt'])}): {'passed' if R['gate']['passed'] else 'failed'}. "
-            "The Lorenz curve, Wilson intervals, the cluster bootstrap chi-square, logistic calibration and the Brier skill score are outside the lectures (D-041).</p></div>"
+            "The Lorenz curve, the cluster bootstrap chi-square, logistic calibration and the Brier skill score are outside the lectures (D-041, D-047).</p></div>"
             + r3_m1(P, R) + r3_m2(P, R) + r3_m3(P, R) + r3_m4(P, R) + r3_m5(P, R) + r3_dups(R, P) + r3_peer(P, R))
 
 

@@ -14,7 +14,7 @@ from common import load_params
 from q1_calibration import analyze
 from verdicts import q1 as q1_rule
 
-OUTSIDE_LECTURE = "outside the lectures (D-039)"   # label the paper prints for X2_cl, Brier skill score, Wilson, logistic calibration
+OUTSIDE_LECTURE = "outside the lectures (D-039)"   # label the paper prints for X2_cl, Brier skill score, logistic calibration
 
 
 def load_prereg(path: str) -> dict:

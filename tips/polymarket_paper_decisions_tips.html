@@ -96,12 +96,12 @@ html.js .langbar{display:flex}
     <li><span lang="ko">방법은 강의 안에서만 쓴다 (D-025, D-026).</span><span lang="en">We use only methods taught in the lecture (D-025, D-026).</span></li>
     <li><span lang="ko">본문은 핵심만 보이고 상세는 부록 A에서 G에 둔다. 본문은 2단이다 (D-042, D-043, D-045).</span><span lang="en">The body shows the core and Appendices A to G hold the details. The body uses two columns (D-042, D-043, D-045).</span></li>
   </ol>
-  <p class="muted"><span lang="ko">왜: 논문을 읽는 사람이 "왜 이렇게 했나"를 물을 때, 결정과 이유를 한 장으로 보이려고 만들었다. 쓴 데이터: <code>cs6344_group_01/DECISIONS.md</code>(D-001 ~ D-046, 46행), <code>papers/paper_mvp1/main.tex</code>의 절 목록, <code>STATUS.md</code>. "왜 중요한가" 칸은 각 행의 버린 안(Rejected)과 이유를 근거로 썼다.</span><span lang="en">Why: a reader of the paper may ask "why did you do this?". This page shows each decision and its reason on one page. Data used: <code>cs6344_group_01/DECISIONS.md</code> (D-001 to D-046, 46 rows), the section list of <code>papers/paper_mvp1/main.tex</code>, and <code>STATUS.md</code>. The "Why it matters" field comes from the rejected option and its reason in each row.</span></p>
+  <p class="muted"><span lang="ko">왜: 논문을 읽는 사람이 "왜 이렇게 했나"를 물을 때, 결정과 이유를 한 장으로 보이려고 만들었다. 쓴 데이터: <code>cs6344_group_01/DECISIONS.md</code>(D-001 ~ D-047, 47행), <code>papers/paper_mvp1/main.tex</code>의 절 목록, <code>STATUS.md</code>. "왜 중요한가" 칸은 각 행의 버린 안(Rejected)과 이유를 근거로 썼다.</span><span lang="en">Why: a reader of the paper may ask "why did you do this?". This page shows each decision and its reason on one page. Data used: <code>cs6344_group_01/DECISIONS.md</code> (D-001 to D-047, 47 rows), the section list of <code>papers/paper_mvp1/main.tex</code>, and <code>STATUS.md</code>. The "Why it matters" field comes from the rejected option and its reason in each row.</span></p>
 </header>
 
 <nav class="tabs" aria-label="보기 선택 / Choose a view">
   <button data-tab="flow" aria-pressed="true">1 · <span lang="ko">결정 흐름</span><span lang="en">Decision flow</span></button>
-  <button data-tab="cards" aria-pressed="false">2 · <span lang="ko">결정 46개: 왜, 왜 중요한가</span><span lang="en">46 decisions: why, why it matters</span></button>
+  <button data-tab="cards" aria-pressed="false">2 · <span lang="ko">결정 47개: 왜, 왜 중요한가</span><span lang="en">47 decisions: why, why it matters</span></button>
   <button data-tab="paper" aria-pressed="false">3 · <span lang="ko">논문 절 ↔ 결정</span><span lang="en">Paper sections ↔ decisions</span></button>
 </nav>
 
@@ -231,20 +231,20 @@ flowchart LR
 flowchart LR
   D038["D-038 두 심사자의 심사<br/>강건성 v3 한 번"] --> D039["D-039 v3 사전 등록<br/>결과 전에 규칙"] --> D040["D-040 outcome 1 유지<br/>Yes 문장 하나"] --> D041["D-041 관문 리뷰 수정<br/>F1에서 F14"]
   D038 --> D042["D-042 상세는 부록으로<br/>본문에 요약 표"] --> D043["D-043 핵심 흐름 그림<br/>서론 끝"] --> D045["D-045 본문 2단<br/>부록 1단"]
-  D042 --> D044["D-044 tips 전부 갱신"] --> D046["D-046 문서도 갱신<br/>이유를 남김"]
+  D042 --> D044["D-044 tips 전부 갱신"] --> D046["D-046 문서도 갱신<br/>이유를 남김"] --> D047["D-047 M2 그림을<br/>z 구간으로"]
   classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
   classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
   class D039 crit
-  class D038,D040,D041,D042,D043,D044,D045,D046 fig
+  class D038,D040,D041,D042,D043,D044,D045,D046,D047 fig
 </pre><pre class="mermaid" lang="en">
 flowchart LR
   D038["D-038 two-reviewer review<br/>one robustness v3 job"] --> D039["D-039 v3 prereg<br/>rules before results"] --> D040["D-040 keep outcome 1<br/>one Yes sentence"] --> D041["D-041 gate review fixes<br/>F1 to F14"]
   D038 --> D042["D-042 details to appendices<br/>summary table in the body"] --> D043["D-043 core flow figure<br/>end of the Introduction"] --> D045["D-045 body in two columns<br/>appendices in one"]
-  D042 --> D044["D-044 update every tips page"] --> D046["D-046 update docs too<br/>keep the why"]
+  D042 --> D044["D-044 update every tips page"] --> D046["D-046 update docs too<br/>keep the why"] --> D047["D-047 M2 figure<br/>uses the z interval"]
   classDef crit fill:#dbe4ff,stroke:#0432ff,color:#111
   classDef fig fill:#dcf5e3,stroke:#1f8a45,color:#111
   class D039 crit
-  class D038,D040,D041,D042,D043,D044,D045,D046 fig
+  class D038,D040,D041,D042,D043,D044,D045,D046,D047 fig
 </pre></div>
     <p class="muted"><span lang="ko">그림에 없는 결정: 환경 D-001, D-002, D-006, D-008, D-015, 마감 D-021, 나중에 바뀐 MVP2 결정 D-009, D-010. 탭 2 카드에 있다.</span><span lang="en">Decisions not in the figure: environment D-001, D-002, D-006, D-008, D-015, deadline D-021, and the MVP2 decisions changed later, D-009 and D-010. They are in the tab 2 cards.</span></p>
     <p class="muted"><span lang="ko">그림 1. 논문 모양을 바꾼 결정 38개를 일곱 단계로 나눈 순서와 연결. 왜: 한 결정이 다음 결정의 조건이 된 길을 보이면, 논문의 각 선택이 어디서 왔는지 거꾸로 따라갈 수 있다. 출처: <code>cs6344_group_01/DECISIONS.md</code>.</span><span lang="en">Figure 1. The 38 decisions that shaped the paper, in seven phases with their links. Why: when one decision is the condition of the next, you can trace each paper choice back to its source. CCDF means complementary cumulative distribution function. Source: <code>cs6344_group_01/DECISIONS.md</code>.</span></p>
@@ -347,7 +347,7 @@ flowchart LR
         <tr><td>3.2 Filters and drop reasons</td><td>D-007, D-004, D-042</td><td><span lang="ko">제외 규칙과 순서. 10 trades 기준은 파일럿에서 Q1 결과 전에 정함. 제외 사유 그림은 Appendix A</span><span lang="en">The drop rules and their order. The 10 trades threshold was set in the pilot, before the Q1 result. The drop-reason figure is in Appendix A</span></td></tr>
         <tr><td>3.3 Market and wallet tables</td><td>D-007</td><td><span lang="ko">중복 행을 유지한다 (실제 체결을 지우지 않으려고)</span><span lang="en">Duplicate rows are kept (so real fills are not deleted)</span></td></tr>
         <tr><td>4.1 Evaluation price and pre-registration</td><td>D-005, D-007, D-011, D-042</td><td><span lang="ko">T = close_at. 가격 = 마지막 시각 거래들의 평균. 기준은 결과 전에 커밋. 사전 등록 표는 Appendix B.1</span><span lang="en">T = close_at. Price = mean of the trades at the last timestamp. The criteria were committed before the results. The pre-registered choices table is in Appendix B.1</span></td></tr>
-        <tr><td>4.2 Q1 calibration</td><td>D-026, D-041</td><td><span lang="ko">구간별 격차와 z 구간. 가격의 평균 제곱 잔차(이름만 바뀐 Brier). 강의 밖 방법 다섯 개에 표시</span><span lang="en">Per-bin gap and z interval. Mean squared residual of the price (the Brier score, renamed only). Five methods outside the lectures are labelled</span></td></tr>
+        <tr><td>4.2 Q1 calibration</td><td>D-026, D-041, D-047</td><td><span lang="ko">구간별 격차와 z 구간. 가격의 평균 제곱 잔차(이름만 바뀐 Brier). 강의 밖 방법 네 개에 표시</span><span lang="en">Per-bin gap and z interval. Mean squared residual of the price (the Brier score, renamed only). Four methods outside the lectures are labelled</span></td></tr>
         <tr><td>4.3 Q2 wallet concentration</td><td>D-024, D-025, D-028</td><td><span lang="ko">80/20은 참고선. 멱법칙은 기술만. Lorenz 곡선은 강의 밖 표시. k-평균은 부가 분석(Appendix D.2)</span><span lang="en">80/20 is a reference line. Power law is description only. The Lorenz curve is marked outside the lectures. k-means is a side analysis (Appendix D.2)</span></td></tr>
         <tr><td>4.4 Q3 distributions</td><td>D-025</td><td><span lang="ko">멱법칙은 기술만. x_min 고정 이유는 소유자가 쓴다</span><span lang="en">Power law is description only. The reason for the fixed x_min is for the owner to write</span></td></tr>
         <tr><td>4.5 Reproducibility</td><td>D-011, D-014, D-001</td><td><span lang="ko">해시 순서 표본. 숫자 매크로. 같은 Python 버전. 해시와 소프트웨어는 Appendix B.2</span><span lang="en">Hash-ordered sample. Number macros. Same Python version. Hashes and software are in Appendix B.2</span></td></tr>
@@ -364,7 +364,7 @@ flowchart LR
         <tr><td>Appendix D Q2 further results</td><td>D-031, D-028, D-030, D-033</td><td><span lang="ko">D.1 지갑 수와 거래량 분포, 전체 Lorenz. D.2 k-평균, 군집 × 주제 카이제곱(효과 = 몫 차이)</span><span lang="en">D.1 wallet count and volume distributions, full Lorenz. D.2 k-means, cluster × topic chi-square (effect = share difference)</span></td></tr>
         <tr><td>Appendix E Q3 further figures</td><td>D-042, D-033</td><td><span lang="ko">가격과 거래 크기 히스토그램, 지갑 거래량 QQ 그림</span><span lang="en">Histograms of price and trade size, QQ plot of wallet volume</span></td></tr>
         <tr><td>Appendix F Robustness</td><td>D-013, D-042</td><td><span lang="ko">R1 반반 지급 시장과 R2 마지막 하루 가격 변화. 판정은 그대로</span><span lang="en">R1 split-payout markets and R2 price change in the last day. Verdicts unchanged</span></td></tr>
-        <tr><td>Appendix G Checks requested in review</td><td>D-038, D-039, D-040, D-041, D-042</td><td><span lang="ko">M1에서 M5, 중복 행, 동료 질문. 새 행은 원래 Q1 행 옆에 둔다. G.2에 Yes 문장</span><span lang="en">M1 to M5, duplicate rows, peer asks. New rows sit beside the original Q1 row. The Yes sentence is in G.2</span></td></tr>
+        <tr><td>Appendix G Checks requested in review</td><td>D-038, D-039, D-040, D-041, D-042, D-047</td><td><span lang="ko">M1에서 M5, 중복 행, 동료 질문. 새 행은 원래 Q1 행 옆에 둔다. G.2에 Yes 문장</span><span lang="en">M1 to M5, duplicate rows, peer asks. New rows sit beside the original Q1 row. The Yes sentence is in G.2</span></td></tr>
         <tr><td>Layout of all sections</td><td>D-045</td><td><span lang="ko">본문 2단, 부록 1단과 새 쪽. 본문 그림은 단 폭, 글자 7 pt 이상</span><span lang="en">Body in two columns, appendices in one column on new pages. Body figures at column width, text at 7 pt or more</span></td></tr>
 </tbody>
     </table></div>
@@ -412,6 +412,7 @@ const PHASES = [
   ["5. 그림과 마무리 · 2026-11-01 ~ 11-02", ["D-018","D-022","D-029","D-031","D-032","D-033","D-034"]],
   ["6. 리뷰와 문구 · 2026-11-07", ["D-035","D-036","D-037"]],
   ["7. 심사 확인, 길이, 문서 · 2026-11-07 ~ 11-08", ["D-038","D-039","D-040","D-041","D-042","D-043","D-044","D-045","D-046"]],
+  ["8. Appendix G M2 구간 · 2026-11-11", ["D-047"]],
 ];
 const PHASES_EN = [
   "1. Data and criteria · 2026-10-19",
@@ -421,6 +422,7 @@ const PHASES_EN = [
   "5. Figures and wrap-up · 2026-11-01 ~ 11-02",
   "6. Review and wording · 2026-11-07",
   "7. Review checks, length, docs · 2026-11-07 ~ 11-08",
+  "8. Appendix G M2 interval · 2026-11-11",
 ];
 const D = {
   "D-001": ["env", "클러스터 환경: uv + Python 3.13.12", "로컬과 같은 Python으로 모든 데이터 질의를 클러스터에서 돌린다", "로컬 코드가 클러스터에서 그대로 돈다. 재현성 절의 근거", "python3.9 venv (문법이 다름)"],
@@ -469,6 +471,7 @@ const D = {
   "D-044": ["fig", "모든 tips 페이지를 지금의 논문과 프로젝트 상태로 고치고 옛 내용을 지움 (제안서 페이지만 예외)", "소유자: 옛 내용은 필요 없다", "각 페이지는 지금 상태만 보인다. 제안서 페이지는 제출한 문서의 기록이라 2026-10-18 판 그대로 두고, 지금 상태로 가는 링크 한 줄을 붙인다", "논문 페이지 셋만 고치기, 제안서 페이지도 다시 쓰기"],
   "D-045": ["fig", "본문 2단(10 pt, 여백 0.7 in, 단 간격 0.25 in). 부록 A에서 G는 1단이고 부록마다 새 쪽", "소유자 요청. 부록 그림은 전체 폭으로 그렸고 `[H]`는 한 단이 필요하다", "본문 그림은 단 폭으로 다시 그리고 글자를 7 pt 이상으로 둔다. 넓은 float(그림 1, 표 4)는 두 단에 걸친다. 2쪽 보고서는 그대로다", "1단 유지, 부록까지 2단, 이름 있는 학회 양식(학회를 아직 안 골랐다)"],
   "D-046": ["fig", "프로젝트 문서도 고치고 옛 내용을 지우되, 각 단계를 한 이유는 남김", "소유자: 옛 내용은 필요 없지만 왜 했는지는 있어야 한다", "tips와 문서는 지금 상태와 그 이유를 쓴다. `DECISIONS.md`와 run 기록은 이유의 원본이라 덧붙이기만 한다", "tips만 고치고 이유를 옛 내용과 함께 지우기"],
+  "D-047": ["fig", "부록 G M2 그림을 z 구간으로 바꿈. 강의 밖 방법은 넷", "Claude가 사전 등록에 윌슨 구간을 넣었고 기록된 이유가 없다. z 구간도 결론이 같다 (끝 차이 최대 0.0011, 0을 벗어나는 구간 같은 8개)", "논문이 강의 밖 방법 넷(Lorenz 곡선, 군집 부트스트랩 카이제곱, 로지스틱 보정, Brier 기술 점수)을 표시한다. 그림은 저장된 z 열로 다시 그렸고 새 실행은 없다", "윌슨 구간을 강의 밖 표시와 함께 유지"],
 };
 const DE = {
   "D-001": ["Cluster environment: uv + Python 3.13.12", "Every data query runs on the cluster with the same Python as the local machine", "Local code runs on the cluster unchanged. This is the basis of the reproducibility section", "python3.9 venv (different syntax)"],
@@ -517,6 +520,7 @@ const DE = {
   "D-044": ["Update every tips page to the current paper and project state and remove old content (the proposal page is the one exception)", "Owner: old content is not needed", "Each page shows only the current state. The proposal page is the record of a submitted document, so it keeps the 2026-10-18 version plus one line that links to the current state", "Update only the three paper pages, rewrite the proposal page too"],
   "D-045": ["Body in two columns (10 pt, margins 0.7 in, column gap 0.25 in). Appendices A to G in one column, each on a new page", "Owner request. Appendix figures are drawn for full width and `[H]` needs one column", "Body figures are redrawn at column width with text at 7 pt or more. Wide floats (Figure 1, Table 4) span both columns. The 2-page report is unchanged", "One column, two columns in the appendices too, a named conference template (no venue is picked)"],
   "D-046": ["Update the project docs too, remove old content, and keep why each step was done", "Owner: old content is not needed, but the reason for each step is", "Tips and docs state the current state plus the reason. `DECISIONS.md` and run records stay append-only because they hold the reasons", "Tips only, dropping the reasons with the old content"],
+  "D-047": ["fig", "The Appendix G M2 figure uses the z interval. Four methods lie outside the lectures", "Claude put the Wilson interval in the pre-registration with no recorded reason. The z interval gives the same conclusion (ends differ by 0.0011 at most, the same 8 bins exclude 0)", "The paper labels four methods outside the lectures (Lorenz curve, cluster bootstrap chi-square, logistic calibration, Brier skill score). The figure is redrawn from the saved z columns with no new run", "Keep the Wilson interval with the outside-lecture label"],
 };
 const SUPERSEDED = { "D-009": "D-016", "D-006": "D-008", "D-032": "D-033", "D-001": "D-015" };
 
