@@ -17,6 +17,7 @@ Explainer pages for the group project. Each page holds English and Korean. Click
 | `polymarket_class_questions_tips.html` | Answers to 4 class questions, tied to the paper |
 | `polymarket_paper_review_tips.html` | What a conference reviewer and the course professor ask, and what we changed |
 | `polymarket_paper_flow_tips.html` | Our paper's flowchart, pages and key numbers per section. Start here for the current state |
+| `polymarket_lecture_rq_guide_tips.html` | Lecture decks to paper sections, the five methods outside the lectures, and how Q1, Q2 and Q3 were set and solved |
 | `polymarket_paper_summaries_tips.html` | The cited papers: flowchart of our paper and one summary per paper |
 | `polymarket_proposal_tips.html` | The proposal in seven steps, as posted on 2026-10-18 |
 | `polymarket_plan_detailed.md` | Detailed MVP1 plan (English) |
