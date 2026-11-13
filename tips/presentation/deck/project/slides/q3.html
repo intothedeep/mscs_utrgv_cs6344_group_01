@@ -1,0 +1,21 @@
+<section id="q3" class="bg-light padf q3">
+  <div class="band"><span class="bq">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq bq3 on">Q3 Distributions</span></div>
+  <h2 class="t44">Q3: trade sizes have a long tail, so we read them on a log scale</h2>
+  <div class="body g-q3">
+    <div class="card">
+      <img src="/_blob/634b5d8e5163bf6db983db6fe47816dc" width="1020" height="810" alt="Histogram of trade size">
+      <div class="cap">Histogram of trade size</div>
+    </div>
+    <div class="card">
+      <img src="/_blob/b5fea725872060da08621359a1d21a06" width="2100" height="1170" alt="QQ plot of trade size, raw and log">
+      <div class="cap">QQ plot against the normal: raw and after a log transform</div>
+    </div>
+    <div class="statline span2">
+      <div class="stat"><div class="mid">129.8</div><div class="lab">mean trade size, USDC</div></div>
+      <div class="stat"><div class="mid">6.9</div><div class="lab">median trade size, USDC</div></div>
+      <div class="stat wide"><div class="mid">0.376 vs 0.320</div><div class="lab">price one day before close: mean vs median</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>Source: paper Section 5.3</span><span class="pg"></span></div>
+  <aside>Speaker: Q3 speaker. About 1 minute. Q3 only describes the data. The mean trade size is 129.8 USDC, but the median is only 6.9. So a few very large trades pull the mean far above the typical trade. In the QQ plot, the raw points bend away from the straight line, and after a log transform they follow it much better. Prices pile up near both ends of the scale, with a mean of 0.376 and a median of 0.320. We report this without a verdict.</aside>
+</section>

@@ -1,0 +1,240 @@
+/* Tokens follow .claude/skills/html-theme/theme.css (light): achromatic neutral, radius 0, IBM Plex Mono.
+   Q1/Q2/Q3 colours are chart series colours, which the theme leaves to each page. */
+:root{
+  --background:#FFFFFF;
+  --foreground:#0A0A0A;
+  --primary:#171717;
+  --secondary:#F5F5F5;
+  --muted-fg:#737373;
+  --border:#737373;
+  --rule:#E5E5E5;
+  --dark:#171717;
+  --body:#262626;
+  --muted:#737373;
+  --line:#E5E5E5;
+  --q1:#C2410C;
+  --q2:#0E7490;
+  --q3:#4D7C0F;
+  --accent:#171717;
+}
+
+section{
+  counter-increment:page;
+  position:relative;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  font-family:"IBM Plex Mono",Menlo,monospace;
+  font-size:24px;
+  line-height:1.35;
+  color:var(--body);
+  overflow:hidden;
+}
+h1,h2,h3{font-family:"IBM Plex Mono",Menlo,monospace;color:var(--foreground);margin:0}
+p,ul,ol{margin:0}
+b{color:var(--foreground);font-weight:700}
+
+/* backgrounds */
+.bg-light{background:#FFFFFF}
+.bg-alt{background:#F5F5F5}
+.bg-dark{background:#171717;color:#E5E5E5}
+.bg-dark h1,.bg-dark h2,.bg-dark b{color:#FAFAFA}
+
+/* padding variants */
+.pad{padding:128px}
+.padf{padding:128px 128px 160px}
+
+/* accents per question */
+.q1{--accent:#C2410C}
+.q2{--accent:#0E7490}
+.q3{--accent:#4D7C0F}
+
+/* progress band on Q slides */
+.band{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  height:44px;
+  margin-bottom:24px;
+  font-size:24px;
+  font-weight:500;
+  color:var(--muted);
+  border-bottom:2px solid var(--line);
+  flex:none;
+}
+.bq{height:42px;line-height:40px;box-sizing:border-box}
+.bq.on{color:var(--accent);font-weight:700;border-bottom:6px solid var(--accent)}
+.dot{color:#A3A3A3}
+
+/* titles */
+.t96{font-size:96px;font-weight:700;line-height:1.05}
+.t64{font-size:64px;font-weight:700;line-height:1.1}
+.t44{font-size:44px;font-weight:700;line-height:1.1;margin-bottom:24px}
+.t44.tight{margin-bottom:0}
+
+/* body area fills the rest of the slide */
+.body{flex:1;min-height:0;display:grid;gap:32px}
+.split{flex:1;min-height:0;display:grid;gap:48px}
+.col{display:flex;flex-direction:column;justify-content:center;gap:24px;min-width:0;min-height:0}
+.col-top{justify-content:flex-start}
+
+/* grid layouts */
+.g-data{grid-template-columns:560px 1fr}
+.g-q1a{grid-template-columns:1fr 600px}
+.g-q1b{grid-template-columns:1fr 920px}
+.g-chk{grid-template-columns:700px 1fr}
+.g-q2{grid-template-columns:760px 540px 1fr}
+.g-q3{grid-template-columns:1.26fr 1.79fr;grid-template-rows:minmax(0,1fr) auto}
+.g-two{grid-template-columns:1fr 1fr}
+.g-bk{grid-template-columns:1fr 720px}
+.span2{grid-column:1 / span 2}
+.statline{display:flex;align-items:center;gap:48px}
+.statline .stat{flex:1}
+.statline .wide{flex:1.6}
+.navy{color:#171717}
+.mt16{margin-top:16px}
+.mt48{margin-top:48px}
+.mt64{margin-top:64px}
+.mb40{margin-bottom:40px}
+
+/* figure card: square corners, one border, like the theme's step boxes */
+.card{
+  background:#FFFFFF;
+  border:1px solid var(--border);
+  border-radius:0;
+  padding:16px;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-width:0;
+  min-height:0;
+}
+.card img{display:block;flex:1 1 0;min-height:0;width:100%;object-fit:contain}
+.cap{font-size:24px;line-height:1.3;color:var(--muted);text-align:center;margin-top:8px;flex:none}
+
+/* numbers and text */
+.big{font-size:96px;font-weight:700;line-height:1;color:var(--accent)}
+.mid{font-size:56px;font-weight:700;line-height:1.05;color:var(--accent)}
+.lab{font-size:24px;line-height:1.3;color:var(--body)}
+.line{font-size:32px;line-height:1.3;color:var(--foreground)}
+.line24{font-size:24px;line-height:1.3;color:var(--body)}
+.stat{display:flex;flex-direction:column;gap:6px}
+.statrow{display:flex;align-items:center;gap:32px}
+.statrow .mid{width:540px;flex:none}
+.statrow .lab{flex:1}
+.callout{
+  background:#FFFFFF;
+  border:1px solid var(--border);
+  border-left:10px solid var(--accent);
+  border-radius:0;
+  padding:16px 24px;
+  font-size:28px;
+  line-height:1.3;
+  color:var(--foreground);
+}
+
+/* why slide flow: boxes with a thick top border, as the theme's step boxes */
+.flow{display:flex;align-items:stretch;gap:24px;flex:1;min-height:0}
+.step{
+  flex:1;
+  background:#FFFFFF;
+  border:1px solid var(--border);
+  border-top:8px solid var(--accent);
+  border-radius:0;
+  padding:24px 32px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:16px;
+  min-width:0;
+}
+.step .mid{font-size:56px}
+.step .ask{font-size:28px;font-weight:700;color:var(--foreground);line-height:1.25}
+.arrow{align-self:center;font-size:56px;color:#A3A3A3}
+
+/* methods slide */
+.panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;flex:1;min-height:0}
+.panel{
+  background:#FFFFFF;
+  border:1px solid var(--border);
+  border-top:8px solid var(--accent);
+  border-radius:0;
+  padding:20px 28px;
+  min-width:0;
+}
+.panel h3{font-size:28px;font-weight:700;margin-bottom:12px;color:var(--accent)}
+.panel ul{padding-left:24px;font-size:24px;line-height:1.3}
+.panel li{margin-bottom:10px}
+.strip{
+  margin-top:24px;
+  background:#F5F5F5;
+  border:1px solid var(--border);
+  border-radius:0;
+  padding:16px 24px;
+  font-size:24px;
+  line-height:1.3;
+  flex:none;
+}
+
+/* tables: dark header, high-contrast alternating rows */
+table.t{width:100%;border-collapse:collapse;font-size:24px;line-height:1.3;color:var(--body)}
+table.t td,table.t th{padding:12px 16px;text-align:left;vertical-align:middle}
+.hd{background:#171717}
+.hd th{color:#FAFAFA;font-weight:700}
+.r1{background:#FFFFFF}
+.r2{background:#EDEDED}
+.w30{width:30%}
+.w35{width:35%}
+.w40{width:40%}
+.w60{width:60%}
+.w65{width:65%}
+
+/* limits cards */
+.lim{display:grid;grid-template-columns:1fr 1fr;gap:32px;flex:1;min-height:0}
+.limcard{
+  background:#FFFFFF;
+  border:1px solid var(--border);
+  border-top:8px solid var(--dark);
+  border-radius:0;
+  padding:24px 32px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:12px;
+}
+.limcard h3{font-size:28px;font-weight:700}
+.limcard p{font-size:28px;line-height:1.3;color:var(--body)}
+
+/* conclusion and closing */
+.stats3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px}
+.sbox{border-top:8px solid var(--accent);padding-top:24px;display:flex;flex-direction:column;gap:12px}
+.bg-dark .big{color:#FAFAFA}
+.bg-dark .lab{color:#D4D4D4;font-size:24px}
+.bg-dark .tag{font-size:28px;font-weight:700;color:#FAFAFA}
+.stripes{display:flex;width:360px;height:12px;margin:0 0 40px}
+.stripes div{flex:1;height:12px}
+.s1{background:#C2410C}
+.s2{background:#0E7490}
+.s3{background:#4D7C0F}
+.center{justify-content:center}
+.sub{font-size:28px;line-height:1.3;color:var(--body)}
+.names{font-size:28px;line-height:1.4;color:var(--foreground);font-weight:700}
+
+/* backup slides */
+.bk{--accent:#171717}
+
+/* pinned footer */
+.foot{
+  position:absolute;
+  left:128px;
+  right:128px;
+  bottom:64px;
+  height:24px;
+  display:flex;
+  justify-content:space-between;
+  font-size:24px;
+  line-height:24px;
+  color:var(--muted);
+}
+.pg::after{content:counter(page)}

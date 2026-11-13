@@ -1,0 +1,18 @@
+<section id="q1-verdict" class="bg-light padf q1">
+  <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <div class="split g-q1a">
+    <div class="col">
+      <h2 class="t44 tight">Q1: prices are not calibrated as a whole</h2>
+      <div class="callout">Chi-square goodness of fit on 10 price bins: the prices do not match what happened.</div>
+      <div class="statrow"><div class="mid">χ² = 68.0</div><div class="lab">10 degrees of freedom, 47,948 markets</div></div>
+      <div class="statrow"><div class="mid">p = 1.1×10⁻¹⁰</div><div class="lab">assumes independent markets, so it may be too small</div></div>
+      <div class="statrow"><div class="mid">3.29 points</div><div class="lab">largest per-bin gap (70 to 80% bin): small</div></div>
+    </div>
+    <div class="card">
+      <img src="/_blob/4b6dbeeb8d4c89aa099011c8850e8ea3" width="900" height="1125" alt="Calibration gap by price bin">
+      <div class="cap">Gap by price bin: observed rate minus mean price</div>
+    </div>
+  </div>
+  <div class="foot"><span>Source: paper Section 5.1</span><span class="pg"></span></div>
+  <aside>Speaker: Q1 speaker. About 1 minute. We split the prices into ten bins and compare the observed rate of outcome 1 with the mean price in each bin. A chi-square goodness of fit test compares observed counts with the counts the prices predict. We fixed this rule before seeing any result. The statistic is 68.0 with p about ten to the minus ten, so the verdict is that prices are not calibrated as a whole. The gap is small: the largest per-bin gap is 3.29 points, in the 70 to 80% bin. The the p-value assumes independent markets, so it may be too small.</aside>
+</section>

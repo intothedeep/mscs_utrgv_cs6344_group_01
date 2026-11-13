@@ -1,0 +1,17 @@
+<section id="backup-practical" class="bg-alt padf bk">
+  <div class="band"><span class="bq on">Backup</span></div>
+  <h2 class="t44">The gap is 1 point but p is 10⁻¹⁰. Does it matter in practice?</h2>
+  <div class="body g-bk">
+    <div class="col">
+      <p class="line"><b>The effect is small and runs one way.</b> With this many markets, a tiny gap gives a tiny p-value, so we read effect sizes first.</p>
+      <p class="line24">We set no size line before the results, so “small” is our reading. The p-value also assumes independent markets.</p>
+    </div>
+    <div class="col">
+      <div class="stat"><div class="mid">3.29 points</div><div class="lab">largest per-bin gap (70 to 80% bin)</div></div>
+      <div class="stat"><div class="mid">−0.99%</div><div class="lab">net gap over 47,948 markets</div></div>
+      <div class="stat"><div class="mid">1.57%</div><div class="lab">practical line (M5, mean half spread). Largest implied gap 2.22%, but at 0 of 7 grid prices is the whole 95% band beyond the line.</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>Source: paper Section 5.1, M5</span><span class="pg"></span></div>
+  <aside>Backup. Speaker: Q1 speaker. With almost 48,000 markets, even a tiny gap gives a tiny p-value, so we read the effect size first. The net gap is minus 0.99%, and the largest per-bin gap is 3.29 points. We set no size line before seeing results, so calling it small is our reading. Check M5 adds a practical line, the mean half spread of 1.57%. The largest implied gap is 2.22%, above the line as a point estimate. But a price passes only when its whole 95% bootstrap band lies beyond the line, and 0 of 7 grid prices do. So we cannot say the gap is surely larger than the cost of trading.</aside>
+</section>

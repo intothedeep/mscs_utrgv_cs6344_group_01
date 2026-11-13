@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<title>6344 Polymarket 발표 슬라이드 편집법</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<script>
+/* Runs first: sets the language. Korean is the default. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){var d=document.documentElement;d.className="js";var l="ko";try{var s=localStorage.getItem("group01-lang");if(s==="ko"||s==="en"){l=s;}}catch(e){}try{var q=/[?&]lang=(ko|en)(&|$)/.exec(location.search);if(q){l=q[1];}}catch(e){}d.setAttribute("data-lang",l);d.lang=l;})();
+</script>
+<style>
+/* Tokens from skills/html-theme/theme.css, light only. Layout: tips exemplar, step boxes. */
+:root{--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--stripe:oklch(0.96 0 0);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
+--c-q1:#c2410c;--c-q2:#0e7490;--c-q3:#4d7c0f;--c-out:#7e22ce;--c-gray:#6b6b6b}
+*{box-sizing:border-box;border-radius:0}
+body{background:var(--background);color:var(--foreground);font:15px/1.5 var(--font);padding:24px 16px 40px;margin:0;overflow-wrap:anywhere}
+main{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:650;letter-spacing:-.01em}
+h3{font-size:16px;font-weight:650;margin:0 0 4px}
+h4{font-size:14px;font-weight:650;margin:8px 0 2px}
+p{margin:0 0 6px}
+.eyebrow{font:500 11px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--signal-plan);margin-bottom:8px}
+.lede{font-size:15.5px;color:var(--muted-foreground);margin-top:8px}
+.steps-nav{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0;padding:0;list-style:none;counter-reset:st}
+.steps-nav li{counter-increment:st;margin:0}
+.steps-nav a{display:block;padding:4px 10px;border:1px solid var(--rule);color:var(--foreground);text-decoration:none;font-size:12.5px}
+.steps-nav a::before{content:counter(st) " ";color:var(--signal-plan);font-weight:600}
+.step{border:1px solid var(--border);border-top:4px solid var(--signal-plan);background:var(--card);padding:14px 18px 16px;margin-top:12px;scroll-margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.step>.eyebrow{font-size:12px;margin-bottom:0}
+.step:target{outline:2px solid var(--signal-plan)}
+.partlab{font:600 12px/1 var(--font);letter-spacing:.08em;text-transform:uppercase;border-left:4px solid var(--signal-plan);padding:4px 8px;background:var(--stripe)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card);overflow-wrap:normal}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 11px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground);background:var(--background)}
+tbody tr:nth-child(even) td{background:var(--stripe)}
+tr:last-child td{border-bottom:0}
+td.todo{background:var(--signal-flag-fill)!important}
+td.num{width:34px;text-align:center;padding:6px 2px}
+.badge{display:inline-block;min-width:22px;padding:1px 5px;background:var(--primary);color:var(--primary-foreground);font:700 12px/1.4 var(--font);text-align:center}
+ul,ol{margin:0;padding-left:18px}
+li{margin:2px 0}
+.note{font-size:12.5px;color:var(--muted-foreground)}
+.todo-mark{background:var(--signal-flag-fill);border:1px solid var(--signal-flag-line);padding:0 4px;font-size:12.5px}
+.callout{border-left:3px solid var(--signal-flag-line);background:var(--signal-flag-fill);padding:6px 12px;font-size:13px}
+.verdict{border:1px solid var(--signal-plan);padding:6px 12px;font-size:14px}
+.answer{border:2px solid var(--foreground);padding:6px 12px;font-size:14px}
+.abc{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.abc>div{border:1px solid var(--rule);padding:6px 10px;font-size:13px}
+@media (max-width:720px){.abc{grid-template-columns:1fr}.step{padding:12px}}
+figure{margin:0;display:flex;flex-direction:column;gap:6px}
+figcaption{font-size:12.5px;color:var(--muted-foreground)}
+footer{font-size:12.5px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:8px}
+a{color:var(--signal-plan)}
+a.t{text-decoration-style:dotted}
+code{font-size:12px}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+html[data-lang="ko"] [lang="en"],html[data-lang="en"] [lang="ko"]{display:none!important}
+html[data-lang="ko"] body{word-break:keep-all}
+.topbar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-bottom:6px}
+.langbar{display:none}
+html.js .langbar{display:flex}
+.langbar button{font:500 12.5px var(--font);padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer;margin-left:-1px}
+.langbar button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+.row2{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:12px;align-items:center;color:var(--muted-foreground)}
+.row2 .cur{color:var(--foreground);font-weight:600;border-bottom:2px solid var(--signal-plan)}
+svg.flow{width:100%;height:auto;display:block;border:1px solid var(--rule)}
+svg.flow text{font-family:var(--font)}
+svg.flow .card{fill:var(--card);stroke:var(--border);stroke-width:1}
+svg.flow .hd{font-size:11px;font-weight:700;fill:var(--foreground)}
+svg.flow .nt{font-size:10.5px;fill:var(--foreground)}
+svg.flow .mu{font-size:10px;fill:var(--muted-foreground)}
+svg.flow .col{font-size:11px;font-weight:700;fill:#fff;text-anchor:middle}
+svg.flow .arr{fill:none;stroke:#404040;stroke-width:1.2}
+svg.flow .q1{fill:var(--c-q1)}svg.flow .q2{fill:var(--c-q2)}svg.flow .q3{fill:var(--c-q3)}svg.flow .ot{fill:var(--c-out)}svg.flow .gr{fill:var(--c-gray)}
+.sw{display:inline-block;width:14px;height:12px;vertical-align:-1px;margin-right:4px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px}
+.todotbl tbody tr:nth-child(even) td{background:oklch(0.9 0 0)}
+.todotbl tbody tr:nth-child(odd) td{background:#fff}
+.todotbl td.who{font-size:12.5px}
+tr.chk td{font-size:12.5px;border-left:3px solid var(--signal-plan)}
+tr.chk td:first-child{border-left:0}
+tr.chk p{margin:0 0 4px}
+table.sum th:first-child,table.sum td:first-child{width:96px}
+#terms-box ul{list-style:none;padding:0}
+#terms-box li{margin:4px 0;scroll-margin-top:12px}
+#terms-box li:target{background:var(--signal-flag-fill)}
+</style>
+</head>
+<body>
+<main>
+<nav class="topbar" aria-label="Page navigation">
+  <div class="langbar" role="group" aria-label="Language">
+    <button type="button" data-set="ko" aria-pressed="true">한국어</button>
+    <button type="button" data-set="en" aria-pressed="false">English</button>
+  </div>
+  <div class="row2">
+    <span lang="ko">다른 페이지:</span><span lang="en">Other pages:</span>
+    <span class="cur" aria-current="page"><span lang="ko">이 페이지 (발표 슬라이드)</span><span lang="en">This page (presentation slides)</span></span>
+    <a href="index.html" target="_top"><span lang="ko">전체 보기</span><span lang="en">All pages</span></a>
+    <a href="index.html#guide" target="_top"><span lang="ko">강의와 RQ 해설서</span><span lang="en">Lecture and RQ guide</span></a>
+  </div>
+</nav>
+<header>
+  <div class="eyebrow"><span lang="ko">CS 6344 데이터 과학 입문 · 1조 · 발표</span><span lang="en">CS 6344 Intro to Data Science · Group 1 · Presentation</span></div>
+  <h1><span lang="ko">발표 슬라이드를 보고, 각자 고치는 법</span><span lang="en">How to view the presentation slides and how each of us edits them</span></h1>
+  <p class="lede"><span lang="ko">슬라이드는 16장이다. 7단계로 읽는다. 각 단계가 앞 단계 위에 쌓인다.</span><span lang="en">The deck has 16 slides. 7 steps, each building on the one before.</span></p>
+  <div class="verdict"><b><span lang="ko">결론:</span><span lang="en">Result:</span></b> <span lang="ko">가장 쉬운 방법은 A다. 온라인 덱 하나를 모두가 고친다. 그러면 팀에 판이 하나만 남는다.</span><span lang="en">The easiest way is A. All of us edit one online deck. Then the team keeps one version only.</span></div>
+  <ol class="steps-nav" id="navlist" aria-label="Steps"></ol>
+</header>
+
+<section class="step" id="sec-view">
+  <div class="eyebrow"></div>
+  <h3><span lang="ko">슬라이드 보기 세 가지</span><span lang="en">Three ways to view the slides</span></h3>
+  <p><span lang="ko"><b>왜:</b> 먼저 슬라이드를 봐야 고칠 곳을 안다. 발표는 10분에서 12분이고, 질의응답(<a class="t" data-t="qa"></a>)까지 30분이다 (D-048).</span><span lang="en"><b>Why:</b> You must see the slides before you edit them. The talk runs 10 to 12 minutes inside a 30-minute slot with Q&amp;A (D-048).</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th><span lang="ko">무엇</span><span lang="en">What</span></th><th><span lang="ko">어디서</span><span lang="en">Where</span></th><th><span lang="ko">왜 쓰나</span><span lang="en">Why use it</span></th></tr></thead>
+    <tbody>
+      <tr><td class="num"><span class="badge">1</span></td><td><b><span lang="ko">온라인 덱</span><span lang="en">Online deck</span></b></td><td><a href="https://claude.ai/artifact/FYZyxi6weBL3LyUHkq4H4u" target="_blank" rel="noopener">claude.ai/artifact/FYZyxi6weBL3LyUHkq4H4u</a></td><td><span lang="ko">원본이다. 여기서 바로 고친다.</span><span lang="en">This is the source. You edit here.</span></td></tr>
+      <tr><td class="num"><span class="badge">2</span></td><td><b><span lang="ko">로컬 사본 (HTML)</span><span lang="en">Local copy (HTML)</span></b></td><td><a href="presentation/slides_local.html"><code>presentation/slides_local.html</code></a></td><td><span lang="ko">16장 모두와 슬라이드별 <a class="t" data-t="notes"></a>를 본다. 브라우저로 연다.</span><span lang="en">Shows all 16 slides with speaker notes under each. Open it in a browser.</span></td></tr>
+      <tr><td class="num"><span class="badge">3</span></td><td><b><span lang="ko">로컬 사본 (PDF)</span><span lang="en">Local copy (PDF)</span></b></td><td><a href="presentation/slides_local.pdf"><code>presentation/slides_local.pdf</code></a></td><td><span lang="ko">슬라이드만 16쪽이다. 인쇄나 공유에 쓴다. 형식: <a class="t" data-t="pdf"></a></span><span lang="en">Slides only, 16 pages. Use it to print or share.</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><span lang="ko">온라인 덱은 소유자만 볼 수 있다. 소유자가 덱 화면의 Share 메뉴에서 공유해야 팀원이 연다. 로컬 HTML은 <code>papers/paper_mvp1/figures/</code>에서 그림을 읽는다. 폴더 구조를 바꾸지 않는다.</span><span lang="en">The online deck is private to the owner. A teammate can open it only after the owner shares it from the deck page&#39;s Share menu. The local HTML reads images from <code>papers/paper_mvp1/figures/</code>, so keep the folder layout.</span></div>
+</section>
+
+<section class="step" id="sec-who">
+  <div class="eyebrow"></div>
+  <h3><span lang="ko">누가 어느 슬라이드를 맡나</span><span lang="en">Who owns which slides</span></h3>
+  <p><span lang="ko"><b>왜:</b> 담당이 분명해야 같은 슬라이드를 동시에 고치지 않는다. 지금은 연구 질문(research question, RQ)별로 나눴고, 바뀔 수 있다 (D-048).</span><span lang="en"><b>Why:</b> A clear owner stops two people from editing the same slide. For now we split by research question (RQ), and the split may change (D-048).</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th><span lang="ko">구간</span><span lang="en">Part</span></th><th><span lang="ko">슬라이드 id</span><span lang="en">Slide ids</span></th><th><span lang="ko">발표자</span><span lang="en">Speaker</span></th></tr></thead>
+    <tbody>
+      <tr><td class="num"><span class="badge">1</span></td><td><b><span lang="ko">도입</span><span lang="en">Intro</span></b></td><td><code>cover</code>, <code>why</code>, <code>data</code>, <code>methods</code>, <code>limits</code>, <code>conclusion</code>, <code>qa</code></td><td>Taek Lim</td></tr>
+      <tr><td class="num"><span class="badge">2</span></td><td><b style="color:var(--c-q1)">Q1</b></td><td><code>q1-verdict</code>, <code>q1-reading</code>, <code>checks</code></td><td class="todo"><span lang="ko">미정 (README TODO 9)</span><span lang="en">To be decided (README TODO 9)</span></td></tr>
+      <tr><td class="num"><span class="badge">3</span></td><td><b style="color:var(--c-q2)">Q2</b></td><td><code>q2</code></td><td class="todo"><span lang="ko">미정 (README TODO 9)</span><span lang="en">To be decided (README TODO 9)</span></td></tr>
+      <tr><td class="num"><span class="badge">4</span></td><td><b style="color:var(--c-q3)">Q3</b></td><td><code>q3</code></td><td class="todo"><span lang="ko">미정 (README TODO 9)</span><span lang="en">To be decided (README TODO 9)</span></td></tr>
+      <tr><td class="num"><span class="badge">5</span></td><td><b><span lang="ko">백업</span><span lang="en">Backup</span></b></td><td><code>backup-kept</code>, <code>backup-lorenz</code>, <code>backup-practical</code>, <code>backup-outcome1</code></td><td><span lang="ko">질문을 받은 사람</span><span lang="en">Whoever is asked</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><span lang="ko">합계 16장: 도입 7장, Q1 3장, Q2 1장, Q3 1장, 백업 4장. 슬라이드 id는 파일 이름이기도 하다.</span><span lang="en">Total 16 slides: Intro 7, Q1 3, Q2 1, Q3 1, Backup 4. A slide id is also its file name.</span></p>
+</section>
+
+<section class="step" id="sec-ways">
+  <div class="eyebrow"></div>
+  <h3><span lang="ko">편집 방법 세 가지 비교</span><span lang="en">Compare the three ways to edit</span></h3>
+  <p><span lang="ko"><b>왜:</b> 방법마다 고친 내용이 흐르는 길이 다르다. 길을 모르고 고치면 두 판이 어긋난다.</span><span lang="en"><b>Why:</b> Each way sends your change along a different path. Edit without knowing the path and two versions drift apart.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th><span lang="ko">방법</span><span lang="en">Way</span></th><th><span lang="ko">누구에게 맞나</span><span lang="en">Best for</span></th><th><span lang="ko">고친 내용이 다른 판으로 가나</span><span lang="en">Does the edit reach the other copies</span></th><th><span lang="ko">왜 이렇게 정했나</span><span lang="en">Why</span></th></tr></thead>
+    <tbody>
+      <tr><td class="num"><span class="badge">A</span></td><td><b><span lang="ko">A 온라인 덱 (권장)</span><span lang="en">A Online deck (recommended)</span></b></td><td><span lang="ko">모든 팀원</span><span lang="en">Every teammate</span></td><td><span lang="ko">온라인 덱에 바로 저장된다. 저장소로는 소유자가 가져온다.</span><span lang="en">Saved in the online deck at once. The owner pulls it into the repo.</span></td><td><span lang="ko">원본이 하나라서 발표 날 판이 어긋나지 않는다.</span><span lang="en">One source of truth, so two versions never disagree on the day.</span></td></tr>
+      <tr><td class="num"><span class="badge">B</span></td><td><b><span lang="ko">B 저장소 파일</span><span lang="en">B Repo files</span></b></td><td><span lang="ko"><a class="t" data-t="git"></a>를 쓰는 사람</span><span lang="en">People who use git</span></td><td><span lang="ko">저장소와 로컬 사본은 바뀐다. 온라인 덱은 소유자가 Claude에게 올려 달라고 해야 바뀐다.</span><span lang="en">The repo and local copy change. The online deck changes only when the owner asks Claude to publish the files.</span></td><td><span lang="ko">글과 노트가 변경 기록과 함께 남는다.</span><span lang="en">Text and notes are kept with a change history.</span></td></tr>
+      <tr><td class="num"><span class="badge">C</span></td><td><b><span lang="ko">C 파워포인트 파일</span><span lang="en">C PowerPoint file (PPTX)</span></b></td><td><span lang="ko">연습이나 최종 동결</span><span lang="en">Personal rehearsal or a final freeze</span></td><td><span lang="ko">아니다. 별도 사본이라 돌아오지 않는다.</span><span lang="en">No. It is a separate copy and does not flow back.</span></td><td><span lang="ko">돌아오지 않는 사본을 팀 판으로 쓰면 고친 내용이 사라진다.</span><span lang="en">A copy that does not flow back loses edits if the team treats it as the real deck.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="step" id="sec-a">
+  <div class="eyebrow"></div>
+  <div class="partlab"><span lang="ko">방법 A</span><span lang="en">Way A</span></div>
+  <h3><span lang="ko">온라인 덱에서 고친다</span><span lang="en">Edit in the online deck</span></h3>
+  <p><span lang="ko"><b>왜:</b> 모두가 한 덱을 고치면 합칠 일이 없다. 팀원은 <a class="t" data-t="git"></a>을 몰라도 된다.</span><span lang="en"><b>Why:</b> When all of us edit one deck, nothing needs merging. A teammate needs no git.</span></p>
+  <figure>
+  <svg class="flow" viewBox="0 0 1060 120" role="img" aria-label="Flow of way A: share, edit or comment, new version, pull into repo, rebuild local copy">
+    <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#404040"/></marker></defs>
+    <g class="arr"><path d="M180 60 H224" marker-end="url(#ah)"/><path d="M397 60 H441" marker-end="url(#ah)"/><path d="M614 60 H658" marker-end="url(#ah)"/><path d="M831 60 H875" marker-end="url(#ah)"/></g>
+    <rect class="card" x="10" y="14" width="170" height="92"/>
+    <text class="hd" x="18" y="38" lang="ko">1 공유</text><text class="hd" x="18" y="38" lang="en">1 Share</text>
+    <text class="nt" x="18" y="62" lang="ko">소유자가 Share에서</text><text class="nt" x="18" y="62" lang="en">Owner gives edit</text>
+    <text class="nt" x="18" y="80" lang="ko">편집 권한을 준다</text><text class="nt" x="18" y="80" lang="en">access in Share</text>
+    <rect class="card" x="227" y="14" width="170" height="92"/>
+    <text class="hd" x="235" y="38" lang="ko">2 편집 또는 댓글</text><text class="hd" x="235" y="38" lang="en">2 Edit or comment</text>
+    <text class="nt" x="235" y="62" lang="ko">슬라이드 글을 직접</text><text class="nt" x="235" y="62" lang="en">Edit slide text</text>
+    <text class="nt" x="235" y="80" lang="ko">고치거나 댓글</text><text class="nt" x="235" y="80" lang="en">or leave a comment</text>
+    <rect class="card" x="444" y="14" width="170" height="92"/>
+    <text class="hd" x="452" y="38" lang="ko">3 새 버전</text><text class="hd" x="452" y="38" lang="en">3 New version</text>
+    <text class="nt" x="452" y="62" lang="ko">변경이 새 버전으로</text><text class="nt" x="452" y="62" lang="en">Each change is</text>
+    <text class="nt" x="452" y="80" lang="ko">저장된다</text><text class="nt" x="452" y="80" lang="en">saved as a version</text>
+    <rect class="card" x="661" y="14" width="170" height="92"/>
+    <text class="hd" x="669" y="38" lang="ko">4 저장소로 가져옴</text><text class="hd" x="669" y="38" lang="en">4 Pull into repo</text>
+    <text class="nt" x="669" y="62" lang="ko">소유자가 Claude에게</text><text class="nt" x="669" y="62" lang="en">Owner asks Claude</text>
+    <text class="nt" x="669" y="80" lang="ko">덱 가져오기를 시킨다</text><text class="nt" x="669" y="80" lang="en">to pull the deck</text>
+    <rect class="card" x="878" y="14" width="170" height="92"/>
+    <text class="hd" x="886" y="38" lang="ko">5 로컬 재빌드</text><text class="hd" x="886" y="38" lang="en">5 Rebuild local</text>
+    <text class="nt" x="886" y="62" lang="ko">build_local.sh로</text><text class="nt" x="886" y="62" lang="en">build_local.sh</text>
+    <text class="nt" x="886" y="80" lang="ko">로컬 사본을 갱신</text><text class="nt" x="886" y="80" lang="en">updates local copy</text>
+  </svg>
+  <figcaption><span lang="ko">그림 1: 방법 A에서 고친 내용이 흐르는 길. 왜: 다섯 단계를 순서대로 보면 누가 무엇을 하는지 분명하다.</span><span lang="en">Figure 1: The path of an edit in way A. Why: the five steps in order show who does what.</span></figcaption>
+  </figure>
+  <ol>
+    <li><span lang="ko">소유자가 덱 화면의 Share 메뉴에서 팀원에게 편집 권한을 준다.</span><span lang="en">The owner gives each teammate edit access from the deck page&#39;s Share menu.</span></li>
+    <li><span lang="ko">팀원이 링크를 열고, 자기 슬라이드의 글을 직접 고친다. 고치기 어렵다면 댓글을 남긴다.</span><span lang="en">Each teammate opens the link and edits the text on their own slides. If unsure, leave a comment.</span></li>
+    <li><span lang="ko">변경은 새 버전으로 저장된다.</span><span lang="en">Changes save as new versions.</span></li>
+    <li><span lang="ko">소유자가 Claude에게 덱을 저장소로 가져오고 로컬 사본을 다시 만들라고 시킨다.</span><span lang="en">The owner asks Claude to pull the deck into the repo and rebuild the local copy.</span></li>
+  </ol>
+  <div class="callout"><span lang="ko">공유 전에는 소유자만 덱을 연다. 팀원은 먼저 소유자에게 Share를 부탁한다.</span><span lang="en">Until the owner shares it, only the owner can open the deck. Ask the owner to share first.</span></div>
+</section>
+
+<section class="step" id="sec-b">
+  <div class="eyebrow"></div>
+  <div class="partlab"><span lang="ko">방법 B</span><span lang="en">Way B</span></div>
+  <h3><span lang="ko">저장소 파일에서 고친다</span><span lang="en">Edit the repo files</span></h3>
+  <p><span lang="ko"><b>왜:</b> 파일로 고치면 변경 기록이 남는다. 슬라이드 한 장이 파일 하나라서 고칠 곳을 찾기 쉽다.</span><span lang="en"><b>Why:</b> Editing files leaves a change history. One slide is one file, so the place to edit is easy to find.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th><span lang="ko">할 일</span><span lang="en">Do</span></th><th><span lang="ko">무엇을 고치나</span><span lang="en">What it changes</span></th></tr></thead>
+    <tbody>
+      <tr><td class="num"><span class="badge">1</span></td><td><b><span lang="ko">슬라이드 글을 고친다.</span><span lang="en">Edit slide text.</span></b><br><code>tips/presentation/deck/project/slides/&lt;id&gt;.html</code></td><td><span lang="ko">한 파일에 <code>&lt;section&gt;</code> 하나가 있다. 보이는 글은 <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, 표 칸에 둔다. <a class="t" data-t="notes"></a>는 마지막 <code>&lt;aside&gt;</code>에 둔다. 그림 주소(<code>/_blob/...</code>)는 그대로 둔다.</span><span lang="en">One file holds one <code>&lt;section&gt;</code>. Visible text sits in <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code> and table cells. Speaker notes sit in the last <code>&lt;aside&gt;</code>. Leave the image addresses (<code>/_blob/...</code>) as they are.</span></td></tr>
+      <tr><td class="num"><span class="badge">2</span></td><td><b><span lang="ko">공통 모양을 고친다.</span><span lang="en">Edit the shared look.</span></b><br><code>tips/presentation/deck/project/deck.css</code></td><td><span lang="ko">모든 슬라이드가 쓴다. 글꼴 IBM Plex Mono, 무채색, 각진 모서리다. Q1은 주황, Q2는 청록, Q3는 초록이다. 고치기 전에 묻는다.</span><span lang="en">Every slide uses it. Font IBM Plex Mono, achromatic, square corners. Q1 is orange, Q2 teal, Q3 green. Ask before you edit.</span></td></tr>
+      <tr><td class="num"><span class="badge">3</span></td><td><b><span lang="ko">순서와 제목을 고친다.</span><span lang="en">Edit order and title.</span></b><br><code>tips/presentation/deck/project/deck.json</code></td><td><span lang="ko">제목, 슬라이드 순서(<code>"order"</code>), 구간, 글꼴이 있다.</span><span lang="en">It holds the title, the slide order (<code>"order"</code>), the sections and the font.</span></td></tr>
+      <tr><td class="num"><span class="badge">4</span></td><td><b><span lang="ko">로컬 사본을 다시 만든다.</span><span lang="en">Rebuild the local copy.</span></b><br><code>bash tips/presentation/build_local.sh</code></td><td><span lang="ko"><code>slides_local.html</code>과 <code>slides_local.pdf</code>를 새로 쓴다. PDF에는 Chrome이 필요하다. 없으면 HTML만 새로 쓴다.</span><span lang="en">It rewrites <code>slides_local.html</code> and <code>slides_local.pdf</code>. The PDF needs Chrome. Without Chrome only the HTML is rewritten.</span></td></tr>
+      <tr><td class="num"><span class="badge">5</span></td><td><b><span lang="ko">결과를 확인한다.</span><span lang="en">Check the result.</span></b><br><code>tips/presentation/slides_local.html</code></td><td><span lang="ko">브라우저로 열어 고친 슬라이드와 노트를 본다.</span><span lang="en">Open it in a browser and look at the edited slide and its notes.</span></td></tr>
+      <tr><td class="num"><span class="badge">6</span></td><td><b><span lang="ko">커밋한다.</span><span lang="en">Commit.</span></b></td><td><span lang="ko">파일 변경을 <a class="t" data-t="commit"></a>으로 남긴다.</span><span lang="en">Record the file changes as a commit.</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><span lang="ko">이 방법은 온라인 덱을 바꾸지 않는다. 온라인 덱에도 반영하려면 소유자가 Claude에게 파일을 올려 달라고 한다.</span><span lang="en">This way does not change the online deck. To update it too, the owner asks Claude to publish the files.</span></div>
+</section>
+
+<section class="step" id="sec-c">
+  <div class="eyebrow"></div>
+  <div class="partlab"><span lang="ko">방법 C</span><span lang="en">Way C</span></div>
+  <h3><span lang="ko">파워포인트 파일로 연습한다</span><span lang="en">Rehearse with a PPTX file</span></h3>
+  <p><span lang="ko"><b>왜:</b> 인터넷 없이 연습하고 싶을 때 쓴다. 원본에는 영향이 없다.</span><span lang="en"><b>Why:</b> Use it to rehearse without internet. The real deck stays untouched.</span></p>
+  <ol>
+    <li><span lang="ko">온라인 덱 화면에서 <a class="t" data-t="pptx"></a>이나 PDF로 내려받는다.</span><span lang="en">Download the deck as a PowerPoint file (PPTX) or a PDF from the deck page.</span></li>
+    <li><span lang="ko">PowerPoint나 Google Slides에서 연다. 고친 파일은 별도 사본이다.</span><span lang="en">Open it in PowerPoint or Google Slides. The edited file is a separate copy.</span></li>
+    <li><span lang="ko">고친 내용을 팀 덱에 쓰려면 온라인 덱이나 슬라이드 파일에 손으로 옮긴다.</span><span lang="en">To keep an edit in the team deck, retype it into the online deck or the slide file.</span></li>
+  </ol>
+  <div class="callout"><span lang="ko">개인 연습이나 마지막 동결에만 쓴다. 이 사본은 온라인 덱과 저장소로 돌아오지 않는다.</span><span lang="en">Use it only for personal rehearsal or a final freeze. This copy never flows back to the online deck or the repo.</span></div>
+</section>
+
+<section class="step" id="sec-rules">
+  <div class="eyebrow"></div>
+  <h3><span lang="ko">함께 쓰는 규칙 네 가지</span><span lang="en">Four rules for working together</span></h3>
+  <p><span lang="ko"><b>왜:</b> 규칙이 적을수록 지키기 쉽다. 넷만 지키면 판이 어긋나지 않는다.</span><span lang="en"><b>Why:</b> Fewer rules are easier to keep. Follow these four and the versions stay together.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th><span lang="ko">규칙</span><span lang="en">Rule</span></th><th><span lang="ko">왜</span><span lang="en">Why</span></th></tr></thead>
+    <tbody>
+      <tr><td class="num"><span class="badge">1</span></td><td><b><span lang="ko">자기 슬라이드만 고친다.</span><span lang="en">Edit only your own slides.</span></b></td><td><span lang="ko">남의 글을 모르고 바꾸는 일을 막는다.</span><span lang="en">It stops you from changing someone else&#39;s text by mistake.</span></td></tr>
+      <tr><td class="num"><span class="badge">2</span></td><td><b><span lang="ko">같은 슬라이드를 동시에 고치지 않는다.</span><span lang="en">Do not edit the same slide at the same time.</span></b></td><td><span lang="ko">두 고침이 서로를 덮어쓸 수 있다.</span><span lang="en">Two edits can overwrite each other.</span></td></tr>
+      <tr><td class="num"><span class="badge">3</span></td><td><b><span lang="ko">숫자는 논문에서 온다. 논문이 바뀔 때만 숫자를 바꾼다.</span><span lang="en">Numbers come from the paper. Change a number only if the paper changes.</span></b></td><td><span lang="ko">출처는 <code>papers/paper_mvp1/numbers.tex</code>다. 논문과 다른 숫자는 발표의 신뢰를 깎는다.</span><span lang="en">The source is <code>papers/paper_mvp1/numbers.tex</code>. A number that differs from the paper hurts trust in the talk.</span></td></tr>
+      <tr><td class="num"><span class="badge">4</span></td><td><b><span lang="ko"><code>deck.css</code>를 고치기 전에 묻는다.</span><span lang="en">Ask before you change <code>deck.css</code>.</span></b></td><td><span lang="ko">모든 슬라이드의 모양이 한 번에 바뀐다.</span><span lang="en">It changes the look of every slide at once.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>
+  <p><span lang="ko">출처: <code>DECISIONS.md</code> D-048, <code>tips/presentation/deck/project/deck.json</code>, <code>tips/presentation/build_local.sh</code>, <code>README.md</code> TODO 9. 이 페이지는 그 파일에 없는 숫자를 더하지 않는다.</span><span lang="en">Sources: <code>DECISIONS.md</code> D-048, <code>tips/presentation/deck/project/deck.json</code>, <code>tips/presentation/build_local.sh</code>, <code>README.md</code> TODO 9. This page adds no number that is not in those files.</span></p>
+</footer>
+<footer lang="ko" id="terms-box">
+  <h3>용어 부록</h3>
+  <ul id="terms"></ul>
+</footer>
+</main>
+<script>
+(function(){
+  var TERMS={
+    pptx:["파워포인트 파일(PowerPoint file, PPTX)","PowerPoint나 Google Slides에서 여는 슬라이드 파일 형식."],
+    pdf:["문서 파일(Portable Document Format, PDF)","어느 기기에서나 같은 모양으로 열리는 문서 형식. 슬라이드를 쪽으로 보인다."],
+    git:["깃(git)","파일의 변경 기록을 저장하고 팀이 나눠 쓰는 도구."],
+    commit:["커밋(commit)","git에 변경 하나를 설명과 함께 기록하는 일."],
+    notes:["발표자 노트(speaker notes)","슬라이드 아래에 두는, 발표자가 읽을 말할 거리. 청중 화면에는 나오지 않는다."],
+    qa:["질의응답(question and answer, Q&A)","발표 뒤 청중이 묻고 발표자가 답하는 시간."]
+  };
+  var d=document.documentElement;
+  var TITLE={ko:"6344 Polymarket 발표 슬라이드 편집법",en:"6344 Polymarket: How to Edit the Presentation Slides"};
+  var KEY="group01-lang";
+  var NAMES={view:["슬라이드 보기","View"],who:["발표 분담","Who owns what"],ways:["편집 방법 3가지","3 ways to edit"],a:["A 온라인 덱","A Online deck"],b:["B 저장소 파일","B Repo files"],c:["C 파워포인트","C PPTX"],rules:["함께 쓰는 규칙","Rules"]};
+  function sp(l,h){var s=document.createElement("span");s.setAttribute("lang",l);s.textContent=h;return s;}
+  var as=document.querySelectorAll("a.t[data-t]");
+  for(var j=0;j<as.length;j++){var k2=as[j].getAttribute("data-t");if(TERMS[k2]){as[j].textContent=TERMS[k2][0];as[j].setAttribute("href","#term-"+k2);}}
+  var ul2=document.getElementById("terms");
+  Object.keys(TERMS).forEach(function(k){var li2=document.createElement("li");li2.id="term-"+k;var b=document.createElement("b");b.textContent=TERMS[k][0];li2.appendChild(b);li2.appendChild(document.createTextNode(": "+TERMS[k][1]));ul2.appendChild(li2);});
+  var steps=document.querySelectorAll("main > section.step");
+  var nav=document.getElementById("navlist");
+  for(var s=0;s<steps.length;s++){
+    var st=steps[s];var ey=st.querySelector(".eyebrow");
+    ey.appendChild(sp("ko",(s+1)+"단계 / "+steps.length));ey.appendChild(sp("en","Step "+(s+1)+" of "+steps.length));
+    var li=document.createElement("li");var a=document.createElement("a");a.href="#"+st.id;
+    var nm=NAMES[st.id.replace("sec-","")]||["",""];
+    a.appendChild(sp("ko",nm[0]));a.appendChild(sp("en",nm[1]));li.appendChild(a);nav.appendChild(li);
+  }
+  function setLang(l,save){
+    d.setAttribute("data-lang",l);d.lang=l;document.title=TITLE[l];
+    var b=document.querySelectorAll(".langbar button");
+    for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",b[i].getAttribute("data-set")===l?"true":"false");}
+    if(save){try{localStorage.setItem(KEY,l);}catch(e){}}
+  }
+  setLang(d.getAttribute("data-lang")==="en"?"en":"ko",false);
+  var btn=document.querySelectorAll(".langbar button");
+  for(var n2=0;n2<btn.length;n2++){btn[n2].addEventListener("click",function(){setLang(this.getAttribute("data-set"),true);});}
+})();
+</script>
+</body>
+</html>
