@@ -3,17 +3,125 @@
 **Group 1 | Team Brier**: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
 CS 6344 Introduction to Data Science, UTRGV
 
+## 1. TODO for teammates
+
+**The course deadline is 2026-11-15 (D-021). Five parts of the paper are still empty and need the owner's words. Everyone can help with the checks below them.**
+
+Why it matters: the course report and the paper cannot be final while a `\todo{owner: ...}` mark is open (D-044).
+
+Terms: a `\todo{}` is a visible mark in the LaTeX source. The paper shows it as a note in the PDF.
+
+| # | What to do | Where | Why it matters | Who decides |
+| --- | --- | --- | --- | --- |
+| 1 | Confirm the added references. Add any others | `papers/paper_mvp1/sections/02-related.tex` line 39 (Related work) | Related work shows how our study fits earlier work | Owner confirms. Any teammate may suggest references |
+| 2 | Write why x_min (where the power-law tail starts) is fixed at the top 10% of values, not chosen by the smallest Kolmogorov-Smirnov (KS) distance D. Or drop the sentence | `papers/paper_mvp1/sections/04-methods.tex` line 117 (Section 4.4) | The power-law exponent (alpha) depends on x_min. The audit says the x_min choice is ours (`analysis/lecture_method_audit.md` row 45). A reader will ask | Owner. A new fit on the smallest D would need a cluster run (D-027) |
+| 3 | Write why prices run high, and what the gaps mean for a reader of the price | `papers/paper_mvp1/sections/11-discussion.tex` line 12 (Discussion) | The Q1 result is a direction (outcome 1 priced too high). The reader needs a reading of it. Check M5 found 0 of 7 grid prices pass the practical line | Owner. Teammates may draft options |
+| 4 | Decide whether the paper needs wider implications. Write them or remove the mark | `papers/paper_mvp1/sections/11-discussion.tex` line 26 | The mark says "if the course report needs them" | Owner |
+| 5 | Write the closing sentence on the value of the study, and the future work | `papers/paper_mvp1/sections/13-conclusion.tex` line 12 (Conclusion) | The paper ends without a closing today. One future-work item is already logged: compare the power law and lognormal on the same data (D-027) | Owner |
+| 6 | Check every sentence of the paper has 15 words or fewer (finding F5), after items 1 to 5 are in | `papers/paper_mvp1/main.tex`, `papers/paper_mvp1/sections/*.tex` | Style rule `.claude/rules/writing/style.md` section 2. The build must still have 0 errors and 0 overfull boxes | Owner, with Claude Code |
+| 7 | Validate each class method in the table in section 2: is it good enough, or is there a better way to show it? Write each finding in one line under the table | Section 2 of this README | The professor grades whether the analysis stays inside the lecture contents (D-025). A weak method may hurt the Q1 verdict | Any teammate checks. Owner decides every change |
+| 8 | Review report v1. Record notes in `STATUS.md` | `reports/report_v1.html` | The report was built for the owner (D-016) | Owner |
+| 9 | Pick the 3-person work split. Options: A stable, B scalable, C cutting-edge | `docs/team_split_design.html` Steps 2 and 7 | Not yet decided (owner, 2026-11-01). Log the pick in `DECISIONS.md` | Owner |
+| 10 | Decide whether to redraw `fig5_ecdf_yes_no.png`. Its inside text may still say Yes/No | `reports/figures/fig5_ecdf_yes_no.png` | The paper says "outcome 1" (D-036). One cluster job is needed | Owner decides. The main session runs the job |
+| 11 | Compare the `markets.parquet` hash of run 142082 with run 142140 | `runs/142140_q1eqfreq_v5/input.sha256` (review item G11) | It shows both runs read the same input table | Owner, on the cluster |
+| 12 | Split `code/make_report.py` (about 800 lines) in its own commit. Low priority | `code/make_report.py` | Kept as is for now (owner, 2026-10-19). AC: same report HTML byte for byte | Owner, with Claude Code |
+
+Not open any more: the gate review of the restructured paper passed (PL-15, cycle 2/2). Source: `PLAN.md` "Open tasks".
+
+Source: `papers/paper_mvp1/sections/*.tex` (grep `todo{`), `PLAN.md`, `STATUS.md`, `analysis/lecture_method_audit.md`.
+
+## About this project
+
 Do Polymarket prices behave like real probabilities? Who does the trading? What does the trading data look like? We answer these questions with statistics on Polymarket-v1.
 
 The dataset paper (Qin & Yang, 2026) reports about 1.2 billion trades across 1.3 million markets, 2022–2026. Our runs use 688,131 markets in scope and keep 47,948 of them. Source: `runs/142082_mvp1_full_v1r3/tables_summary.json` (`n_markets_in_scope`, `n_kept`). The filter rules are in [How we filter the data](#how-we-filter-the-data).
 
-This README is a step-by-step guide to MVP1 (minimum viable product 1: the smallest complete working version of the project). Start with [Current status](#current-status).
+This README tells the team what to do next, which class methods we used, and why each step matters. It is also a step-by-step guide to MVP1 (minimum viable product 1: the smallest complete working version of the project).
 
 Scope: MVP1 only (Q1, Q2, Q3). MVP2 (Q1a, Q1b, Q1c) is out of scope, by the owner's choice on 2026-11-01 (D-016). Its files sit in `future_work/`.
 
+Course deadline: 2026-11-15 (D-021).
+
+```
+ 1. TODO for teammates (above) --> 2. Class methods to validate --> 3. What we did and why
+        (act now)               (check each one)              (Q1, Q2, Q3 summary)
+                                       |
+                                       v
+        Current status, Results so far, How we got here, and the reference sections
+```
+
+Visual version of sections 2 and 3: open `tips/index.html` in a browser and pick the lecture and research question (RQ) guide, `tips/polymarket_lecture_rq_guide_tips.html`.
+
+## 2. Class topics we used, and what to validate
+
+**Nearly every method comes from a lecture deck. Each row below says what a teammate should check and which other lecture method could show the same thing.**
+
+Why: the owner rule says all analysis stays inside the lecture contents (D-025). The audit counted 52 methods: 35 in a lecture, 7 partly, 10 not found. Ten were removed, renamed or labeled (D-026, D-028).
+
+How to read the table:
+
+- D6 means the Lecture 6 deck, `notes/6_DataDistribution.pptx`. The number is the deck number.
+- Paper sections: 4.2, 4.3, 4.4 are methods for Q1, Q2, Q3. Sections 5.1, 5.2, 5.3 are the results.
+- Check = what a teammate does. Open the slide, then the paper section, then compare.
+- "(suggestion, to validate)" marks a check or alternative that no source file states.
+- Slide images are not in the audit text. The audit lists five slides to open (D11 slides 3 and 6, D7 slide 2, D6 slide 20, D12 slides 5 to 9, D5 slide 24).
+
+| # | Lecture deck | Method | Where in the paper | What it answers | Validate: is it good enough? | Other ways to show it |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | D6 Data Distribution | Bernoulli and binomial model | 4.2 (Q1) | Treats each market outcome as a coin flip with chance = price | Prices vary inside a bin, so the binomial is approximate (`docs/lecture_concept_map.md` section 2.1). Compare with the equal-frequency result (row 2) | Equal-frequency bins, already run |
+| 2 | D7 QQ Plot and Normalization, D5 Statistics and Visualization | 10 equal-width price bins. Equal-frequency bins as a check | 4.2, 5.1 (Q1) | Do events priced at p happen with frequency p, bin by bin? | Do both bin schemes give the same verdict? Now: 5 of 10 bins off (equal-width) and 7 of 10 (equal-frequency) after the Benjamini-Hochberg (BH) correction. Try 5 or 20 bins (suggestion, to validate) | A calibration chart as an error bar chart by bin (D5 slide 15) |
+| 3 | D9 Hypothesis Testing, D10 P-value, D13 Multiple Hypothesis Testing | Binomial test per bin, with BH and Bonferroni corrections | 4.2, 5.1 (Q1) | Which bins are off, after ten tests | Confirm 5 bins off after BH and 4 after Bonferroni. The tests assume independent markets, and check M3 re-tests with proxy event keys | Permutation test (D13 slides 20 to 32, suggestion, to validate) |
+| 4 | D12 Chi-Square Test | Chi-square goodness of fit, observed counts against counts the prices predict. It decides the Q1 verdict | 4.2, 5.1 (Q1) | Are the prices calibrated as a whole? | The deck shows the independence form only (audit: "partly"). Open D12 slides 5 to 9. The degrees of freedom (df) are 10 in code, and 9 by the deck rule. The verdict does not change (audit section 2) | None keeps the committed rule (audit section 3.3). Keep it, labeled |
+| 5 | D5 Statistics and Visualization | z interval (95% range around each observed rate) | 4.2, 5.1 (Q1) | How sure is each bin rate | Open D5 slide 24 for the exact form. The interval is unreliable when a bin has very few wins (1 win in 4,795 in the lowest equal-frequency bin) | Bootstrap interval (D5 slides 25 and 26) |
+| 6 | D20 Regression, D15 Entropy | Mean squared residual of the price (0.107). Log loss and mean entropy as side scores | 4.2, 5.1, Appendix F (Q1) | How far is the price from the outcome, on average | The name was changed from Brier score (D-026). Check the paper and report both state the departure from `analysis/prereg_mvp1.md`. Log loss uses the natural log, and D15 uses bits | Average surprise in bits (D15 slide 14) |
+| 7 | D16 Intro to Machine Learning, D21 Logistic Regression, D11 Comparing Distributions, D9 and D10 | Confusion matrix, accuracy, precision, recall at 0.5. Also the KS test and ECDF of price by outcome, and the longshot check (two cheapest bins) | 4.2, 5.1, Appendix C (Q1) | Does "price above 0.5" predict the winner | Side scores only. Check none carries a claim the verdict needs. The longshot result holds only with the 10-trade filter. Check the paper says so | Drop to an appendix line (suggestion, to validate) |
+| 8 | D4 Basic Stats, D5 Statistics and Visualization, D6 Data Distribution | Top 1, 5, 10, 20% volume shares against the 80/20 rule. Mean and median | 4.3, 5.2 (Q2) | Do a few wallets do most of the trading | The answer is by USDC volume (a dollar-pegged token), in kept markets, in wallet-role rows. Check the text never says "trader" or "person" | Complementary cumulative distribution function (CCDF) on log-log axes (D6 slide 21), already shown |
+| 9 | D6 Data Distribution, D7 QQ Plot and Normalization, D11 Comparing Distributions | Power-law exponent on the top 10% tail. One-sample KS test against the fit. CCDF | 4.3, 4.4, 5.2, 5.3 (Q2, Q3) | Does the tail follow a power law | The KS test rejects an exact power law, and x_min is fixed (TODO 2). Check the text never says "follows a power law" | Fit the power law and lognormal on the same data, with x_min estimated (D-027, no run yet) |
+| 10 | D11 Comparing Distributions, D14 Pairwise Association | Welch t-test, KS test, Spearman correlation, maker against taker | 4.3, 5.2 (Q2) | Do makers and takers differ | Open D11 slides 3 and 6. Does the deck t-test use unpooled variances? The audit says "partly" | Student t-test (audit section 3.3) |
+| 11 | D17 Clustering, D12 Chi-Square Test, D11 Comparing Distributions, D13 Multiple Hypothesis Testing | k-means side analysis, elbow plot, chi-square of independence, ANOVA, permutation test | Appendix D.2 (Q2) | Do wallet clusters line up with topic category | Must stay under 1/10 of the report. Check the effect size (largest share gap -1.49%) is read, not only p below 0.0001 | Hierarchical clustering (D18, suggestion, to validate) |
+| 12 | D3 Data and Matrix, D4 Basic Stats, D5 Statistics and Visualization | Mean, median, histogram, violin plot, box plot | 3 (data matrix), 4.4, 5.3, Appendix E (Q3) | What do prices and trade sizes look like | Do the figures show the two readings (prices U-shaped, sizes right skewed)? | The Lecture 25 deck on visualization (`25_Visualization.pptx`, suggestion, to validate) |
+| 13 | D7 QQ Plot and Normalization, D6 Data Distribution | QQ plot before and after a log transform. Normal and exponential fits | 4.4, 5.3, Appendix E (Q3) | Is a log scale needed, and which curve fits | The fits are not like for like. Normal and exponential use all data, and the power law uses the tail only. The paper says so. Check the sentence is near each fit table | Fit all three on the same tail (suggestion, to validate) |
+| 14 | D5 Statistics and Visualization, D10 P-value, D11 Comparing Distributions | Paired t-test and t interval on the price change. Empirical cumulative distribution function (ECDF) of the change | Appendix F (check R2) | Is the T - 1 day price close to the closing price | Mean squared residual: 0.107 at T - 1 day, and 0.075 just before the close. Check the paper does not call the T - 1 day price the close price | z interval from the saved mean and SD (audit section 3.3) |
+| 15 | Decks 22 to 25 (`22_Classification`, `23_ModelEvaluation`, `24_Dimensionality Reduction_v2`, `25_Visualization`) | None. The audit did not map these decks | none | | Open each deck. Does any method fit Q1, Q2 or Q3 better than the current one? (suggestion, to validate) | Model evaluation for calibration, dimensionality reduction for the wallet features (suggestion, to validate) |
+
+Four methods lie outside the lectures. The paper labels each one (D-028, D-041). D-047 removed the Wilson interval.
+
+| Method | Where | Why we kept it | Parent idea in a lecture |
+| --- | --- | --- | --- |
+| Lorenz curve | Section 5.2, Appendix D.1 (Q2) | It shows the whole curve of volume share against wallet share, next to the 80/20 reference (D-031). The owner asked to keep it beside the CCDF (D-028), and it carries no verdict. The repo rule `.claude/rules/visualization.md` section 7 asks for a Lorenz panel whenever a report shows "the top x% hold y%" | None. Closest: CCDF (D6) |
+| Cluster bootstrap chi-square | Appendix G, check M3 (Q1) | Markets on one event are not independent. It widens the interval to show that | Bootstrap (D5) |
+| Logistic calibration | Appendix G, check M5 (Q1) | It gives the slope of outcome on price, a second view of the gap | Logistic regression (D21) |
+| Brier skill score | Appendix G, check M5 (Q1) | It compares the mean squared residual with a flat base rate | Squared residual (D20) |
+
+Sources: `analysis/lecture_method_audit.md` (sections 1 to 4), `tips/polymarket_lecture_rq_guide_tips.html` (Part A), `papers/paper_mvp1/sections/04-methods.tex`, `app-g-review.tex`, `docs/lecture_concept_map.md`, `DECISIONS.md` D-025 to D-028, D-041, D-047. Deck file names: `notes/`.
+
+## 3. What we did, for what, and why it matters
+
+**Q1 says prices are not calibrated as a whole, in one small direction. Q2 says a few wallets hold nearly all volume. Q3 describes prices and sizes, with no verdict.**
+
+```
+ Q1 Is the crowd right?        --> bins of price vs observed rate --> verdict (pre-registered)
+ Q2 Who is the crowd?          --> volume shares per wallet       --> descriptive, no verdict
+ Q3 What does the data look like? --> price and size distributions --> descriptive, no verdict
+```
+
+All three use the same 47,948 kept markets, out of 688,131 in scope. MVP2 (Q1a, Q1b, Q1c) is out of scope.
+
+| | Q1: is the crowd right? | Q2: who is the crowd? | Q3: what does the data look like? |
+| --- | --- | --- | --- |
+| Why it matters | If a price of 0.70 means 70%, a reader can trust prices as probabilities | If a few wallets trade most of the volume, "the crowd" is small | A reader must know the data shape before any other analysis |
+| What we did | Split prices at T - 1 day into 10 bins. Compared the observed rate with the mean price. Ran a chi-square test. Fixed the rule before the result | Ranked wallets by USDC volume, for makers and takers. Compared the top shares with the 80/20 rule. Drew the CCDF and the Lorenz curve | Summarized prices, trade sizes and wallet volume. Drew histograms and QQ plots. Fitted three curves |
+| Result | Chi-square 67.99 (df 10), p 1.08e-10. In 9 of 10 bins the rate is below the price. Net gap -0.99 percent points | Top 20% of wallets hold 98.9% (makers) and 98.0% (takers) of volume. Top 1% hold 86.1% and 75.9% | Price median 0.32, mean 0.376. Trade size median 6.93 USDC, mean 129.8 USDC |
+| What it means | Prices are not calibrated as a whole. The effect is small and runs one way. Outcome 1 is priced too high. The reason is an open TODO (item 3) | Far beyond the 80/20 reference, by volume. A wallet is one address, not one person | Prices are U-shaped. Sizes are right skewed. The power law is a reference only (TODO item 2) |
+| Detail | [Results so far](#results-so-far), [Checks next to the Q1 verdict](#checks-next-to-the-q1-verdict) | [Results so far](#results-so-far) | [Results so far](#results-so-far) |
+
+Order of work and the reason for each step: [How we got here, step by step](#how-we-got-here-step-by-step).
+
+Source: `runs/142082_mvp1_full_v1r3/verdicts.json`, `q2_results.json`, `q3_results.json`, `tables_summary.json`, and the numbers in [Results so far](#results-so-far).
+
 ## Current status
 
-**The analysis is done. The paper, the 2-page course report and report v1 are built. Five owner text parts remain.**
+**The analysis is done. The paper, the 2-page course report and report v1 are built. Five owner text parts remain (see [TODO for teammates](#1-todo-for-teammates)).**
 
 ```
  data --> runs --> Q1 --> Q2 --> Q3 --> checks --> paper --> course report
@@ -31,6 +139,7 @@ Scope: MVP1 only (Q1, Q2, Q3). MVP2 (Q1a, Q1b, Q1c) is out of scope, by the owne
 | Paper | Built | `papers/paper_mvp1/main.pdf`. Body in two columns, then References, then appendices A to G (D-042 to D-045). Page numbers: `papers/paper_mvp1/main.aux` |
 | Course report | Built | `papers/course_report_mvp1/main.pdf`, 2 pages |
 | Report v1 | Built | `reports/report_v1.html`. Owner review is open |
+| Paper gate review | Passed | PL-15, cycle 2/2 (`PLAN.md`) |
 | Course deadline | 2026-11-15 | D-021 |
 
 Terms: RQ means research question. The RQ list and its status are in `RQ.md`.
@@ -323,25 +432,6 @@ Then regenerate `papers/paper_mvp1/numbers.tex` with the command in `papers/READ
 
 Source: `STATUS.md` log, `00.runs.md`, `DECISIONS.md`, `analysis/review_*.md`.
 
-## What is left
-
-State as read from `PLAN.md` and `STATUS.md`.
-
-| Work | Who | Why |
-| --- | --- | --- |
-| Write or remove the 5 `\todo{owner: ...}` parts in the paper: related work, x_min choice, interpretation, wider implications, closing | Owner | The text is the owner's (D-044 keeps owner parts open) |
-| Finish F5: no sentence over 15 words in the paper, after the owner text is in | Owner, with Claude Code | `rules/writing/style.md` §2 |
-| Review report v1 and record notes in `STATUS.md` | Owner | Report v1 was built for the owner (D-016) |
-| Compare the `markets.parquet` hash of run 142082 with run 142140 | Owner, on the cluster | Review item G11 |
-| Split `code/make_report.py` (about 800 lines) in its own commit | Owner, with Claude Code | Kept as is for now (owner, 2026-10-19) |
-| Pick the 3-person work split (`docs/team_split_design.html`) | Owner | Not yet decided (owner, 2026-11-01) |
-| Redraw `fig5_ecdf_yes_no.png`: its inside text may still say Yes/No | Owner decides | One cluster job needed |
-| Gate review of the restructured paper (PL-15) | Reviewer | Closes milestone M5 |
-
-Course deadline: 2026-11-15 (D-021).
-
-Source: `PLAN.md` "Open tasks", `paper_length.plan.md`, `STATUS.md`.
-
 ## How to read the outputs
 
 Read in this order. Each step builds on the one before.
@@ -352,7 +442,7 @@ Read in this order. Each step builds on the one before.
 | 2 | `papers/course_report_mvp1/main.pdf` | The 2-page course report |
 | 3 | `reports/report_v1.html` | The full story in steps, with tables and figures |
 | 4 | `runs/142082_mvp1_full_v1r3/summary.md` | Links to each stage report of the final run |
-| 5 | `tips/index.html` | Explainer pages in English and Korean. Start with the Paper flow tab |
+| 5 | `tips/index.html` | Explainer pages in English and Korean. Start with the Paper flow tab. For the class methods and the Q1 to Q3 steps, open `tips/polymarket_lecture_rq_guide_tips.html` |
 
 Open the HTML files in a browser. Numbers in the report and paper come from the saved run files. Do not retype them.
 
