@@ -1,0 +1,21 @@
+<section id="q3-meaning" class="bg-light padf q3">
+  <div class="band"><span class="bq">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq bq3 on">Q3 Distributions</span></div>
+  <div class="frame"><span class="chip">Why</span><span class="chip">How</span><span class="chip">Result</span><span class="chip on">Meaning</span></div>
+  <h2 class="t44">Q3 meaning: read the median and the log scale</h2>
+  <div class="flow">
+    <div class="step">
+      <div class="ask">Use the median</div>
+      <div class="lab">A few huge trades pull the mean far up. Mean 129.8 vs median 6.9 USDC.</div>
+    </div>
+    <div class="step">
+      <div class="ask">Use the log scale</div>
+      <div class="lab">After a log transform the points follow the normal line much better.</div>
+    </div>
+    <div class="step ph">
+      <div class="ask">Power-law x_min</div>
+      <div class="lab">[Owner: x_min choice for the power-law fit]</div>
+    </div>
+  </div>
+  <div class="foot"><span>Source: paper Section 5.3, Discussion</span><span class="pg"></span></div>
+  <aside>Speaker: Q3 speaker. About 1 minute. Why: a description is only useful if it tells a reader how to read the numbers. How: we compare the mean with the median and the raw QQ plot with the log QQ plot. Result: trade sizes are strongly right skewed and prices cluster near the ends. Meaning: use the median and the log scale, because a few huge trades pull the mean far above the typical trade. We describe the data and give no verdict. The third box is a placeholder. The choice of the lower cutoff for the power-law fit is still an open item in the paper, and the owner will write it. We do not explain it here.</aside>
+</section>

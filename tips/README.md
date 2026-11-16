@@ -19,7 +19,7 @@ Explainer pages for the group project. Each page holds English and Korean. Click
 | `polymarket_paper_flow_tips.html` | Our paper's flowchart, pages and key numbers per section. Start here for the current state |
 | `polymarket_lecture_rq_guide_tips.html` | The 12-item TODO list for teammates (what, where, why, who decides), lecture decks to paper sections with a "Validate" and "Other ways to show it" line per method, the four methods outside the lectures, and how Q1, Q2 and Q3 were set and solved |
 | `polymarket_slides_tips.html` | The course presentation: three ways to view the slides, who presents which slide, and three ways each teammate can edit them (online deck, repo files, PPTX) |
-| `presentation/` | The slide files: `slides_local.html` (16 slides with speaker notes), `slides_local.pdf` (slides only), `build_local.sh` (rebuilds both), `deck/project/` (`deck.json`, `deck.css`, `slides/<id>.html`) |
+| `presentation/` | The slide files: `slides_local.html` (32 slides with speaker notes), `slides_local.pdf` (slides only), `build_local.sh` (rebuilds both), `deck/project/` (`deck.json`, `deck.css`, `slides/<id>.html`) |
 | `polymarket_paper_summaries_tips.html` | The cited papers: flowchart of our paper and one summary per paper |
 | `polymarket_proposal_tips.html` | The proposal in seven steps, as posted on 2026-10-18 |
 | `polymarket_plan_detailed.md` | Detailed MVP1 plan (English) |

@@ -11,7 +11,7 @@ F=../../papers/paper_mvp1/figures
 OUT=slides_local.html
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
-# upload id -> paper figure file (the 9 figures uploaded to the online deck)
+# upload id -> paper figure file (the 17 figures uploaded to the online deck)
 MAP=(
   "f1962a5429c289b56bb1321737717fdb drop_reasons.png"
   "4b6dbeeb8d4c89aa099011c8850e8ea3 fig4_calibration_gap.png"
@@ -22,6 +22,14 @@ MAP=(
   "b5fea725872060da08621359a1d21a06 qq_trade_size_raw_log.png"
   "7a92142d4bce249652cc54fa16d8cf77 fig_r3_m3_cluster_bootstrap.png"
   "dae8c2a548e569b365a5ea43784e20c3 fig_r3_m5_implied_gap.png"
+  "7c6571fe4b62f10eb82e08507a9734a3 hist_price_p1d.png"
+  "d7a873a86ee35c05bf11eb50eecacbbd qq_wallet_volume_raw_log.png"
+  "26093cdd07c53762949429523d370b47 wallet_dist_panels.png"
+  "b7015dd0cb953bc967f993ed30505fee fig5_ecdf_yes_no.png"
+  "559b3b8714f9955236f383016d428d97 fig_r3_m4_kept_vs_dropped.png"
+  "5845a06a1765090afe767ae22a8b5629 fig_r3_m1_price_definition.png"
+  "727f35750af0e3b714c0a723cd233bcb fig_r3_m2_yes_reliability.png"
+  "100321546d88828ede2423c5b94ea7fa fig6_ccdf_top_sampled.png"
 )
 SED_ARGS=()
 for pair in "${MAP[@]}"; do

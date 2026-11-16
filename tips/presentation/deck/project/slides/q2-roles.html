@@ -1,0 +1,19 @@
+<section id="q2-roles" class="bg-light padf q2">
+  <div class="band"><span class="bq">Q1 Calibration</span><span class="dot">·</span><span class="bq bq2 on">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <div class="frame"><span class="chip">Why</span><span class="chip">How</span><span class="chip on">Result</span><span class="chip">Meaning</span></div>
+  <div class="split g-q2c">
+    <div class="col">
+      <h2 class="t44 tight">Makers and takers, side by side</h2>
+      <div class="statrow sr2"><div class="mid">t = 117.1</div><div class="lab">Welch t-test on log volume (p below 10⁻³⁰⁰)</div></div>
+      <div class="statrow sr2"><div class="mid">0.219</div><div class="lab">mean log10 volume: makers 2.104, takers 1.885</div></div>
+      <div class="statrow sr2"><div class="mid">D = 0.057</div><div class="lab">Kolmogorov-Smirnov (KS) statistic</div></div>
+      <div class="statrow sr2"><div class="mid">ρ = 0.655</div><div class="lab">Spearman: trade count and volume</div></div>
+    </div>
+    <div class="card">
+      <div class="anno">Color: top 20%. Gray: bottom 80%</div>
+      <img src="/_blob/26093cdd07c53762949429523d370b47" width="2200" height="1440" alt="Wallet and volume distributions and Lorenz curves for makers and takers">
+    </div>
+  </div>
+  <div class="foot"><span>Source: paper Section 5.2, Appendix D</span><span class="pg"></span></div>
+  <aside>Speaker: Q2 speaker. About 1 minute 30 seconds. Why: the crowd has two roles, makers and takers, so we check whether they differ. How: we compare log volume with a Welch t-test and a KS test, and we correlate trade count with volume using Spearman. The figure shows, for each role, the wallet distribution, the volume distribution and the Lorenz curve, with the top 20% in color. Result: the Welch t statistic is 117.1. The difference in mean log10 volume is 0.219, makers 2.104 and takers 1.885. The KS statistic is 0.057, and the Spearman correlation between trade count and volume is 0.655. Mean volume sits far above median volume in both roles. Makers have 14,103 against a median of 101.2 USDC, and takers have 5,339 against 86.6. Meaning: both roles are strongly skewed, and the volume sits with a few wallets in each. The Welch p-value is a float-underflow bound, not an exact value.</aside>
+</section>

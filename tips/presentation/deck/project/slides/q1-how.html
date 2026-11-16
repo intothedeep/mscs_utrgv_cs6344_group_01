@@ -1,0 +1,29 @@
+<section id="q1-how" class="bg-light padf q1">
+  <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <div class="frame"><span class="chip">Why</span><span class="chip on">How</span><span class="chip">Result</span><span class="chip">Meaning</span></div>
+  <h2 class="t44">Q1 how: bin the prices, compare, then test</h2>
+  <div class="flow">
+    <div class="step">
+      <div class="ask">1 Bin the prices</div>
+      <div class="lab">10 bins: 0 to 10%, 10 to 20%, up to 90 to 100%.</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="ask">2 Compare</div>
+      <div class="lab">Observed rate of outcome 1 against the mean price, bin by bin.</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="ask">3 Chi-square test</div>
+      <div class="lab">Goodness of fit on the 10 bins. The rule was fixed before the results.</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="ask">4 Per-bin tests</div>
+      <div class="lab">Binomial test in each bin, with Benjamini-Hochberg (BH) correction.</div>
+    </div>
+  </div>
+  <div class="strip"><b>Example:</b> the 70 to 80% bin holds 2,301 markets. Mean price 74.6%, observed rate 71.3%.</div>
+  <div class="foot"><span>Source: paper Section 4.2, Table 1</span><span class="pg"></span></div>
+  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. Why: we need a test that compares the price with what happened, and a rule we cannot bend after seeing the answer. How: step one splits the prices into 10 bins. Step two compares the observed rate of outcome 1 with the mean price in each bin. Step three is the chi-square goodness of fit test from Lecture 12. It decides the verdict as a whole, and we fixed this rule before we saw any result. Step four runs a binomial test in each bin with Benjamini-Hochberg correction, because ten tests at once need a correction. Take the 70 to 80% bin as an example. It holds 2,301 markets, the mean price is 74.6%, and the observed rate is 71.3%. Result: the next slides show it. Meaning: the order protects the verdict, because the rule came before the data.</aside>
+</section>

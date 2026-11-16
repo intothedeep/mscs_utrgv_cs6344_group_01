@@ -1,0 +1,21 @@
+<section id="q3-trades" class="bg-light padf q3">
+  <div class="band"><span class="bq">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq bq3 on">Q3 Distributions</span></div>
+  <div class="frame"><span class="chip">Why</span><span class="chip">How</span><span class="chip on">Result</span><span class="chip">Meaning</span></div>
+  <h2 class="t44">Trade sizes: a few huge trades pull the mean far up</h2>
+  <div class="body g-q3">
+    <div class="card">
+      <img src="/_blob/634b5d8e5163bf6db983db6fe47816dc" width="1020" height="810" alt="Histogram of trade size">
+    </div>
+    <div class="card">
+      <div class="anno">Raw points bend away, log points follow the line</div>
+      <img src="/_blob/b5fea725872060da08621359a1d21a06" width="2100" height="1170" alt="QQ plot of trade size against the normal, raw and after a log transform">
+    </div>
+    <div class="statline span2">
+      <div class="stat"><div class="mid">129.8</div><div class="lab">mean trade size, USDC</div></div>
+      <div class="stat"><div class="mid">6.9</div><div class="lab">median trade size, USDC</div></div>
+      <div class="stat wide"><div class="mid">D = 0.469</div><div class="lab">normal fit KS statistic: a poor fit</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>Source: paper Section 5.3</span><span class="pg"></span></div>
+  <aside>Speaker: Q3 speaker. About 1 minute. Why: trade size is the basic unit of betting, so its shape tells us what a typical trade is. How: a histogram, and a QQ plot against the normal, raw and after a log transform. Result: the mean trade size is 129.8 USDC but the median is only 6.9. In the QQ plot the raw points bend away from the straight line and the log points follow it much better. The normal fit has a KS statistic of 0.469, which is a poor fit. Meaning: a few very large trades pull the mean far above the typical trade, so the median and the log scale describe the data better. We report this without a verdict.</aside>
+</section>

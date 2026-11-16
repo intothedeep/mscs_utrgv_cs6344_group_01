@@ -1,0 +1,22 @@
+<section id="q3-prices-wallets" class="bg-light padf q3">
+  <div class="band"><span class="bq">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq bq3 on">Q3 Distributions</span></div>
+  <div class="frame"><span class="chip">Why</span><span class="chip">How</span><span class="chip on">Result</span><span class="chip">Meaning</span></div>
+  <h2 class="t44">Prices pile up near the ends, wallet volume is skewed</h2>
+  <div class="body g-q3">
+    <div class="card">
+      <div class="anno">Price one day before close</div>
+      <img src="/_blob/7c6571fe4b62f10eb82e08507a9734a3" width="1020" height="810" alt="Histogram of the price one day before close">
+    </div>
+    <div class="card">
+      <div class="anno">Wallet volume, raw and log</div>
+      <img src="/_blob/d7a873a86ee35c05bf11eb50eecacbbd" width="2100" height="1170" alt="QQ plot of wallet volume against the normal, raw and after a log transform">
+    </div>
+    <div class="statline span2">
+      <div class="stat"><div class="mid">0.376 vs 0.320</div><div class="lab">price one day before close: mean vs median</div></div>
+      <div class="stat"><div class="mid">14,103 vs 101.2</div><div class="lab">maker volume: mean vs median, USDC</div></div>
+      <div class="stat"><div class="mid">5,339 vs 86.6</div><div class="lab">taker volume: mean vs median, USDC</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>Source: paper Section 5.3, Appendix E</span><span class="pg"></span></div>
+  <aside>Speaker: Q3 speaker. About 1 minute. Why: Q1 uses the price and Q2 uses wallet volume, so we check their shapes too. How: a histogram of the price one day before close, and a QQ plot of wallet volume, raw and log. Result: prices pile up near both ends of the scale, with a mean of 0.376 and a median of 0.320. Wallet volume is strongly skewed. Makers have a mean of 14,103 USDC against a median of 101.2, and takers have 5,339 against 86.6. Meaning: the same long-tail shape appears in the prices and in the wallets. We report it without a verdict.</aside>
+</section>

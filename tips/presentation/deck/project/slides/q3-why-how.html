@@ -1,0 +1,30 @@
+<section id="q3-why-how" class="bg-light padf q3">
+  <div class="band"><span class="bq">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq bq3 on">Q3 Distributions</span></div>
+  <div class="frame"><span class="chip on">Why</span><span class="chip on">How</span><span class="chip">Result</span><span class="chip">Meaning</span></div>
+  <h2 class="t44">Q3: why the shape matters, and how we look at it</h2>
+  <p class="line24 mb40"><b>Why:</b> with a long tail, the mean misleads. The shape tells us which summary to trust.</p>
+  <div class="flow">
+    <div class="step">
+      <div class="ask">1 Histogram</div>
+      <div class="lab">Count the values in bins and see the shape.</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="ask">2 QQ plot</div>
+      <div class="lab">Compare the values with the normal. A straight line means close to normal.</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="ask">3 Log transform</div>
+      <div class="lab">Plot the QQ again on log values.</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="ask">4 Fits</div>
+      <div class="lab">Normal, exponential and power law, scored by the KS statistic.</div>
+    </div>
+  </div>
+  <div class="strip"><b>Illustrative values:</b> trades of 1, 2, 3 and 1,000 USDC. The mean is 251.5, the median is 2.5.</div>
+  <div class="foot"><span>Source: paper Section 4.4, Section 5.3</span><span class="pg"></span></div>
+  <aside>Speaker: Q3 speaker. About 1 minute. Why: a mean can mislead when a few values are huge, so we check the shape before we pick a summary. How: step one is a histogram. Step two is a QQ plot against the normal, where points on a straight line mean close to normal. Step three repeats the QQ plot on log values. Step four fits a normal, an exponential and a power law and scores each with the KS statistic. Here is a tiny example with illustrative values. Four trades of 1, 2, 3 and 1,000 USDC have a mean of 251.5 but a median of 2.5. The mean describes none of the trades. Result and meaning: the next slides use our real data.</aside>
+</section>
