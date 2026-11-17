@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<title>6344 Polymarket 지갑별 손익</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<script>
+/* Runs first: marks JS as on and restores the saved language. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){var d=document.documentElement;d.className="js";var l="ko";try{var s=localStorage.getItem("mvp1tips-lang");if(s==="ko"||s==="en"){l=s;}}catch(e){}try{var q=/[?&]lang=(ko|en)(&|$)/.exec(location.search);if(q){l=q[1];}}catch(e){}d.setAttribute("data-lang",l);d.lang=l;})();
+</script>
+<style>
+/* theme.css (skills/html-theme), inlined, light only. Layout: tips exemplar, step boxes. */
+:root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--card-foreground:oklch(0.145 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;--quiet:oklch(0.82 0 0)}
+*{box-sizing:border-box;border-radius:var(--radius)}
+/* One language at a time. Without JS the html element keeps data-lang="ko". */
+html[data-lang="ko"] [lang="en"],html[data-lang="en"] [lang="ko"]{display:none!important}
+body{background:var(--background);color:var(--foreground);font:15px/1.5 var(--font);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;margin:0;overflow-wrap:anywhere}
+main{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:650;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:650;margin-bottom:10px}
+h3{font-size:14px;font-weight:600;margin:12px 0 4px}
+p{margin:0 0 6px}
+.eyebrow{font:500 11px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--signal-plan);margin-bottom:8px}
+.lede{font-size:15.5px;color:var(--muted-foreground);margin-top:8px}
+header{padding-top:18px}
+.bar{position:sticky;top:0;z-index:5;background:var(--background);border-bottom:1px solid var(--border);padding:8px 0 6px;display:flex;flex-direction:column;gap:6px}
+.row1{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.langbar{display:none}
+html.js .langbar{display:flex}
+.langbar button{font:500 12.5px var(--font);padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer;margin-left:-1px}
+.langbar button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none;counter-reset:st}
+.steps li{counter-increment:st;margin:0}
+.steps a{display:block;padding:4px 10px;border:1px solid var(--rule);color:var(--foreground);text-decoration:none;font-size:12.5px}
+.steps a::before{content:counter(st) " ";color:var(--signal-plan);font-weight:600}
+.steps a.app::before{content:"A ";}
+.steps a.on{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+.steps a.on::before{color:var(--primary-foreground)}
+.row2{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:12px;align-items:center;color:var(--muted-foreground)}
+.row2 .cur{color:var(--foreground);font-weight:600;border-bottom:2px solid var(--signal-plan)}
+main>section{border:1px solid var(--border);border-top:4px solid var(--signal-plan);background:var(--card);padding:16px 18px 18px;margin-top:14px;scroll-margin-top:150px;display:flex;flex-direction:column;gap:8px}
+html.js main>section{display:none}
+html.js main>section.on{display:flex}
+main>section>.eyebrow{font-size:12px;margin-bottom:0}
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:520px}
+svg text{font-family:var(--font)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card);overflow-wrap:normal}
+table{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top;overflow-wrap:break-word}
+html[data-lang="ko"] body{word-break:keep-all}
+td:first-child,th:first-child{word-break:keep-all;min-width:6.5em}
+th{font:600 11px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground);background:var(--background)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
+td.num{color:var(--signal-plan)}
+td ul{margin:0;padding-left:16px}
+ul,ol{margin:0;padding-left:18px}
+li{margin:2px 0}
+.note{font-size:12.5px;color:var(--muted-foreground)}
+.src{font-size:12px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:6px;margin-top:4px}
+.callout{border-left:3px solid var(--signal-flag-line);background:var(--signal-flag-fill);padding:6px 12px;font-size:13px}
+.callout p:last-child{margin:0}
+.add{border:1px solid var(--signal-plan);padding:6px 12px;font-size:13.5px}
+.add b{color:var(--signal-plan)}
+figure{margin:0}
+figure img{display:block;max-width:100%;height:auto;border:1px solid var(--rule)}
+footer{font-size:12.5px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:8px}
+a{color:var(--signal-plan)}
+a.t{color:inherit;text-decoration:underline dotted var(--muted-foreground)}
+.steps a{color:var(--foreground)}
+.steps a.on{color:var(--primary-foreground)}
+dl{margin:0}
+dt{font-weight:600;margin-top:8px;scroll-margin-top:150px}
+dd{margin:0 0 0 14px}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+@media (max-width:720px){main>section{padding:12px}}
+</style>
+</head>
+<body>
+<main>
+<nav class="bar" aria-label="Page navigation">
+  <div class="row1">
+    <div class="langbar" role="group" aria-label="Language">
+      <button type="button" data-set="ko" aria-pressed="true">한국어</button>
+      <button type="button" data-set="en" aria-pressed="false">English</button>
+    </div>
+    <ol class="steps">
+      <li><a href="#s1" data-step="1"><span lang="ko">질문</span><span lang="en">Question</span></a></li>
+      <li><a href="#s2" data-step="2"><span lang="ko">데이터</span><span lang="en">Data</span></a></li>
+      <li><a href="#s3" data-step="3"><span lang="ko">계산 규칙</span><span lang="en">Accounting</span></a></li>
+      <li><a href="#s4" data-step="4"><span lang="ko">결과</span><span lang="en">Results</span></a></li>
+      <li><a href="#s5" data-step="5"><span lang="ko">쏠림</span><span lang="en">Concentration</span></a></li>
+      <li><a href="#s6" data-step="6"><span lang="ko">분포 그림</span><span lang="en">Distribution</span></a></li>
+      <li><a href="#s7" data-step="7"><span lang="ko">한계</span><span lang="en">Limits</span></a></li>
+    </ol>
+    <ol class="steps" lang="ko"><li><a class="app" href="#s8" data-step="8">용어 부록</a></li></ol>
+  </div>
+  <div class="row2">
+    <span lang="ko">다른 페이지:</span><span lang="en">Other pages:</span>
+    <span class="cur" aria-current="page"><span lang="ko">이 페이지 (지갑 손익)</span><span lang="en">This page (wallet profit and loss)</span></span>
+    <a href="index.html" target="_top"><span lang="ko">전체 보기</span><span lang="en">All pages</span></a>
+    <a href="index.html#preprocessing" target="_top"><span lang="ko">전처리</span><span lang="en">Preprocessing</span></a>
+    <a href="index.html#data" target="_top"><span lang="ko">데이터 구조</span><span lang="en">Data structure</span></a>
+    <a href="index.html#flow" target="_top"><span lang="ko">연구 흐름</span><span lang="en">Research flow</span></a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow"><span lang="ko">CS 6344 데이터 과학 입문 · 1조 프로젝트 · 지갑별 손익</span><span lang="en">CS 6344 Intro to Data Science · Group 1 project · Wallet profit and loss</span></div>
+  <h1><span lang="ko">Polymarket: 지갑마다 돈을 얼마나 벌고 잃었나</span><span lang="en">Polymarket: how much money did each wallet win or lose?</span></h1>
+  <p class="lede"><span lang="ko">우리 실행에서 얻은 결과와 이유. 어떻게 셌고, 무엇이 나왔고, 어디까지 믿을 수 있나. 7단계로, 앞 단계 위에 다음 단계를 쌓습니다.</span><span lang="en">Results from our own run and the reason for each step: how we counted, what came out, how far to trust it. 7 steps, each building on the one before.</span></p>
+</header>
+
+<section id="s1">
+  <div class="eyebrow">Step 1 of 7</div>
+  <h2><span lang="ko">무엇을 알려고 하나</span><span lang="en">What we want to know</span></h2>
+  <div class="add" lang="ko"><p><b>결론:</b> 수수료를 빼기 전, 지갑 전체가 딴 돈과 잃은 돈은 정확히 같다($777.6M). 수수료를 빼면 전체 순손실은 $572.2M이고, 수수료와 같다. 이익은 소수 지갑에 몰린다. 상위 1% 지갑이 총이익의 84.0%를 가져간다.</p></div>
+  <div class="add" lang="en"><p><b>Result:</b> Before fees, all wallets together won exactly what they lost ($777.6M). After fees the crowd lost $572.2M net, equal to the fees. Winnings pile up in few wallets: the top 1% of wallets took 84.0% of all gross winnings.</p></div>
+  <p lang="ko"><b>왜 했나:</b> 소유자가 2026-11-16에 물었다. "<a class="t" href="#term-wallet">지갑(wallet)</a>마다 돈을 얼마나 벌거나 잃었나?" 지갑은 주소 하나다. 사람이 아니다. 한 사람이 지갑 여럿을 쓸 수도 있다.</p>
+  <p lang="en"><b>Why:</b> The owner asked this on 2026-11-16: "How much money did each wallet win or lose?" A wallet is one address, not a person. One person can hold several wallets.</p>
+  <p lang="ko"><b>범위:</b> 이 내용은 tips 전용이다. 보고서와 논문에는 넣지 않는다. 설명만 하는 분석이다. 가설 검정도 판정도 없다.</p>
+  <p lang="en"><b>Scope:</b> This is for tips only. It is not in the report or the paper. The analysis only describes. There is no hypothesis test and no verdict.</p>
+  <div class="chart">
+    <svg viewBox="0 0 760 120" role="img" aria-labelledby="t1ko t1en">
+      <title id="t1ko" lang="ko">흐름. 체결 기록, 지갑마다 현금과 지급금 합산, 지갑별 손익 분포.</title>
+      <title id="t1en" lang="en">Flow. Fills, sum cash and payout per wallet, profit distribution across wallets.</title>
+      <defs><marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted-foreground)"/></marker></defs>
+      <g fill="var(--card)" stroke="var(--border)"><rect x="10" y="30" width="200" height="56"/><rect x="280" y="30" width="210" height="56"/><rect x="560" y="30" width="190" height="56"/></g>
+      <rect x="560" y="30" width="190" height="56" fill="none" stroke="var(--signal-plan)" stroke-width="1.5"/>
+      <g font-size="12" fill="var(--foreground)" text-anchor="middle" font-weight="600">
+        <text lang="ko" x="110" y="54">체결 기록</text><text lang="en" x="110" y="54">Fills</text>
+        <text lang="ko" x="385" y="54">지갑마다 합산</text><text lang="en" x="385" y="54">Sum per wallet</text>
+        <text lang="ko" x="655" y="54">손익 분포</text><text lang="en" x="655" y="54">Profit distribution</text>
+      </g>
+      <g font-size="10.5" fill="var(--muted-foreground)" text-anchor="middle">
+        <text lang="ko" x="110" y="74">596,196,865건</text><text lang="en" x="110" y="74">596,196,865 fills</text>
+        <text lang="ko" x="385" y="74">현금 + 지급금 − 수수료</text><text lang="en" x="385" y="74">cash + payout − fees</text>
+        <text lang="ko" x="655" y="74">지갑 2,068,055개 (전체)</text><text lang="en" x="655" y="74">2,068,055 wallets (all)</text>
+      </g>
+      <g stroke="var(--muted-foreground)" stroke-width="1.3" fill="none" marker-end="url(#ar1)"><path d="M210 58H278"/><path d="M490 58H558"/></g>
+    </svg>
+  </div>
+  <p class="note" lang="ko">그림 1. 체결 기록에서 지갑별 손익 분포까지의 흐름. 왜: 지갑 하나의 손익을 알려면 그 지갑의 모든 체결을 한 곳에서 합쳐야 한다.</p>
+  <p class="note" lang="en">Figure 1. Flow from fills to the profit distribution per wallet. Why: to know one wallet's profit, we must add up all of its fills in one place.</p>
+</section>
+
+<section id="s2">
+  <div class="eyebrow">Step 2 of 7</div>
+  <h2><span lang="ko">쓴 데이터</span><span lang="en">The data we used</span></h2>
+  <p lang="ko">진짜 데이터다. 원본 거래 기록(raw trades)을 클러스터 Cradle(UTRGV의 SLURM 클러스터)에서 읽었다. 작업 번호는 156432다.</p>
+  <p lang="en">This is real data. The job read the raw trades on Cradle (the UTRGV SLURM cluster) as job 156432.</p>
+  <div class="tablewrap"><table>
+    <caption class="note" style="text-align:left;caption-side:top;padding:4px 8px"><span lang="ko">표 1. 입력 개수.</span><span lang="en">Table 1. Input counts.</span></caption>
+    <thead><tr><th><span lang="ko">대상</span><span lang="en">Item</span></th><th class="num"><span lang="ko">개수</span><span lang="en">Count</span></th></tr></thead>
+    <tbody>
+      <tr><td><span lang="ko">범위 안의 시장(market)</span><span lang="en">Markets in scope</span></td><td class="num">688,131</td></tr>
+      <tr><td><span lang="ko">쓸 수 있는 승자가 있는 시장</span><span lang="en">Markets with a usable winner</span></td><td class="num">548,340</td></tr>
+      <tr><td><span lang="ko">그 시장의 <a class="t" href="#term-fill">체결(fill)</a></span><span lang="en">Fills in those markets</span></td><td class="num">596,196,865</td></tr>
+      <tr><td><span lang="ko">범위 1: <code>all</code> (지갑 수)</span><span lang="en">Scope 1: <code>all</code> (wallets)</span></td><td class="num">2,068,055</td></tr>
+      <tr><td><span lang="ko">범위 2: <code>non_updown</code> (지갑 수)</span><span lang="en">Scope 2: <code>non_updown</code> (wallets)</span></td><td class="num">1,794,474</td></tr>
+      <tr><td><span lang="ko">범위 3: <code>kept</code> (지갑 수)</span><span lang="en">Scope 3: <code>kept</code> (wallets)</span></td><td class="num">1,569,986</td></tr>
+    </tbody>
+  </table></div>
+  <ul lang="ko">
+    <li><b>쓸 수 있는 승자:</b> 시장의 모든 행이 같은 승자 라벨 하나를 갖고, 그 라벨이 시장의 결과 라벨 중 하나와 같다. 왜: 승자를 모르면 지급금을 셀 수 없다.</li>
+    <li><b><code>all</code>:</b> 쓸 수 있는 승자가 있는 모든 시장.</li>
+    <li><b><code>non_updown</code>:</b> <code>all</code>에서 Up/Down 시장(<code>is_updown</code> 표시)을 뺀 것. Up/Down 시장은 250,826개다.</li>
+    <li><b><code>kept</code>:</b> MVP1 전체 실행이 남긴 시장 47,948개.</li>
+  </ul>
+  <ul lang="en">
+    <li><b>Usable winner:</b> All rows of the market carry one winner label, and that label equals one of the market's outcome labels. Why: with no known winner we cannot count the payout.</li>
+    <li><b><code>all</code>:</b> every market with a usable winner.</li>
+    <li><b><code>non_updown</code>:</b> <code>all</code> without the Up/Down markets (flag <code>is_updown</code>). There are 250,826 usable Up/Down markets.</li>
+    <li><b><code>kept</code>:</b> the 47,948 markets that the MVP1 full run keeps.</li>
+  </ul>
+  <p lang="ko">쓸 수 있는 시장에서 버린 행은 0개다.</p>
+  <p lang="en">No row was dropped inside the usable markets.</p>
+  <p class="src" lang="ko">출처: <code>runs/156432_pnl_wallets_v1/pnl_summary.json</code> (<code>checks</code>), <code>report_pnl_wallets.md</code>, <code>analysis/prereg_pnl.md</code></p>
+  <p class="src" lang="en">Source: <code>runs/156432_pnl_wallets_v1/pnl_summary.json</code> (<code>checks</code>), <code>report_pnl_wallets.md</code>, <code>analysis/prereg_pnl.md</code></p>
+</section>
+
+<section id="s3">
+  <div class="eyebrow">Step 3 of 7</div>
+  <h2><span lang="ko">어떻게 셌나: 계산 규칙</span><span lang="en">How we counted: the accounting rule</span></h2>
+  <p lang="ko"><b>왜 이 규칙인가:</b> 체결 한 건은 두 지갑이 맞선 거래다. 한쪽의 이익은 다른 쪽의 손실이다. 그래서 두 쪽을 모두 센다.</p>
+  <p lang="en"><b>Why this rule:</b> A fill is a trade between two wallets. One side's gain is the other side's loss. So we count both sides.</p>
+  <ol lang="ko">
+    <li><a class="t" href="#term-taker">테이커(taker)</a>가 BUY면 현금이 나가고 주식(share)이 늘어난다. SELL이면 반대다.</li>
+    <li><a class="t" href="#term-maker">메이커(maker)</a>는 같은 결과(outcome)에서 반대쪽이다.</li>
+    <li><a class="t" href="#term-payout">지급금(payout)</a>: 그 결과가 이기면 주식 1개당 $1, 지면 $0이다.</li>
+    <li><a class="t" href="#term-gross">총손익(gross)</a> = 현금 + 지급금. 순손익(net) = 총손익 − <a class="t" href="#term-fee">수수료(fee)</a>.</li>
+    <li>순손익이 +$0.000001보다 크면 승자, −$0.000001보다 작으면 패자, 그 사이는 0이다.</li>
+  </ol>
+  <ol lang="en">
+    <li>A taker BUY sends cash out and adds shares. A SELL is the reverse.</li>
+    <li>The maker holds the opposite side on the same outcome.</li>
+    <li>Payout: $1 per share if that outcome won, $0 if it lost.</li>
+    <li>Gross profit = cash + payout. Net profit = gross profit − fees.</li>
+    <li>Net above +$0.000001 is a winner, below −$0.000001 a loser, in between is zero.</li>
+  </ol>
+  <h3><span lang="ko">예: 설명용 값(Illustrative values)</span><span lang="en">Example: Illustrative values</span></h3>
+  <p lang="ko">테이커가 Yes를 가격 0.40에 $40어치 산다. 주식은 100개다 (40 / 0.40). 수수료는 예에서 뺀다.</p>
+  <p lang="en">A taker buys Yes at price 0.40 for $40. That gives 100 shares (40 / 0.40). The example leaves out the fee.</p>
+  <div class="chart">
+    <svg viewBox="0 0 760 190" role="img" aria-labelledby="t3ko t3en">
+      <title id="t3ko" lang="ko">설명용 값. 체결 한 건에서 테이커와 메이커의 현금과 주식, 그리고 Yes가 이길 때와 No가 이길 때의 손익.</title>
+      <title id="t3en" lang="en">Illustrative values. One fill: taker and maker cash and shares, then profit if Yes wins and if No wins.</title>
+      <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted-foreground)"/></marker></defs>
+      <g fill="var(--card)" stroke="var(--border)"><rect x="10" y="65" width="170" height="60"/><rect x="250" y="15" width="220" height="60"/><rect x="250" y="115" width="220" height="60"/><rect x="540" y="15" width="210" height="60"/><rect x="540" y="115" width="210" height="60"/></g>
+      <g fill="none" stroke="var(--signal-plan)" stroke-width="1.5"><rect x="540" y="15" width="210" height="60"/></g>
+      <g font-size="12" fill="var(--foreground)" text-anchor="middle" font-weight="600">
+        <text lang="ko" x="95" y="91">체결 1건</text><text lang="en" x="95" y="91">One fill</text>
+        <text lang="ko" x="360" y="38">테이커: BUY Yes</text><text lang="en" x="360" y="38">Taker: BUY Yes</text>
+        <text lang="ko" x="360" y="138">메이커: 반대쪽</text><text lang="en" x="360" y="138">Maker: other side</text>
+        <text lang="ko" x="645" y="38">테이커 손익</text><text lang="en" x="645" y="38">Taker profit</text>
+        <text lang="ko" x="645" y="138">메이커 손익</text><text lang="en" x="645" y="138">Maker profit</text>
+      </g>
+      <g font-size="10.5" fill="var(--muted-foreground)" text-anchor="middle">
+        <text lang="ko" x="95" y="110">가격 0.40, $40</text><text lang="en" x="95" y="110">price 0.40, $40</text>
+        <text lang="ko" x="360" y="58">현금 −$40, 주식 +100</text><text lang="en" x="360" y="58">cash −$40, shares +100</text>
+        <text lang="ko" x="360" y="158">현금 +$40, 주식 −100</text><text lang="en" x="360" y="158">cash +$40, shares −100</text>
+        <text lang="ko" x="645" y="56">Yes 승: +$60</text><text lang="en" x="645" y="56">Yes wins: +$60</text>
+        <text lang="ko" x="645" y="68">No 승: −$40</text><text lang="en" x="645" y="68">No wins: −$40</text>
+        <text lang="ko" x="645" y="156">Yes 승: −$60</text><text lang="en" x="645" y="156">Yes wins: −$60</text>
+        <text lang="ko" x="645" y="168">No 승: +$40</text><text lang="en" x="645" y="168">No wins: +$40</text>
+      </g>
+      <g stroke="var(--muted-foreground)" stroke-width="1.3" fill="none" marker-end="url(#ar3)"><path d="M180 85L248 50"/><path d="M180 105L248 140"/><path d="M470 45H538"/><path d="M470 145H538"/></g>
+    </svg>
+  </div>
+  <p class="note" lang="ko">그림 2. 체결 한 건의 두 쪽. 왜: Yes가 이기면 테이커 +$60과 메이커 −$60이 서로 지워져 합이 0이다. No가 이겨도 −$40과 +$40이 지워진다.</p>
+  <p class="note" lang="en">Figure 2. The two sides of one fill. Why: if Yes wins, the taker's +$60 and the maker's −$60 cancel to 0. If No wins, −$40 and +$40 cancel.</p>
+  <div class="callout" lang="ko"><p>주의: 이 "합이 0"은 계산 방식에서 나온 항등식이다. 메이커를 정확한 반대쪽으로 놓았기 때문이다. 코드 오류를 찾는 검사이지, 데이터가 옳다는 증거가 아니다.</p></div>
+  <div class="callout" lang="en"><p>Note: this "sums to zero" is an identity of the counting method. We set the maker as the exact opposite side. It finds code errors. It is not proof that the data is right.</p></div>
+  <p class="src" lang="ko">출처: <code>analysis/prereg_pnl.md</code> (계산 규칙). 예의 값은 설명용이며 실행 결과가 아니다.</p>
+  <p class="src" lang="en">Source: <code>analysis/prereg_pnl.md</code> (accounting rule). The example values are illustrative, not run output.</p>
+</section>
+
+<section id="s4">
+  <div class="eyebrow">Step 4 of 7</div>
+  <h2><span lang="ko">결과: 순손익과 총손익</span><span lang="en">Results: net and gross profit</span></h2>
+  <p lang="ko"><b>읽는 법:</b> 표 2는 수수료를 뺀 순손익이다. 표 3은 수수료 전 총손익이다. 둘을 비교하면 손실이 어디서 왔는지 보인다.</p>
+  <p lang="en"><b>How to read:</b> Table 2 is net profit, after fees. Table 3 is gross profit, before fees. Comparing them shows where the loss comes from.</p>
+  <div class="tablewrap"><table>
+    <caption class="note" style="text-align:left;caption-side:top;padding:4px 8px"><span lang="ko">표 2. 범위별 순손익 (USDC, 달러에 묶인 토큰).</span><span lang="en">Table 2. Net profit per scope (USDC, a dollar-pegged token).</span></caption>
+    <thead><tr><th><span lang="ko">항목</span><span lang="en">Measure</span></th><th class="num"><code>all</code></th><th class="num"><code>non_updown</code></th><th class="num"><code>kept</code></th></tr></thead>
+    <tbody>
+      <tr><td><span lang="ko">지갑</span><span lang="en">Wallets</span></td><td class="num">2,068,055</td><td class="num">1,794,474</td><td class="num">1,569,986</td></tr>
+      <tr><td><span lang="ko">승자 지갑</span><span lang="en">Winners</span></td><td class="num">693,490</td><td class="num">679,182</td><td class="num">663,072</td></tr>
+      <tr><td><span lang="ko">패자 지갑 (순손익)</span><span lang="en">Losers (net)</span></td><td class="num">1,345,431</td><td class="num">1,083,047</td><td class="num">871,667</td></tr>
+      <tr><td><span lang="ko">딴 돈 합계</span><span lang="en">Total won</span></td><td class="num">$652.7M</td><td class="num">$548.8M</td><td class="num">$352.1M</td></tr>
+      <tr><td><span lang="ko">잃은 돈 합계</span><span lang="en">Total lost</span></td><td class="num">$1,224.8M</td><td class="num">$745.1M</td><td class="num">$447.0M</td></tr>
+      <tr><td><span lang="ko">수수료 합계</span><span lang="en">Fees</span></td><td class="num">$572.2M</td><td class="num">$196.3M</td><td class="num">$94.8M</td></tr>
+      <tr><td><span lang="ko"><a class="t" href="#term-median">중앙값(median)</a></span><span lang="en">Median</span></td><td class="num">−$3.52</td><td class="num">−$1.00</td><td class="num">−$0.20</td></tr>
+      <tr><td><span lang="ko"><a class="t" href="#term-quantile">분위수(quantile)</a> 1%</span><span lang="en">1% quantile</span></td><td class="num">−$7,365</td><td class="num">−$4,580</td><td class="num">−$3,145</td></tr>
+      <tr><td><span lang="ko">분위수(quantile) 99%</span><span lang="en">99% quantile</span></td><td class="num">$3,506</td><td class="num">$2,667</td><td class="num">$1,968</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note" lang="ko">패자 지갑에 순손익이 0인 지갑은 들어 있지 않다. 0인 지갑은 29,134 / 32,245 / 35,247개다.</p>
+  <p class="note" lang="en">The loser count leaves out wallets at exactly zero. Zero wallets: 29,134 / 32,245 / 35,247.</p>
+  <div class="tablewrap"><table>
+    <caption class="note" style="text-align:left;caption-side:top;padding:4px 8px"><span lang="ko">표 3. 범위별 총손익 (수수료 전).</span><span lang="en">Table 3. Gross profit per scope (before fees).</span></caption>
+    <thead><tr><th><span lang="ko">항목</span><span lang="en">Measure</span></th><th class="num"><code>all</code></th><th class="num"><code>non_updown</code></th><th class="num"><code>kept</code></th></tr></thead>
+    <tbody>
+      <tr><td><span lang="ko">이익 지갑 (수수료 전)</span><span lang="en">Winners (before fees)</span></td><td class="num">799,513</td><td class="num">743,437</td><td class="num">714,050</td></tr>
+      <tr><td><span lang="ko">손실 지갑 (수수료 전)</span><span lang="en">Losers (before fees)</span></td><td class="num">1,249,201</td><td class="num">1,030,402</td><td class="num">833,329</td></tr>
+      <tr><td><span lang="ko">딴 돈 합계</span><span lang="en">Total won</span></td><td class="num">$777.6M</td><td class="num">$617.7M</td><td class="num">$389.8M</td></tr>
+      <tr><td><span lang="ko">잃은 돈 합계</span><span lang="en">Total lost</span></td><td class="num">$777.6M</td><td class="num">$617.7M</td><td class="num">$389.8M</td></tr>
+      <tr><td><span lang="ko">수수료 합계</span><span lang="en">Fees</span></td><td class="num">$572.2M</td><td class="num">$196.3M</td><td class="num">$94.8M</td></tr>
+      <tr><td><span lang="ko">중앙값(median)</span><span lang="en">Median</span></td><td class="num">−$1.47</td><td class="num">−$0.50</td><td class="num">−$0.06</td></tr>
+    </tbody>
+  </table></div>
+  <ul lang="ko">
+    <li><b>읽는 법 1:</b> 총손익에서 딴 돈과 잃은 돈이 같다. 이 <a class="t" href="#term-zerosum">제로섬(zero-sum)</a> 검사는 세 범위 모두 통과했다.</li>
+    <li><b>읽는 법 2:</b> 그래서 지갑 전체의 순손실은 수수료와 같다. <code>all</code>은 $572.2M이다.</li>
+    <li><b>읽는 법 3:</b> 중앙값이 음수다. 지갑의 절반 넘게 돈을 잃었다. 이유 하나는 수수료다 (한계 3 참고).</li>
+    <li><b>읽는 법 4:</b> 수수료가 가장 큰 곳은 <code>all</code>이다. Up/Down 시장 때문이다. <code>non_updown</code>의 수수료는 $196.3M뿐이다.</li>
+  </ul>
+  <ul lang="en">
+    <li><b>Read 1:</b> In gross profit, won equals lost. This zero-sum check passed in all three scopes.</li>
+    <li><b>Read 2:</b> So the crowd's net loss equals the fees. In <code>all</code> it is $572.2M.</li>
+    <li><b>Read 3:</b> The median is negative. More than half of the wallets lost money. One reason is the fee (see limit 3).</li>
+    <li><b>Read 4:</b> Fees are largest in <code>all</code>. The Up/Down markets cause this. <code>non_updown</code> pays only $196.3M in fees.</li>
+  </ul>
+  <p class="src" lang="ko">출처: <code>runs/156432_pnl_wallets_v1/pnl_summary.json</code>, <code>pnl_gross_summary.json</code> (표시를 위해 반올림)</p>
+  <p class="src" lang="en">Source: <code>runs/156432_pnl_wallets_v1/pnl_summary.json</code>, <code>pnl_gross_summary.json</code> (rounded for display)</p>
+</section>
+
+<section id="s5">
+  <div class="eyebrow">Step 5 of 7</div>
+  <h2><span lang="ko">이익은 소수 지갑에 몰린다</span><span lang="en">Winnings pile up in few wallets</span></h2>
+  <p lang="ko"><b>무엇을 알려고 하나:</b> 이익이 지갑 사이에 고르게 퍼졌나, 몇 지갑이 가져갔나. 총손익(수수료 전)에서 상위 1%, 3%, 10% 지갑이 가져가는 몫을 본다.</p>
+  <p lang="en"><b>What we want to know:</b> Are winnings spread evenly, or do a few wallets take them? We look at the share of gross winnings (before fees) held by the top 1%, 3% and 10% of wallets.</p>
+  <div class="chart">
+    <svg viewBox="0 0 700 330" role="img" aria-labelledby="t5ko t5en">
+      <title id="t5ko" lang="ko">막대 그림. 상위 1%, 3%, 10% 지갑이 가져가는 총이익의 몫. 세 범위가 비슷하다.</title>
+      <title id="t5en" lang="en">Bar chart. Share of gross winnings taken by the top 1%, 3% and 10% of wallets. The three scopes are similar.</title>
+      <g font-size="11" fill="var(--foreground)">
+        <rect x="150" y="6" width="12" height="12" fill="var(--primary)"/><text x="168" y="16"><tspan lang="ko">all</tspan><tspan lang="en">all</tspan></text>
+        <rect x="230" y="6" width="12" height="12" fill="var(--muted-foreground)"/><text x="248" y="16">non_updown</text>
+        <rect x="350" y="6" width="12" height="12" fill="var(--signal-plan)"/><text x="368" y="16">kept</text>
+      </g>
+      <g stroke="var(--rule)"><path d="M150 28V318"/><path d="M350 28V318"/><path d="M550 28V318"/></g>
+      <g font-size="10" fill="var(--muted-foreground)" text-anchor="middle"><text x="150" y="328">0%</text><text x="350" y="328">50%</text><text x="550" y="328">100%</text></g>
+      <g font-size="11.5" font-weight="600" fill="var(--foreground)" text-anchor="end">
+        <text lang="ko" x="140" y="64">상위 1%</text><text lang="en" x="140" y="64">Top 1%</text>
+        <text lang="ko" x="140" y="160">상위 3%</text><text lang="en" x="140" y="160">Top 3%</text>
+        <text lang="ko" x="140" y="256">상위 10%</text><text lang="en" x="140" y="256">Top 10%</text>
+      </g>
+      <g>
+        <rect x="150" y="36" width="336.2" height="16" fill="var(--primary)"/><rect x="150" y="56" width="347.4" height="16" fill="var(--muted-foreground)"/><rect x="150" y="76" width="352.1" height="16" fill="var(--signal-plan)"/>
+        <rect x="150" y="132" width="377.7" height="16" fill="var(--primary)"/><rect x="150" y="152" width="381.3" height="16" fill="var(--muted-foreground)"/><rect x="150" y="172" width="383.2" height="16" fill="var(--signal-plan)"/>
+        <rect x="150" y="228" width="397.1" height="16" fill="var(--primary)"/><rect x="150" y="248" width="397.4" height="16" fill="var(--muted-foreground)"/><rect x="150" y="268" width="397.6" height="16" fill="var(--signal-plan)"/>
+      </g>
+      <g font-size="11" fill="var(--foreground)">
+        <text x="492" y="48">84.0%</text><text x="503" y="68">86.8%</text><text x="508" y="88">88.0%</text>
+        <text x="534" y="144">94.4%</text><text x="537" y="164">95.3%</text><text x="539" y="184">95.8%</text>
+        <text x="553" y="240">99.3%</text><text x="553" y="260">99.3%</text><text x="553" y="280">99.4%</text>
+      </g>
+    </svg>
+  </div>
+  <p class="note" lang="ko">그림 3. 상위 1%, 3%, 10% 지갑이 가져가는 총이익의 몫, 범위 셋을 나란히. 왜: 세 범위가 비슷하면 쏠림이 Up/Down 시장이나 거름 방식 때문이 아니다.</p>
+  <p class="note" lang="en">Figure 3. Share of gross winnings taken by the top 1%, 3% and 10% of wallets, three scopes side by side. Why: if the scopes agree, the pile-up does not come from Up/Down markets or from the filter.</p>
+  <ul lang="ko">
+    <li><b>읽는 법:</b> <code>all</code>에서 상위 1% 지갑이 총이익의 84.0%를 가져간다. 상위 3%는 94.4%, 상위 10%는 99.3%다.</li>
+    <li><b>읽는 법:</b> <code>kept</code>는 88.0%, 95.8%, 99.4%다. 나머지 90%의 지갑은 총이익의 1% 미만을 나눠 가진다.</li>
+  </ul>
+  <ul lang="en">
+    <li><b>Read:</b> In <code>all</code>, the top 1% of wallets take 84.0% of gross winnings. The top 3% take 94.4% and the top 10% take 99.3%.</li>
+    <li><b>Read:</b> In <code>kept</code> the shares are 88.0%, 95.8% and 99.4%. The other 90% of wallets share less than 1% of gross winnings.</li>
+  </ul>
+  <div class="callout" lang="ko"><p><b>외부 자료 (우리가 확인하지 않음):</b> 소유자가 CoinDesk 2026-04-26 기사를 알려 줬다. 런던 비즈니스 스쿨(London Business School)과 예일(Yale) 연구에서 거래자 약 3%가 예측 시장의 정확도를 이끈다고 한다. <a href="https://www.coindesk.com/markets/2026/04/26/only-3-of-traders-drive-prediction-markets-accuracy-not-the-crowd-study-finds" target="_blank" rel="noopener">기사 링크</a>. 우리 숫자는 이익의 몫이다. 정확도에 대한 기여가 아니다. 그래서 그 주장과 어긋나지 않지만, 그 주장을 검정하지는 않는다.</p></div>
+  <div class="callout" lang="en"><p><b>Outside source (not verified by us):</b> The owner shared a CoinDesk article of 2026-04-26. It reports an LBS and Yale study (London Business School and Yale) that about 3% of traders drive prediction-market accuracy. <a href="https://www.coindesk.com/markets/2026/04/26/only-3-of-traders-drive-prediction-markets-accuracy-not-the-crowd-study-finds" target="_blank" rel="noopener">Article link</a>. Our number is the share of profit, not the contribution to accuracy. So it is consistent with that claim but does not test it.</p></div>
+  <p class="src" lang="ko">출처: <code>runs/156432_pnl_wallets_v1/pnl_gross_summary.json</code> (<code>top1_share_won</code>, <code>top3_share_won</code>, <code>top10_share_won</code>)</p>
+  <p class="src" lang="en">Source: <code>runs/156432_pnl_wallets_v1/pnl_gross_summary.json</code> (<code>top1_share_won</code>, <code>top3_share_won</code>, <code>top10_share_won</code>)</p>
+</section>
+
+<section id="s6">
+  <div class="eyebrow">Step 6 of 7</div>
+  <h2><span lang="ko">분포 그림</span><span lang="en">The distribution picture</span></h2>
+  <p lang="ko"><b>무엇을 알려고 하나:</b> 지갑 대부분이 0 근처에 있나, 양쪽 꼬리는 얼마나 긴가. 순손익을 대칭 로그 구간(symmetric-log bins)으로 묶었다. 가운데 구간은 −$1에서 +$1이다.</p>
+  <p lang="en"><b>What we want to know:</b> Do most wallets sit near zero, and how long are the two tails? We bin net profit in symmetric-log bins. The centre bin runs from −$1 to +$1.</p>
+  <figure>
+    <img src="../runs/local_pnlfig_v1/fig_pnl_distribution.png" alt="Histogram of wallets by net profit in symmetric-log bins, three panels: all, non-Up/Down, kept" width="1050" height="1200">
+  </figure>
+  <p class="note" lang="ko">그림 4. 순손익별 지갑 수. 범위마다 패널 하나, 세로축은 로그. 왜: 0 근처에 지갑이 얼마나 많고 꼬리가 얼마나 긴지 한 장에 보인다. 출처: <code>runs/156432_pnl_wallets_v1</code></p>
+  <p class="note" lang="en">Figure 4. Wallets by net profit, one panel per scope, log vertical axis. Why: it shows how many wallets sit near zero and how long the tails are in one view. Source: <code>runs/156432_pnl_wallets_v1</code></p>
+  <ul lang="ko">
+    <li><b>읽는 법 1:</b> 가운데 구간(−$1에서 +$1)이 패널마다 가장 높은 막대다. <code>kept</code>에서 지갑 497,984개가 여기 있다.</li>
+    <li><b>읽는 법 2:</b> 꼬리는 양쪽으로 $1M 넘게 뻗는다. 막대가 낮아지는 곳에서는 지갑이 몇 개뿐이다.</li>
+  </ul>
+  <ul lang="en">
+    <li><b>Read 1:</b> The centre bin (−$1 to +$1) is the tallest bar in every panel. In <code>kept</code>, 497,984 wallets sit there.</li>
+    <li><b>Read 2:</b> The tails reach past $1M on both sides. Where the bars get low, only a few wallets remain.</li>
+  </ul>
+</section>
+
+<section id="s7">
+  <div class="eyebrow">Step 7 of 7</div>
+  <h2><span lang="ko">한계: 어디까지 믿나</span><span lang="en">Limits: how far to trust it</span></h2>
+  <p lang="ko"><b>결론:</b> 총손익 숫자가 더 튼튼하다. 순손익은 수수료 가정에 기대므로 조심해서 읽는다.</p>
+  <p lang="en"><b>Bottom line:</b> The gross numbers are the robust ones. Net numbers rest on a fee assumption, so read them with care.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th><span lang="ko">한계</span><span lang="en">Limit</span></th><th><span lang="ko">영향</span><span lang="en">Effect</span></th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td>
+        <td><span lang="ko">지갑은 사람이 아니다.</span><span lang="en">A wallet is not a person.</span></td>
+        <td><span lang="ko">한 사람이 지갑 여럿을 쓰면 몫이 나뉜다. "상위 1% 사람"이라고 읽지 않는다.</span><span lang="en">One person with several wallets splits the share. Do not read "top 1% of people".</span></td></tr>
+      <tr><td class="num">2</td>
+        <td><span lang="ko">kept 포지션의 59%가 <a class="t" href="#term-short">숏(short)</a>이다. 민트와 병합 체결이 섞였다.</span><span lang="en">59% of kept positions are short. Mint and merge fills are mixed in.</span></td>
+        <td><ul>
+          <li><span lang="ko">이진 시장에서 Yes 숏을 끝까지 들고 있으면 No 롱과 손익이 같다. 그래서 합계는 맞다.</span><span lang="en">In a binary market, a Yes short held to resolution has the same profit as a No long. So the totals stay valid.</span></li>
+          <li><span lang="ko">포지션마다 붙인 숏·롱 라벨은 믿지 않는다.</span><span lang="en">Per-position short and long labels do not hold.</span></li>
+          <li><span lang="ko"><a class="t" href="#term-mint">민트와 병합(mint, merge)</a>은 모델에 넣지 않았다.</span><span lang="en">Mints and merges are not modelled.</span></li></ul></td></tr>
+      <tr><td class="num">3</td>
+        <td><span lang="ko">수수료 가정: <code>fee_usdc</code>를 테이커에게만 물린다. 확인하지 못했다.</span><span lang="en">Fee assumption: <code>fee_usdc</code> is charged to the taker only. We have not verified it.</span></td>
+        <td><ul>
+          <li><span lang="ko">수수료 합계는 $572.2M이다 (<code>all</code>).</span><span lang="en">Fees total $572.2M (<code>all</code>).</span></li>
+          <li><span lang="ko">Up/Down 시장에서 수수료가 훨씬 높다 (표 2에서 <code>all</code>과 <code>non_updown</code>을 비교).</span><span lang="en">Fees are much higher in Up/Down markets (compare <code>all</code> with <code>non_updown</code> in Table 2).</span></li>
+          <li><span lang="ko">순손익 숫자는 조심해서 읽는다. 총손익이 튼튼하다.</span><span lang="en">Read net numbers with care. Gross numbers are robust.</span></li></ul></td></tr>
+      <tr><td class="num">4</td>
+        <td><span lang="ko"><code>kept</code> 시장 1,014개가 새 승자 규칙을 통과하지 못했다.</span><span lang="en">1,014 kept markets fail the new winner rule.</span></td>
+        <td><span lang="ko">그 시장은 계산에서 빠진다. 규칙은 쓸 수 있는 승자(단계 2)다.</span><span lang="en">Those markets are left out. The rule is the usable winner (Step 2).</span></td></tr>
+      <tr><td class="num">5</td>
+        <td><span lang="ko">중복 행을 남겼다. 이전 실행과 같다.</span><span lang="en">Duplicate rows stay, as in earlier runs.</span></td>
+        <td><span lang="ko">두 쪽이 함께 두 배가 되어 시장 합은 0으로 유지된다. 지갑의 거래액과 손익에는 반복이 들어간다.</span><span lang="en">Both sides double together, so market sums still cancel. A wallet's volume and profit include the repeats.</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="src" lang="ko">출처: <code>analysis/prereg_pnl.md</code> (가정), <code>pnl_summary.json</code> (<code>checks</code>: 숏 비율 0.5896, <code>n_kept_not_usable</code> 1,014)</p>
+  <p class="src" lang="en">Source: <code>analysis/prereg_pnl.md</code> (assumptions), <code>pnl_summary.json</code> (<code>checks</code>: short share 0.5896, <code>n_kept_not_usable</code> 1,014)</p>
+</section>
+
+<section id="s8" lang="ko">
+  <div class="eyebrow">부록</div>
+  <h2>용어 부록</h2>
+  <dl>
+    <dt id="term-wallet">지갑(wallet)</dt><dd>블록체인 주소 하나. 거래자 한 사람이 아니라 주소 하나로 센다.</dd>
+    <dt id="term-fill">체결(fill)</dt><dd>두 지갑이 맞선 거래 한 건. 원본 기록의 한 행이다.</dd>
+    <dt id="term-taker">테이커(taker)</dt><dd>이미 걸려 있는 주문을 받아 체결한 쪽. 이 분석에서 수수료를 내는 쪽이다(가정).</dd>
+    <dt id="term-maker">메이커(maker)</dt><dd>주문을 걸어 두고 기다린 쪽. 같은 결과에서 테이커의 반대쪽이다.</dd>
+    <dt id="term-payout">지급금(payout)</dt><dd>시장이 끝난 뒤 받는 돈. 이긴 결과의 주식 1개는 $1, 진 결과는 $0이다.</dd>
+    <dt id="term-gross">총손익(gross profit)</dt><dd>현금 + 지급금. 수수료를 빼기 전의 손익이다.</dd>
+    <dt id="term-fee">수수료(fee)</dt><dd>체결에 붙는 비용. 원본 열 <code>fee_usdc</code>에서 읽고, 테이커에게만 물린다고 가정했다.</dd>
+    <dt id="term-median">중앙값(median)</dt><dd>지갑을 손익 순으로 세웠을 때 가운데 지갑의 값.</dd>
+    <dt id="term-quantile">분위수(quantile)</dt><dd>1% 분위수는 지갑의 1%가 그 값 이하인 지점이다. 99% 분위수는 99%가 그 값 이하인 지점이다.</dd>
+    <dt id="term-zerosum">제로섬(zero-sum)</dt><dd>한쪽이 딴 만큼 다른 쪽이 잃어 합이 0인 상태.</dd>
+    <dt id="term-short">숏(short position)</dt><dd>주식을 빌려 판 것처럼, 보유 주식 수가 음수인 포지션.</dd>
+    <dt id="term-mint">민트와 병합(mint, merge)</dt><dd>민트는 $1을 두 결과의 주식 한 쌍으로 쪼개는 일이다. 병합은 그 반대다. 이때 체결의 상대방은 반대쪽 주식을 가진 지갑이 아닐 수 있다.</dd>
+  </dl>
+</section>
+
+<footer>
+  <span lang="ko">모든 숫자는 <code>runs/156432_pnl_wallets_v1</code>의 저장된 산출물에서 읽었고, 표시를 위해서만 반올림했다. 설명용 값은 단계 3의 예뿐이다.</span>
+  <span lang="en">Every number comes from the saved outputs of <code>runs/156432_pnl_wallets_v1</code>, rounded for display only. The only illustrative values are in the Step 3 example.</span>
+</footer>
+</main>
+<script>
+/* Language toggle and one-step-at-a-time nav. No library. Storage may be blocked. */
+(function(){
+  var d=document.documentElement;
+  var TITLE={ko:"6344 Polymarket 지갑별 손익",en:"6344 Polymarket wallet profit and loss"};
+  var KEY="mvp1tips-lang";
+  function setLang(l,save){
+    d.setAttribute("data-lang",l);
+    d.lang=l;
+    document.title=TITLE[l];
+    var b=document.querySelectorAll(".langbar button");
+    for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",b[i].getAttribute("data-set")===l?"true":"false");}
+    if(save){try{localStorage.setItem(KEY,l);}catch(e){}}
+  }
+  var cur=d.getAttribute("data-lang")==="en"?"en":"ko";
+  setLang(cur,false);
+  var btn=document.querySelectorAll(".langbar button");
+  for(var i=0;i<btn.length;i++){
+    btn[i].addEventListener("click",function(){setLang(this.getAttribute("data-set"),true);});
+  }
+  /* The hash holds the step. A #term- hash opens the appendix (step 8) and scrolls to that term. */
+  function show(){
+    var h=location.hash;
+    var term=/^#term-/.test(h)?document.getElementById(h.slice(1)):null;
+    var m=/^#s([1-8])$/.exec(h);
+    var n=term?"8":(m?m[1]:"1");
+    for(var k=1;k<=8;k++){
+      var s=document.getElementById("s"+k);
+      if(s){s.className=(String(k)===n)?"on":"";}
+    }
+    var a=document.querySelectorAll(".steps a");
+    for(var j=0;j<a.length;j++){
+      var on=a[j].getAttribute("data-step")===n;
+      a[j].className=(a[j].className.indexOf("app")>=0?"app ":"")+(on?"on":"");
+      if(on){a[j].setAttribute("aria-current","true");}else{a[j].removeAttribute("aria-current");}
+    }
+    if(term){term.scrollIntoView();}else{window.scrollTo(0,0);}
+  }
+  window.addEventListener("hashchange",show);
+  show();
+  window.addEventListener("load",function(){setTimeout(function(){if(!/^#term-/.test(location.hash)){window.scrollTo(0,0);}},0);});
+})();
+</script>
+</body>
+</html>

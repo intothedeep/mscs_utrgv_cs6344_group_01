@@ -12,6 +12,7 @@ Explainer pages for the group project. Each page holds English and Korean. Click
 | `polymarket_data_erd_tips.html` | Tables and entity relationship diagram (ERD), what one row of each table means, data flow |
 | `polymarket_research_flow_tips.html` | Order of the work, the reason for each step, progress log |
 | `polymarket_mvp1_preprocessing_tips.html` | MVP1 filters, preprocessing and constraints |
+| `polymarket_wallet_pnl_tips.html` | How much money each wallet won or lost: accounting rule, results per scope, how winnings concentrate, limits |
 | `polymarket_paper_decisions_tips.html` | The decisions behind the paper, why each was made, paper sections |
 | `polymarket_feedback_answers_tips.html` | Classmates' proposal feedback and where the paper answers it |
 | `polymarket_class_questions_tips.html` | Answers to 4 class questions, tied to the paper |
