@@ -1,18 +1,15 @@
 <section id="q1-verdict" class="bg-light padf q1">
   <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
   <div class="frame"><span class="chip">Why</span><span class="chip">How</span><span class="chip on">Result</span><span class="chip">Meaning</span></div>
-  <div class="split g-q1a">
-    <div class="col">
-      <h2 class="t44 tight">Q1 result: prices are not calibrated as a whole</h2>
-      <div class="callout">Chi-square goodness of fit on 10 price bins: the prices do not match what happened.</div>
-      <div class="statrow"><div class="mid">χ² = 68.0</div><div class="lab">10 degrees of freedom, 47,948 markets</div></div>
-      <div class="statrow"><div class="mid">p = 1.1×10⁻¹⁰</div><div class="lab">assumes independent markets, so it may be too small</div></div>
-    </div>
-    <div class="card">
-      <div class="anno">9 of 10 bins below 0</div>
-      <img src="/_blob/4b6dbeeb8d4c89aa099011c8850e8ea3" width="900" height="1125" alt="Calibration gap by price bin: observed rate minus mean price">
-    </div>
+  <h2 class="t44 tight">Q1 result: prices are not calibrated as a whole</h2>
+  <div class="card" style="flex:1;min-height:0;margin-top:16px">
+    <div class="anno">Left: points sit just under the diagonal. Right: 9 of 10 bins below 0</div>
+    <img src="/_blob/76d4d2ed74b5b2e61db7fd4225011d03" width="2190" height="750" alt="Left: observed outcome-1 rate against the mean price per bin, with the diagonal for perfect calibration. Right: gap, rate minus price, per bin with 95 percent intervals. Both x axes are the mean price 1 day before close.">
   </div>
-  <div class="foot"><span>Source: paper Section 5.1</span><span class="pg"></span></div>
-  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. Why: this is the test we fixed before the results, so its answer is the Q1 verdict. How: it compares the observed counts in the 10 bins with the counts the prices predict. Result: the chi-square statistic is 68.0 with 10 degrees of freedom, and p is about 1.1 times ten to the minus ten. The verdict is that prices are not calibrated as a whole. The chart shows the gap in each bin, the observed rate minus the mean price. Nine of the ten bars are below zero. The p-value assumes independent markets, so it may be too small. Meaning: the prices do not match what happened, and the next slide shows how and by how much.</aside>
+  <div class="statline" style="margin-top:16px">
+    <div class="stat"><div class="mid">χ² = 68.0</div><div class="lab">chi-square goodness of fit, 10 bins, 47,948 markets</div></div>
+    <div class="stat"><div class="mid">p = 1.1×10⁻¹⁰</div><div class="lab">assumes independent markets, so it may be too small</div></div>
+  </div>
+  <div class="foot"><span>x axis: mean price of the markets in each bin, 1 day before close. Source: paper Section 5.1</span><span class="pg"></span></div>
+  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. Why: this is the test we fixed before the results, so its answer is the Q1 verdict. How: it compares the observed counts in the 10 bins with the counts the prices predict. Result: the chi-square statistic is 68.0 with 10 degrees of freedom, and p is about 1.1 times ten to the minus ten. The verdict is that prices are not calibrated as a whole. In both panels the x axis is the mean price of the markets in each bin, one day before close. On the left, the points sit just under the diagonal, so events happen a little less often than priced. On the right, we zoom in on that distance: the gap is the observed rate minus the mean price. Nine of the ten bins are below zero. The p-value assumes independent markets, so it may be too small. Meaning: the prices do not match what happened, and the next slide shows how and by how much.</aside>
 </section>

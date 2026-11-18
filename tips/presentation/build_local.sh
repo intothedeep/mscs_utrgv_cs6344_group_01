@@ -15,6 +15,7 @@ CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 MAP=(
   "f1962a5429c289b56bb1321737717fdb drop_reasons.png"
   "4b6dbeeb8d4c89aa099011c8850e8ea3 fig4_calibration_gap.png"
+  "76d4d2ed74b5b2e61db7fd4225011d03 fig4_calibration_gap_row.png"
   "4f6567840fdebf6a7827a918aaab8508 fig4_calibration_rate_col.png"
   "50336fd0a3d903e76d640646cbd7d0bd fig6_ccdf.png"
   "6f49999e06e661dde60926ef827f5a57 fig7_lorenz.png"
