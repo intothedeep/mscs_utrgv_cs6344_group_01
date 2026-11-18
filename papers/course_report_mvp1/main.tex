@@ -103,12 +103,10 @@ Largest per-bin gap & \LargestGapAbs \\
 \end{tabular}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.60\textwidth}\vspace{0pt}
-% One line per check with a bold label: easier to scan than one paragraph (owner, 2026-11-18)
-\textbf{Review checks} (rows next to the original, no new verdict).\par\smallskip
-\textbf{Price rule:} with a volume-weighted average price the net gap is \RThreeMOneVwapNetGap{}, and with a trade-based midpoint it is \RThreeMOneMidNetGap{}. So the price rule does not create the gap.\par
-\textbf{Markets labelled Yes/No} (n=\RThreeMTwoYesNoN): Yes is priced above its observed rate, net gap \RThreeMTwoYesNoNetGap{}.\par
-\textbf{Dependent markets:} with markets grouped by a proxy event key, the net-gap interval is [\RThreeMThreeKOneNetGapCiLow, \RThreeMThreeKOneNetGapCiHigh]. It stays below 0.\par
-\textbf{Size and volume:} Appendix C compares the gap with the trading cost and across market volume.
+% Review checks are extra (no new verdict), so the body only names them; rows in Appendix D.1 (owner, 2026-11-18)
+\textbf{Review checks.} Appendix D repeats Q1 with other price rules, Yes/No markets only, and markets grouped by a proxy event key.
+The net gap stays below 0 in each.
+Appendix C compares the gap with the trading cost and across market volume.
 \end{minipage}
 
 % Reading states only what Figure 1 and the table show; size and volume groups moved to Appendix C (owner, 2026-11-18).
@@ -177,7 +175,7 @@ A reader can use a price as a probability if they read it a little lower.
 % Owner asked for the limits only, without numbers (2026-11-18); the numbers stay in the paper (check M3)
 \textbf{Independence.} Our tests assume that markets are independent.
 Markets on one event move together, so the p-values may be too small.
-The data hold no event key, so our check with a proxy key is only partial.
+The data hold no event key, so our check with a proxy key (Appendix D) is only partial.
 \textbf{Selection.} Only a small share of markets pass the filters, and kept markets trade more than dropped ones.
 % Price day and wallet limits copied from ../paper_mvp1/sections/12-limits.tex (owner, 2026-11-18)
 \textbf{Price day.} Trading continues after the scheduled close, when the answer may be known.
@@ -302,9 +300,20 @@ That difference is weak evidence.
 \toprule
 Check & What it asks & Result \\
 \midrule
+M1 price rule & Does the way we set the price create the gap? & Volume-weighted average price: \RThreeMOneVwapNetGap{} [\RThreeMOneVwapNetGapCiLow, \RThreeMOneVwapNetGapCiHigh].\newline
+Trade-based midpoint, n=\RThreeMOneMidN: \RThreeMOneMidNetGap{} [\RThreeMOneMidNetGapCiLow, \RThreeMOneMidNetGapCiHigh]. \\
+\midrule
+M2 Yes/No labels & Is the gap there in markets whose outcomes are named Yes and No? & n=\RThreeMTwoYesNoN: Yes is priced above its observed rate, \RThreeMTwoYesNoNetGap{} [\RThreeMTwoYesNoNetGapCiLow, \RThreeMTwoYesNoNetGapCiHigh].\newline
+The other n=\RThreeMTwoOtherN{} markets show no rejection ($p=\RThreeMTwoOtherP$). \\
+\midrule
+M3 grouped markets &Markets on one event move together. Does the gap survive when we group them by a proxy event key? & Key: first three words of the market slug, \RThreeMThreeKOneNClusters{} groups. Cluster bootstrap interval [\RThreeMThreeKOneNetGapCiLow, \RThreeMThreeKOneNetGapCiHigh], below 0. \\
+\midrule
+M4 kept vs dropped & How do the kept markets differ from the dropped ones? & Median volume before the price day: \RThreeMFourKeptMedianVolumeBeforeDay{} USDC kept, \RThreeMFourDroppedMedianVolumeBeforeDay{} USDC dropped. \\
+\midrule
 R1 clean payout & Does Q1 hold without markets that have no clean payout? & We remove \RobROneNExcluded{} markets, so n=\RobROneSensN. $\chi^2$ moves from \QOneChiSq{} to \RobROneSensChiSq. The Q1 rule result is the same. \\
 \midrule
-R2 last-day price & How far does the price move from \pOne{} to the last trade before the close? & The median absolute change is \RobRTwoMedianAbsDelta. The change is at least \DeltaA{} in \RobRTwoShareDeltaAtLeastTen{} of markets. So \pOne{} is not the price at the close. \\
+R2 last price before close & How far does the price move from \pOne{} to the last trade before the close, and does Q1 hold at that price? & The median absolute change is \RobRTwoMedianAbsDelta. The change is at least \DeltaA{} in \RobRTwoShareDeltaAtLeastTen{} of markets.\newline
+At the last price, $\chi^2=\RTwoCloseCloseChiSq$ ($p=\RTwoCloseCloseP$) still rejects, and the net gap is \RTwoCloseCloseNetGap. \\
 \midrule
 Close period & Does the gap change with the close year? & \RThreePeerBPeriodOneLabel: \RThreePeerBPeriodOneNetGap{} [\RThreePeerBPeriodOneNetGapCiLow, \RThreePeerBPeriodOneNetGapCiHigh], n=\RThreePeerBPeriodOneN.\newline
 \RThreePeerBPeriodTwoLabel: \RThreePeerBPeriodTwoNetGap{} [\RThreePeerBPeriodTwoNetGapCiLow, \RThreePeerBPeriodTwoNetGapCiHigh], n=\RThreePeerBPeriodTwoN.\newline
