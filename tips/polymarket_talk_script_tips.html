@@ -130,7 +130,7 @@ figcaption{font-size:12px;color:var(--muted-foreground)}
     <li><a href="#s7"><span lang="ko">Q3 분포 모양</span><span lang="en">Q3 shapes</span></a></li>
     <li><a href="#s8"><span lang="ko">결론</span><span lang="en">Conclusion</span></a></li>
     <li><a href="#s9"><span lang="ko">강의 덱 지도</span><span lang="en">Lecture map</span></a></li>
-    <li><a href="#s9b"><span lang="ko">강의 밖 4가지</span><span lang="en">Outside the lectures</span></a></li>
+    <li><a href="#s9b"><span lang="ko">질문 대비 (backup)</span><span lang="en">Backup for questions</span></a></li>
     <li><a href="#s10"><span lang="ko">소유자가 채울 것</span><span lang="en">Owner to fill</span></a></li>
   </ul>
   <div class="callout"><p><span lang="ko"><b>숫자 출처:</b> 우리 데이터 숫자는 모두 저장된 실행 산출물(MVP1 전체 실행, 검토 확인 실행, 지갑 손익 실행)에서 읽었다. 시장 규모 숫자는 뉴스와 공시이며 우리 데이터가 아니다.</span><span lang="en"><b>Where numbers come from:</b> every number about our data is read from the saved run outputs (the MVP1 full run, the review-check run, the wallet PnL run). Market-size numbers are news and filings, not our data.</span></p></div>
@@ -328,9 +328,52 @@ figcaption{font-size:12px;color:var(--muted-foreground)}
       <tr><td><span lang="ko">질문</span><span lang="en">Question</span></td><td><span lang="ko">전체가 맞나</span><span lang="en">Is the whole set right?</span></td><td><span lang="ko">어느 구간이 틀렸나</span><span lang="en">Which bin is off?</span></td></tr>
       <tr><td><span lang="ko">검정 수</span><span lang="en">Tests</span></td><td>1</td><td>10</td></tr>
       <tr><td><span lang="ko">보정</span><span lang="en">Correction</span></td><td><span lang="ko">필요 없음</span><span lang="en">Not needed</span></td><td><span lang="ko">필요함 (6)</span><span lang="en">Needed (6)</span></td></tr>
-      <tr><td><span lang="ko">관계</span><span lang="en">Link</span></td><td><span lang="ko">χ² = 구간 10개 z²의 합 (z는 가격으로 계산한 표준편차를 씀)</span><span lang="en">χ² = sum of the 10 bins' z² (z uses the SD from the price)</span></td><td><span lang="ko">각 구간의 z가 그 구간의 p를 정한다</span><span lang="en">Each bin's z sets that bin's p</span></td></tr>
+      <tr><td><span lang="ko">비교하는 두 수</span><span lang="en">Two numbers compared</span></td><td><span lang="ko">구간마다 관측 개수 대 기대 개수 (기대 = 시장 수 × 평균 가격)</span><span lang="en">Per bin, observed count vs expected count (expected = markets × mean price)</span></td><td><span lang="ko">같다 (한 구간씩)</span><span lang="en">Same (one bin at a time)</span></td></tr>
+      <tr><td><span lang="ko">쓰는 분포</span><span lang="en">Distribution used</span></td><td><span lang="ko">정규 근사 → χ²(10)</span><span lang="en">Normal approximation → χ²(10)</span></td><td><span lang="ko">이항분포 B(n, 평균 가격) 그 자체</span><span lang="en">The binomial B(n, mean price) itself</span></td></tr>
+      <tr><td><span lang="ko">정규 가정</span><span lang="en">Normal assumption</span></td><td><span lang="ko">있다. 근거는 중심극한정리(central limit theorem): 개수가 크면 z가 정규에 가깝다</span><span lang="en">Yes. The central limit theorem makes each z near normal when counts are large</span></td><td><span lang="ko">없다. 그래서 이름이 "정확(exact)"</span><span lang="en">None. That is why it is called "exact"</span></td></tr>
+      <tr><td><span lang="ko">관계</span><span lang="en">Link</span></td><td><span lang="ko">χ² = 구간 10개 z²의 합 (z는 가격으로 계산한 표준편차를 씀). 21.28 + 11.30 + … + 0.03 = 67.99</span><span lang="en">χ² = sum of the 10 bins' z² (z uses the SD from the price). 21.28 + 11.30 + … + 0.03 = 67.99</span></td><td><span lang="ko">이항분포에서 p를 바로 더해 구한다 (5a3)</span><span lang="en">Adds probabilities straight from the binomial (5a3)</span></td></tr>
     </table></div>
     <div class="say"><span lang="ko">방법을 순서대로 보겠습니다. 표본을 뽑지 않습니다. 남긴 47,948개 시장을 모두 씁니다. 먼저 시장마다 마감 하루 전 가격을 정합니다. 마감 뒤 가격에는 답이 섞이기 때문입니다. 가격을 10개 구간으로 나누고, 구간마다 평균 가격과 실제 비율을 셉니다. 그다음 두 가지 검정을 합니다. 카이제곱 적합도 검정은 한 번만 합니다. 10개 구간이 모두 함께 맞는지 묻습니다. 이항 검정은 구간마다 한 번씩, 모두 10번 합니다. 어느 구간이 틀렸는지 묻습니다. 검정을 10번 하면 우연히 하나쯤 걸릴 확률이 약 40%입니다. 그래서 Benjamini-Hochberg와 Bonferroni로 보정합니다. 판정 규칙은 결과를 보기 전에 정했습니다.</span><span lang="en">Here is the method in order. We do not sample. We use all 47,948 kept markets. First, each market gets its price one day before the close, because a later price already knows the answer. We split the prices into 10 bins and count the mean price and the observed rate in each bin. Then we run two kinds of test. The chi-square goodness-of-fit test runs once. It asks whether all 10 bins match together. The binomial test runs once per bin, 10 times in all. It asks which bin is off. With 10 tests, the chance of a false hit somewhere is about 40%, so we correct with Benjamini-Hochberg and Bonferroni. We fixed the verdict rule before we saw any result.</span></div>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 5a3</b> · <span lang="ko">이항 검정의 p값은 어떻게 구하나 · 1분 (시간이 부족하면 건너뜀)</span><span lang="en">How the binomial test gets its p-value · 1 min (skip if short on time)</span></div>
+    <div class="chart"><svg viewBox="0 0 860 240" role="img" aria-label="Binomial distribution of the outcome-1 count in bin 0 if the price were right">
+      <g font-size="12">
+        <rect x="60" y="172" width="70.6" height="10" fill="#0432ff"/>
+        <rect x="776.9" y="172" width="63.1" height="10" fill="#0432ff"/>
+        <path d="M60.0,170.0 L178.9,170.0 L186.3,169.9 L201.1,169.8 L216.0,169.6 L230.9,169.1 L245.7,168.2 L260.6,166.5 L275.4,163.6 L290.3,158.9 L305.1,151.9 L320.0,141.9 L334.9,128.8 L349.7,112.7 L364.6,94.4 L379.4,75.3 L394.3,57.4 L409.1,42.7 L424.0,33.2 L438.9,30.0 L453.7,33.6 L468.6,43.4 L483.4,58.0 L498.3,75.5 L513.1,93.9 L528.0,111.5 L542.9,127.1 L557.7,139.9 L572.6,149.8 L587.4,157.0 L602.3,162.0 L617.1,165.3 L632.0,167.4 L646.9,168.6 L661.7,169.3 L676.6,169.6 L691.4,169.8 L706.3,169.9 L721.1,170.0 L840.0,170.0" fill="#eef1ff" stroke="#555"/>
+        <line x1="60" y1="170" x2="840" y2="170" stroke="#333"/>
+        <line x1="438.9" y1="22" x2="438.9" y2="170" stroke="#999" stroke-dasharray="4 3"/>
+        <text x="438.9" y="16" text-anchor="middle">E = 332 (price is right)</text>
+        <line x1="130.6" y1="60" x2="130.6" y2="182" stroke="#0432ff" stroke-width="2"/>
+        <text x="136" y="56" fill="#0432ff">O = 249 (observed)</text>
+        <line x1="776.9" y1="60" x2="776.9" y2="182" stroke="#0432ff" stroke-width="2"/>
+        <text x="771" y="56" text-anchor="end" fill="#0432ff">423</text>
+        <g text-anchor="middle" fill="#555"><text x="60" y="198">230</text><text x="438.9" y="198">332</text><text x="840" y="198">440</text></g>
+        <text x="95" y="216" text-anchor="middle" fill="#0432ff">k ≤ 249: 8.5e-7</text>
+        <text x="790" y="216" text-anchor="middle" fill="#0432ff">k ≥ 423: 7.9e-7</text>
+        <text x="438.9" y="216" text-anchor="middle">p = 8.5e-7 + 7.9e-7 = 1.6e-6</text>
+        <text x="438.9" y="234" text-anchor="middle" fill="#555">Outcome-1 count k in bin 0 (18,209 markets)</text>
+      </g></svg></div>
+    <p class="note"><span lang="ko">구간 0에서 가격이 맞다면 나올 outcome 1 개수의 분포 B(18,209, 0.0183) 대 실제 개수 249. 왜: 파란 꼬리의 넓이가 p값이다. 꼬리가 너무 얇아 그림에서는 띠로만 표시하고 넓이는 숫자로 적었다.</span><span lang="en">Distribution of the outcome-1 count in bin 0 if the price were right, B(18,209, 0.0183), against the observed 249. Why: the area of the blue tails is the p-value. The tails are too thin to see, so a band marks them and the area is written as a number.</span></p>
+    <div class="tablewrap"><table>
+      <tr><th>#</th><th><span lang="ko">단계</span><span lang="en">Step</span></th><th><span lang="ko">구간 0의 값</span><span lang="en">Bin 0 value</span></th></tr>
+      <tr><td>1</td><td><span lang="ko">귀무가설(null hypothesis): 진짜 확률 = 평균 가격</span><span lang="en">Null hypothesis: true chance = mean price</span></td><td class="num">p = 0.0183, n = 18,209</td></tr>
+      <tr><td>2</td><td><span lang="ko">그러면 개수는 이항분포 B(n, p)를 따른다</span><span lang="en">Then the count follows the binomial B(n, p)</span></td><td><span lang="ko">기대 332, 표준편차 18.1</span><span lang="en">Expected 332, SD 18.1</span></td></tr>
+      <tr><td>3</td><td><span lang="ko">실제 개수가 나올 확률을 구한다</span><span lang="en">Find the chance of the observed count</span></td><td class="num">P(k = 249) = 2.2e-7</td></tr>
+      <tr><td>4</td><td><span lang="ko">확률이 그 이하인 모든 k를 더한다 (양측). 왼쪽 꼬리와 오른쪽 꼬리 둘 다</span><span lang="en">Add every k whose chance is no larger (two-sided). Both the left and the right tail</span></td><td><ul><li>k ≤ 249: 8.5e-7</li><li>k ≥ 423: 7.9e-7</li></ul></td></tr>
+      <tr><td>5</td><td><span lang="ko">합 = p값. 가격이 맞다면 이만큼 빗나갈 확률</span><span lang="en">The sum is the p-value: the chance of a miss this large if the price were right</span></td><td class="num">1.6e-6</td></tr>
+      <tr><td>6</td><td><span lang="ko">BH 보정 뒤 0.05와 비교한다</span><span lang="en">Compare with 0.05 after BH correction</span></td><td><span lang="ko">1.6e-5 &lt; 0.05 → 이 구간은 가격과 다르다</span><span lang="en">1.6e-5 &lt; 0.05 → this bin is off</span></td></tr>
+    </table></div>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">구간</span><span lang="en">Bin</span></th><th><span lang="ko">기대 대 관측</span><span lang="en">Expected vs observed</span></th><th><span lang="ko">정확 이항 p (저장값)</span><span lang="en">Exact binomial p (saved)</span></th><th><span lang="ko">정규 근사 p (설명용 계산)</span><span lang="en">Normal approximation p (illustrative)</span></th></tr>
+      <tr><td>0</td><td class="num">332 vs 249, z = −4.61</td><td class="num">1.6e-6</td><td class="num">4.0e-6</td></tr>
+      <tr><td>7</td><td class="num">1,716 vs 1,640, z = −3.62</td><td class="num">3.6e-4</td><td class="num">3.0e-4</td></tr>
+    </table></div>
+    <p class="note"><span lang="ko">두 방법의 결론은 같다. 꼬리 끝에서는 근사가 어느 쪽으로든 조금 어긋난다. 그래서 구간 판정에는 근사 없는 정확 이항 검정을 쓴다. 숫자: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>의 개수로 다시 계산했고, 정확 p는 저장값과 같다.</span><span lang="en">Both give the same verdict. In the far tail the approximation drifts a little, either way. So the bin verdict uses the exact test. Numbers: recomputed from the counts in <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>. The exact p matches the saved value.</span></p>
+    <div class="say"><span lang="ko">이항 검정의 p값은 이렇게 구합니다. 가장 싼 구간에는 시장이 18,209개 있고, 평균 가격은 1.83%입니다. 가격이 맞다면 outcome 1은 약 332번 나와야 합니다. 실제로는 249번이었습니다. 가격이 맞다고 가정한 이항분포에서, 249처럼 드문 결과가 나올 확률을 양쪽 꼬리에서 모두 더합니다. 그 합이 1.6 × 10⁻⁶입니다. 가격이 맞다면 거의 일어날 수 없는 결과입니다. 그래서 이 구간의 가격은 맞지 않다고 판정합니다. 정규분포는 가정하지 않습니다. 이항분포에서 바로 계산합니다.</span><span lang="en">Here is how the binomial test gets its p-value. The cheapest bin has 18,209 markets, with a mean price of 1.83%. If the price were right, outcome 1 should happen about 332 times. It happened 249 times. From the binomial we would see if the price were right, we add the chance of every result as rare as 249, in both tails. The sum is 1.6 times ten to the minus six. That almost never happens if the price is right, so this bin's price is off. We assume no normal curve here. We compute straight from the binomial.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D6 s23, s26, s29 이항분포 · D10 s8–s13 이항 검정과 p값 (동전 예).</span><span lang="en"><b>Lecture:</b> D6 s23, s26, s29 binomial distribution · D10 s8–s13 binomial test and p-value (coin example).</span></p>
   </div>
 
   <div class="slide">
@@ -496,7 +539,7 @@ figcaption{font-size:12px;color:var(--muted-foreground)}
 
 <section id="s9b">
   <div class="eyebrow"><span lang="ko">Step 10 of 11 · 질문 대비 (backup)</span><span lang="en">Step 10 of 11 · Backup for questions</span></div>
-  <h2><span lang="ko">강의 밖 4가지: 무엇이고, 어디에 썼고, 왜</span><span lang="en">Four items outside the lectures: what, where, why</span></h2>
+  <h2><span lang="ko">질문 대비: 강의 밖 도구와 검정의 가정</span><span lang="en">Backup: tools outside the lectures, and the test assumptions</span></h2>
 
   <div class="slide">
     <div class="meta"><b>B1</b> · <span lang="ko">포아송과 이항분포</span><span lang="en">Poisson and binomial</span></div>
@@ -530,6 +573,139 @@ figcaption{font-size:12px;color:var(--muted-foreground)}
     </table></div>
     <div class="say"><span lang="ko">중심극한정리는 숫자 하나하나가 아니라 평균에 작동합니다. 실제 비율은 0과 1의 평균이라 정규에 가깝고, 그래서 z 구간을 그립니다. 카이제곱도 정규에 가까운 z를 제곱해 더한 것입니다. 다만 한 사건의 시장들은 독립이 아닙니다. 그래서 p값이 너무 작을 수 있고, 군집 부트스트랩으로 확인했습니다.</span><span lang="en">The central limit theorem works on means, not on single values. The observed rate is a mean of 0s and 1s, so it is near normal, and we can draw a z interval. The chi-square is a sum of squared near-normal z values. But markets on one event are not independent. So the p-values may be too small, and we checked with a cluster bootstrap.</span></div>
     <p class="lec"><span lang="ko"><b>강의:</b> 이 이름은 덱 글에 없다. 이 정리를 쓰는 도구는 덱에 있다: z 구간 D5 s24, t 구간 D11 s9.</span><span lang="en"><b>Lecture:</b> not named in the deck text. The tools that use it are: z interval D5 s24, t interval D11 s9.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>B2a</b> · <span lang="ko">카이제곱에서 중심극한정리는 어떻게 쓰이나 · 덱 backup 슬라이드 <code>backup-q1-clt</code></span><span lang="en">How the chi-square test uses the central limit theorem · deck backup slide <code>backup-q1-clt</code></span></div>
+    <p><span lang="ko"><b>한 줄:</b> 중심극한정리는 구간마다 구한 z가 표준정규를 따른다는 근거다. 그래야 z²의 합을 χ²(10) 분포로 읽을 수 있다.</span><span lang="en"><b>One line:</b> the central limit theorem is why each bin's z is near a standard normal. Only then can the sum of z² be read from the χ²(10) distribution.</span></p>
+    <div class="chart"><svg viewBox="0 0 860 250" role="img" aria-label="Chain from one 0 or 1 market to the chi-square p-value">
+      <g font-size="13">
+        <rect x="20" y="6" width="820" height="32" fill="none" stroke="#999"/><text x="34" y="27">One market: 0 or 1 (not normal)</text>
+        <text x="430" y="54" text-anchor="middle" fill="#555">↓ add n markets in a bin</text>
+        <rect x="20" y="62" width="820" height="32" fill="#eef1ff" stroke="#0432ff"/><text x="34" y="83"><tspan font-weight="700" fill="#0432ff">Central limit theorem:</tspan> count O ≈ normal (n large)</text>
+        <text x="430" y="110" text-anchor="middle" fill="#555">↓ standardize: z = (O − E) / √(n·p·(1−p))</text>
+        <rect x="20" y="118" width="820" height="32" fill="none" stroke="#999"/><text x="34" y="139">z ≈ N(0, 1)</text>
+        <text x="430" y="166" text-anchor="middle" fill="#555">↓ add the 10 bins' z²</text>
+        <rect x="20" y="174" width="820" height="32" fill="none" stroke="#333" stroke-width="2"/><text x="34" y="195" font-weight="700">χ² = Σ z² ≈ χ²(10) → p-value</text>
+        <text x="430" y="236" text-anchor="middle" fill="#555">χ²(k) is, by definition, the sum of k squared standard normals.</text>
+      </g></svg></div>
+    <p class="note"><span lang="ko">0/1 결과 하나에서 카이제곱 p값까지의 사슬. 왜: 중심극한정리가 둘째 상자를 채워야 마지막 상자의 분포가 맞다.</span><span lang="en">The chain from one 0/1 outcome to the chi-square p-value. Why: the last box's distribution holds only if the central limit theorem fills the second box.</span></p>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">구간</span><span lang="en">Bin</span></th><th><span lang="ko">시장 수 n</span><span lang="en">Markets n</span></th><th><span lang="ko">기대 개수 (outcome 1 / outcome 0)</span><span lang="en">Expected (outcome 1 / outcome 0)</span></th><th><span lang="ko">관측</span><span lang="en">Observed</span></th><th>z</th><th>z²</th></tr>
+      <tr><td>0</td><td class="num">18,209</td><td class="num">332 / 17,877</td><td class="num">249</td><td class="num">−4.61</td><td class="num"><b>21.28</b></td></tr>
+      <tr><td>1</td><td class="num">2,703</td><td class="num">401 / 2,302</td><td class="num">339</td><td class="num">−3.36</td><td class="num">11.30</td></tr>
+      <tr><td>2</td><td class="num">2,543</td><td class="num">634 / 1,909</td><td class="num">609</td><td class="num">−1.17</td><td class="num">1.36</td></tr>
+      <tr><td>3</td><td class="num">2,769</td><td class="num">967 / 1,802</td><td class="num">919</td><td class="num">−1.89</td><td class="num">3.59</td></tr>
+      <tr><td>4</td><td class="num">3,859</td><td class="num">1,738 / 2,121</td><td class="num">1,691</td><td class="num">−1.53</td><td class="num">2.35</td></tr>
+      <tr><td>5</td><td class="num">4,240</td><td class="num">2,293 / 1,947</td><td class="num">2,268</td><td class="num">−0.76</td><td class="num">0.58</td></tr>
+      <tr><td>6</td><td class="num">2,553</td><td class="num">1,645 / 908</td><td class="num">1,574</td><td class="num">−2.94</td><td class="num">8.64</td></tr>
+      <tr><td>7</td><td class="num">2,301</td><td class="num">1,716 / 585</td><td class="num">1,640</td><td class="num">−3.62</td><td class="num"><b>13.10</b></td></tr>
+      <tr><td>8</td><td class="num">2,133</td><td class="num">1,803 / 330</td><td class="num">1,763</td><td class="num">−2.40</td><td class="num">5.75</td></tr>
+      <tr><td>9</td><td class="num">6,638</td><td class="num">6,487 / 151</td><td class="num">6,489</td><td class="num">+0.17</td><td class="num">0.03</td></tr>
+      <tr><td><b><span lang="ko">합</span><span lang="en">Sum</span></b></td><td></td><td></td><td></td><td></td><td class="num"><b>67.99 ≈ 68.0</b></td></tr>
+    </table></div>
+    <p class="note"><span lang="ko">z와 z²는 <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>의 개수로 다시 계산했다. 합은 저장된 χ² = 68.0과 같다.</span><span lang="en">z and z² are recomputed from the counts in <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>. The sum matches the saved χ² = 68.0.</span></p>
+    <ul>
+      <li><span lang="ko"><b>합이 저장값과 같다.</b> 그래서 "χ² = z²의 합"이 우리 숫자로 확인된다.</span><span lang="en"><b>The sum matches the saved value.</b> So "χ² = sum of z²" holds on our numbers.</span></li>
+      <li><span lang="ko"><b>근사는 안전하다.</b> 흔한 기준은 기대 개수 5 이상이다. 가장 작은 값은 151(구간 9, outcome 0)이다.</span><span lang="en"><b>The approximation is safe.</b> The usual rule is an expected count of at least 5. Our smallest is 151 (bin 9, outcome 0).</span></li>
+      <li><span lang="ko"><b>두 구간이 절반 이상이다.</b> 구간 0과 7이 21.28 + 13.10 = 34.38을 만든다.</span><span lang="en"><b>Two bins give over half.</b> Bins 0 and 7 give 21.28 + 13.10 = 34.38.</span></li>
+      <li><span lang="ko"><b>중심극한정리가 못 지키는 것은 독립성이다.</b> 한 사건의 시장들은 함께 움직인다. 그러면 실제 분산이 √(n·p·(1−p))보다 크고, χ²가 커지고, p값이 너무 작아진다. 대리 사건 키(proxy event key)로 시장을 묶어 다시 보았고, 순 격차 구간은 여전히 0 아래였다.</span><span lang="en"><b>What the theorem does not protect is independence.</b> Markets on one event move together. Then the real spread exceeds √(n·p·(1−p)), χ² grows, and p is too small. We regrouped markets by a proxy event key, and the net-gap interval stayed below 0.</span></li>
+      <li><span lang="ko"><b>정확 이항 검정(5a3)은 이 정규 단계를 쓰지 않는다.</b> 이항분포에서 바로 p를 구한다.</span><span lang="en"><b>The exact binomial test (5a3) skips this normal step.</b> It takes p straight from the binomial.</span></li>
+    </ul>
+    <div class="say"><span lang="ko">시장 하나의 결과는 0 아니면 1이라 정규분포가 아닙니다. 하지만 구간 하나에는 시장이 수천 개 있습니다. 중심극한정리에 따라 그 개수는 정규에 가깝습니다. 그래서 기대 개수를 빼고 표준편차로 나눈 z는 표준정규에 가깝습니다. 카이제곱 값은 이 z를 제곱해서 10개 구간에 걸쳐 더한 것입니다. 표준정규 10개의 제곱합이 바로 자유도 10인 카이제곱 분포이므로, 여기서 p값을 읽습니다. 우리 숫자로 더하면 67.99, 저장된 68.0과 같습니다. 가장 작은 기대 개수도 151이라 근사는 안전합니다. 다만 중심극한정리는 독립을 가정합니다. 한 사건의 시장들은 함께 움직이므로, 시장을 사건별로 묶어 다시 확인했습니다.</span><span lang="en">One market's outcome is 0 or 1, which is not normal. But a bin holds thousands of markets. By the central limit theorem, the count is near normal. So z, the count minus its expected value divided by the standard deviation, is near a standard normal. The chi-square value squares this z and adds it over the 10 bins. A sum of 10 squared standard normals is exactly the chi-square distribution with 10 degrees of freedom, so we read the p-value there. On our numbers the sum is 67.99, the saved 68.0. The smallest expected count is 151, so the approximation is safe. But the theorem assumes independence. Markets on one event move together, so we regrouped markets by event and checked again.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> 카이제곱(관측 대 기대) D12 s3, s4 · z 구간 D5 s24. 중심극한정리라는 이름은 덱 글에 없다.</span><span lang="en"><b>Lecture:</b> chi-square (observed vs expected) D12 s3, s4 · z interval D5 s24. The name central limit theorem is not in the deck text.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>B2b</b> · <span lang="ko">시장이 독립이 아니면 무엇이 어느 방향으로 바뀌나 · 덱 backup 슬라이드 <code>backup-q1-independence</code></span><span lang="en">If markets are not independent, what moves which way · deck backup slide <code>backup-q1-independence</code></span></div>
+    <p><span lang="ko"><b>한 줄:</b> 격차는 그대로다. 흔들림만 커진다. 그래서 z, χ²는 너무 크고, p값은 너무 작고, 구간은 너무 좁게 나온다.</span><span lang="en"><b>One line:</b> the gap stays the same. Only the spread grows. So z and χ² come out too large, p too small, and the interval too narrow.</span></p>
+    <div class="chart"><svg viewBox="0 0 860 170" role="img" aria-label="Variance of the count with and without independence">
+      <g font-size="13">
+        <text x="20" y="28">Independent:</text><text x="200" y="28">Var(count) = Σ pᵢ(1 − pᵢ)</text>
+        <text x="20" y="62">Real:</text><text x="200" y="62">Var(count) = Σ pᵢ(1 − pᵢ) + 2 · Σ Cov(i, j)</text>
+        <line x1="545" y1="70" x2="545" y2="88" stroke="#0432ff"/><text x="545" y="104" text-anchor="middle" fill="#0432ff">same event → Cov &gt; 0 → spread grows</text>
+        <text x="20" y="138" fill="#555">Example: one election, 20 markets. If the candidate loses, all 20 turn 0 together.</text>
+        <text x="20" y="160" fill="#555">That is like one big coin, not 20 coins.</text>
+      </g></svg></div>
+    <p class="note"><span lang="ko">독립 가정과 실제의 개수 분산. 왜: 같은 사건의 시장끼리 공분산이 양수면 실제 분산이 가정보다 커진다.</span><span lang="en">Variance of the count under independence and in reality. Why: positive covariance within one event makes the real variance larger than assumed.</span></p>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">값</span><span lang="en">Value</span></th><th><span lang="ko">독립이 아니면</span><span lang="en">If not independent</span></th><th><span lang="ko">이유</span><span lang="en">Why</span></th></tr>
+      <tr><td><span lang="ko">관측 비율, 평균 가격, 격차, 순 격차 −0.99%</span><span lang="en">Observed rate, mean price, gap, net gap −0.99%</span></td><td><b><span lang="ko">그대로</span><span lang="en">Unchanged</span></b></td><td><span lang="ko">개수를 세는 방법은 같다</span><span lang="en">The counting is the same</span></td></tr>
+      <tr><td><span lang="ko">개수의 실제 표준편차</span><span lang="en">Real SD of the count</span></td><td><b><span lang="ko">커진다</span><span lang="en">Larger</span></b></td><td><span lang="ko">공분산 항이 더해진다</span><span lang="en">The covariance term adds</span></td></tr>
+      <tr><td><span lang="ko">계산한 z (구간 0: −4.61)</span><span lang="en">Computed z (bin 0: −4.61)</span></td><td><b><span lang="ko">실제보다 크다</span><span lang="en">Too large</span></b></td><td><span lang="ko">너무 작은 표준편차로 나눴다</span><span lang="en">Divided by too small an SD</span></td></tr>
+      <tr><td>χ² = 68.0</td><td><b><span lang="ko">실제보다 크다</span><span lang="en">Too large</span></b></td><td><span lang="ko">z²의 합이다</span><span lang="en">It is a sum of z²</span></td></tr>
+      <tr><td><span lang="ko">p값 (카이제곱, 이항)</span><span lang="en">p-values (chi-square, binomial)</span></td><td><b><span lang="ko">실제보다 작다</span><span lang="en">Too small</span></b></td><td><span lang="ko">결과가 실제보다 드물어 보인다</span><span lang="en">The result looks rarer than it is</span></td></tr>
+      <tr><td><span lang="ko">95% 구간</span><span lang="en">95% interval</span></td><td><b><span lang="ko">실제보다 좁다</span><span lang="en">Too narrow</span></b></td><td><span lang="ko">표준오차를 작게 잡았다</span><span lang="en">The standard error is too small</span></td></tr>
+      <tr><td><span lang="ko">BH로 걸린 구간 수 (5개)</span><span lang="en">Bins flagged by BH (5)</span></td><td><b><span lang="ko">실제보다 많을 수 있다</span><span lang="en">May be too many</span></b></td><td><span lang="ko">p가 작게 나와서</span><span lang="en">Because p comes out small</span></td></tr>
+    </table></div>
+    <p><span lang="ko"><b>우리가 확인한 것:</b> 대리 사건 키(proxy event key)로 시장을 묶은 군집 부트스트랩(cluster bootstrap).</span><span lang="en"><b>What we checked:</b> a cluster bootstrap with markets grouped by a proxy event key.</span></p>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">묶는 단위</span><span lang="en">Unit</span></th><th><span lang="ko">순 격차 95% 구간</span><span lang="en">Net gap 95% interval</span></th><th><span lang="ko">폭</span><span lang="en">Width</span></th></tr>
+      <tr><td><span lang="ko">시장 하나 (독립 가정)</span><span lang="en">One market (independence)</span></td><td class="num">−1.28% ~ −0.70%</td><td class="num">0.58 pp</td></tr>
+      <tr><td><span lang="ko">사건 키 1 (군집 16,161개)</span><span lang="en">Event key 1 (16,161 clusters)</span></td><td class="num">−1.41% ~ −0.58%</td><td class="num">0.83 pp</td></tr>
+      <tr><td><span lang="ko">사건 키 2 (군집 6,181개)</span><span lang="en">Event key 2 (6,181 clusters)</span></td><td class="num">−1.39% ~ −0.58%</td><td class="num">0.81 pp</td></tr>
+    </table></div>
+    <p class="note"><span lang="ko">숫자: <code>papers/paper_mvp1/numbers.tex</code> (R3 M3 행, run 150310).</span><span lang="en">Numbers: <code>papers/paper_mvp1/numbers.tex</code> (R3 M3 rows, run 150310).</span></p>
+    <ul>
+      <li><span lang="ko"><b>예상대로 구간이 약 1.4배 넓어졌다.</b> 그래도 구간 전체가 0 아래다. "가격이 조금 높다"는 결론은 남는다.</span><span lang="en"><b>As expected, the interval is about 1.4 times wider.</b> It still sits fully below 0. "Prices run a little high" stands.</span></li>
+      <li><span lang="ko"><b>대리 키의 한계.</b> 진짜 사건 키가 데이터에 없다. 대리 키가 덜 묶었다면 실제 구간은 더 넓을 수 있다.</span><span lang="en"><b>Proxy key limit.</b> The data has no true event key. If the proxy groups too little, the real interval may be wider.</span></li>
+      <li><span lang="ko"><b>구간별 이항 p값은 다시 계산하지 않았다.</b> 그래서 BH 5개 구간의 p값은 "너무 작을 수 있다"고 말한다.</span><span lang="en"><b>Per-bin binomial p-values were not redone.</b> So the five BH bins' p-values "may be too small".</span></li>
+      <li><span lang="ko"><b>반대 경우 (재지 않음).</b> 한 사건에서 하나만 맞는 시장들("A 승", "B 승")은 음의 상관이다. 같은 구간에 모이면 분산이 오히려 준다.</span><span lang="en"><b>The opposite case (not measured).</b> Markets where only one can win ("A wins", "B wins") are negatively correlated. In the same bin, they shrink the variance.</span></li>
+    </ul>
+    <div class="say"><span lang="ko">시장이 독립이 아니면 무엇이 바뀌는지 보겠습니다. 격차 자체는 바뀌지 않습니다. 세는 방법이 같기 때문입니다. 바뀌는 것은 흔들림의 크기입니다. 같은 선거에 걸린 시장들은 함께 움직이므로, 실제 분산이 우리가 가정한 것보다 큽니다. 그러면 z와 카이제곱은 너무 크고, p값은 너무 작고, 구간은 너무 좁게 나옵니다. 즉 실제보다 더 확신하게 됩니다. 그래서 시장을 사건별로 묶어 다시 계산했습니다. 구간은 약 1.4배 넓어졌지만, 여전히 0보다 아래였습니다.</span><span lang="en">What changes if markets are not independent? The gap itself does not change, because the counting is the same. What changes is the size of the spread. Markets on one election move together, so the real variance is larger than we assumed. Then z and chi-square come out too large, p too small, and the interval too narrow. In short, we would be more sure than we should be. So we grouped markets by event and computed again. The interval got about 1.4 times wider, but it stayed below zero.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> 부트스트랩 구간 D5 s25, s26 · z 구간 D5 s24. 공분산 항과 군집 단위 재표집은 덱 글에 없다.</span><span lang="en"><b>Lecture:</b> bootstrap interval D5 s25, s26 · z interval D5 s24. The covariance term and resampling whole clusters are not in the deck text.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>B2c</b> · <span lang="ko">무엇이 종 모양인가: 시뮬레이션으로 보기, 그리고 λ의 뜻</span><span lang="en">What is bell-shaped: a simulation, and what λ means</span></div>
+    <p><span lang="ko"><b>한 줄:</b> 종 모양은 실제 데이터가 아니라, 가격이 맞는 세상을 여러 번 반복할 때 나오는 "1의 개수"들의 모양이다. λ는 그 종의 중심이다. 시뮬레이션 횟수가 아니다.</span><span lang="en"><b>One line:</b> the bell is not the real data. It is the shape of the "count of 1s" over many repeats of a world where the price is right. λ is the center of that bell, not the number of runs.</span></p>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">무엇</span><span lang="en">What</span></th><th><span lang="ko">개수</span><span lang="en">How many</span></th><th><span lang="ko">모양</span><span lang="en">Shape</span></th></tr>
+      <tr><td><span lang="ko">구간 0 시장의 가격</span><span lang="en">Prices of the bin 0 markets</span></td><td class="num">18,209</td><td><span lang="ko">0 쪽에 몰림 (평균 0.0183). 종 아님. 검정에 모양은 안 쓰인다</span><span lang="en">Piled near 0 (mean 0.0183). Not a bell. The test does not use this shape</span></td></tr>
+      <tr><td><span lang="ko">시뮬레이션 한 번 안의 시장 결과</span><span lang="en">Market outcomes inside one run</span></td><td class="num">18,209</td><td><span lang="ko">0과 1, 막대 두 개. 예: 0이 17,883개, 1이 326개</span><span lang="en">0s and 1s, two bars. Example: 17,883 zeros, 326 ones</span></td></tr>
+      <tr><td><b><span lang="ko">시뮬레이션마다 나온 "1의 개수"</span><span lang="en">The "count of 1s" from each run</span></b></td><td><span lang="ko">반복 횟수만큼 (아래 10,000개)</span><span lang="en">One per run (10,000 below)</span></td><td><b><span lang="ko">종 모양</span><span lang="en">Bell</span></b></td></tr>
+      <tr><td><span lang="ko">실제 데이터</span><span lang="en">Real data</span></td><td><span lang="ko">반복 한 번에 해당</span><span lang="en">Like one run</span></td><td><span lang="ko">숫자 하나: 249</span><span lang="en">One number: 249</span></td></tr>
+    </table></div>
+    <div class="chart"><svg viewBox="0 0 860 250" role="img" aria-label="Histogram of the count of 1s in 10,000 simulated runs of bin 0, centered at 332; the observed 249 lies left of every run">
+      <g font-size="12">
+        <line x1="60" y1="190" x2="830" y2="190" stroke="#333"/>
+        <g fill="#999">
+          <rect x="202.5" y="189" width="46" height="1"/>
+          <rect x="250" y="185.7" width="46" height="4.3"/>
+          <rect x="297.5" y="172.6" width="46" height="17.4"/>
+          <rect x="345" y="140.4" width="46" height="49.6"/>
+          <rect x="392.5" y="93.6" width="46" height="96.4"/>
+          <rect x="440" y="49.2" width="46" height="140.8"/>
+          <rect x="487.5" y="40" width="46" height="150"/>
+          <rect x="535" y="71.1" width="46" height="118.9"/>
+          <rect x="582.5" y="114.7" width="46" height="75.3"/>
+          <rect x="630" y="158" width="46" height="32"/>
+          <rect x="677.5" y="178.9" width="46" height="11.1"/>
+          <rect x="725" y="187.6" width="46" height="2.4"/>
+        </g>
+        <line x1="497" y1="22" x2="497" y2="190" stroke="#555" stroke-dasharray="4 3"/>
+        <text x="497" y="16" text-anchor="middle">λ = n·p = 18,209 × 0.0183 = 332 (center)</text>
+        <line x1="102.8" y1="60" x2="102.8" y2="190" stroke="#0432ff" stroke-width="2"/>
+        <text x="108" y="56" fill="#0432ff">real count 249</text>
+        <text x="108" y="72" fill="#0432ff">0 of 10,000 runs ≤ 249</text>
+        <g text-anchor="middle" fill="#555"><text x="102.8" y="206">249</text><text x="250" y="206">280</text><text x="392.5" y="206">310</text><text x="497" y="206">332</text><text x="630" y="206">360</text><text x="772" y="206">390</text></g>
+        <text x="445" y="228" text-anchor="middle" fill="#555">Count of 1s in one run (10-wide bars). 10,000 runs: mean 332.3, SD 18.1, min 260</text>
+      </g></svg></div>
+    <p class="note"><span lang="ko">구간 0을 B(18,209, 0.0183)로 10,000번 시뮬레이션했을 때 나온 1의 개수의 분포. 실제 개수 249와 비교한다. 왜: 이 종이 "가격이 맞다면"의 기준선이고, 249는 그 바깥에 있다. 설명용 계산(seed 0)이며, 실제 검정은 시뮬레이션 없이 이항 식으로 같은 종을 계산한다.</span><span lang="en">Count of 1s over 10,000 simulated runs of bin 0 as B(18,209, 0.0183), against the real count 249. Why: this bell is the "if the price were right" baseline, and 249 lies outside it. Illustrative (seed 0). The real test gets the same bell from the binomial formula, with no simulation.</span></p>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">숫자</span><span lang="en">Number</span></th><th><span lang="ko">뜻</span><span lang="en">Meaning</span></th><th><span lang="ko">구간 0의 값</span><span lang="en">Bin 0 value</span></th><th><span lang="ko">바꾸면 무엇이 변하나</span><span lang="en">What changes if it changes</span></th></tr>
+      <tr><td><b>λ (= n·p)</b></td><td><span lang="ko">한 번 시뮬레이션할 때 1이 평균 몇 개 나오나</span><span lang="en">Mean count of 1s in one run</span></td><td class="num">332</td><td><span lang="ko">종의 위치와 폭. 표준편차 ≈ √λ = 18.2</span><span lang="en">Where the bell sits and how wide. SD ≈ √λ = 18.2</span></td></tr>
+      <tr><td>n</td><td><span lang="ko">시뮬레이션 한 번 안의 시장 수</span><span lang="en">Markets inside one run</span></td><td class="num">18,209</td><td><span lang="ko">λ를 계산할 때 쓴다</span><span lang="en">Used to compute λ</span></td></tr>
+      <tr><td><span lang="ko">시뮬레이션 횟수</span><span lang="en">Number of runs</span></td><td><span lang="ko">숫자를 몇 개 모으나</span><span lang="en">How many counts we collect</span></td><td><span lang="ko">10,000 (설명용)</span><span lang="en">10,000 (illustrative)</span></td><td><span lang="ko">히스토그램이 얼마나 매끈한가만 바뀐다. 종의 중심과 폭은 그대로다</span><span lang="en">Only how smooth the histogram looks. The center and width stay</span></td></tr>
+    </table></div>
+    <ul>
+      <li><span lang="ko">100번을 돌리든 100만 번을 돌리든 종의 중심은 332, 폭은 약 18이다. 많이 돌리면 모양이 더 깨끗하게 보일 뿐이다.</span><span lang="en">With 100 runs or a million, the center is 332 and the width about 18. More runs only show the shape more cleanly.</span></li>
+      <li><span lang="ko"><b>"λ ≥ 5" 규칙의 5는 시뮬레이션 횟수가 아니다.</b> 한 번에 평균 5개 이상 나와야 한다는 뜻이다.</span><span lang="en"><b>The 5 in the "λ ≥ 5" rule is not the number of runs.</b> It means at least 5 expected per run.</span></li>
+      <li><span lang="ko">λ가 작으면 아무리 많이 돌려도 종이 안 된다. 예: 시장이 100개면 λ = 100 × 0.0183 ≈ 1.8이다. 개수는 0, 1, 2 쪽에 몰린 치우친 모양으로 계속 나온다. 그때는 정규 근사 대신 정확 이항 검정을 쓴다.</span><span lang="en">If λ is small, no number of runs makes a bell. Example: with 100 markets, λ = 100 × 0.0183 ≈ 1.8. The counts keep a skewed shape piled at 0, 1, 2. Then use the exact binomial test, not the normal approximation.</span></li>
+      <li><span lang="ko">종이 되는 이유: 1의 개수는 0/1 값 18,209개의 합이다. 독립인 값을 많이 더한 합은 종 모양이 된다 (중심극한정리, B2a).</span><span lang="en">Why a bell: the count is a sum of 18,209 values of 0 or 1. A sum of many independent values is bell-shaped (central limit theorem, B2a).</span></li>
+    </ul>
+    <div class="say"><span lang="ko">무엇이 종 모양인지 시뮬레이션으로 보겠습니다. 가격이 맞다고 하고, 구간 0의 시장 18,209개마다 동전을 한 번씩 던집니다. 1이 몇 개 나왔는지 숫자 하나를 적습니다. 이것을 만 번 반복하면 숫자가 만 개 생기고, 그 히스토그램이 332를 중심으로 한 종 모양입니다. 실제 개수 249는 만 번 중 한 번도 나오지 않은 값입니다. 종의 중심 332가 람다이고, 람다는 시뮬레이션 횟수가 아니라 한 번에 나오는 1의 평균 개수입니다.</span><span lang="en">Let me show what is bell-shaped with a simulation. Assume the price is right, and flip one coin for each of the 18,209 markets in bin 0. Write down one number: how many 1s came up. Repeat this ten thousand times. We get ten thousand numbers, and their histogram is a bell centered at 332. The real count, 249, never came up in ten thousand runs. The center, 332, is lambda. Lambda is not the number of runs. It is the mean count of 1s in one run.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> 이항분포 D6 s23, s26, s29. 포아송과 중심극한정리라는 이름은 덱 글에 없다.</span><span lang="en"><b>Lecture:</b> binomial distribution D6 s23, s26, s29. Poisson and the central limit theorem are not named in the deck text.</span></p>
   </div>
 
   <div class="slide">

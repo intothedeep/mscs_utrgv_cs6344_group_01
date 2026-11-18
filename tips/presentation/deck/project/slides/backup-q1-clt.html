@@ -1,0 +1,45 @@
+<section id="backup-q1-clt" class="bg-light padf q1">
+  <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <h2 class="t44">Q: Where does the central limit theorem come in?</h2>
+  <div class="body g-two">
+    <div class="panel" style="display:flex;flex-direction:column;justify-content:center">
+      <h3>It makes each z normal, so χ² works</h3>
+      <p class="line24" style="font-size:20px;margin-bottom:12px">χ²(k) = sum of k squared standard normals, by definition.</p>
+      <svg aria-label="Chain: one market is 0 or 1, not normal. Add n markets to get a bin count. The central limit theorem makes the count near normal. Standardize to z, near N(0,1). Sum the 10 squared z values to get chi-square with 10 degrees of freedom, then the p-value." width="760" height="380" viewBox="0 0 760 380" style="width:100%;height:auto">
+        <g font-family="IBM Plex Mono, Menlo, monospace" font-size="22" fill="#262626">
+          <rect x="10" y="4" width="740" height="56" fill="#FFFFFF" stroke="#737373" stroke-width="2"/>
+          <text x="30" y="40">One market: 0 or 1 (not normal)</text>
+          <text x="380" y="92" text-anchor="middle" fill="#737373">↓ add n markets in a bin</text>
+          <rect x="10" y="108" width="740" height="56" fill="#FFFFFF" stroke="#C04F00" stroke-width="3"/>
+          <text x="30" y="144"><tspan font-weight="700" fill="#C04F00">CLT:</tspan> count O ≈ normal (n large)</text>
+          <text x="380" y="196" text-anchor="middle" fill="#737373">↓ z = (O − E) / √(n·p·(1−p))</text>
+          <rect x="10" y="212" width="740" height="56" fill="#FFFFFF" stroke="#737373" stroke-width="2"/>
+          <text x="30" y="248">z ≈ N(0, 1)</text>
+          <text x="380" y="300" text-anchor="middle" fill="#737373">↓ add the 10 bins' z²</text>
+          <rect x="10" y="316" width="740" height="56" fill="#F5F5F5" stroke="#171717" stroke-width="3"/>
+          <text x="30" y="352" font-weight="700">χ² = Σ z² ≈ χ²(10) → p-value</text>
+        </g>
+      </svg>
+    </div>
+    <div class="panel" style="padding:12px 20px">
+      <table class="t" style="font-size:20px"><style>#backup-q1-clt table.t td,#backup-q1-clt table.t th{padding:6px 14px}</style>
+        <tr class="hd"><th>bin</th><th>expected</th><th>observed</th><th>z</th><th>z²</th></tr>
+        <tr class="r1"><td>0</td><td>332</td><td>249</td><td>−4.61</td><td><b>21.28</b></td></tr>
+        <tr class="r2"><td>1</td><td>401</td><td>339</td><td>−3.36</td><td>11.30</td></tr>
+        <tr class="r1"><td>2</td><td>634</td><td>609</td><td>−1.17</td><td>1.36</td></tr>
+        <tr class="r2"><td>3</td><td>967</td><td>919</td><td>−1.89</td><td>3.59</td></tr>
+        <tr class="r1"><td>4</td><td>1,738</td><td>1,691</td><td>−1.53</td><td>2.35</td></tr>
+        <tr class="r2"><td>5</td><td>2,293</td><td>2,268</td><td>−0.76</td><td>0.58</td></tr>
+        <tr class="r1"><td>6</td><td>1,645</td><td>1,574</td><td>−2.94</td><td>8.64</td></tr>
+        <tr class="r2"><td>7</td><td>1,716</td><td>1,640</td><td>−3.62</td><td><b>13.10</b></td></tr>
+        <tr class="r1"><td>8</td><td>1,803</td><td>1,763</td><td>−2.40</td><td>5.75</td></tr>
+        <tr class="r2"><td>9</td><td>6,487</td><td>6,489</td><td>+0.17</td><td>0.03</td></tr>
+        <tr class="hd"><th colspan="4">Sum = saved χ²</th><th>67.99</th></tr>
+      </table>
+      <p class="line24 mt16" style="font-size:20px">Counts of outcome 1. Smallest expected count: 151 (rule: at least 5).</p>
+    </div>
+  </div>
+  <div class="strip"><b>What the CLT does not fix: independence.</b> Markets on one event move together. Then the real spread is larger, χ² is too big and p is too small. A check that groups markets by a proxy event key keeps the net gap below 0.</div>
+  <div class="foot"><span>z and z² recomputed from run 142082 q1_bins.csv; the sum matches the saved χ² = 68.0</span><span class="pg"></span></div>
+  <aside>Backup, Q1 speaker. About 45 seconds. Why: someone may ask where the central limit theorem is used. How: one market's outcome is zero or one, which is not normal. A bin adds up thousands of markets. The central limit theorem says that such a count is close to normal when n is large. So we standardize it: z equals the observed count minus the expected count, divided by the standard deviation from the price. That z is close to a standard normal. The chi-square statistic is the sum of the ten squared z values, and a chi-square distribution with ten degrees of freedom is, by definition, a sum of ten squared standard normals. That is how we read the p-value. The table shows it with our numbers: the ten z squared values add up to 67.99, the saved chi-square of 68.0. Bins 0 and 7 give more than half of it. The approximation is safe: the smallest expected count is 151, far above the usual rule of 5. What the theorem does not fix is independence. Markets on one event move together, so the real spread is larger and the p-value may be too small. We grouped markets by a proxy event key, and the net gap stayed below zero. Note that the per-bin binomial test does not use this normal step. It computes the p-value straight from the binomial.</aside>
+</section>

@@ -1,0 +1,47 @@
+<section id="backup-q1-independence" class="bg-light padf q1">
+  <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <h2 class="t44">Q: What if markets are not independent?</h2>
+  <div class="body g-two">
+    <div class="panel" style="padding:12px 20px">
+      <h3>The gap stays. Only the spread grows.</h3>
+      <table class="t" style="font-size:20px"><style>#backup-q1-independence table.t td,#backup-q1-independence table.t th{padding:7px 14px}</style>
+        <tr class="hd"><th>Value</th><th>If not independent</th></tr>
+        <tr class="r1"><td>Gap, net gap −0.99%</td><td><b>unchanged</b></td></tr>
+        <tr class="r2"><td>Real SD of a count</td><td><b>larger</b></td></tr>
+        <tr class="r1"><td>Our z (bin 0: −4.61)</td><td><b>too large</b></td></tr>
+        <tr class="r2"><td>χ² = 68.0</td><td><b>too large</b></td></tr>
+        <tr class="r1"><td>p-values</td><td><b>too small</b></td></tr>
+        <tr class="r2"><td>95% interval</td><td><b>too narrow</b></td></tr>
+        <tr class="r1"><td>Bins flagged by BH (5)</td><td><b>maybe too many</b></td></tr>
+      </table>
+      <p class="line24 mt16" style="font-size:20px">Var = Σ p(1 − p) <b>+ 2 · Σ Cov</b>. One election, 20 markets: they fall together, like one big coin, not 20 coins.</p>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;justify-content:center">
+      <h3>Check: resample whole events</h3>
+      <svg aria-label="Net gap 95% intervals. Market as unit: -1.28 to -0.70 percent. Event key 1, 16,161 clusters: -1.41 to -0.58. Event key 2, 6,181 clusters: -1.39 to -0.58. All lie below zero." width="760" height="360" viewBox="0 0 760 360" style="width:100%;height:auto">
+        <g font-family="IBM Plex Mono, Menlo, monospace" font-size="22">
+          <line x1="40" y1="290" x2="740" y2="290" stroke="#737373" stroke-width="2"/>
+          <line x1="690" y1="20" x2="690" y2="290" stroke="#171717" stroke-width="2" stroke-dasharray="6 5"/>
+          <text x="690" y="320" text-anchor="middle" fill="#171717">0</text>
+          <text x="90" y="320" text-anchor="middle" fill="#737373">−1.5%</text>
+          <text x="390" y="320" text-anchor="middle" fill="#737373">−0.75%</text>
+          <text x="40" y="350" fill="#737373">net gap, 95% interval</text>
+          <!-- x = 690 + 400 * gap(%) -->
+          <text x="40" y="48" fill="#262626">market (independence)</text>
+          <line x1="178" y1="80" x2="410" y2="80" stroke="#737373" stroke-width="10"/>
+          <text x="420" y="88" fill="#262626">width 0.58</text>
+          <text x="40" y="138" fill="#262626">event key 1 (16,161)</text>
+          <line x1="126" y1="170" x2="458" y2="170" stroke="#C04F00" stroke-width="10"/>
+          <text x="468" y="178" fill="#C04F00">width 0.83</text>
+          <text x="40" y="218" fill="#262626">event key 2 (6,181)</text>
+          <line x1="134" y1="250" x2="458" y2="250" stroke="#C04F00" stroke-width="10"/>
+          <text x="468" y="258" fill="#C04F00">width 0.81</text>
+        </g>
+      </svg>
+      <p class="line24 mt16"><b>About 1.4× wider, still all below 0.</b></p>
+    </div>
+  </div>
+  <div class="strip"><b>Limits.</b> The event key is a proxy, so the real interval may be wider. Per-bin p-values were not redone, so they may be too small. Markets where only one can win are negatively correlated (not measured).</div>
+  <div class="foot"><span>Source: paper numbers, R3 M3 cluster bootstrap (run 150310); run 142082 q1_bins.csv</span><span class="pg"></span></div>
+  <aside>Backup, Q1 speaker. About 45 seconds. Why: our tests assume the markets are independent, and someone may ask what happens if they are not. How: the gap itself does not change, because the counting is the same. What changes is the spread. Markets on one election move together. If the candidate loses, twenty markets fall to zero at once, more like one big coin than twenty coins. So the real variance of a count is larger than we assumed. Then our z and chi-square come out too large, the p-values too small, and the intervals too narrow. We would be more sure than we should be. To check, we resampled whole events instead of single markets, using a proxy event key. The net-gap interval got about 1.4 times wider, from a width of 0.58 to about 0.8 points, but it still lies fully below zero. So the conclusion that prices run a little high stands. Limits: the event key is a proxy, so the real interval may be wider. We did not redo the per-bin p-values, so those may be too small. And markets where only one outcome can win are negatively correlated, which works the other way. We did not measure that.</aside>
+</section>
