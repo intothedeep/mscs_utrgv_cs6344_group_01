@@ -1,28 +1,25 @@
 <section id="questions" class="bg-light padf">
   <div class="frame"><span class="chip on">Why</span><span class="chip">How</span><span class="chip">Result</span><span class="chip">Meaning</span></div>
-  <h2 class="t44">Three questions, one reason: can we trust the price?</h2>
-  <div class="flow">
-    <div class="step q1">
-      <div class="mid">Q1</div>
-      <div class="ask">Is the crowd right?</div>
-      <div class="lab">Do events priced at 70% happen about 70% of the time?</div>
-      <div class="lab"><b>Matters:</b> a price we can trust is a probability.</div>
+  <h2 class="t44 tight">One question, three ways to look at it</h2>
+  <div class="hub">70¢ → is it really a 70% chance?</div>
+  <svg class="hublines" aria-label="Lines from the one question to the three questions" width="1664" height="48" viewBox="0 0 1664 48" preserveAspectRatio="none"><path d="M832 0 V24 M267 24 H1397 M267 24 V48 M832 24 V48 M1397 24 V48" fill="none" stroke="#A3A3A3" stroke-width="3"/></svg>
+  <div class="qtri">
+    <div class="qstep q1 fragment">
+      <h3>Q1<br>Is the crowd right?</h3>
+      <svg aria-label="Sketch: dots sit just under the dashed diagonal where price equals rate" width="390" height="270" viewBox="0 0 390 270"><line x1="40" y1="230" x2="370" y2="230" stroke="#737373" stroke-width="2"/><line x1="40" y1="20" x2="40" y2="230" stroke="#737373" stroke-width="2"/><line x1="40" y1="230" x2="370" y2="20" stroke="#A3A3A3" stroke-width="2" stroke-dasharray="8 6"/><path d="M66 223a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M115.5 191a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M165 160a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M214.5 128a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M264 97a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M313.5 66a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" fill="#C04F00"/><g font-family="IBM Plex Mono, Menlo, monospace" font-size="22"><text x="205" y="260" fill="#171717" text-anchor="middle">price</text><text x="50" y="22" fill="#171717">how often it happened</text><text x="236" y="66" fill="#737373" text-anchor="end">price = rate</text></g></svg>
+      <div class="lab">Does 70¢ happen 70% of the time?</div>
     </div>
-    <div class="arrow">→</div>
-    <div class="step q2">
-      <div class="mid">Q2</div>
-      <div class="ask">Who is the crowd?</div>
-      <div class="lab">Does a small group of wallets do most of the trading?</div>
-      <div class="lab"><b>Matters:</b> it shows who the crowd is. Volume is not price-setting power.</div>
+    <div class="qstep q2 fragment">
+      <h3>Q2<br>Who is the crowd?</h3>
+      <svg aria-label="Sketch: one tall bar for a few wallets, nine short bars for the rest" width="390" height="270" viewBox="0 0 390 270"><line x1="40" y1="230" x2="370" y2="230" stroke="#737373" stroke-width="2"/><rect x="44" y="40" width="26" height="190" fill="#0072B2"/><path d="M77 196h26v34h-26zM110 206h26v24h-26zM143 212h26v18h-26zM176 216h26v14h-26zM209 219h26v11h-26zM242 221h26v9h-26zM275 223h26v7h-26zM308 224h26v6h-26zM341 225h26v5h-26z" fill="#A3A3A3"/><g font-family="IBM Plex Mono, Menlo, monospace" font-size="22"><text x="82" y="62" fill="#0072B2">most of the $</text><text x="57" y="260" fill="#171717" text-anchor="middle">few</text><text x="222" y="260" fill="#171717" text-anchor="middle">everyone else</text></g></svg>
+      <div class="lab">Do a few wallets hold most of the money?</div>
     </div>
-    <div class="arrow">→</div>
-    <div class="step q3">
-      <div class="mid">Q3</div>
-      <div class="ask">What does betting look like?</div>
-      <div class="lab">How are trade sizes, wallet volumes and prices spread?</div>
-      <div class="lab"><b>Matters:</b> the shape tells us which summary number is honest.</div>
+    <div class="qstep q3 fragment">
+      <h3>Q3<br>What does betting look like?</h3>
+      <svg aria-label="Sketch: right-skewed trade sizes, the median sits left of the mean" width="390" height="270" viewBox="0 0 390 270"><line x1="40" y1="230" x2="370" y2="230" stroke="#737373" stroke-width="2"/><path d="M44 30h24v200h-24zM71 80h24v150h-24zM98 135h24v95h-24zM125 170h24v60h-24zM152 192h24v38h-24zM179 206h24v24h-24zM206 215h24v15h-24zM233 220h24v10h-24zM260 224h24v6h-24zM287 226h24v4h-24zM314 227h24v3h-24zM341 228h24v2h-24z" fill="#007A5A" opacity="0.35"/><line x1="79" y1="36" x2="79" y2="230" stroke="#171717" stroke-width="3"/><line x1="152" y1="60" x2="152" y2="230" stroke="#007A5A" stroke-width="3" stroke-dasharray="8 6"/><g font-family="IBM Plex Mono, Menlo, monospace" font-size="22"><text x="86" y="28" fill="#171717">median</text><text x="160" y="76" fill="#007A5A">mean</text><text x="370" y="260" fill="#171717" text-anchor="end">trade size →</text></g></svg>
+      <div class="lab">Which summary number is honest?</div>
     </div>
   </div>
-  <div class="foot"><span>Source: README section 1, paper Section 1</span><span class="pg"></span></div>
-  <aside>Speaker 1 (Taek Lim). About 45 seconds. Why: the hook gave us one question, so we split it into three. How: each question gets the same four steps. Why we did it, how we did it, what we got, and why it matters. Result: Q1 asks whether the crowd is right, meaning whether events priced at 70% happen about 70% of the time. Q2 asks who the crowd is, meaning whether a small group of wallets does most of the trading. Q3 describes what the betting looks like, meaning how trade sizes, wallet volumes and prices are spread. Meaning: Q1 tests the price directly. Q2 tells us who stands behind it, but volume is not price-setting power. Q3 tells us which summary number is honest.</aside>
+  <div class="foot"><span>Sketches show shapes only, not our data. Source: README section 1, paper Section 1</span><span class="pg"></span></div>
+  <aside>Speaker 1 (Taek Lim). About 45 seconds. Why: the hook gave us one question. If a share costs 70 cents, is it really a 70% chance? We look at it in three ways. Click. Q1 asks whether the crowd is right. In this sketch the dots sit just under the line where price equals how often things happen. That is the test: do events priced at 70% happen about 70% of the time? Click. Q2 asks who the crowd is. Does a small group of wallets hold most of the money? If so, the price may reflect a few traders, but volume is not price-setting power. Click. Q3 asks what betting looks like. When sizes have a long right tail, the mean moves far from the median, so we must pick the honest summary number. These sketches show shapes only. The real results come next.</aside>
 </section>

@@ -2,25 +2,37 @@
   <div class="frame"><span class="chip on">Why</span><span class="chip on">How</span><span class="chip">Result</span><span class="chip">Meaning</span></div>
   <h2 class="t44">Data: we keep 47,948 Polymarket markets for all three questions</h2>
   <p class="line24"><b>Polymarket-v1:</b> 1.2 billion trades, 1.3 million markets, Nov 2022 to Apr 2026. In scope: standard yes/no markets.</p>
-  <svg aria-label="Funnel of markets: 688,131 in scope, then 432,711 after removing Up/Down markets, 369,993 after removing markets with no clear winner, 154,704 after removing markets with no price one day before close, 74,474 after removing prices older than 24 hours, 47,948 after removing markets with fewer than 10 trades" width="1664" height="470" viewBox="0 0 1664 470" style="margin-top:24px;flex:none">
+  <svg aria-label="Funnel of markets. 688,131 in scope. Minus 255,420 Up/Down markets, which settle a different way, leaves 432,711. Minus 62,718 with no clear winner, no outcome to compare, leaves 369,993. Minus 215,289 with no price 1 day before close, nothing to test, leaves 154,704. Minus 80,230 with a price older than 24 hours, out of date, leaves 74,474. Minus 26,526 with fewer than 10 trades, one or two people and not a crowd, leaves 47,948 kept, 7.0 percent" width="1664" height="500" viewBox="0 0 1664 500" style="margin-top:16px;flex:none">
     <g fill="#A3A3A3">
-      <rect x="0" y="0" width="900" height="56"/>
-      <rect x="0" y="80" width="566" height="56"/>
-      <rect x="0" y="160" width="484" height="56"/>
-      <rect x="0" y="240" width="202" height="56"/>
-      <rect x="0" y="320" width="97" height="56"/>
+      <rect x="0" y="0" width="900" height="40"/>
+      <rect x="0" y="92" width="566" height="40"/>
+      <rect x="0" y="184" width="484" height="40"/>
+      <rect x="0" y="276" width="202" height="40"/>
+      <rect x="0" y="368" width="97" height="40"/>
     </g>
-    <rect x="0" y="400" width="63" height="56" fill="#C04F00"/>
+    <rect x="0" y="460" width="63" height="40" fill="#C04F00"/>
     <g font-family="IBM Plex Mono, Menlo, monospace" font-size="26" fill="#262626">
-      <text x="920" y="37"><tspan font-weight="700" fill="#0A0A0A">688,131</tspan> standard yes/no markets in scope</text>
-      <text x="586" y="117"><tspan font-weight="700" fill="#0A0A0A">432,711</tspan>  − 255,420 Up/Down markets</text>
-      <text x="504" y="197"><tspan font-weight="700" fill="#0A0A0A">369,993</tspan>  − 62,718 with no clear winner</text>
-      <text x="222" y="277"><tspan font-weight="700" fill="#0A0A0A">154,704</tspan>  − 215,289 with no price 1 day before close</text>
-      <text x="117" y="357"><tspan font-weight="700" fill="#0A0A0A">74,474</tspan>  − 80,230 with a price older than 24 hours</text>
-      <text x="83" y="437"><tspan font-weight="700" fill="#C04F00">47,948 kept (7.0%)</tspan>  − 26,526 with fewer than 10 trades</text>
+      <text x="920" y="29"><tspan font-weight="700" fill="#0A0A0A">688,131</tspan> standard yes/no markets in scope</text>
+      <text x="586" y="121" font-weight="700" fill="#0A0A0A">432,711</text>
+      <text x="504" y="213" font-weight="700" fill="#0A0A0A">369,993</text>
+      <text x="222" y="305" font-weight="700" fill="#0A0A0A">154,704</text>
+      <text x="117" y="397" font-weight="700" fill="#0A0A0A">74,474</text>
+      <text x="83" y="489" font-weight="700" fill="#C04F00">47,948 kept (7.0%)</text>
+    </g>
+    <g font-family="IBM Plex Mono, Menlo, monospace" font-size="24" fill="#262626">
+      <text x="8" y="75" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="74"><tspan font-weight="700" fill="#0A0A0A">− 255,420</tspan> Up/Down markets <tspan fill="#737373">· settle a different way</tspan></text>
+      <text x="8" y="167" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="166"><tspan font-weight="700" fill="#0A0A0A">− 62,718</tspan> with no clear winner <tspan fill="#737373">· no outcome to compare</tspan></text>
+      <text x="8" y="259" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="258"><tspan font-weight="700" fill="#0A0A0A">− 215,289</tspan> with no price 1 day before close <tspan fill="#737373">· nothing to test</tspan></text>
+      <text x="8" y="351" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="350"><tspan font-weight="700" fill="#0A0A0A">− 80,230</tspan> with a price older than 24 hours <tspan fill="#737373">· out of date</tspan></text>
+      <text x="8" y="443" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="442"><tspan font-weight="700" fill="#0A0A0A">− 26,526</tspan> with fewer than 10 trades <tspan fill="#737373">· one or two people, not a crowd</tspan></text>
     </g>
   </svg>
   <div class="callout mt16">We fixed these rules before any Q1 result. All three questions use the same 47,948 markets.</div>
   <div class="foot"><span>Source: paper, Data section; Qin and Yang 2026 (Polymarket-v1)</span><span class="pg"></span></div>
-  <aside>Speaker 1 (Taek Lim). About 1 minute. Why: a price is only useful if it exists before the market closes and the outcome is clear, so we filter. How: we use Polymarket-v1, a public database of 1.2 billion trades and 1.3 million markets from November 2022 to April 2026. In scope are 688,131 standard yes/no markets. Each bar shows what is left after one rule. We remove 255,420 Up/Down markets, which settle in a different way. We remove 62,718 with no clear winner. We remove 215,289 with no price one day before the close, 80,230 whose price is older than 24 hours, and 26,526 with fewer than 10 trades. We fixed these rules before we saw any Q1 result. Result: 47,948 markets are left, 7.0% of the scope. Meaning: all three questions use the same 47,948 markets, so the three answers fit together. The results hold for markets that pass these filters.</aside>
+  <aside>Speaker 1 (Taek Lim). About 1 minute. Why: to test a price, each market needs a clear answer, a price one day before the close, and a crowd behind that price. Each rule removes markets that miss one of these. How: we use Polymarket-v1, a public database of 1.2 billion trades and 1.3 million markets from November 2022 to April 2026. In scope are 688,131 standard yes/no markets. Each arrow shows what one rule removes from the bar above it. First, 255,420 Up/Down markets. The dataset paper says they settle a different way, so we do not mix them in. Next, 62,718 with no clear winner, so there is no outcome to compare. Next, 215,289 with no price one day before the close. A later price can already contain the answer, so without that price there is nothing to test. Next, 80,230 whose price is older than 24 hours, so it misses the news since then. Last, 26,526 with fewer than 10 trades. Their price comes from one or two people, not a crowd. We fixed these rules before we saw any Q1 result. Result: 47,948 markets are left, 7.0% of the scope. Meaning: all three questions use the same 47,948 markets, so the three answers fit together. The results hold for markets that pass these filters.</aside>
 </section>
