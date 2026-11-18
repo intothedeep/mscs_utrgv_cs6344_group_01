@@ -9,7 +9,7 @@
       <img src="/_blob/634b5d8e5163bf6db983db6fe47816dc" width="1020" height="810" alt="Histogram of trade size">
     </div>
     <div class="card">
-      <div class="anno">Raw points bend away, log points follow the line</div>
+      <div class="anno">Raw points bend away, log points follow the line. Log values below 0 are trades under 1 USDC.</div>
       <img src="/_blob/b5fea725872060da08621359a1d21a06" width="2100" height="1170" alt="QQ plot of trade size against the normal, raw and after a log transform">
     </div>
     <div class="statline span2">
@@ -19,5 +19,5 @@
     </div>
   </div>
   <div class="foot"><span>Source: paper Section 5.3</span><span class="pg"></span></div>
-  <aside>Speaker: Q3 speaker. About 1 minute. Why: trade size is the basic unit of betting, so its shape tells us what a typical trade is. How: a histogram, and a QQ plot against the normal, raw and after a log transform. Result: the mean trade size is 129.8 USDC but the median is only 6.9. In the QQ plot the raw points bend away from the straight line and the log points follow it much better. The normal fit has a KS statistic of 0.469, which is a poor fit. Meaning: a few very large trades pull the mean far above the typical trade, so the median and the log scale describe the data better. We report this without a verdict.</aside>
+  <aside>Speaker: Q3 speaker. About 1 minute. Why: trade size is the basic unit of betting, so its shape tells us what a typical trade is. How: a histogram, and a QQ plot against the normal, raw and after a log transform. Result: the mean trade size is 129.8 USDC but the median is only 6.9. In the QQ plot the raw points bend away from the straight line and the log points follow it much better. Log values below 0 are not negative trades. They are trades under 1 USDC. The normal fit has a KS statistic of 0.469, which is a poor fit. Meaning: a few very large trades pull the mean far above the typical trade, so the median and the log scale describe the data better. We report this without a verdict.</aside>
 </section>
