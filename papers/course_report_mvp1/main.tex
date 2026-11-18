@@ -158,21 +158,27 @@ Prices pile up near both ends of the scale.
 \textbf{Reading.} A typical trade is small, so the median, not the mean, describes it.
 \end{minipage}
 
-\hd{5. Limitations}
+% Order Conclusion, Limitations, Future work; conclusion answers Q1 to Q3 (owner, 2026-11-18)
+\hd{5. Conclusion}
+Polymarket prices are close to probabilities, but events happen slightly less often than priced (Q1).
+A few wallets dominate: the top \TopTwentyLabel{} hold \MakerTopTwentyShare{} of maker volume (Q2).
+The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings.
+A typical trade is small: the median is \TradeSizeMedian{} USDC, the mean \TradeSizeMean{} USDC (Q3).
+A reader can use a price as a probability if they read it a little lower.
+
+\hd{6. Limitations}
 % Owner asked for the limits only, without numbers (2026-11-18); the numbers stay in the paper (check M3)
 \textbf{Independence.} Our tests assume that markets are independent.
 Markets on one event move together, so the p-values may be too small.
 The data hold no event key, so our check with a proxy key is only partial.
 \textbf{Selection.} Only a small share of markets pass the filters, and kept markets trade more than dropped ones.
 
-\hd{6. Conclusion}
-Polymarket prices are close to probabilities, but not equal to them: across the checks we ran, events happen slightly less often than priced.
-The bias is small, and it holds for the \PctMarketsKept{} of markets that pass the filters.
-A reader can use a price as a probability if they read it a little lower.
-
 \hd{7. Future work}
+% Volume is already tested in Appendix C, so the next step holds volume fixed (owner, 2026-11-18)
+Each limitation leads to one next step.
 Build a true event key and test Q1 with markets grouped by event.
-Test whether markets with more distinct wallets are better calibrated, holding volume fixed.
+Q2 shows a concentrated crowd, but we do not link it to Q1.
+So test whether the gap depends on the number of distinct wallets, holding volume fixed.
 Correct prices after the fact and test the correction on later markets.
 
 \clearpage
