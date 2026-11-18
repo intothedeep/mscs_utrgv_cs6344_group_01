@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<title>6344 Polymarket Q1 z Interval</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<script>
+/* Runs first: marks JS as on and sets the language. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){var d=document.documentElement;d.className="js";var l="en";try{var s=localStorage.getItem("ziv-lang");if(s==="ko"||s==="en"){l=s;}}catch(e){}try{var q=/[?&]lang=(ko|en)(&|$)/.exec(location.search);if(q){l=q[1];}}catch(e){}d.setAttribute("data-lang",l);d.lang=l;})();
+</script>
+<style>
+/* theme.css (skills/html-theme), inlined. Layout: tips exemplar, step boxes. */
+:root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--card-foreground:oklch(0.145 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
+--over:oklch(0.62 0.17 45);--under:oklch(0.5 0.1 210);--busy:oklch(0.62 0.17 45);--quiet:oklch(0.82 0 0);--obs:#0432ff}
+*{box-sizing:border-box;border-radius:var(--radius)}
+body{background:var(--background);color:var(--foreground);font:15px/1.5 var(--font);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 40px;margin:0;overflow-wrap:anywhere}
+main{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:650;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:650;margin-bottom:10px}
+h3{font-size:14px;font-weight:600;margin:12px 0 4px}
+p{margin:0 0 6px}
+.eyebrow{font:500 11px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--signal-plan);margin-bottom:8px}
+.lede{font-size:15.5px;color:var(--muted-foreground);margin-top:8px}
+.steps-nav{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0;padding:0;list-style:none;counter-reset:st}
+.steps-nav li{counter-increment:st}
+.steps-nav a{display:block;padding:4px 10px;border:1px solid var(--rule);color:var(--foreground);text-decoration:none;font-size:12.5px}
+.steps-nav a::before{content:counter(st) " ";color:var(--signal-plan);font-weight:600}
+main>section{border:1px solid var(--border);border-top:4px solid var(--signal-plan);background:var(--card);padding:16px 18px 18px;margin-top:14px;scroll-margin-top:12px;display:flex;flex-direction:column;gap:8px}
+main>section>.eyebrow{font-size:12px;margin-bottom:0}
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:520px}
+svg text{font-family:var(--font)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card);overflow-wrap:normal}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 11px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground);background:var(--background)}
+tr:last-child td{border-bottom:0}
+td.num{white-space:nowrap;color:var(--signal-plan)}
+td ul{margin:0;padding-left:16px}
+ul,ol{margin:0;padding-left:18px}
+li{margin:2px 0}
+.note{font-size:12.5px;color:var(--muted-foreground)}
+.callout{border-left:3px solid var(--signal-flag-line);background:var(--signal-flag-fill);padding:6px 12px;font-size:13px}
+.callout p:last-child{margin:0}
+footer{font-size:12.5px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:8px}
+a{color:var(--signal-plan)}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+@media (max-width:720px){main>section{padding:12px}}
+html[data-lang="ko"] [lang="en"],html[data-lang="en"] [lang="ko"]{display:none!important}
+html[data-lang="ko"] body{word-break:keep-all}
+.topbar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-bottom:6px}
+.langbar{display:none}
+html.js .langbar{display:flex}
+.langbar button{font:500 12.5px var(--font);padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer;margin-left:-1px}
+.langbar button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+.row2{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:12px;align-items:center;color:var(--muted-foreground)}
+.row2 .cur{color:var(--foreground);font-weight:600;border-bottom:2px solid var(--signal-plan)}
+</style>
+<style>
+.ans{font-size:15px}
+.formula{font-size:13.5px;background:var(--muted);border-left:3px solid var(--signal-plan);padding:4px 10px;margin:4px 0;overflow-x:auto;white-space:nowrap;overflow-wrap:normal}
+.steps-list>li{margin:8px 0}
+a.t{color:inherit;text-decoration:underline dotted}
+dl.terms{margin:0}
+dl.terms dt{font-weight:600;margin-top:8px}
+dl.terms dd{margin:0 0 0 12px}
+</style>
+</head>
+<body>
+<main>
+<nav class="topbar" aria-label="Page navigation">
+  <div class="langbar" role="group" aria-label="Language">
+    <button type="button" data-set="ko" aria-pressed="false">한국어</button>
+    <button type="button" data-set="en" aria-pressed="true">English</button>
+  </div>
+  <div class="row2">
+    <span lang="ko">다른 페이지:</span><span lang="en">Other pages:</span>
+    <span class="cur" aria-current="page"><span lang="ko">이 페이지 (Q1 z 구간)</span><span lang="en">This page (Q1 z interval)</span></span>
+    <a href="index.html" target="_top"><span lang="ko">전체 보기</span><span lang="en">All pages</span></a>
+    <a href="index.html#questions" target="_top"><span lang="ko">수업 질문</span><span lang="en">Class questions</span></a>
+  </div>
+</nav>
+<header>
+  <div class="eyebrow"><span lang="ko">CS 6344 데이터 과학 입문 · 1조 · Q1 z 구간</span><span lang="en">CS 6344 Intro to Data Science · Group 1 · Q1 z interval</span></div>
+  <h1><span lang="ko">Q1은 z를 어디에 쓰나</span><span lang="en">How Q1 uses the z score</span></h1>
+  <p class="lede"><span lang="ko">Q1은 z를 빈(bin)마다 95% 구간을 만드는 데에만 씁니다. 여섯 단계입니다.</span><span lang="en">Q1 uses z only to build a 95% interval for each bin. Six steps.</span></p>
+  <ol class="steps-nav">
+    <li><a href="#s1"><span lang="ko">정의와 이유</span><span lang="en">Definition and why</span></a></li>
+    <li><a href="#s2"><span lang="ko">흐름도</span><span lang="en">Flow diagram</span></a></li>
+    <li><a href="#s3"><span lang="ko">작동 순서</span><span lang="en">How it works</span></a></li>
+    <li><a href="#s4"><span lang="ko">예: 70–80% 빈</span><span lang="en">Example: the 70–80% bin</span></a></li>
+    <li><a href="#s5"><span lang="ko">결과</span><span lang="en">Result</span></a></li>
+    <li><a href="#s6"><span lang="ko">주의할 점</span><span lang="en">Cautions</span></a></li>
+  </ol>
+</header>
+
+<section id="s1">
+  <div class="eyebrow"><span lang="ko">단계 1 / 6</span><span lang="en">Step 1 of 6</span></div>
+  <h2><span lang="ko">정의와 이유</span><span lang="en">Definition and why</span></h2>
+  <p class="ans"><span lang="ko"><b>Q1에서 <a class="t" href="#term-z">z</a>는 <a class="t" href="#term-bin">빈(bin)</a>마다 95% 구간(<a class="t" href="#term-zint">z interval</a>)을 만드는 데에만 씁니다.</b></span><span lang="en"><b>In Q1, z is used only to build a 95% interval (z interval) for each bin.</b></span></p>
+  <ul>
+    <li><span lang="ko">시장마다 <a class="t" href="#term-z">z 점수(z score)</a>를 계산하지 않습니다.</span><span lang="en">We do not compute a z score for each market.</span></li>
+    <li><span lang="ko">빈이 가격과 다른지 판정하는 검정은 z 검정이 아닙니다.</span><span lang="en">The test that decides whether a bin differs from its price is not a z test.</span></li>
+    <li><span lang="ko">그 검정은 <a class="t" href="#term-binom">이항 검정(binomial test)</a>입니다.</span><span lang="en">That test is the binomial test.</span></li>
+  </ul>
+  <h3><span lang="ko">왜 쓰나</span><span lang="en">Why we use it</span></h3>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">도구</span><span lang="en">Tool</span></th><th><span lang="ko">알려 주는 것</span><span lang="en">What it tells us</span></th></tr>
+    <tr><td><span lang="ko"><a class="t" href="#term-binom">이항 검정(binomial test)</a></span><span lang="en">Binomial test</span></td><td><span lang="ko">"가격과 다르다/아니다"만 알려 줍니다.</span><span lang="en">Only "differs from the price" or "does not".</span></td></tr>
+    <tr><td><span lang="ko"><a class="t" href="#term-zint">z 구간(z interval)</a></span><span lang="en">z interval</span></td><td><span lang="ko">차이가 얼마나 큰지와 그 불확실성을 보여 줍니다.</span><span lang="en">How large the difference is, and its uncertainty.</span></td></tr>
+  </table></div>
+  <p><span lang="ko">Figure 1 오른쪽 패널의 오차 막대가 이 구간입니다.</span><span lang="en">The error bars in the right panel of Figure 1 are this interval.</span></p>
+</section>
+
+<section id="s2">
+  <div class="eyebrow"><span lang="ko">단계 2 / 6</span><span lang="en">Step 2 of 6</span></div>
+  <h2><span lang="ko">흐름도</span><span lang="en">Flow diagram</span></h2>
+  <div class="chart">
+    <svg viewBox="0 0 780 150" role="img" aria-labelledby="f1ko f1en">
+      <title id="f1ko" lang="ko">빈 하나에서 시작해 관측 비율 r̂, r̂ ± 1.96 × 표준오차, 구간이 평균 가격을 포함하는지 묻는 네 단계. 포함하지 않으면 가격과 다르다.</title>
+      <title id="f1en" lang="en">Four stages: one bin, the rate r̂, r̂ ± 1.96 × standard error, and the question of whether the interval contains the mean price. If it does not, the bin differs from its price.</title>
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--foreground)"/></marker></defs>
+      <g fill="var(--card)" stroke="var(--rule)" stroke-width="1.5">
+        <rect x="10" y="20" width="165" height="62"/><rect x="205" y="20" width="165" height="62"/><rect x="400" y="20" width="165" height="62"/>
+      </g>
+      <rect x="595" y="20" width="175" height="62" fill="var(--card)" stroke="var(--signal-plan)" stroke-width="2"/>
+      <g stroke="var(--foreground)" stroke-width="1.5" marker-end="url(#ar)"><line x1="176" y1="51" x2="203" y2="51"/><line x1="371" y1="51" x2="398" y2="51"/><line x1="566" y1="51" x2="593" y2="51"/></g>
+      <g font-size="11.5" fill="var(--foreground)" text-anchor="middle">
+        <text x="92" y="46" font-weight="600" lang="ko">빈 하나</text><text x="92" y="46" font-weight="600" lang="en">one bin</text>
+        <text x="92" y="64" lang="ko">시장 n개</text><text x="92" y="64" lang="en">n markets</text>
+        <text x="287" y="46" font-weight="600" lang="ko">outcome 1 비율</text><text x="287" y="46" font-weight="600" lang="en">rate of outcome 1</text>
+        <text x="287" y="64">r̂</text>
+        <text x="482" y="46" font-weight="600">r̂ ± 1.96 ×</text>
+        <text x="482" y="64" lang="ko">표준오차</text><text x="482" y="64" lang="en">standard error</text>
+        <text x="682" y="46" font-weight="600" lang="ko">구간이 평균 가격을</text><text x="682" y="46" font-weight="600" lang="en">does the interval</text>
+        <text x="682" y="64" lang="ko">포함하나?</text><text x="682" y="64" lang="en">contain the mean price?</text>
+      </g>
+      <g font-size="11" text-anchor="middle">
+        <text x="682" y="104" fill="var(--signal-instruction)" lang="ko">포함 안 함 → 가격과 다름</text><text x="682" y="104" fill="var(--signal-instruction)" lang="en">no → differs from price</text>
+        <text x="482" y="104" fill="var(--muted-foreground)">z = 1.96</text>
+      </g>
+      <text x="10" y="136" font-size="10.5" fill="var(--muted-foreground)" lang="ko">예: 가격 70–80% 빈. z = 1.96은 95%에 해당합니다.</text><text x="10" y="136" font-size="10.5" fill="var(--muted-foreground)" lang="en">Example: the price 70–80% bin. z = 1.96 corresponds to 95%.</text>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 1. 빈 하나가 가격과 다른지 읽는 흐름. 왜: 구간이 평균 가격을 포함하는지만 보면 판정이 됩니다.</span><span lang="en">Figure 1. How one bin is read against its price. Why: the verdict needs only one check, whether the interval contains the mean price.</span></p>
+</section>
+
+<section id="s3">
+  <div class="eyebrow"><span lang="ko">단계 3 / 6</span><span lang="en">Step 3 of 6</span></div>
+  <h2><span lang="ko">작동 순서</span><span lang="en">How it works</span></h2>
+  <ol class="steps-list">
+    <li><span lang="ko">시장을 가격으로 10개 <a class="t" href="#term-bin">빈(bin)</a>에 나눕니다.</span><span lang="en">Split the markets into 10 bins by price.</span></li>
+    <li><span lang="ko">빈마다 <a class="t" href="#term-rate">관측 비율(observed rate)</a> r̂를 구합니다.</span><span lang="en">For each bin, compute the observed rate r̂.</span>
+      <div class="formula">r̂ = (<span lang="ko">outcome 1 개수</span><span lang="en">number of outcome 1</span>) / n</div></li>
+    <li><span lang="ko"><a class="t" href="#term-se">표준오차(standard error)</a>를 구합니다.</span><span lang="en">Compute the standard error.</span>
+      <div class="formula"><span lang="ko">표준오차</span><span lang="en">standard error</span> = √( r̂ (1 − r̂) / n )</div></li>
+    <li><span lang="ko">95% 구간을 만듭니다. 1.96이 95%에 해당하는 z 값입니다.</span><span lang="en">Build the 95% interval. The z value for 95% is 1.96.</span>
+      <div class="formula"><span lang="ko">구간</span><span lang="en">interval</span> = r̂ ± 1.96 × <span lang="ko">표준오차</span><span lang="en">standard error</span></div></li>
+    <li><span lang="ko">구간이 그 빈의 평균 가격을 포함하지 않으면 "가격과 다르다"로 읽습니다.</span><span lang="en">If the interval does not contain the bin's mean price, read it as "differs from the price".</span></li>
+  </ol>
+</section>
+
+<section id="s4">
+  <div class="eyebrow"><span lang="ko">단계 4 / 6</span><span lang="en">Step 4 of 6</span></div>
+  <h2><span lang="ko">예: 70–80% 빈</span><span lang="en">Example: the 70–80% bin</span></h2>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">값</span><span lang="en">Quantity</span></th><th><span lang="ko">숫자</span><span lang="en">Number</span></th></tr>
+    <tr><td>n</td><td class="num">2,301</td></tr>
+    <tr><td><span lang="ko">평균 가격</span><span lang="en">Mean price</span></td><td class="num">74.6%</td></tr>
+    <tr><td><span lang="ko">관측 비율 r̂</span><span lang="en">Observed rate r̂</span></td><td class="num">71.3%</td></tr>
+    <tr><td><span lang="ko">차이 (<a class="t" href="#term-pp">퍼센트포인트(percentage points)</a>)</span><span lang="en">Gap (in percentage points)</span></td><td class="num">−3.29</td></tr>
+    <tr><td><span lang="ko">95% 구간 (차이 기준, 퍼센트포인트)</span><span lang="en">95% interval (for the gap, in percentage points)</span></td><td class="num">[−5.14, −1.44]</td></tr>
+  </table></div>
+  <div class="formula"><span lang="ko">표준오차</span><span lang="en">standard error</span> = √(0.713 · 0.287 / 2,301) ≈ 0.0094</div>
+  <div class="formula">1.96 · 0.0094 ≈ 0.0185, <span lang="ko">즉</span><span lang="en">that is</span> ±1.85 <span lang="ko">퍼센트포인트</span><span lang="en">percentage points</span></div>
+  <div class="chart">
+    <svg viewBox="0 0 740 150" role="img" aria-labelledby="f2ko f2en">
+      <title id="f2ko" lang="ko">차이의 95% 구간 [−5.14, −1.44]가 0선의 왼쪽에 완전히 있다. 점은 −3.29.</title>
+      <title id="f2en" lang="en">The 95% interval for the gap, [−5.14, −1.44], lies entirely left of the 0 line. The point is −3.29.</title>
+      <line x1="136" y1="80" x2="464" y2="80" stroke="var(--signal-plan)" stroke-width="3"/>
+      <g stroke="var(--signal-plan)" stroke-width="3"><line x1="136" y1="68" x2="136" y2="92"/><line x1="464" y1="68" x2="464" y2="92"/></g>
+      <circle cx="300" cy="80" r="5" fill="var(--signal-plan)"/>
+      <line x1="591" y1="40" x2="591" y2="112" stroke="var(--signal-instruction)" stroke-width="2" stroke-dasharray="4 3"/>
+      <g font-size="11.5" fill="var(--foreground)" text-anchor="middle">
+        <text x="136" y="110">−5.14</text><text x="464" y="110">−1.44</text>
+        <text x="300" y="60" fill="var(--signal-plan)">−3.29</text>
+        <text x="591" y="128" fill="var(--signal-instruction)">0</text>
+        <text x="591" y="32" fill="var(--signal-instruction)" lang="ko">0선: 평균 가격과 같음</text><text x="591" y="32" fill="var(--signal-instruction)" lang="en">0 line: equal to the mean price</text>
+      </g>
+      <text x="10" y="144" font-size="10.5" fill="var(--muted-foreground)" lang="ko">단위: 퍼센트포인트. 구간 전체가 0 아래에 있습니다.</text><text x="10" y="144" font-size="10.5" fill="var(--muted-foreground)" lang="en">Unit: percentage points. The whole interval sits below 0.</text>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 2. 70–80% 빈의 차이와 95% 구간을 0선과 비교합니다. 왜: 구간이 0을 덮지 않으면 가격과 다르다고 읽습니다.</span><span lang="en">Figure 2. The gap of the 70–80% bin and its 95% interval, against the 0 line. Why: an interval that misses 0 is read as "differs from the price".</span></p>
+  <p><span lang="ko">구간 전체가 0 아래에 있습니다. 그래서 이 빈에서는 사건이 가격보다 덜 일어납니다.</span><span lang="en">The whole interval is below 0. So in this bin, the event happens less often than the price says.</span></p>
+  <p class="note"><span lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (빈 7 행).</span><span lang="en">Source: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (bin 7 row).</span></p>
+</section>
+
+<section id="s5">
+  <div class="eyebrow"><span lang="ko">단계 5 / 6</span><span lang="en">Step 5 of 6</span></div>
+  <h2><span lang="ko">결과</span><span lang="en">Result</span></h2>
+  <p class="ans"><span lang="ko"><b>10개 빈 중 5개(빈 0, 1, 6, 7, 8)에서 구간이 평균 가격을 벗어납니다.</b></span><span lang="en"><b>In 5 of 10 bins (bins 0, 1, 6, 7, 8), the interval falls outside the mean price.</b></span></p>
+  <p><span lang="ko"><a class="t" href="#term-bh">벤저미니-호크버그(Benjamini-Hochberg, BH)</a> 보정 이항 검정이 "다르다"고 표시한 빈과 같은 5개입니다.</span><span lang="en">These are the same 5 bins that the Benjamini-Hochberg (BH) corrected binomial test marks as different.</span></p>
+  <div class="chart">
+    <svg viewBox="0 0 740 110" role="img" aria-labelledby="f3ko f3en">
+      <title id="f3ko" lang="ko">빈 0부터 9까지 열 칸. 0, 1, 6, 7, 8번 칸이 표시되어 있다.</title>
+      <title id="f3en" lang="en">Ten cells for bins 0 to 9. Cells 0, 1, 6, 7 and 8 are marked.</title>
+      <g stroke="var(--border)" stroke-width="1.2">
+        <rect x="40" y="20" width="56" height="40" fill="var(--signal-plan)"/><rect x="108" y="20" width="56" height="40" fill="var(--signal-plan)"/>
+        <rect x="176" y="20" width="56" height="40" fill="var(--card)"/><rect x="244" y="20" width="56" height="40" fill="var(--card)"/><rect x="312" y="20" width="56" height="40" fill="var(--card)"/><rect x="380" y="20" width="56" height="40" fill="var(--card)"/>
+        <rect x="448" y="20" width="56" height="40" fill="var(--signal-plan)"/><rect x="516" y="20" width="56" height="40" fill="var(--signal-plan)"/><rect x="584" y="20" width="56" height="40" fill="var(--signal-plan)"/>
+        <rect x="652" y="20" width="56" height="40" fill="var(--card)"/>
+      </g>
+      <g font-size="12" text-anchor="middle" fill="var(--foreground)">
+        <text x="68" y="78">0</text><text x="136" y="78">1</text><text x="204" y="78">2</text><text x="272" y="78">3</text><text x="340" y="78">4</text><text x="408" y="78">5</text><text x="476" y="78">6</text><text x="544" y="78">7</text><text x="612" y="78">8</text><text x="680" y="78">9</text>
+      </g>
+      <text x="40" y="100" font-size="11" fill="var(--signal-plan)" lang="ko">파란 칸: 구간이 평균 가격을 벗어난 빈</text><text x="40" y="100" font-size="11" fill="var(--signal-plan)" lang="en">Blue cell: the interval falls outside the mean price</text>
+    </svg>
+  </div>
+  <p class="note"><span lang="ko">그림 3. 10개 빈의 판정. 왜: z 구간과 BH 보정 이항 검정이 같은 빈을 고른다는 것을 보입니다.</span><span lang="en">Figure 3. The verdict for the 10 bins. Why: it shows that the z interval and the BH corrected binomial test pick the same bins.</span></p>
+  <p class="note"><span lang="ko">출처: <code>papers/paper_mvp1/numbers.tex</code> (<code>\ZIntervalBinsOutsideN</code>, <code>\ZIntervalBinsOutsideList</code>).</span><span lang="en">Source: <code>papers/paper_mvp1/numbers.tex</code> (<code>\ZIntervalBinsOutsideN</code>, <code>\ZIntervalBinsOutsideList</code>).</span></p>
+</section>
+
+<section id="s6">
+  <div class="eyebrow"><span lang="ko">단계 6 / 6</span><span lang="en">Step 6 of 6</span></div>
+  <h2><span lang="ko">주의할 점</span><span lang="en">Cautions</span></h2>
+  <ul>
+    <li><span lang="ko"><b>보정이 없습니다.</b> z 구간에는 <a class="t" href="#term-mc">다중 비교 보정(multiple-comparison correction)</a>이 없습니다.</span><span lang="en"><b>No correction.</b> The z interval has no multiple-comparison correction.</span></li>
+    <li><span lang="ko">10개 빈을 동시에 보는 보정은 BH와 <a class="t" href="#term-bonf">본페로니(Bonferroni)</a>가 이항 검정 쪽에서 맡습니다.</span><span lang="en">The correction for looking at 10 bins at once is done by BH and Bonferroni, on the binomial test side.</span></li>
+    <li><span lang="ko"><b>독립 가정.</b> 시장끼리 <a class="t" href="#term-indep">독립(independence)</a>이라고 가정합니다.</span><span lang="en"><b>Independence assumption.</b> We assume the markets are independent of each other.</span></li>
+    <li><span lang="ko">같은 사건의 시장이 함께 움직이면 구간이 실제보다 좁을 수 있습니다(Limitations의 Independence).</span><span lang="en">If markets on the same event move together, the interval may be narrower than it should be (Independence, under Limitations).</span></li>
+  </ul>
+  <p class="note"><span lang="ko">출처: 방법 문장 <code>papers/paper_mvp1/sections/04-methods.tex</code> 67행.</span><span lang="en">Source: the method sentence in <code>papers/paper_mvp1/sections/04-methods.tex</code>, line 67.</span></p>
+</section>
+
+<section id="terms" lang="ko">
+  <div class="eyebrow">용어 부록</div>
+  <h2>용어 부록</h2>
+  <dl class="terms">
+    <dt id="term-z">z 점수(z score)</dt><dd>표준오차 단위로 잰 값입니다. 이 페이지에서는 1.96이 95%에 해당하는 z 값이라는 점만 씁니다.</dd>
+    <dt id="term-zint">z 구간(z interval)</dt><dd>관측 비율 r̂ ± 1.96 × 표준오차로 만든 95% 구간입니다.</dd>
+    <dt id="term-se">표준오차(standard error)</dt><dd>√(r̂(1 − r̂) / n)입니다. 관측 비율의 흔들림 크기입니다.</dd>
+    <dt id="term-bin">빈(bin)</dt><dd>가격으로 나눈 시장 묶음입니다. 10개입니다.</dd>
+    <dt id="term-rate">관측 비율(observed rate)</dt><dd>빈 안에서 outcome 1이 나온 시장의 몫입니다.</dd>
+    <dt id="term-binom">이항 검정(binomial test)</dt><dd>빈이 가격과 다른지 판정하는 검정입니다.</dd>
+    <dt id="term-bh">벤저미니-호크버그(Benjamini-Hochberg, BH) 보정</dt><dd>이항 검정 쪽에서 쓰는 다중 비교 보정입니다.</dd>
+    <dt id="term-bonf">본페로니(Bonferroni) 보정</dt><dd>BH와 함께 이항 검정 쪽에서 쓰는 다중 비교 보정입니다.</dd>
+    <dt id="term-mc">다중 비교 보정(multiple-comparison correction)</dt><dd>10개 빈을 동시에 볼 때 생기는 오류를 바로잡는 보정입니다.</dd>
+    <dt id="term-pp">퍼센트포인트(percentage point)</dt><dd>두 퍼센트 값의 차이를 재는 단위입니다.</dd>
+    <dt id="term-indep">독립(independence)</dt><dd>한 시장의 결과가 다른 시장의 결과와 무관하다는 가정입니다.</dd>
+  </dl>
+</section>
+</main>
+<script>
+/* Language toggle. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){
+  var d=document.documentElement;
+  var TITLE={ko:"6344 Polymarket Q1 z 구간",en:"6344 Polymarket Q1 z Interval"};
+  var KEY="ziv-lang";
+  function setLang(l,save){
+    d.setAttribute("data-lang",l);
+    d.lang=l;
+    document.title=TITLE[l];
+    var b=document.querySelectorAll(".langbar button");
+    for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",b[i].getAttribute("data-set")===l?"true":"false");}
+    if(save){try{localStorage.setItem(KEY,l);}catch(e){}}
+  }
+  setLang(d.getAttribute("data-lang")==="en"?"en":"ko",false);
+  var btn=document.querySelectorAll(".langbar button");
+  for(var i=0;i<btn.length;i++){
+    btn[i].addEventListener("click",function(){setLang(this.getAttribute("data-set"),true);});
+  }
+})();
+</script>
+</body>
+</html>
