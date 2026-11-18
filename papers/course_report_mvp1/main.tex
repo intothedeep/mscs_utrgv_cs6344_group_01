@@ -128,14 +128,13 @@ We do not test its cause.
 \label{fig:winnings}
 \end{minipage}\par
 \smallskip
-Q2 tells us who holds the total.
-The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker USDC volume.
-They hold \TakerTopTwentyShare{} of taker USDC volume.
-The 80/20 reference is \TopTwentyReference.
-The Welch test on log volume gives $t=\RoleWelchT$.
-Mean log10 volume is \RoleLogTenDiff{} higher for makers than for takers.
-Winnings are concentrated like volume.
-Before fees the kept markets are zero-sum: wallets won \PnlGrossWonM{} M USDC and lost the same.
+% Grouped as three claims, each with its numbers (owner, 2026-11-18); power-law line from ../paper_mvp1/sections/07-res-q2.tex
+Q2 tells us who holds the volume and the winnings.
+\textbf{Volume is concentrated.} The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker volume and \TakerTopTwentyShare{} of taker volume.
+The 80/20 rule would give \TopTwentyReference.
+The tail bends down in Figure~\ref{fig:ccdf}, so it is not a power law.
+\textbf{Makers trade more than takers.} Mean log10 volume is \RoleLogTenDiff{} higher for makers (Welch $t=\RoleWelchT$).
+\textbf{Winnings are concentrated like volume.} Before fees, wallets won \PnlGrossWonM{} M USDC and lost the same.
 The median wallet net profit is \PnlMedianNet{} USD.
 The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings.
 \textbf{Reading.} The crowd behind a price may be small. Volume is not price-setting power, and we do not test who sets the price.
