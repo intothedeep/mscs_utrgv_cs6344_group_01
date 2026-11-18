@@ -172,11 +172,15 @@ A reader can use a price as a probability if they read it a little lower.
 Markets on one event move together, so the p-values may be too small.
 The data hold no event key, so our check with a proxy key is only partial.
 \textbf{Selection.} Only a small share of markets pass the filters, and kept markets trade more than dropped ones.
+% Price day and wallet limits copied from ../paper_mvp1/sections/12-limits.tex (owner, 2026-11-18)
+\textbf{Price day.} Trading continues after the scheduled close, when the answer may be known.
+So we price one day before the close, but this choice rests on a one-month pilot.
+\textbf{Wallets.} A wallet is an address, and one owner may control many addresses.
 
 \hd{7. Future work}
 % Volume is already tested in Appendix C, so the next step holds volume fixed (owner, 2026-11-18)
 Each limitation leads to one next step.
-Build a true event key and test Q1 with markets grouped by event.
+Build a true event key, measure how markets on one event move together, and test Q1 with markets grouped by event.
 Q2 shows a concentrated crowd, but we do not link it to Q1.
 So test whether the gap depends on the number of distinct wallets, holding volume fixed.
 Correct prices after the fact and test the correction on later markets.
