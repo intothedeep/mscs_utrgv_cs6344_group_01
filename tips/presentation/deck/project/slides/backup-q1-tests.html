@@ -1,0 +1,35 @@
+<section id="backup-q1-tests" class="bg-light padf q1">
+  <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <h2 class="t44">Q: Why a χ² test first, then a test per bin?</h2>
+  <div class="body g-two">
+    <div class="panel" style="display:flex;flex-direction:column;justify-content:center">
+      <h3>χ² test: all 10 bins at once</h3>
+      <div class="mid" style="font-size:44px">68.0 &gt; 18.3</div>
+      <p class="line24 mt16">H0: price = probability.</p>
+      <p class="line24">p = 1.1 × 10⁻¹⁰, so we reject H0.</p>
+      <div class="fx">
+        <div>Eₖ = nₖ · p̄ₖ <span class="fxn">expected Yes in bin k</span></div>
+        <div>zₖ = (Oₖ − Eₖ) / √(nₖ · p̄ₖ · (1 − p̄ₖ))</div>
+        <div>χ² = z₁² + z₂² + … + z₁₀²</div>
+        <div class="fxn">bin 7: z = (1,640 − 1,716) / 20.9 = −3.6</div>
+      </div>
+      <p class="line24 mt16"><b>It says only that something is off.</b></p>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;justify-content:center">
+      <h3>Binomial test: one bin at a time</h3>
+      <div class="mid" style="font-size:44px">9 of 10 bins below price</div>
+      <div class="fx">
+        <div>K = X₁ + … + Xₙ, <span class="fxn">Xᵢ = 1 with prob. pᵢ</span></div>
+        <div>P(K = k) = Σ Πᵢ∈A pᵢ · Πⱼ∉A (1 − pⱼ) <span class="fxn">|A| = k</span></div>
+        <div>Var K = Σ pᵢ(1 − pᵢ) ≤ n · p̄(1 − p̄)</div>
+        <div class="fxn">all pᵢ = p̄: P(K = k) = C(n, k) · p̄ᵏ · (1 − p̄)ⁿ⁻ᵏ</div>
+      </div>
+      <p class="line24 mt16">It shows where and which way.</p>
+      <p class="line24">Largest gap: 3.29 points (70 to 80% bin).</p>
+      <p class="line24 mt16"><b>Ten tests, so we correct (next slide).</b></p>
+    </div>
+  </div>
+  <div class="strip"><b>Q: Why binomial, not t?</b> Outcomes are 0/1 counts, not means of continuous values. The exact model is the Poisson binomial: each market has its own price. We test with the binomial at the bin mean price. Its variance is a little larger, so the test is slightly conservative (gap at most 1.3% in the 70 to 80% bin).</div>
+  <div class="foot"><span>Source: paper Section 5.1, Appendix B; run 142082 q1_bins.csv</span><span class="pg"></span></div>
+  <aside>Backup, Q1 speaker. About 45 seconds. Why: someone may ask why we run two kinds of test. How: the chi-square test looks at all 10 bins at once. Its null is that the price equals the probability. We get 68.0 against a 5% cut of 18.3, so p is about one in ten billion and we reject the null. But the chi-square only says that something is off. It does not say where or which way. So we test each bin with a binomial test. Nine of ten bins come out below the price, and the largest gap is 3.29 points in the 70 to 80% bin. If asked why binomial and not t: outcomes are zero-or-one counts, not means of continuous values. The exact model is the Poisson binomial, because each market has its own price. We use the binomial at the bin mean price. Its variance is a little larger, so the test is slightly conservative. In the 70 to 80% bin the difference is at most 1.3%. The formulas, if asked: on the left, each bin gives a z score, the observed Yes count minus the expected count, divided by the binomial standard deviation. Chi-square adds the ten squared z scores. On the right, the Yes count K in a bin adds one coin per market, each with its own price. That is the Poisson binomial. Its variance is never larger than the binomial variance, which is why the binomial test is slightly conservative.</aside>
+</section>

@@ -899,6 +899,22 @@ table.sum th:first-child,table.sum td:first-child{width:96px}
     <li><span lang="ko"><b>논문:</b> BH를 주 결과로, Bonferroni를 더 엄격한 확인으로 함께 보고했다.</span><span lang="en"><b>Paper:</b> Benjamini-Hochberg is the main result, with Bonferroni as a stricter check.</span></li>
   </ul>
   <p class="note"><span lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (<code>n</code>, <code>n_yes</code>, <code>mean_price</code>, <code>binom_p</code>, <code>reject_bh</code>, <code>reject_bonferroni</code>), <code>papers/paper_mvp1/numbers.tex</code> (<code>\QOneChiSq</code>, <code>\QOneDf</code>). 시장 2개 예의 0.71, 0.79는 설명용 값(Illustrative values)이다.</span><span lang="en">Source: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (<code>n</code>, <code>n_yes</code>, <code>mean_price</code>, <code>binom_p</code>, <code>reject_bh</code>, <code>reject_bonferroni</code>), <code>papers/paper_mvp1/numbers.tex</code> (<code>\QOneChiSq</code>, <code>\QOneDf</code>). The two-market prices 0.71 and 0.79 are illustrative values.</span></p>
+
+  <h4><span lang="ko">5. 자주 하는 오해 네 가지</span><span lang="en">5. Four common mix-ups</span></h4>
+  <p><span lang="ko">이해를 점검할 때 자주 나온 틀린 문장이다. 왼쪽을 오른쪽처럼 고쳐 읽는다.</span><span lang="en">These wrong sentences came up while checking our understanding. Read the left column as the right column.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">틀린 문장</span><span lang="en">Wrong sentence</span></th><th><span lang="ko">바른 이해</span><span lang="en">Right reading</span></th><th><span lang="ko">근거</span><span lang="en">Evidence</span></th></tr></thead>
+    <tbody>
+      <tr><td><span lang="ko">"[[chi]] 결과: 가격이 확률인지 증명할 수 없다."</span><span lang="en">"Chi-square: we cannot prove the price is a probability."</span></td><td><ul><li><span lang="ko">귀무가설은 "가격 = 확률"이다.</span><span lang="en">The null is "price = probability".</span></li><li><span lang="ko">p가 매우 작아서 그 가설을 기각한다.</span><span lang="en">The p-value is tiny, so we reject it.</span></li><li><span lang="ko">결론: 가격은 전체로 보정되어 있지 않다.</span><span lang="en">Conclusion: prices are not calibrated as a whole.</span></li></ul></td><td style="white-space:nowrap">χ² 68.0 &gt; 18.3<br>p = 1.1×10⁻¹⁰</td></tr>
+      <tr><td><span lang="ko">"구간 검정은 [[tdist]]를 쓴다."</span><span lang="en">"The bin test uses the t distribution."</span></td><td><ul><li><span lang="ko">결과가 0/1이고 Yes 개수를 센다. 그래서 이항 계열이다.</span><span lang="en">Outcomes are 0/1 and we count Yes. So it is the binomial family.</span></li><li><span lang="ko">정확한 분포는 [[pbinom]]이다. 코드는 평균 가격 p̄를 넣은 [[binom]]으로 근사한다.</span><span lang="en">The exact distribution is Poisson binomial. The code approximates it with an exact binomial test at the mean price p̄.</span></li><li><span lang="ko">t 분포는 연속 값의 평균에 쓴다. 예: Q2의 [[welch]].</span><span lang="en">The t distribution is for means of continuous values, such as the Q2 Welch t-test.</span></li></ul></td><td><code>binomtest(k, n, p̄)</code></td></tr>
+      <tr><td><span lang="ko">"이항 근사가 안전한 것은 [[clt]] 덕분이다."</span><span lang="en">"The binomial approximation is safe because of the central limit theorem."</span></td><td><ul><li><span lang="ko">근거는 분산 비교다. 이항 분산 − 포아송-이항 분산 = Σ (pᵢ − p̄)² ≥ 0.</span><span lang="en">The reason is the variance gap. Binomial minus Poisson-binomial variance = Σ (pᵢ − p̄)² ≥ 0.</span></li><li><span lang="ko">구간 7: 이항 분산 436.0. 구간 폭이 0.1이라 차이는 최대 2,301 · 0.05² = 5.8이다(1.3% 이하).</span><span lang="en">Bin 7: binomial variance 436.0. The bin is 0.1 wide, so the gap is at most 2,301 · 0.05² = 5.8 (under 1.3%).</span></li><li><span lang="ko">CLT는 χ²에 쓰인다. 구간마다 z가 정규를 따라야 z² 10개의 합이 χ²_10을 따른다.</span><span lang="en">The central limit theorem is used by the chi-square: each bin's z must be normal for the sum of 10 z² to follow chi-square with 10 degrees of freedom.</span></li></ul></td><td><span lang="ko">1절 표, 2절</span><span lang="en">Part 1 table, part 2</span></td></tr>
+      <tr><td><span lang="ko">"n ≥ 30이면 정규분포를 따른다."</span><span lang="en">"With n ≥ 30 it is normal."</span></td><td><ul><li><span lang="ko">n ≥ 30은 정리가 아니라 경험 규칙이다.</span><span lang="en">n ≥ 30 is a rule of thumb, not a theorem.</span></li><li><span lang="ko">0/1 결과는 기대 개수 n · p̄와 n · (1 − p̄)가 둘 다 약 10 이상이어야 한다.</span><span lang="en">For 0/1 outcomes, both expected counts n · p̄ and n · (1 − p̄) should be about 10 or more.</span></li><li><span lang="ko">구간 0: p̄ = 0.018이라 n = 30이면 기대 Yes가 0.5개다. 실제 n = 18,209라서 약 332개다.</span><span lang="en">Bin 0: p̄ = 0.018, so n = 30 would expect 0.5 Yes. The real n is 18,209, so about 332.</span></li></ul></td><td style="white-space:nowrap"><span lang="ko">구간 0</span><span lang="en">Bin 0</span><br>18,209 × 0.018</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>함께 기대는 가정:</b> 포아송-이항과 CLT 모두 시장이 서로 독립이라고 본다. 한 사건의 시장은 함께 움직이므로 p값이 너무 작을 수 있다. 부록 G의 [[clboot]]이 이를 따로 확인한다.</span><span lang="en"><b>Shared assumption:</b> both the Poisson binomial and the central limit theorem assume independent markets. Markets of one event move together, so p-values may be too small. Appendix G checks this with a cluster bootstrap.</span></li>
+  </ul>
+  <p class="note"><span lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (<code>n</code>, <code>mean_price</code>), <code>code/q1_calibration.py</code> (<code>binomtest</code>), <code>papers/paper_mvp1/numbers.tex</code> (<code>\QOneChiSq</code>, <code>\QOneP</code>).</span><span lang="en">Source: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (<code>n</code>, <code>mean_price</code>), <code>code/q1_calibration.py</code> (<code>binomtest</code>), <code>papers/paper_mvp1/numbers.tex</code> (<code>\QOneChiSq</code>, <code>\QOneP</code>).</span></p>
 </section>
 
 <section class="step" id="sec-meaning">
@@ -1234,7 +1250,8 @@ table.sum th:first-child,table.sum td:first-child{width:96px}
     dof:["자유도(degrees of freedom)","데이터가 기대에서 서로 독립으로 벗어날 수 있는 기회의 수. 칸 수에서 제약 수를 뺀다."],
     bonf:["본페로니 보정(Bonferroni correction)","유의수준을 검정 수로 나눠 모든 p값에 같은 기준을 쓰는 보정."],
     fwer:["가족별 오류율(family-wise error rate, FWER)","여러 검정에서 거짓 발견이 하나라도 생길 확률."],
-    fdr:["거짓 발견 비율(false discovery rate, FDR)","발견한 것 가운데 거짓 발견의 기대 비율."]
+    fdr:["거짓 발견 비율(false discovery rate, FDR)","발견한 것 가운데 거짓 발견의 기대 비율."],
+    clt:["중심극한정리(central limit theorem, CLT)","독립인 값을 많이 더하면 그 합이 정규분포에 가까워진다는 정리. 값마다 분포가 달라도 된다."]
   };
   var d=document.documentElement;
   var TITLE={ko:"6344 Polymarket 강의와 RQ 해설서",en:"6344 Polymarket Lecture and RQ Guide"};

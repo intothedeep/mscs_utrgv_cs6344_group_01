@@ -2,20 +2,29 @@
   <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
   <div class="frame"><span class="chip">Why</span><span class="chip">How</span><span class="chip">Result</span><span class="chip on">Meaning</span></div>
   <h2 class="t44">Q1 meaning: prices run a little high, in one direction</h2>
-  <div class="flow">
-    <div class="step">
-      <div class="ask">What we found</div>
-      <div class="lab">Prices are not calibrated as a whole. 9 of 10 bins are below the price. Net gap −0.99%. Small: the largest bin gap is 3.29 points.</div>
+  <div class="rows">
+    <div class="rowk">What for</div>
+    <div class="rowv">χ² says the prices miss. The bin tests ask where, and which way.</div>
+    <div class="rowk">Result</div>
+    <div class="rowv">9 of 10 bins below the price. Bonferroni keeps 4 bins, BH keeps 5, all below. Largest gap 3.29 points: priced 74.6%, happened 71.3%.</div>
+    <div class="rowk">Meaning</div>
+    <div class="rowv rowfig">
+      <div>Outcome 1 (mostly Yes) is priced a little high at almost every price. Only the cheapest bins match the favorite-longshot bias. We do not test why.</div>
+      <svg aria-label="Gap by price bin. Our ten gaps sit below zero almost everywhere. The favorite-longshot bias would put cheap bins below zero and dear bins above zero." width="600" height="205" viewBox="0 0 440 150" style="flex:none">
+        <line x1="20" y1="70" x2="420" y2="70" stroke="#737373" stroke-width="2"/>
+        <path d="M20 100 C 160 100, 280 40, 420 40" fill="none" stroke="#A3A3A3" stroke-width="3" stroke-dasharray="8 6"/>
+        <path d="M24 76a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M66 97.6a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M108 82a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M150 90.4a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M192 84.4a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M234 77.2a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M276 103.6a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M318 109.6a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M360 92.8a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M402 70a6 6 0 1 0 12 0a6 6 0 1 0 -12 0" fill="#C04F00"/>
+        <g font-family="IBM Plex Mono, Menlo, monospace" font-size="22">
+          <text x="420" y="26" text-anchor="end" fill="#737373">bias would say</text>
+          <text x="20" y="140" fill="#262626">cheap</text>
+          <text x="420" y="140" text-anchor="end" fill="#262626">dear</text>
+          <text x="220" y="140" text-anchor="middle" fill="#C04F00" font-weight="700">ours</text>
+        </g>
+      </svg>
     </div>
-    <div class="step">
-      <div class="ask">The hook, answered</div>
-      <div class="lab">Right 83.4% of the time does not mean calibrated. χ² = 68.0 says the prices miss.</div>
-    </div>
-    <div class="step ph">
-      <div class="ask">Why prices run high</div>
-      <div class="lab">[Owner: why prices run high]</div>
-    </div>
+    <div class="rowk">Why it matters</div>
+    <div class="rowv"><b>Right 83.4% of the time is not calibrated.</b> Read a price as a probability, a little lower.</div>
   </div>
-  <div class="foot"><span>Source: paper Section 5.1 and Discussion</span><span class="pg"></span></div>
-  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. Why: the numbers only matter if we say what they mean. How: we put the Q1 result next to the hook. Result: prices are not calibrated as a whole. The effect is small and runs one way, with a net gap of minus 0.99%. The largest gap in one bin is 3.29 points, in the 70 to 80% bin. Meaning: this answers the hook. A market can be right 83.4% of the time and still have prices that are not calibrated, because being right often and being calibrated are different things. The third box is a placeholder. The owner has not yet written why the prices run high, and we do not invent a reason. Fill this in before the talk.</aside>
+  <div class="foot"><span>Dots: gap (rate − price) per bin. Dashed: favorite-longshot shape only. Source: paper Section 5.1; run 142082</span><span class="pg"></span></div>
+  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. What for: the chi-square test said the prices miss, 68.0 against a cut of 18.3. But it does not say where or which way, so we tested each bin. Result: 9 of 10 bins are below the price. After correcting for ten tests, Bonferroni keeps 4 bins and Benjamini-Hochberg keeps 5, and all of them are below the price. The largest gap is in the 70 to 80% bin: prices average 74.6%, but 71.3% of those events happen. Meaning: outcome 1, which is mostly Yes, is priced a little high at almost every price. In horse racing there is the favorite-longshot bias: cheap bets win less often than priced, and favorites win more often. The dashed line shows that shape. Only our two cheapest bins match it. At high prices our gaps are also below zero, the opposite of that bias. So our pattern is a small shift down almost everywhere. We do not test why. Why it matters: a market can be right 83.4% of the time and still not be calibrated. You can read a Polymarket price as a probability, but read it a little lower.</aside>
 </section>
