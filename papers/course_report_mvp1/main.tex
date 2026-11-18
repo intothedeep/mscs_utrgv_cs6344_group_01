@@ -148,7 +148,10 @@ The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings
 \label{fig:qq}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.47\textwidth}\vspace{0pt}
-Q3 tells us what a typical trade looks like.
+% Q3 opens with what it looks at: pooled shapes, not each market (owner, 2026-11-18)
+Q3 pools all kept markets and looks at the shape of three values: price, trade size and wallet volume.
+It does not look at each market alone.
+It tells us what a typical trade looks like.
 Mean trade size is \TradeSizeMean{} USDC.
 The median is \TradeSizeMedian{} USDC.
 So sizes are strongly right skewed.

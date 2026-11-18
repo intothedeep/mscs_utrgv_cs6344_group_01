@@ -70,8 +70,8 @@ aside{display:none}
 <script>function fit(){document.documentElement.style.setProperty('--z',Math.min(1,(window.innerWidth-48)/1920))}addEventListener('resize',fit);addEventListener('DOMContentLoaded',fit)</script>
 </head><body>
 EOF
-# slide order comes from deck.json "order"
-for id in $(grep -o '"order":\[[^]]*\]' deck/project/deck.json | grep -o '"[A-Za-z0-9_-]*"' | tr -d '"' | grep -v '^order$'); do
+# slide order comes from deck.json "order"; newlines and spaces are stripped first, so compact and pretty JSON both work
+for id in $(tr -d ' \n' < deck/project/deck.json | grep -o '"order":\[[^]]*\]' | grep -o '"[A-Za-z0-9_-]*"' | tr -d '"' | grep -v '^order$'); do
   echo '<div class="slide">'
   sed "${SED_ARGS[@]}" "deck/project/slides/$id.html"
   echo '</div>'
