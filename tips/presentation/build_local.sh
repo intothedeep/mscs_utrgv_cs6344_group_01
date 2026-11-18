@@ -11,7 +11,7 @@ F=../../papers/paper_mvp1/figures
 OUT=slides_local.html
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
-# upload id -> paper figure file (the 17 figures uploaded to the online deck)
+# upload id -> paper figure file (the 18 figures uploaded to the online deck)
 MAP=(
   "f1962a5429c289b56bb1321737717fdb drop_reasons.png"
   "4b6dbeeb8d4c89aa099011c8850e8ea3 fig4_calibration_gap.png"
@@ -30,6 +30,7 @@ MAP=(
   "5845a06a1765090afe767ae22a8b5629 fig_r3_m1_price_definition.png"
   "727f35750af0e3b714c0a723cd233bcb fig_r3_m2_yes_reliability.png"
   "100321546d88828ede2423c5b94ea7fa fig6_ccdf_top_sampled.png"
+  "a5e7147e0661a0704e4c04239eca8b43 fig_pnl_distribution.png"
 )
 SED_ARGS=()
 for pair in "${MAP[@]}"; do

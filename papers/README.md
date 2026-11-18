@@ -47,7 +47,8 @@ Run from `cs6344_group_01/`. The script reads saved JSON and CSV only.
 OMP_NUM_THREADS=1 timeout 300 uv run python code/make_paper_numbers.py \
   --run runs/142082_mvp1_full_v1r3 --pilot runs/142041_pilotA_2025_06 \
   --robust runs/142123_robust_full_v4 --q1eqfreq runs/142140_q1eqfreq_v5 \
-  --r3 runs/150310_r3_review_fixes_v6 --out papers/paper_mvp1/numbers.tex
+  --r3 runs/150310_r3_review_fixes_v6 --pnl runs/156432_pnl_wallets_v1 \
+  --out papers/paper_mvp1/numbers.tex
 ```
 
 | Option | What it adds |

@@ -70,3 +70,45 @@ Its $p\,\KmeansCategoryP$ is a float-underflow bound, on \KmeansNSample{} rows.
 The largest cell gap is in cluster \ClusterCategoryGapCluster, category \ClusterCategoryGapCategory.
 Its observed share is \ClusterCategoryGapObs{} of the sample, against \ClusterCategoryGapExp{} expected.
 The gap is \ClusterCategoryGapDiff.
+
+\subsection{Wallet profit and loss}\label{sec:app-q2-pnl}
+% src: S-PAPER-5, S-PAPER-10
+This analysis is descriptive and outside the pre-registered Q2 criteria.
+It asks how much each wallet won or lost on resolved markets.
+It uses the kept markets only.
+The gross profit of a wallet is its cash flow plus its payout, summed over all its trades in the scope.
+Its net profit is the gross profit minus the recorded taker fee of each trade.
+A buy costs the USDC amount and gives shares at the trade price.
+A sell gives the USDC amount and takes shares.
+The maker takes the opposite leg of the same trade.
+Each share pays 1 USDC if its outcome won and 0 otherwise.
+A wallet is a winner if its net profit is above $10^{-6}$ USDC, a loser if below $-10^{-6}$ USDC, and zero otherwise.
+We report no fee totals, because the meaning of the fee column is unverified.
+The net profit rests on that column.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_pnl_distribution}{0.62\linewidth}
+\caption{Wallets by net profit in symmetric-log bins, for all resolved markets, for markets without Up/Down, and for the kept markets (bottom panel). Why: it shows how many wallets sit near zero and how long both tails are.}% Source: run \PnlRun.
+\label{fig:pnl-dist}
+\end{figure}
+
+% src: S-PAPER-5, S-PAPER-10
+In the kept markets, \PnlNWallets{} wallets include \PnlNWinners{} winners and \PnlNLosers{} losers.
+Wallets won \PnlGrossWonM{} M USDC and lost \PnlGrossLostM{} M USDC before fees.
+The per-market identity check, that gross profits over all wallets sum to zero, had \PnlNIdentityFailures{} failures.
+It covers \PnlNMarketsChecked{} usable markets in the full scope, not only the kept markets.
+The median net profit is \PnlMedianNet{} USD.
+The 1\% quantile is \PnlQuantileOne{} USD and the 99\% quantile is \PnlQuantileNinetyNine{} USD.
+The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings.
+We use quantiles and a histogram, which are in the lectures.
+
+The wallet-level numbers are estimates, for these reasons.
+\begin{itemize}
+\item A trade matched by a mint or a merge has no wallet on the other side. We do not model it, and \PnlShareShortPositions{} of kept positions are short.
+\item \PnlNKeptNotUsable{} kept markets fail the winner rule, so their payouts are not counted.
+\item Every position is held to resolution, and no wallet sells after resolution.
+\item Duplicate rows stay, so a wallet's profit includes the repeats.
+\item Fees are not reported.
+\end{itemize}
+

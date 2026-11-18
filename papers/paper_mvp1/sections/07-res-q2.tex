@@ -43,3 +43,12 @@ The Welch test on log volume gives $t=\RoleWelchT$ with $p\,\RoleWelchP$, a floa
 The effect size is the difference of mean log10 volume, makers minus takers: \RoleLogTenDiff{} (\RoleLogTenMaker{} against \RoleLogTenTaker).
 The KS statistic is $D=\RoleKsD$.
 Trade count and volume have a Spearman correlation of $\rho=\SpearmanTradesVolumeRho$.
+
+% src: S-PAPER-5, S-PAPER-10
+Winnings are concentrated like volume.
+This result is descriptive and outside the pre-registered Q2 criteria (\Cref{sec:app-q2-pnl}).
+Before fees, the kept markets are zero-sum: wallets won \PnlGrossWonM{} M USDC and lost the same.
+The per-market identity check had \PnlNIdentityFailures{} failures over \PnlNMarketsChecked{} usable markets in the full scope.
+The median wallet net profit is slightly negative (\PnlMedianNet{} USD), with \PnlNLosers{} losers and \PnlNWinners{} winners among \PnlNWallets{} wallets.
+The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings.
+For comparison, the top \TopOneLabel{} of makers hold \MakerTopOneShare{} of maker volume.
