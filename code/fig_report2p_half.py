@@ -27,7 +27,7 @@ FONT = 7.5                            # printed size, since each figure is drawn
 DPI = 300
 # (minipage fraction in main.tex) x TEXTWIDTH_IN = printed width; heights are chosen to keep the report at 2 pages
 W_CALIB, W_CCDF, W_QQ = (round(f * TEXTWIDTH_IN, 3) for f in (0.56, 0.48, 0.50))
-H_CALIB, H_CCDF, H_QQ = 4.7, 2.3, 2.3
+H_CALIB, H_CCDF, H_QQ = 4.7, 1.95, 1.95  # 2.3 -> 1.95 (2026-11-18): Q2 got a second figure, report must stay 2 pages
 ROLE_COLOR = {"maker": "#222222", "taker": "#aa5500"}   # same as the original CCDF
 GRAY, LINE_COLOR = "#555555", "#aa5500"                 # same as the original QQ plot
 

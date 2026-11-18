@@ -49,9 +49,18 @@
 \begin{document}
 \maketitle
 
-\textbf{Question.} Is a Polymarket price a calibrated probability?
-We also ask who trades (Q2) and what the trades look like (Q3).
-Q3 tells us what a typical trade looks like. Q2 tells us who holds the total.
+% Layout (owner, 2026-11-18): one column in reading order; each figure sits right after the text that uses it
+\begin{abstract}
+% src: structure from the owner (data, prior work, why, result, future work), 2026-11-18; sentences from paper Sections 1, 2 and 7 (D-052)
+The Polymarket-v1 database records every trade on Polymarket from 2022 to 2026.
+Studies of horse racing and earlier prediction markets find that cheap bets win less often than priced.
+Readers take a Polymarket price as a probability, so we test whether it is one.
+On \NMarketsKept{} resolved Yes/No markets, we ask three questions: is the crowd right, who is the crowd, and what do trades look like?
+Prices are not calibrated as a whole, but the gap is small and runs one way: events happen slightly less often than priced.
+A few wallets hold most of the trading volume and take most of the winnings.
+Trade sizes are strongly right skewed, so the median describes a typical trade better than the mean.
+Future work can correct prices after the fact and test the correction on later markets.
+\end{abstract}
 
 \hd{1. Data and method}
 We use the Polymarket-v1 database, which holds \PaperTrades{} trades and \PaperMarkets{} markets from \PaperPeriod{} \citep{qin2026polymarketv1}.
@@ -65,15 +74,20 @@ We fixed the criteria in a pre-registration before any Q1 result.
 We report one later rule change as an amendment (tie rule for the price).
 
 \hd{2. Q1: is the crowd right?}
-\begin{minipage}[t]{0.56\textwidth}\vspace{0pt}
-\centering
-\figorbox{../paper_mvp1/figures/fig4_calibration_gap_half}{4.088in}
-\captionof{figure}{Observed outcome-1 rate against mean price per bin (top), and the per-bin gap with \CiLevel{} intervals (bottom). Why: the lower panel shows the gaps that the diagonal hides.}
-\label{fig:calib}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.41\textwidth}\vspace{0pt}
+{\centering
+\figorbox{../paper_mvp1/figures/fig4_calibration_gap_row}{\textwidth}
+\captionof{figure}{Observed outcome-1 rate against mean price per bin (left), and the per-bin gap with \CiLevel{} intervals (right). Why: the right panel shows the gaps that the diagonal hides.}
+\label{fig:calib}\par}
+\smallskip
 \textbf{\VerdictQOne} The effect is small and runs one way.
+Outcome 1 is priced too high.
+We set no size line before the results, so ``small'' is our reading.
+With the minimum-trade filter, cheap bets pay off less often than priced.
+This matches horse racing \citep{snowberg2010favorite}.
+Without the filter, the cheapest bin flips above the price.
 
+\smallskip
+\noindent\begin{minipage}[t]{0.36\textwidth}\vspace{0pt}
 \begin{tabular}{@{}lr@{}}
 \toprule
 Chi-square $\chi^2$ & \QOneChiSq \\
@@ -87,31 +101,19 @@ Net gap & \GapNetDiffMain \\
 Largest per-bin gap & \LargestGapAbs \\
 \bottomrule
 \end{tabular}
-
-\smallskip
-Outcome 1 is priced too high.
-We set no size line before the results, so ``small'' is our reading.
-With the minimum-trade filter, cheap bets pay off less often than priced.
-This matches horse racing \citep{snowberg2010favorite}.
-Without the filter, the cheapest bin flips above the price.
-
-\smallskip
-\textbf{Review checks} (rows next to the original, no new verdict).
-\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}\setlength{\topsep}{1pt}\setlength{\leftmargin}{1.2em}
-\item Price rule: with a volume-weighted average price the net gap is \RThreeMOneVwapNetGap{}, and with a trade-based midpoint it is \RThreeMOneMidNetGap{}. So the price rule does not create the gap.
-\item Markets labelled Yes/No (n=\RThreeMTwoYesNoN): Yes is priced above its observed rate, net gap \RThreeMTwoYesNoNetGap{}.
-\item Dependent markets: with markets grouped by a proxy event key, the net-gap interval is [\RThreeMThreeKOneNetGapCiLow, \RThreeMThreeKOneNetGapCiHigh]. It stays below 0.
-\item Size: the largest implied gap is \RThreeMFiveMaxAbsDelta{}, against a mean half spread of \RThreeMOneMeanHalfSpread.
-\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.60\textwidth}\vspace{0pt}
+% One line per check with a bold label: easier to scan than one paragraph (owner, 2026-11-18)
+\textbf{Review checks} (rows next to the original, no new verdict).\par\smallskip
+\textbf{Price rule:} with a volume-weighted average price the net gap is \RThreeMOneVwapNetGap{}, and with a trade-based midpoint it is \RThreeMOneMidNetGap{}. So the price rule does not create the gap.\par
+\textbf{Markets labelled Yes/No} (n=\RThreeMTwoYesNoN): Yes is priced above its observed rate, net gap \RThreeMTwoYesNoNetGap{}.\par
+\textbf{Dependent markets:} with markets grouped by a proxy event key, the net-gap interval is [\RThreeMThreeKOneNetGapCiLow, \RThreeMThreeKOneNetGapCiHigh]. It stays below 0.\par
+\textbf{Size:} the largest implied gap is \RThreeMFiveMaxAbsDelta{}, against a mean half spread of \RThreeMOneMeanHalfSpread.
 \end{minipage}
 
-\hd{3. Q2 and Q3 (descriptive, no verdict)}
-\begin{minipage}[t]{0.48\textwidth}\vspace{0pt}
-{\centering
-\figorbox{../paper_mvp1/figures/fig6_ccdf_top_sampled_half}{3.504in}
-\captionof{figure}{CCDF of wallet volume, one line per role. Why: the tail bends down, so it is not a power law.}
-\label{fig:ccdf}}
-\textbf{Q2.} The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker USDC volume.
+\hd{3. Q2: who is the crowd? (descriptive, no verdict)}
+Q2 tells us who holds the total.
+The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker USDC volume.
 They hold \TakerTopTwentyShare{} of taker USDC volume.
 The 80/20 reference is \TopTwentyReference.
 The Welch test on log volume gives $t=\RoleWelchT$.
@@ -120,27 +122,44 @@ Winnings are concentrated like volume.
 Before fees the kept markets are zero-sum: wallets won \PnlGrossWonM{} M USDC and lost the same.
 The median wallet net profit is \PnlMedianNet{} USD.
 The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings.
+
+\smallskip
+\noindent\begin{minipage}[t]{0.48\textwidth}\vspace{0pt}
+\centering
+\figorbox{../paper_mvp1/figures/fig6_ccdf_top_sampled_half}{3.504in}
+\captionof{figure}{CCDF of wallet volume, one line per role. Why: the tail bends down, so it is not a power law.}
+\label{fig:ccdf}
 \end{minipage}\hfill
-\begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
-{\centering
-\figorbox{../paper_mvp1/figures/qq_trade_size_raw_log_half}{3.65in}
-\captionof{figure}{QQ plot of trade size against the normal, raw (left) and log (right). Why: the log points follow the line, so log sizes are closer to normal.}
-\label{fig:qq}}
-\textbf{Q3.} Mean trade size is \TradeSizeMean{} USDC.
+\begin{minipage}[t]{0.48\textwidth}\vspace{0pt}
+\centering
+\figorbox{../paper_mvp1/figures/fig_report_q2_winnings}{3.504in}
+\captionof{figure}{Share held by the top 1\% and 10\% of wallets, each ranked by its own measure. Why: winnings are as concentrated as volume.}
+\label{fig:winnings}
+\end{minipage}
+
+\hd{4. Q3: what does betting look like? (descriptive, no verdict)}
+\noindent\begin{minipage}[t]{0.47\textwidth}\vspace{0pt}
+Q3 tells us what a typical trade looks like.
+Mean trade size is \TradeSizeMean{} USDC.
 The median is \TradeSizeMedian{} USDC.
 So sizes are strongly right skewed.
 The price \pOne{} has a mean of \PriceOneDayMean{} and a median of \PriceOneDayMedian.
 Prices pile up near both ends of the scale.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
+\centering
+\figorbox{../paper_mvp1/figures/qq_trade_size_raw_log_half}{3.65in}
+\captionof{figure}{QQ plot of trade size against the normal, raw (left) and log (right). Why: the log points follow the line, so log sizes are closer to normal.}
+\label{fig:qq}
 \end{minipage}
 
-\hd{4. Limitations}
+\hd{5. Limitations}
 \textbf{Independence.} Markets on one event move together, so the p-values may be too small. No event key exists, so we size this only with proxy keys.
 \textbf{Selection.} Only \PctMarketsKept{} of markets pass the filters. Kept markets trade more than dropped ones.
 
-\hd{5. Interpretation and conclusion}
+\hd{6. Interpretation and conclusion}
 \todo{owner: interpretation of why prices run high and what the gaps mean in practice for a reader of the price}
 \todo{owner: closing sentence on the value of the study, and future work}
-\vspace{1.2cm}
 
 \clearpage
 \begingroup\footnotesize\raggedright
