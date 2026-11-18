@@ -5,6 +5,7 @@
     <div class="col">
       <h2 class="t44 tight">In 9 of 10 bins, events happen less often than the price says</h2>
       <div class="stat"><div class="big">−0.99%</div><div class="lab">net gap over all 47,948 markets: small but one way</div></div>
+      <div class="stat"><div class="mid" style="font-size:40px">5 bins (BH), 4 (Bonferroni)</div><div class="lab">differ from the price after correcting for 10 bin tests, all priced too high</div></div>
       <div class="stat"><div class="mid">74.6% vs 71.3%</div><div class="lab">70 to 80% bin: priced vs observed</div></div>
     </div>
     <div class="card">
@@ -13,5 +14,5 @@
     </div>
   </div>
   <div class="foot"><span>Source: paper Section 5.1</span><span class="pg"></span></div>
-  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. Why: a verdict of not calibrated does not say which way the prices miss, so we read the bins. How: the chart plots the observed rate against the mean price in each bin. A point on the diagonal would be perfect. Result: in nine of the ten bins the observed rate is below the mean price. Only the top bin, from 90 to 100%, is not. Over all 47,948 markets the net gap is minus 0.99%. The biggest gap is in the 70 to 80% bin, where the price is 74.6% and the observed rate is 71.3%. Meaning: the effect is small, but it runs in one direction. Outcome 1 is priced a little too high.</aside>
+  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. Why: a verdict of not calibrated does not say which way the prices miss, so we read the bins. How: the chart plots the observed rate against the mean price in each bin. A point on the diagonal would be perfect. Result: in nine of the ten bins the observed rate is below the mean price. Only the top bin, from 90 to 100%, is not. We then test each bin with an exact binomial test and correct for the ten tests. Five bins differ from the price under Benjamini-Hochberg, and four under the stricter Bonferroni rule. All of them are priced too high. Over all 47,948 markets the net gap is minus 0.99%. The biggest gap is in the 70 to 80% bin, where the price is 74.6% and the observed rate is 71.3%. Meaning: the effect is small, but it runs in one direction. Outcome 1 is priced a little too high.</aside>
 </section>

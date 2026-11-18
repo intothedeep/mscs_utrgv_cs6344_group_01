@@ -11,7 +11,7 @@
         <tr class="r2"><td class="w40"><b>M2</b> Yes/No labels</td><td class="w60">net gap −1.32%</td></tr>
         <tr class="r1"><td class="w40"><b>M3</b> Event proxies</td><td class="w60">interval [−1.41%, −0.58%]</td></tr>
         <tr class="r2"><td class="w40"><b>M4</b> Kept vs dropped</td><td class="w60">median volume 1,790 vs 69 USDC</td></tr>
-        <tr class="r1"><td class="w40"><b>M5</b> Practical size</td><td class="w60">largest gap 2.22%, line 1.57%</td></tr>
+        <tr class="r1"><td class="w40"><b>M5</b> Practical size</td><td class="w60">largest gap 2.22%; mean half spread 1.57% (median 0.50%)</td></tr>
         <tr class="r2"><td class="w40"><b>R2</b> Last price before close</td><td class="w60">χ² 53.6, still rejects; net gap −0.65%</td></tr>
       </table>
       <p class="line24">Original net gap: −0.99%.</p>
@@ -22,5 +22,5 @@
     </div>
   </div>
   <div class="foot"><span>Source: paper Section 5.4, Appendix G</span><span class="pg"></span></div>
-  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. Why: reviewers asked whether our choices create the gap, so we ran five checks. How: each new row sits next to the original Q1 result and does not replace it. Result: changing the price rule gives a net gap of minus 1.20%. Looking only at Yes/No markets gives minus 1.32%. The key one is M3. Markets on one event move together, so we group them with proxy keys, and the cluster bootstrap interval from minus 1.41% to minus 0.58% still lies below zero. M4 and M5 describe the kept markets and the size of the gap. Last, R2 uses the last price before the close instead of the price one day before. The chi-square is 53.6 and still rejects, and the net gap shrinks to minus 0.65%. So the last day of news explains part of the gap, not all of it. Meaning: the gap does not come from one choice we made. Two backup slides show M1, M2 and M4 in more detail.</aside>
+  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. Why: reviewers asked whether our choices create the gap, so we ran six checks. How: each new row sits next to the original Q1 result and does not replace it. Result: changing the price rule gives a net gap of minus 1.20%. Looking only at Yes/No markets gives minus 1.32%. The key one is M3. Markets on one event move together, so we group them with proxy keys, and the cluster bootstrap interval from minus 1.41% to minus 0.58% still lies below zero. M4 and M5 describe the kept markets and the size of the gap. Last, R2 uses the last price before the close instead of the price one day before. The chi-square is 53.6 and still rejects, and the net gap shrinks to minus 0.65%. So the last day of news explains part of the gap, not all of it. Meaning: the gap does not come from one choice we made. Two backup slides show M1, M2 and M4 in more detail.</aside>
 </section>

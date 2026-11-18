@@ -683,6 +683,9 @@ def add_r3_m1(m: Macros, run: Path) -> None:
     for key, name in (("p_vwap", "MOneVwap"), ("p_mid", "MOneMid")):
         _r3_row(m, name, r["rows"][key], src, f"rows.{key}.", "", ("n", "chi", "bins") + R3_GAP_CI)
     m.add("RThreeMOneMeanHalfSpread", pct2(r["mean_h"]), f"{src}: mean_h")
+    # Median and coverage of the half spread: the mean is pulled up by a long tail (review 2026-11-18)
+    m.add("RThreeMOneMedianHalfSpread", pct2(r["h"]["median"]), f"{src}: h.median")
+    m.add("RThreeMOneHalfSpreadN", count(r["h"]["n"]), f"{src}: h.n")
     m.add("RThreeMOneShareBoth", pct(r["coverage"]["share_S_both"]), f"{src}: coverage.share_S_both")
     m.add("RThreeMOneGapWithinHalfSpread", "yes" if r["side_line"]["gap_within_half_spread"] else "no",
           f"{src}: side_line.gap_within_half_spread")

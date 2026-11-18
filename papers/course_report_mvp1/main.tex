@@ -83,6 +83,7 @@ We fixed these rules before any Q1 result. One later change (the price tie rule)
 \smallskip
 \textbf{\VerdictQOne} The chi-square test says the prices miss, and the bin tests show where and which way.
 In \GapNegBinsMain{} of \GapBinsTotal{} bins events happen less often than priced.
+After correcting for ten tests, \QOneBinsBh{} bins (Benjamini-Hochberg, BH; \QOneBinsBonferroni{} by Bonferroni) differ from the price, and all of them are priced too high (Appendix E).
 In the 70 to 80\% bin, prices average \BinSeventyEightyPrice{} and \BinSeventyEightyObs{} of events happen.
 
 \smallskip
@@ -122,7 +123,7 @@ We do not test its cause.
 \noindent\begin{minipage}[t]{0.48\textwidth}\vspace{0pt}
 \centering
 \figorbox{../paper_mvp1/figures/fig6_ccdf_top_sampled_half}{3.504in}
-\captionof{figure}{CCDF of wallet volume, one line per role.}
+\captionof{figure}{Complementary cumulative distribution function (CCDF) of wallet volume, one line per role.}
 \label{fig:ccdf}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\textwidth}\vspace{0pt}
@@ -138,7 +139,7 @@ Q2 tells us who holds the volume and the winnings.
 The 80/20 rule would give \TopTwentyReference.
 The tail bends down in Figure~\ref{fig:ccdf}, so it is not a power law.
 \textbf{Makers trade more than takers.} Mean log10 volume is \RoleLogTenDiff{} higher for makers (Welch $t=\RoleWelchT$).
-\textbf{Winnings are concentrated like volume.} Before fees, wallets won \PnlGrossWonM{} M USDC and lost the same.
+\textbf{Winnings are concentrated like volume.} Before fees, wallets won \PnlGrossWonM{} M USD Coin (USDC) and lost the same.
 The median wallet net profit is \PnlMedianNet{} USD.
 The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings.
 \textbf{Reading.} The crowd behind a price may be small. Volume is not price-setting power, and we do not test who sets the price.
@@ -148,7 +149,7 @@ The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings
 \noindent\begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
 \centering
 \figorbox{../paper_mvp1/figures/qq_trade_size_raw_log_half}{3.65in}
-\captionof{figure}{QQ plot of trade size against the normal, raw (left) and log (right).}
+\captionof{figure}{Quantile-quantile (QQ) plot of trade size against the normal, raw (left) and log (right).}
 \label{fig:qq}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.47\textwidth}\vspace{0pt}
@@ -259,11 +260,12 @@ Mean, median, QQ plot & What does a typical trade look like, and is it close to 
 \textbf{C.1 Gap against the trading cost.}
 We fit a logistic calibration of the outcome on the price, $\mathrm{logit}\,P(y=1)=a+b\,\mathrm{logit}(p)$.
 The fit gives an implied gap, fitted probability minus price, at each price.
-The practical line is the mean half spread, \RThreeMOneMeanHalfSpread.
-A trader pays about this cost on each trade.
+The practical line is the mean half spread, \RThreeMOneMeanHalfSpread, fixed before the run.
+The half spread is known for \RThreeMOneHalfSpreadN{} kept markets, and it is skewed: its median is only \RThreeMOneMedianHalfSpread.
+So the mean line is a high bar, and a typical market costs less to trade.
 The largest implied gap on the price grid is \RThreeMFiveMaxAbsDelta{} in size.
 Of \RThreeMFiveGridPrices{} grid prices, \RThreeMFivePracticalPrices{} have their whole \CiLevel{} band past the practical line.
-So the gap is clear in the statistics, but it is not larger than the mean trading cost.
+So the gap is clear in the statistics, but we cannot say it is surely larger than the mean half spread.
 We set no size line before the results, so ``small'' is our reading.
 \par\smallskip
 {\centering
@@ -276,7 +278,7 @@ We set no size line before the results, so ``small'' is our reading.
 \textbf{C.2 Gap by market volume.}
 We split the kept markets into three equal groups by volume before the price day.
 The cut points are \RThreePeerACutLowMid{} and \RThreePeerACutMidHigh{} USDC.
-The net gap is \RThreePeerALowNetGap{} in the low group (CI [\RThreePeerALowNetGapCiLow, \RThreePeerALowNetGapCiHigh]).
+The net gap is \RThreePeerALowNetGap{} in the low group (\CiLevel{} confidence interval, CI: [\RThreePeerALowNetGapCiLow, \RThreePeerALowNetGapCiHigh]).
 It is \RThreePeerAMidNetGap{} in the middle group (CI [\RThreePeerAMidNetGapCiLow, \RThreePeerAMidNetGapCiHigh]).
 It is \RThreePeerAHighNetGap{} in the high group (CI [\RThreePeerAHighNetGapCiLow, \RThreePeerAHighNetGapCiHigh]).
 The middle group has the largest gap, so the gap does not shrink step by step with volume.
@@ -317,7 +319,7 @@ The top \TopOneLabel{} of makers hold \MakerTopOneShare{} of maker volume.
 The dataset paper reports \PaperTopShare{} on the full data \citep{qin2026polymarketv1}.
 The populations differ, so we use that value as a reference only.
 The top \TopTenLabel{} tail of wallet volume has a fitted power-law exponent $\alpha=\WalletVolumePowerAlpha$.
-The KS test rejects an exact power law ($D=\WalletVolumePowerKsD$, $p=\WalletVolumePowerKsP$).
+The Kolmogorov-Smirnov (KS) test rejects an exact power law ($D=\WalletVolumePowerKsD$, $p=\WalletVolumePowerKsP$).
 We set no line for how close it is, so we do not say wallet volume follows a power law.
 
 \medskip
@@ -341,5 +343,37 @@ We did not compare a lognormal.
 Wallet volume is strongly right skewed.
 The mean is \MakerMeanVolume{} USDC for makers and \TakerMeanVolume{} USDC for takers.
 The medians are \MakerMedianVolume{} and \TakerMedianVolume{} USDC.
+
+
+% Owner asked for Bonferroni and BH as an appendix (2026-11-18). Table generated from the saved run.
+\clearpage
+\hd{Appendix E. Correcting for ten bin tests}
+We test each of the \NBins{} bins, so one bin could look significant by chance.
+We correct for this in two ways and report both.
+\par\smallskip
+% Steps as numbered lists (owner, 2026-11-18)
+\textbf{Bonferroni.} It controls the chance of even one false finding.
+\begin{enumerate}\itemsep0pt
+\item Run the exact binomial test in each bin. This gives ten p-values.
+\item Split the 0.05 level over the ten tests: one cut, $0.05/10 = 0.005$.
+\item Reject a bin when its p-value is under 0.005.
+\item Result: four bins, 0, 7, 1 and 6.
+\end{enumerate}
+\textbf{Benjamini-Hochberg (BH)} \citep{benjamini1995controlling}. It controls the expected share of false findings among the findings.
+\begin{enumerate}\itemsep0pt
+\item Run the exact binomial test in each bin. This gives ten p-values.
+\item Rank the p-values from smallest (rank 1) to largest (rank 10). The rank uses only the p-value, not the bin number or the price.
+\item Give rank $i$ the cut $i \times 0.05/10 = i \times 0.005$, so the cut grows with the rank.
+\item Find the largest rank whose p-value is under its cut. Here it is rank 5 (bin 8, $0.018 < 0.025$). Rank 6 (bin 3) misses ($0.058 > 0.030$).
+\item Reject every bin up to that rank, even one that misses its own cut.
+\item Result: five bins, the four above and bin 8.
+\end{enumerate}
+{\centering\small
+\input{q1_corrections}
+\par}
+\smallskip
+Only bin 8 ($p=0.018$) differs. It is under its BH cut (0.025) but over the Bonferroni cut (0.005).
+All rejected bins have an observed rate below the price.
+So the Q1 reading does not depend on the correction.
 
 \end{document}

@@ -1,0 +1,16 @@
+<section id="backup-q1-bhrank" class="bg-light padf q1">
+  <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <h2 class="t44">Q: How does BH pick 5 bins?</h2>
+  <div class="body g-bk">
+    <div class="col col-top"><table class="t" style="font-size:24px"><tr class="hd"><th>Rank</th><th>Bin</th><th>p</th><th>Cut</th><th>Reject?</th></tr><tr class="r1"><td>1</td><td>0</td><td>0.0000016</td><td>0.005</td><td><b style="color:#C04F00">yes</b></td></tr><tr class="r2"><td>2</td><td>7</td><td>0.00036</td><td>0.010</td><td><b style="color:#C04F00">yes</b></td></tr><tr class="r1"><td>3</td><td>1</td><td>0.00065</td><td>0.015</td><td><b style="color:#C04F00">yes</b></td></tr><tr class="r2"><td>4</td><td>6</td><td>0.0036</td><td>0.020</td><td><b style="color:#C04F00">yes</b></td></tr><tr class="r1"><td>5</td><td>8</td><td>0.018</td><td>0.025</td><td><b style="color:#C04F00">yes</b></td></tr><tr class="r2"><td>6</td><td>3</td><td>0.058</td><td>0.030</td><td>no <span style="color:#737373">← stop</span></td></tr><tr class="r1"><td>7</td><td>4</td><td>0.13</td><td>0.035</td><td>no</td></tr><tr class="r2"><td>8</td><td>2</td><td>0.25</td><td>0.040</td><td>no</td></tr><tr class="r1"><td>9</td><td>5</td><td>0.45</td><td>0.045</td><td>no</td></tr><tr class="r2"><td>10</td><td>9</td><td>0.90</td><td>0.050</td><td>no</td></tr></table></div>
+    <div class="col">
+      <div class="stat"><div class="lab"><b>Goal:</b> keep the expected share of false findings among the findings under 5%.</div></div>
+      <div class="stat"><div class="lab"><b>1.</b> Sort the 10 p-values from small to large.</div></div>
+      <div class="stat"><div class="lab"><b>2.</b> Rank i gets the cut i × 0.05 / 10 = i × 0.005.</div></div>
+      <div class="stat"><div class="lab"><b>3.</b> Find the largest rank under its cut (rank 5). Reject every bin up to it.</div></div>
+      <div class="callout">5 bins pass: the Bonferroni four and bin 8 (0.018 &lt; 0.025). BH is our main rule, Bonferroni the stricter check.</div>
+    </div>
+  </div>
+  <div class="foot"><span>Benjamini-Hochberg (BH). Source: run 142082 q1_bins.csv; report Appendix E</span><span class="pg"></span></div>
+  <aside>Backup, Q1 speaker. About 40 seconds. Benjamini-Hochberg, or BH, guards a different thing: the expected share of false findings among the bins we flag. We sort the ten p-values. The bin at rank i gets the cut i times 0.005, so the cut grows with the rank. We find the largest rank whose p-value is under its cut. That is rank 5, bin 8, with 0.018 under 0.025. Rank 6, bin 3, misses its cut, 0.058 against 0.030. So we reject every bin up to rank 5: five bins. BH is our main rule, and Bonferroni is the stricter check. Only bin 8 differs between them.</aside>
+</section>
