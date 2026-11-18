@@ -1,5 +1,6 @@
 /* Tokens follow .claude/skills/html-theme/theme.css (light): achromatic neutral, radius 0, IBM Plex Mono.
-   Q1/Q2/Q3 colours are chart series colours, which the theme leaves to each page. */
+   Q1/Q2/Q3 colours are chart series colours, which the theme leaves to each page.
+   They come from the Okabe-Ito colour-blind-safe set (vermillion, blue, bluish green), darkened for 4.5:1 text contrast. */
 :root{
   --background:#FFFFFF;
   --foreground:#0A0A0A;
@@ -12,9 +13,9 @@
   --body:#262626;
   --muted:#737373;
   --line:#E5E5E5;
-  --q1:#C2410C;
-  --q2:#0E7490;
-  --q3:#4D7C0F;
+  --q1:#C04F00;
+  --q2:#0072B2;
+  --q3:#007A5A;
   --accent:#171717;
 }
 
@@ -45,9 +46,9 @@ b{color:var(--foreground);font-weight:700}
 .padf{padding:128px 128px 160px}
 
 /* accents per question */
-.q1{--accent:#C2410C}
-.q2{--accent:#0E7490}
-.q3{--accent:#4D7C0F}
+.q1{--accent:#C04F00}
+.q2{--accent:#0072B2}
+.q3{--accent:#007A5A}
 
 /* progress band on Q slides */
 .band{
@@ -214,9 +215,9 @@ table.t td,table.t th{padding:12px 16px;text-align:left;vertical-align:middle}
 .bg-dark .tag{font-size:28px;font-weight:700;color:#FAFAFA}
 .stripes{display:flex;width:360px;height:12px;margin:0 0 40px}
 .stripes div{flex:1;height:12px}
-.s1{background:#C2410C}
-.s2{background:#0E7490}
-.s3{background:#4D7C0F}
+.s1{background:#C04F00}
+.s2{background:#0072B2}
+.s3{background:#007A5A}
 .center{justify-content:center}
 .sub{font-size:28px;line-height:1.3;color:var(--body)}
 .names{font-size:28px;line-height:1.4;color:var(--foreground);font-weight:700}
@@ -253,3 +254,11 @@ table.t td,table.t th{padding:12px 16px;text-align:left;vertical-align:middle}
 .sr2 .mid{width:340px}
 .bg-dark .line{color:#FAFAFA}
 .g-one{grid-template-columns:1fr}
+
+/* Q1 how: four-step visual flow, steps 2 to 4 appear on click */
+.qflow{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.qstep{background:#FFFFFF;border:1px solid var(--border);border-top:8px solid var(--accent);padding:16px 20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.qstep h3{font-size:28px;font-weight:700;color:var(--accent)}
+.qstep svg{display:block;width:100%;height:auto;flex:none}
+.fragment{opacity:0;transition:opacity .4s}
+.fragment.visible{opacity:1}

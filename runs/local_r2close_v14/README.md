@@ -8,4 +8,4 @@
 - Output: results.json, bins_p_1d.csv, bins_p_T.csv.
 - Result: p_T chi-square 53.6, p 5.7e-8, 5 BH bins (0, 6, 7, 8, 9), 3 Bonferroni, 9 of 10 bins negative, net gap -0.65% (p_1d: 68.0, 5, 4, 9, -0.99%).
 - Command: `OMP_NUM_THREADS=1 timeout 300 uv run python code/r2_close_calibration.py` (from cs6344_group_01). Local, 1 core.
-- Used in: tips/polymarket_lecture_rq_guide_tips.html only. Not in the paper.
+- Used in: tips/polymarket_lecture_rq_guide_tips.html (step 14, part 10) and paper Appendix F R2 (D-053, macros RTwoClose*, figure fig_r2_close_gap.png by code/fig_r2_close_gap.py).

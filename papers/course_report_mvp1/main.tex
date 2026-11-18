@@ -1,5 +1,5 @@
 % CS 6344 course final report (2 pages). Content copied from ../paper_mvp1/main.tex; every number is a macro.
-% src: S-PAPER-5, S-PAPER-9, S-PAPER-10 (paper_mvp1 main.tex and numbers.tex), D-038 to D-040, tips/polymarket_feedback_answers_tips.html
+% src: S-PAPER-5, S-PAPER-9, S-PAPER-10 (paper_mvp1 main.tex and numbers.tex), D-038 to D-040
 \documentclass[10pt]{article}
 
 \usepackage[margin=0.6in]{geometry}
@@ -40,16 +40,10 @@
 \newcommand{\PaperMarkets}{1.3 million}
 \newcommand{\PaperPeriod}{November 2022 to April 2026}
 \newcommand{\pOne}{\ensuremath{p_{1\mathrm{d}}}}
-% Feedback counts after run 150310 (tips page, updated by D-038).
-\newcommand{\FbAsks}{18}
-\newcommand{\FbAnswered}{8}
-\newcommand{\FbPartly}{4}
-\newcommand{\FbMvpTwo}{6}
-\newcommand{\FbNotDone}{0}
 
 \title{When Polymarket Says \HookPct, Does It Happen \HookPct{} of the Time?\\[1pt]
 \large CS 6344 Introduction to Data Science, Final Report}
-\author{Group 1, Team Brier: Taek Lim, Zhugang Liu (Tony), Francisco Cortez}
+\author{Group 1, Team PolyHindSight: Taek Lim, Zhugang Liu (Tony), Francisco Cortez}
 \date{}
 
 \begin{document}
@@ -57,6 +51,7 @@
 
 \textbf{Question.} Is a Polymarket price a calibrated probability?
 We also ask who trades (Q2) and what the trades look like (Q3).
+Q3 tells us what a typical trade looks like. Q2 tells us who holds the total.
 
 \hd{1. Data and method}
 We use the Polymarket-v1 database, which holds \PaperTrades{} trades and \PaperMarkets{} markets from \PaperPeriod{} \citep{qin2026polymarketv1}.
@@ -119,6 +114,12 @@ Without the filter, the cheapest bin flips above the price.
 \textbf{Q2.} The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker USDC volume.
 They hold \TakerTopTwentyShare{} of taker USDC volume.
 The 80/20 reference is \TopTwentyReference.
+The Welch test on log volume gives $t=\RoleWelchT$.
+Mean log10 volume is \RoleLogTenDiff{} higher for makers than for takers.
+Winnings are concentrated like volume.
+Before fees the kept markets are zero-sum: wallets won \PnlGrossWonM{} M USDC and lost the same.
+The median wallet net profit is \PnlMedianNet{} USD.
+The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings.
 \end{minipage}\hfill
 \begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
 {\centering
@@ -128,44 +129,20 @@ The 80/20 reference is \TopTwentyReference.
 \textbf{Q3.} Mean trade size is \TradeSizeMean{} USDC.
 The median is \TradeSizeMedian{} USDC.
 So sizes are strongly right skewed.
+The price \pOne{} has a mean of \PriceOneDayMean{} and a median of \PriceOneDayMedian.
+Prices pile up near both ends of the scale.
 \end{minipage}
 
 \hd{4. Limitations}
 \textbf{Independence.} Markets on one event move together, so the p-values may be too small. No event key exists, so we size this only with proxy keys.
 \textbf{Selection.} Only \PctMarketsKept{} of markets pass the filters. Kept markets trade more than dropped ones.
 
-\hd{5. Response to feedback}
-\FbAsks{} asks came from the proposal feedback.
-Answered \FbAnswered, partly \FbPartly, outside this report (MVP2) \FbMvpTwo, not done \FbNotDone.
-\medskip
-
-\footnotesize
-\begin{tabularx}{\linewidth}{@{}p{2.6cm}p{2.6cm}Xp{1.3cm}@{}}
-\toprule
-Who & Ask & What we did & Status \\
-\midrule
-Amanda Aninagyei, Oscar Juarez, Ben Alvarado, Marcelo Cavazos & Which price, and when & One fixed price \DaysShort{} day before close. In the pilot, \PilotShareMarketsAfterClose{} of markets traded after the close. & Answered \\
-\midrule
-Hameem Gorabi & Map the longshot effect & Gap per bin, \NBins{} bins (Figure~\ref{fig:calib}). & Answered \\
-\midrule
-Hameem Gorabi & Volume with odds & Volume terciles. High minus low net gap is \RThreePeerADiff. & Answered \\
-\midrule
-Robert Molina & Other periods & Three close periods. In the third, BH $p=\RThreePeerBPeriodThreeBhP$ and net gap \RThreePeerBPeriodThreeNetGap. & Answered \\
-\midrule
-Yusuf Oraby & Group dependent markets & Cluster bootstrap on proxy event keys. The interval widens and stays below 0. Proxies are not event keys. & Partly \\
-\midrule
-Luis Tapia & Odd resolutions, late swings & \RobROneSplitN{} split payouts, verdict unchanged. Price moves by 0.10 or more in \RobRTwoShareDeltaAtLeastTen{} of markets. & Partly \\
-\midrule
-Ben Alvarado, Victor Alvarez, Siyi Chen & Other horizons, topics, volume & Run as MVP2 checks, not a target of this report. & Outside \\
-\bottomrule
-\end{tabularx}
-\normalsize
-
-\hd{6. Interpretation and conclusion}
+\hd{5. Interpretation and conclusion}
 \todo{owner: interpretation of why prices run high and what the gaps mean in practice for a reader of the price}
 \todo{owner: closing sentence on the value of the study, and future work}
 \vspace{1.2cm}
 
+\clearpage
 \begingroup\footnotesize\raggedright
 \bibliographystyle{plainnat}
 \bibliography{../paper_mvp1/references}

@@ -79,3 +79,26 @@ The paired difference (\pT{} minus \pOne) is \RobRTwoAllMeanDiff{}
 A negative difference means \pT{} is closer to the outcome than \pOne.
 On the \RobRTwoTradedN{} markets with a trade in the last day, the difference is \RobRTwoTradedMeanDiff.
 The \CiLevel{} CI is [\RobRTwoTradedCiLow, \RobRTwoTradedCiHigh].
+
+% src: owner, 2026-11-18 (D-053); numbers from run \RTwoCloseRun
+We also repeat the Q1 calibration with \pT{} in place of \pOne.
+This check is descriptive and was not pre-registered.
+It uses the same markets, bins, and tests as Q1.
+With \pOne, the same code gives the Q1 values ($\chi^2=\RTwoCloseOneDayChiSq$).
+With \pT, the chi-square statistic is \RTwoCloseCloseChiSq{} with \QOneDf{} degrees of freedom ($p=\RTwoCloseCloseP$).
+So the chi-square test still rejects.
+In \RTwoCloseCloseBinsNeg{} of \GapBinsTotal{} bins the observed rate is below the mean price.
+The BH correction flags \RTwoCloseCloseBinsBh{} bins, and Bonferroni flags \RTwoCloseCloseBinsBonferroni.
+The net gap shrinks from \RTwoCloseOneDayNetGap{} to \RTwoCloseCloseNetGap.
+So the timing of the price explains part of the gap, but not all of it.
+Near the close, many markets move toward 0 or 1.
+For example, bin 0 grows from \RTwoCloseOneDayBinZeroN{} to \RTwoCloseCloseBinZeroN{} markets.
+So a bin does not hold the same markets at the two prices.
+\Cref{fig:r2-close} shows the per-bin gaps at both prices.
+
+\begin{figure}[H]
+\centering
+\figorbox{figures/fig_r2_close_gap}{5.5in}
+\caption{Per-bin gap (observed rate minus mean price) at \pOne{} and at \pT, with \CiLevel{} intervals. Why: if the last day's news closed the gap, the blue points would sit on the zero line.}% Source: run \RTwoCloseRun.
+\label{fig:r2-close}
+\end{figure}

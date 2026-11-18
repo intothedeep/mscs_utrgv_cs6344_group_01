@@ -32,7 +32,10 @@ MAP=(
   "100321546d88828ede2423c5b94ea7fa fig6_ccdf_top_sampled.png"
   "a5e7147e0661a0704e4c04239eca8b43 fig_pnl_distribution.png"
 )
-SED_ARGS=()
+SED_ARGS=(-e "s#/_blob/9f89f600ea3d7048b20fd3d1bd9aa18a#../../docs/kalshi_screenshot.png#g"  # Kalshi screenshot lives in docs/
+  -e "s#/_blob/9f55de1460e0ba17dd3bca5839764873#../../images/aliean_grute.jpeg#g"  # alien teaser images live in images/
+  -e "s#/_blob/6eb2ff6e265940a4e829224883f94b19#../../images/rocket_aliean.jpg#g"
+  -e "s#/_blob/0f59a8a435d19692aa3bb3fef41761fd#../../images/yoda_alien.jpeg#g")
 for pair in "${MAP[@]}"; do
   set -- $pair
   SED_ARGS+=(-e "s#/_blob/$1#$F/$2#g")
@@ -55,6 +58,7 @@ body{counter-reset:page}
 section{width:1920px;height:1080px;margin:0 auto}
 .slide{zoom:var(--z,0.5);margin:24px auto;width:1920px;box-shadow:0 0 0 1px #737373}
 aside{display:none}
+.fragment{opacity:1!important}  /* local copy shows every click step at once */
 .notes{zoom:var(--z,0.5);width:1920px;margin:0 auto;box-sizing:border-box;padding:24px 128px;background:#FFFFFF;border-top:1px solid #737373;font:24px/1.4 "IBM Plex Mono",monospace;color:#262626}
 @media print{
   @page{size:1920px 1080px;margin:0}

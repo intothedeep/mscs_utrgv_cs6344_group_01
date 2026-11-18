@@ -1,6 +1,6 @@
 # When Polymarket Says 70%, Does It Happen 70% of the Time?
 
-**Group 1 | Team Brier**: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
+**Group 1 | Team PolyHindSight**: Taek Lim, Zhugang Liu (Tony), Francisco Cortez
 CS 6344 Introduction to Data Science, UTRGV
 
 ## 1. TODO for teammates
