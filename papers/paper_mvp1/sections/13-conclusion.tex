@@ -9,4 +9,13 @@ By USDC volume, the top wallets in the kept markets hold most of the volume.
 Trade sizes are strongly right skewed.
 We describe the last two results without a verdict.
 The payout check leaves the Q1 result in place.
-\todo{owner: closing sentence on the value of the study, and future work}
+
+% src: owner, 2026-11-17 (D-052)
+Future work can correct the prices after the fact, without a new market.
+Platt scaling passes the price through a fitted logistic curve.
+Our logistic calibration in \Cref{sec:app-m5} is that fit on the same markets.
+Isotonic regression fits a step function that keeps the order of the prices.
+Each correction would be fit on earlier markets and tested on later ones.
+A lower Brier score on the later markets would mean the bias is stable over time.
+No gain would mean the gap does not repeat, so a reader cannot correct for it.
+\todo{owner: closing sentence on the value of the study}

@@ -11,7 +11,7 @@
 </script>
 <style>
 /* Tokens from skills/html-theme/theme.css, light only. Layout: tips exemplar, step boxes. */
-:root{--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--stripe:oklch(0.96 0 0);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
+:root{--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-plan:#0432ff;--signal-instruction:#d40000;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--stripe:oklch(0.96 0 0);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
 --c-q1:#c2410c;--c-q2:#0e7490;--c-q3:#4d7c0f;--c-out:#7e22ce;--c-gray:#6b6b6b}
 *{box-sizing:border-box;border-radius:0}
 body{background:var(--background);color:var(--foreground);font:15px/1.5 var(--font);padding:24px 16px 40px;margin:0;overflow-wrap:anywhere}
@@ -107,7 +107,7 @@ table.sum th:first-child,table.sum td:first-child{width:96px}
 <header>
   <div class="eyebrow"><span lang="ko">CS 6344 데이터 과학 입문 · 1조 · 해설서</span><span lang="en">CS 6344 Intro to Data Science · Group 1 · Guide</span></div>
   <h1><span lang="ko">강의에서 무엇을 가져와 논문에 어떻게 썼고, RQ는 어떻게 풀었나</span><span lang="en">What we took from the lectures, how the paper uses it, and how each RQ was solved</span></h1>
-  <p class="lede"><span lang="ko">A부는 강의 덱에서 논문 절로 가는 길이다. B부는 질문 Q1, Q2, Q3를 어떻게 세우고 풀었는지다. 10단계로 읽고, 마지막은 용어 부록이다.</span><span lang="en">Part A traces each lecture deck to the paper section that uses it. Part B shows how Q1, Q2 and Q3 were set and solved. 10 steps, each building on the one before. The last is the terms appendix.</span></p>
+  <p class="lede"><span lang="ko">A부는 강의 덱에서 논문 절로 가는 길이다. B부는 질문 Q1, Q2, Q3를 어떻게 세우고 풀었는지와, 검정을 어떻게 고르는지다. 14단계로 읽고, 마지막은 용어 부록이다.</span><span lang="en">Part A traces each lecture deck to the paper section that uses it. Part B shows how Q1, Q2 and Q3 were set and solved, and how to pick a test. 14 steps, each building on the one before. The last is the terms appendix.</span></p>
   <div class="verdict"><b><span lang="ko">결론:</span><span lang="en">Result:</span></b>
     <span lang="ko">논문의 방법은 거의 모두 강의 덱에서 왔다. 강의 밖 방법은 4개이고 모두 표시했다. Q1의 답은 "가격은 전체로는 보정되지 않았다"이다. Q2와 Q3는 판정 없이 서술한다.</span><span lang="en">Nearly every method in the paper comes from a lecture deck. Four methods lie outside the lectures, and the paper labels each. The answer to Q1 is: prices are not calibrated as a whole. Q2 and Q3 are descriptive, with no verdict.</span></div>
   <div class="todo-box" id="todo-list" style="background:var(--signal-flag-fill);border:1px solid var(--signal-flag-line);padding:8px 12px;margin:10px 0">
@@ -415,6 +415,40 @@ table.sum th:first-child,table.sum td:first-child{width:96px}
   </ul>
 </section>
 
+<section class="step" id="sec-q1map">
+  <div class="eyebrow"></div>
+  <div class="partlab"><span lang="ko">B부 · Q1 방법 한눈에</span><span lang="en">Part B · Q1 methods at a glance</span></div>
+  <h3><span lang="ko">Q1 방법: 순서와 강의 출처</span><span lang="en">Q1 methods: order and lecture source</span></h3>
+  <div class="answer"><b><span lang="ko">답:</span><span lang="en">Answer:</span></b> <span lang="ko">가격을 구간 10개로 나누고, 구간마다 평균 가격과 실제 비율을 비교한다. 전체는 [[chi]] 1번, 구간별로는 [[binom]] 10번이다. 검정이 10번이라 [[bh]]와 [[bonf]]로 보정한다. 표본을 뽑지 않는다. 남긴 시장 47,948개를 모두 쓴다.</span><span lang="en">Split prices into 10 bins and compare each bin's mean price with its observed rate. One chi-square test for the whole, ten binomial tests for the bins. Ten tests need a Benjamini-Hochberg and a Bonferroni correction. Nothing is sampled: all 47,948 kept markets are used.</span></div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th><span lang="ko">단계</span><span lang="en">Step</span></th><th><span lang="ko">무엇을, 왜</span><span lang="en">What and why</span></th><th><span lang="ko">우리 값</span><span lang="en">Our value</span></th><th><span lang="ko">강의</span><span lang="en">Lecture</span></th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td><b><span lang="ko">평가 가격</span><span lang="en">Evaluation price</span></b></td><td><span lang="ko">마감 1일 전 이전의 마지막 거래 가격 (결과 1). 마감 뒤 가격에는 답이 섞인다</span><span lang="en">Last trade price at or before 1 day before close (outcome 1). Prices after the close can contain the answer</span></td><td><span lang="ko">시장마다 1개</span><span lang="en">One per market</span></td><td><span lang="ko">데이터 규칙</span><span lang="en">Data rule</span></td></tr>
+      <tr><td>1</td><td><b><span lang="ko">시장 거르기</span><span lang="en">Filter markets</span></b></td><td><span lang="ko">24시간 넘게 묵은 가격, 거래 10건 미만을 뺀다. 빈 시장의 가격은 군중의 판단이 아니다</span><span lang="en">Drop prices staler than 24 hours and markets under 10 trades. A nearly empty market is not a crowd view</span></td><td style="white-space:nowrap"><span lang="ko">47,948개</span><span lang="en">47,948 kept</span></td><td><span lang="ko">데이터 규칙</span><span lang="en">Data rule</span></td></tr>
+      <tr><td>2</td><td><b><span lang="ko">구간 10개</span><span lang="en">10 bins</span></b></td><td><span lang="ko">가격을 0.1 폭으로 나눈다. 비슷한 가격끼리 모아야 "70%가 70%인가"를 셀 수 있다</span><span lang="en">Cut prices in steps of 0.1. Grouping similar prices lets us count whether 70% means 70%</span></td><td><span lang="ko">등간격</span><span lang="en">Equal width</span></td><td><span lang="ko">덱 7, s13–s14</span><span lang="en">Deck 7, s13–s14</span></td></tr>
+      <tr><td>3</td><td><b><span lang="ko">구간별 두 숫자</span><span lang="en">Two numbers per bin</span></b></td><td><span lang="ko">평균 가격 = 구간 가격들의 평균. 실제 비율 = 결과 1 개수 / 시장 수. [[gap]] = 실제 비율 − 평균 가격</span><span lang="en">Mean price = mean of the bin's prices. Observed rate = outcome-1 count / markets. Gap = observed rate − mean price</span></td><td style="white-space:nowrap"><span lang="ko">구간 7: −3.29pp</span><span lang="en">Bin 7: −3.29 pp</span></td><td><span lang="ko">덱 12, s3</span><span lang="en">Deck 12, s3</span></td></tr>
+      <tr><td>3a</td><td><b><span lang="ko">이항 모형 (전제)</span><span lang="en">Binomial model (premise)</span></b></td><td><span lang="ko">시장 하나 = 성공 확률이 가격인 [[bern]]. 구간의 1 개수 ≈ B(n, 평균 가격)</span><span lang="en">One market = a Bernoulli trial with the price as its chance. A bin's count ≈ B(n, mean price)</span></td><td></td><td><span lang="ko">덱 6, s23, s26, s29</span><span lang="en">Deck 6, s23, s26, s29</span></td></tr>
+      <tr><td>4</td><td><b><span lang="ko">χ² 적합도 (1번)</span><span lang="en">Chi-square fit (once)</span></b></td><td><span lang="ko">구간 10개가 모두 함께 가격대로인가. 칸 20개의 (O − E)²/E 합. E는 가격에서 온다. 12, 13단계</span><span lang="en">Are all 10 bins together as priced? Sum of (O − E)²/E over 20 cells, E from prices. Steps 12 and 13</span></td><td style="white-space:nowrap">χ² = 68.0<br>df = 10<br>p = 1.1 × 10⁻¹⁰</td><td><span lang="ko">덱 12, s3–s4 (일부. 덱은 독립성 형태를 주로 다룬다)</span><span lang="en">Deck 12, s3–s4 (partly; the deck mainly shows the independence form)</span></td></tr>
+      <tr><td>5</td><td><b><span lang="ko">구간별 이항 검정 (10번)</span><span lang="en">Binomial test per bin (10 times)</span></b></td><td><span lang="ko">χ²는 "어딘가 틀렸다"만 말한다. 구간마다 차이가 우연인지 본다. 13단계 3.1</span><span lang="en">Chi-square only says something is off. Each bin asks whether its gap is chance. Step 13, 3.1</span></td><td style="white-space:nowrap"><span lang="ko">구간 7: p = 0.00036</span><span lang="en">Bin 7: p = 0.00036</span></td><td><span lang="ko">덱 10, s8–s13 (같은 p 규칙, 이름만 없다)</span><span lang="en">Deck 10, s8–s13 (same p rule; name absent)</span></td></tr>
+      <tr><td>6</td><td><b><span lang="ko">다중 비교 보정</span><span lang="en">Multiple-comparison correction</span></b></td><td><span lang="ko">검정이 10번이라 우연히 하나 걸릴 확률이 약 40%다. 5단계의 p값 10개를 그대로 넣는다. 13단계 4</span><span lang="en">Ten tests give about a 40% chance of one false hit. The 10 p-values from step 5 go in as they are. Step 13, part 4</span></td><td style="white-space:nowrap"><span lang="ko">BH 5개<br>Bonferroni 4개</span><span lang="en">BH 5 bins<br>Bonferroni 4</span></td><td><span lang="ko">덱 13, s16, s18–s19</span><span lang="en">Deck 13, s16, s18–s19</span></td></tr>
+      <tr><td>7</td><td><b><span lang="ko">판정 규칙</span><span lang="en">Verdict rule</span></b></td><td><span lang="ko">결과 전에 정했다([[prereg]]). χ² p &lt; 0.05이면 "전체가 보정되지 않았다". 아니면 BH 구간을 본다</span><span lang="en">Set before the results (pre-registration). Chi-square p &lt; 0.05 means "not calibrated as a whole". Otherwise read the BH bins</span></td><td><span lang="ko">전체가 보정되지 않음</span><span lang="en">Not calibrated as a whole</span></td><td><span lang="ko">사전 등록</span><span lang="en">Pre-registration</span></td></tr>
+      <tr><td>8</td><td><b><span lang="ko">효과 크기</span><span lang="en">Effect size</span></b></td><td><span lang="ko">유의한지와 큰지는 다른 질문이다. 격차, [[netgap]], 95% [[zint]]로 본다. 14단계</span><span lang="en">Significant and large are different questions. Read the gap, net gap and 95% z interval. Step 14</span></td><td style="white-space:nowrap"><span lang="ko">순 격차 −0.99%</span><span lang="en">Net gap −0.99%</span></td><td><span lang="ko">덱 12 s3, 덱 5 s24, 덱 6 s25</span><span lang="en">Deck 12 s3, deck 5 s24, deck 6 s25</span></td></tr>
+      <tr><td>9</td><td><b><span lang="ko">확인 검사</span><span lang="en">Checks</span></b></td><td><ul><li><span lang="ko">등빈도 구간 (덱 7, s13–s15)</span><span lang="en">Equal-frequency bins (deck 7, s13–s15)</span></li><li><span lang="ko">필터 없이 (데이터 규칙)</span><span lang="en">No filter (data rule)</span></li><li><span lang="ko">[[clboot]] (덱 5, s25–s26. 묶음 단위는 덱 밖)</span><span lang="en">Cluster bootstrap (deck 5, s25–s26; whole-cluster resampling is outside)</span></li><li><span lang="ko">[[logcal]], 평균 제곱 잔차 (덱 21 s15–s19, 덱 23 s3)</span><span lang="en">Logistic calibration, mean squared residual (deck 21 s15–s19, deck 23 s3)</span></li></ul></td><td></td><td><span lang="ko">각 줄 괄호</span><span lang="en">In each line</span></td></tr>
+    </tbody>
+  </table></div>
+  <h4><span lang="ko">4번과 5번의 관계</span><span lang="en">How steps 4 and 5 relate</span></h4>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th><span lang="ko">χ² 적합도 (4번)</span><span lang="en">Chi-square fit (4)</span></th><th><span lang="ko">이항 검정 × 10 (5번)</span><span lang="en">Binomial test × 10 (5)</span></th></tr></thead>
+    <tbody>
+      <tr><td><b><span lang="ko">질문</span><span lang="en">Question</span></b></td><td><span lang="ko">전체가 맞나</span><span lang="en">Is the whole right?</span></td><td><span lang="ko">어느 구간이 틀렸나</span><span lang="en">Which bins are off?</span></td></tr>
+      <tr><td><b><span lang="ko">검정 수</span><span lang="en">Tests</span></b></td><td><span lang="ko">1번</span><span lang="en">1</span></td><td><span lang="ko">10번</span><span lang="en">10</span></td></tr>
+      <tr><td><b><span lang="ko">보정</span><span lang="en">Correction</span></b></td><td><span lang="ko">필요 없음</span><span lang="en">Not needed</span></td><td><span lang="ko">필요함 (6번)</span><span lang="en">Needed (6)</span></td></tr>
+      <tr><td><b><span lang="ko">관계</span><span lang="en">Link</span></b></td><td><span lang="ko">χ² = 구간 10개의 z² 합</span><span lang="en">Chi-square = sum of the 10 bin z²</span></td><td><span lang="ko">각 구간의 z가 그 구간의 p를 정한다</span><span lang="en">Each bin's z sets its p</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><span lang="ko">덱 번호는 <code>notes/</code> 파일 이름의 번호다. 덱 5 StatandVisualization, 6 DataDistribution, 7 qqPlotandNormalization, 10 P-value, 12 chiSquareTest, 13 Multiple Hypothesis Testing, 21 LogisticRegression, 23 ModelEvaluation. 출처: <code>analysis/lecture_hw_method_audit_2026_11_16.md</code>, <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>, <code>papers/paper_mvp1/numbers.tex</code>.</span><span lang="en">Deck numbers are the numbers in the <code>notes/</code> file names: 5 StatandVisualization, 6 DataDistribution, 7 qqPlotandNormalization, 10 P-value, 12 chiSquareTest, 13 Multiple Hypothesis Testing, 21 LogisticRegression, 23 ModelEvaluation. Sources: <code>analysis/lecture_hw_method_audit_2026_11_16.md</code>, <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>, <code>papers/paper_mvp1/numbers.tex</code>.</span></p>
+</section>
+
 <section class="step" id="sec-q1">
   <div class="eyebrow"></div>
   <div class="partlab"><span lang="ko">B부 · RQ를 세우고 푼 과정</span><span lang="en">Part B · How the RQs were set and solved</span></div>
@@ -573,6 +607,387 @@ table.sum th:first-child,table.sum td:first-child{width:96px}
   </ul>
 </section>
 
+<section class="step" id="sec-tests">
+  <div class="eyebrow"></div>
+  <div class="partlab"><span lang="ko">B부 · 검정 고르기</span><span lang="en">Part B · Picking a test</span></div>
+  <h3><span lang="ko">χ² 분포와 t 분포: 언제 무엇을 쓰나</span><span lang="en">Chi-square and t distributions: when to use which</span></h3>
+  <div class="answer"><b><span lang="ko">답:</span><span lang="en">Answer:</span></b> <span lang="ko">데이터가 개수(범주)이면 [[chidist]], 연속 값의 평균을 비교하면 [[tdist]]다. 평균을 세 그룹 이상에서 비교하면 F 분포(ANOVA)다.</span><span lang="en">Counts of categories use the chi-square distribution. A comparison of means of continuous values uses the t distribution. Means of three or more groups use the F distribution (ANOVA).</span></div>
+  <h4><span lang="ko">한 줄 정의</span><span lang="en">Definitions</span></h4>
+  <ul>
+    <li><span lang="ko"><b>[[tdist]]:</b> 평균을 비교할 때 쓴다. 모집단의 흩어짐을 모르고 표본에서 추정할 때의 분포다.</span><span lang="en"><b>t distribution:</b> used to compare means. It is the distribution when the spread is unknown and estimated from the sample.</span></li>
+    <li><span lang="ko"><b>[[chidist]]:</b> 개수나 분산을 기대값과 비교할 때 쓴다. 표준화한 차이를 제곱해서 더한 값의 분포다.</span><span lang="en"><b>Chi-square distribution:</b> used to compare counts or a variance with expected values. It is the distribution of a sum of squared standardized differences.</span></li>
+  </ul>
+  <h4><span lang="ko">왜 둘이 따로 있나</span><span lang="en">Why there are two</span></h4>
+  <ul>
+    <li><span lang="ko"><b>t:</b> 평균의 차이는 + 쪽으로도 − 쪽으로도 생긴다. 그래서 0을 중심으로 대칭이다. 표준편차를 표본에서 추정하면 불확실성이 하나 더 생긴다. 그래서 정규 분포보다 꼬리가 두껍다.</span><span lang="en"><b>t:</b> a mean difference can be positive or negative, so the curve is symmetric around 0. Estimating the standard deviation from the sample adds uncertainty, so the tails are heavier than the normal.</span></li>
+    <li><span lang="ko"><b>χ²:</b> 여러 칸의 차이를 한 숫자로 합친다. 합치기 전에 제곱하므로 값은 항상 0 이상이고, 오른쪽 꼬리가 길다.</span><span lang="en"><b>Chi-square:</b> it adds the differences of many cells into one number. Each difference is squared first, so the value is never below 0 and the right tail is long.</span></li>
+  </ul>
+  <figure>
+  <div class="chart">
+  <svg class="flow" viewBox="0 0 700 200" role="img" aria-labelledby="dist-ko dist-en">
+    <title id="dist-ko" lang="ko">왼쪽: 정규 분포와 자유도 3인 t 분포. t의 꼬리가 더 두껍다. 오른쪽: 자유도 10인 카이제곱 분포. 오른쪽 5% 꼬리가 18.3에서 시작한다. 우리 Q1 값 68.0은 그림 밖 오른쪽이다.</title>
+    <title id="dist-en" lang="en">Left: the normal and the t distribution with 3 degrees of freedom; t has heavier tails. Right: the chi-square distribution with 10 degrees of freedom; the top 5% tail starts at 18.3. Our Q1 value of 68.0 lies far off the right edge.</title>
+    <g stroke="var(--muted-foreground)" stroke-width="1"><line x1="20" y1="140" x2="320" y2="140"/><line x1="380" y1="140" x2="680" y2="140"/><line x1="170" y1="140" x2="170" y2="146"/><line x1="380" y1="140" x2="380" y2="146"/><line x1="480" y1="140" x2="480" y2="146"/><line x1="580" y1="140" x2="580" y2="146"/><line x1="680" y1="140" x2="680" y2="146"/></g>
+    <path d="M563 121.3 L565.0 124.0 L567.5 125.1 L570.0 126.1 L575.0 128.0 L580.0 129.7 L590.0 132.4 L600.0 134.4 L610.0 136.0 L620.0 137.1 L630.0 137.9 L640.0 138.5 L650.0 139.0 L660.0 139.3 L670.0 139.5 L680.0 139.6 L680 140 L563 140 Z" fill="var(--signal-flag-fill)" stroke="var(--signal-flag-line)"/>
+    <path d="M20.0 140.0 L27.5 139.9 L35.0 139.8 L42.5 139.6 L50.0 139.3 L57.5 138.7 L65.0 137.7 L72.5 136.1 L80.0 133.6 L87.5 129.9 L95.0 124.6 L102.5 117.4 L110.0 108.3 L117.5 97.2 L125.0 84.5 L132.5 70.9 L140.0 57.2 L147.5 44.8 L155.0 34.8 L162.5 28.3 L170.0 26.0 L177.5 28.3 L185.0 34.8 L192.5 44.8 L200.0 57.2 L207.5 70.9 L215.0 84.5 L222.5 97.2 L230.0 108.3 L237.5 117.4 L245.0 124.6 L252.5 129.9 L260.0 133.6 L267.5 136.1 L275.0 137.7 L282.5 138.7 L290.0 139.3 L297.5 139.6 L305.0 139.8 L312.5 139.9 L320.0 140.0" fill="none" stroke="var(--muted-foreground)" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <path d="M20.0 137.4 L27.5 136.9 L35.0 136.3 L42.5 135.5 L50.0 134.6 L57.5 133.4 L65.0 132.0 L72.5 130.1 L80.0 127.7 L87.5 124.6 L95.0 120.7 L102.5 115.7 L110.0 109.4 L117.5 101.6 L125.0 92.1 L132.5 80.9 L140.0 68.7 L147.5 56.3 L155.0 45.4 L162.5 37.7 L170.0 35.0 L177.5 37.7 L185.0 45.4 L192.5 56.3 L200.0 68.7 L207.5 80.9 L215.0 92.1 L222.5 101.6 L230.0 109.4 L237.5 115.7 L245.0 120.7 L252.5 124.6 L260.0 127.7 L267.5 130.1 L275.0 132.0 L282.5 133.4 L290.0 134.6 L297.5 135.5 L305.0 136.3 L312.5 136.9 L320.0 137.4" fill="none" stroke="var(--signal-plan)" stroke-width="2"/>
+    <path d="M382.5 140.0 L387.5 139.7 L392.5 138.1 L397.5 134.4 L402.5 128.2 L407.5 119.5 L412.5 108.8 L417.5 96.9 L422.5 84.7 L427.5 72.7 L432.5 61.8 L437.5 52.4 L442.5 44.8 L447.5 39.1 L452.5 35.4 L457.5 33.6 L462.5 33.6 L467.5 35.2 L472.5 38.1 L477.5 42.0 L482.5 46.8 L487.5 52.2 L492.5 57.9 L497.5 64.0 L502.5 70.0 L507.5 76.0 L512.5 81.9 L517.5 87.5 L522.5 92.9 L527.5 97.9 L532.5 102.5 L537.5 106.8 L542.5 110.7 L547.5 114.2 L552.5 117.4 L557.5 120.3 L562.5 122.8 L567.5 125.1 L572.5 127.1 L577.5 128.9 L582.5 130.4 L587.5 131.8 L592.5 133.0 L597.5 134.0 L602.5 134.9 L607.5 135.6 L612.5 136.3 L617.5 136.9 L622.5 137.3 L627.5 137.7 L632.5 138.1 L637.5 138.4 L642.5 138.7 L647.5 138.9 L652.5 139.1 L657.5 139.2 L662.5 139.3 L667.5 139.4 L672.5 139.5 L677.5 139.6" fill="none" stroke="var(--signal-plan)" stroke-width="2"/>
+    <line x1="563" y1="70" x2="563" y2="140" stroke="var(--signal-instruction)" stroke-width="1" stroke-dasharray="3 3"/>
+    <g font-size="10.5" fill="var(--foreground)" text-anchor="middle">
+      <text x="170" y="158">0</text><text x="20" y="158">−4</text><text x="320" y="158">4</text>
+      <text x="380" y="158">0</text><text x="480" y="158">10</text><text x="580" y="158">20</text><text x="680" y="158">30</text>
+      <text x="563" y="64" fill="var(--signal-instruction)">18.3</text>
+    </g>
+    <g font-size="11" font-weight="700" fill="var(--foreground)">
+      <text x="20" y="14" lang="ko">t 분포 (자유도 3) 대 정규 분포</text><text x="20" y="14" lang="en">t (3 degrees of freedom) vs normal</text>
+      <text x="380" y="14" lang="ko">χ² 분포 (자유도 10)</text><text x="380" y="14" lang="en">Chi-square (10 degrees of freedom)</text>
+    </g>
+    <g font-size="10.5" fill="var(--foreground)">
+      <text x="212" y="40" fill="var(--signal-plan)">t</text><text x="190" y="28" fill="var(--muted-foreground)" lang="ko">정규</text><text x="190" y="28" fill="var(--muted-foreground)" lang="en">normal</text>
+      <text x="20" y="178" lang="ko">양쪽 끝 = 차이가 크다 (방향 있음)</text><text x="20" y="178" lang="en">either end = big difference (has a sign)</text>
+      <text x="380" y="178" lang="ko">오른쪽 끝만 = 차이가 크다 (방향 없음)</text><text x="380" y="178" lang="en">right end only = big difference (no sign)</text>
+      <text x="572" y="104" fill="var(--signal-instruction)" lang="ko">위 5%</text><text x="572" y="104" fill="var(--signal-instruction)" lang="en">top 5%</text>
+      <text x="380" y="194" fill="var(--signal-instruction)" lang="ko">우리 Q1: χ² = 68.0 → 그림 밖 오른쪽 멀리</text><text x="380" y="194" fill="var(--signal-instruction)" lang="en">our Q1: chi-square = 68.0 → far off the right edge</text>
+    </g>
+  </svg>
+  </div>
+  <figcaption><span lang="ko">그림 6: t 분포와 χ² 분포의 모양. 왜: t는 0 주위 대칭이라 양쪽 끝을 보고, χ²는 0 이상이라 오른쪽 끝만 본다. 곡선은 scipy 밀도에서 계산했다.</span><span lang="en">Figure 6: The shapes of the t and chi-square distributions. Why: t is symmetric around 0, so both ends count, while chi-square is never below 0, so only the right end counts. Curves are computed from the scipy densities.</span></figcaption>
+  </figure>
+  <h4><span lang="ko">비교</span><span lang="en">Comparison</span></h4>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th><span lang="ko">t 분포</span><span lang="en">t distribution</span></th><th><span lang="ko">χ² 분포</span><span lang="en">Chi-square distribution</span></th></tr></thead>
+    <tbody>
+      <tr><td><b><span lang="ko">데이터</span><span lang="en">Data</span></b></td><td><span lang="ko">연속 값 (금액, 시간, 점수)</span><span lang="en">Continuous values (amounts, times, scores)</span></td><td><span lang="ko">범주의 개수, 또는 분산</span><span lang="en">Counts of categories, or a variance</span></td></tr>
+      <tr><td><b><span lang="ko">질문</span><span lang="en">Question</span></b></td><td><span lang="ko">평균이 다른가</span><span lang="en">Do the means differ?</span></td><td><ul><li><span lang="ko">개수가 기대와 맞나</span><span lang="en">Do counts match the expected counts?</span></li><li><span lang="ko">두 범주 변수가 독립인가</span><span lang="en">Are two categorical variables independent?</span></li></ul></td></tr>
+      <tr><td><b><span lang="ko">통계량</span><span lang="en">Statistic</span></b></td><td>t = <span lang="ko">(평균 차이) / (표준오차)</span><span lang="en">(mean difference) / (standard error)</span></td><td>χ² = Σ (O − E)² / E</td></tr>
+      <tr><td><b><span lang="ko">값의 범위</span><span lang="en">Range</span></b></td><td>−∞ <span lang="ko">에서</span><span lang="en">to</span> +∞</td><td>0 <span lang="ko">에서</span><span lang="en">to</span> +∞</td></tr>
+      <tr><td><b><span lang="ko">방향</span><span lang="en">Sign</span></b></td><td><span lang="ko">있음 (+/−)</span><span lang="en">Yes (+/−)</span></td><td><span lang="ko">없음 (제곱 때문)</span><span lang="en">No (squared)</span></td></tr>
+      <tr><td><b><span lang="ko">자유도</span><span lang="en">Degrees of freedom</span></b></td><td><span lang="ko">보통 n − 1. [[welch]]는 보정한 값</span><span lang="en">Usually n − 1. The Welch t-test uses a corrected value</span></td><td><span lang="ko">칸 수 − 제약 수</span><span lang="en">Number of cells − number of constraints</span></td></tr>
+      <tr><td><b><span lang="ko">대표 검정</span><span lang="en">Typical tests</span></b></td><td><span lang="ko">일표본, 이표본, 대응 t 검정, [[welch]]</span><span lang="en">One-sample, two-sample and paired t-tests, Welch t-test</span></td><td><span lang="ko">적합도 검정, 독립성 검정, 분산 검정</span><span lang="en">Goodness-of-fit, independence, variance tests</span></td></tr>
+      <tr><td><b><span lang="ko">n이 커지면</span><span lang="en">As n grows</span></b></td><td><span lang="ko">정규 분포 N(0,1)에 가까워진다</span><span lang="en">Approaches the normal N(0,1)</span></td><td><span lang="ko">정규 분포 모양에 가까워진다 (평균은 자유도)</span><span lang="en">Approaches a normal shape (mean = degrees of freedom)</span></td></tr>
+    </tbody>
+  </table></div>
+  <h4><span lang="ko">둘의 관계</span><span lang="en">How they are related</span></h4>
+  <p><span lang="ko">둘은 같은 뿌리에서 나온다. t의 분모 안에 χ²가 있다.</span><span lang="en">Both come from the same root. The t denominator holds a chi-square.</span></p>
+  <div class="tablewrap"><table>
+    <tbody>
+      <tr><td><code>Z ~ N(0,1)</code></td><td><span lang="ko">표준 정규</span><span lang="en">standard normal</span></td></tr>
+      <tr><td><code>χ²_k = Z₁² + Z₂² + … + Z_k²</code></td><td><span lang="ko">표준 정규 k개를 제곱해 더한다</span><span lang="en">sum of k squared standard normals</span></td></tr>
+      <tr><td><code>t_k = Z / √(χ²_k / k)</code></td><td><span lang="ko">평균 차이를, 추정한 흩어짐으로 나눈다</span><span lang="en">a mean difference divided by the estimated spread</span></td></tr>
+    </tbody>
+  </table></div>
+  <h4><span lang="ko">우리 프로젝트의 예</span><span lang="en">Examples in our project</span></h4>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">어디</span><span lang="en">Where</span></th><th><span lang="ko">질문</span><span lang="en">Question</span></th><th><span lang="ko">데이터</span><span lang="en">Data</span></th><th><span lang="ko">검정</span><span lang="en">Test</span></th><th><span lang="ko">결과</span><span lang="en">Result</span></th></tr></thead>
+    <tbody>
+      <tr><td><b><span lang="ko">Q1 보정</span><span lang="en">Q1 calibration</span></b></td><td><span lang="ko">가격대로 일어났나</span><span lang="en">Did events happen as often as priced?</span></td><td><span lang="ko">구간별 outcome 1 개수</span><span lang="en">Outcome-1 counts per bin</span></td><td><span lang="ko">χ² 적합도</span><span lang="en">Chi-square goodness of fit</span></td><td class="num" style="white-space:nowrap">χ² = 68.0<br>df = 10</td></tr>
+      <tr><td><b><span lang="ko">Q2 [[kmeans]]</span><span lang="en">Q2 k-means</span></b></td><td><span lang="ko">군집과 카테고리가 독립인가</span><span lang="en">Are cluster and category independent?</span></td><td><span lang="ko">군집 × 카테고리 개수표</span><span lang="en">Cluster by category count table</span></td><td><span lang="ko">χ² 독립성</span><span lang="en">Chi-square independence</span></td><td class="num" style="white-space:nowrap">χ² = 6,653.0<br>df = 21</td></tr>
+      <tr><td><b><span lang="ko">Q2 역할</span><span lang="en">Q2 roles</span></b></td><td><span lang="ko">[[maker]]와 [[taker]]의 평균 거래량이 다른가</span><span lang="en">Do makers and takers differ in mean volume?</span></td><td><span lang="ko">지갑별 log10 거래량 (연속 값)</span><span lang="en">log10 volume per wallet (continuous)</span></td><td><span lang="ko">[[welch]]</span><span lang="en">Welch t-test</span></td><td class="num" style="white-space:nowrap">t = 117.1<br><span lang="ko">차이 0.219</span><span lang="en">diff. 0.219</span></td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>Q1과 k-means 부분:</b> 데이터가 개수라서 χ²를 쓴다.</span><span lang="en"><b>Q1 and k-means:</b> the data are counts, so chi-square fits.</span></li>
+    <li><span lang="ko"><b>Q2 역할 비교:</b> 데이터가 연속 값의 평균이라서 t를 쓴다. [[welch]]은 두 그룹의 분산이 달라도 쓸 수 있다.</span><span lang="en"><b>Q2 roles:</b> the data are means of continuous values, so t fits. The Welch t-test works when the two groups have different variances.</span></li>
+    <li><span lang="ko"><b>세 그룹 이상의 평균:</b> F 분포(ANOVA)를 쓴다. 우리 논문의 k-means 군집 사이 가격 비교가 그 예다.</span><span lang="en"><b>Means of three or more groups:</b> the F distribution (ANOVA). Our k-means price comparison across clusters is one case.</span></li>
+  </ul>
+  <p class="note"><span lang="ko">출처: <code>papers/paper_mvp1/numbers.tex</code> (<code>\QOneChiSq</code>, <code>\KmeansCategoryChi</code>, <code>\RoleWelchT</code>, <code>\RoleLogTenDiff</code>).</span><span lang="en">Source: <code>papers/paper_mvp1/numbers.tex</code> (<code>\QOneChiSq</code>, <code>\KmeansCategoryChi</code>, <code>\RoleWelchT</code>, <code>\RoleLogTenDiff</code>).</span></p>
+</section>
+
+<section class="step" id="sec-bintests">
+  <div class="eyebrow"></div>
+  <div class="partlab"><span lang="ko">B부 · 검정 고르기</span><span lang="en">Part B · Picking a test</span></div>
+  <h3><span lang="ko">구간 검정, 자유도, 다중 비교</span><span lang="en">Bin tests, degrees of freedom, multiple comparisons</span></h3>
+  <div class="answer"><b><span lang="ko">답:</span><span lang="en">Answer:</span></b> <span lang="ko">χ² 하나는 "어딘가 틀렸다"만 말한다. 그래서 구간마다 [[binom]]을 10번 했다. 10번 검정하면 우연한 발견이 생기므로 [[bh]]로 보정했다. BH로 5개 구간, [[bonf]]로 4개 구간이 기각된다.</span><span lang="en">One chi-square says only that something is off. So we ran a binomial test in each of the 10 bins. Ten tests produce chance findings, so we corrected with Benjamini-Hochberg. Benjamini-Hochberg rejects 5 bins, Bonferroni 4.</span></div>
+
+  <h4><span lang="ko">1. 이항분포 대 [[pbinom]]</span><span lang="en">1. Binomial vs Poisson binomial</span></h4>
+  <p><span lang="ko">이름이 비슷하지만 포아송 분포(Poisson distribution)와는 다른 분포다. 성공 확률이 서로 다른 시행을 더한 성공 횟수의 분포다.</span><span lang="en">Despite the name, it is not the Poisson distribution. It is the count of successes over trials with different success probabilities.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th><span lang="ko">이항분포</span><span lang="en">Binomial</span></th><th><span lang="ko">포아송-이항분포</span><span lang="en">Poisson binomial</span></th></tr></thead>
+    <tbody>
+      <tr><td><b><span lang="ko">가정</span><span lang="en">Assumption</span></b></td><td><span lang="ko">모든 시장이 같은 확률 p̄</span><span lang="en">Every market has the same p̄</span></td><td><span lang="ko">시장마다 다른 확률 pᵢ (구간 7: 0.71, 0.79, 0.74, …)</span><span lang="en">Each market has its own pᵢ (bin 7: 0.71, 0.79, 0.74, …)</span></td></tr>
+      <tr><td><b><span lang="ko">평균</span><span lang="en">Mean</span></b></td><td>n · p̄</td><td>Σ pᵢ <span lang="ko">(같은 값)</span><span lang="en">(same value)</span></td></tr>
+      <tr><td><b><span lang="ko">분산</span><span lang="en">Variance</span></b></td><td>n · p̄ · (1 − p̄)</td><td>Σ pᵢ (1 − pᵢ) <span lang="ko">(항상 같거나 작다)</span><span lang="en">(never larger)</span></td></tr>
+      <tr><td><b><span lang="ko">예: 시장 2개, 0.71과 0.79</span><span lang="en">Example: 2 markets, 0.71 and 0.79</span></b></td><td style="white-space:nowrap">2 × 0.75 × 0.25 = 0.375</td><td style="white-space:nowrap">0.206 + 0.166 = 0.372</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>우리 검정:</b> 이항분포의 분산을 썼다. 분산을 조금 크게 잡은 셈이다.</span><span lang="en"><b>Our test:</b> it uses the binomial variance, which is slightly too large.</span></li>
+    <li><span lang="ko"><b>그래서:</b> z가 조금 작아지고, 유의하게 나오기 조금 어렵다. 검정이 약간 보수적이다. 결론은 그대로이고 더 단단해진다.</span><span lang="en"><b>So:</b> z is a little smaller and significance a little harder. The test is slightly conservative. The conclusion stands, and is a bit firmer.</span></li>
+    <li><span lang="ko"><b>남는 문제:</b> 한 사건의 시장들은 함께 움직인다. 이 의존성은 부록 G의 [[clboot]]이 따로 확인한다.</span><span lang="en"><b>Open issue:</b> markets of one event move together. Appendix G checks this dependence with a cluster bootstrap.</span></li>
+  </ul>
+
+  <h4><span lang="ko">2. 자유도가 10인 이유</span><span lang="en">2. Why 10 degrees of freedom</span></h4>
+  <p><span lang="ko">[[dof]]는 데이터가 기대에서 서로 독립으로 벗어날 수 있는 기회의 수다. 칸 수에서 제약 수를 뺀다.</span><span lang="en">Degrees of freedom count the independent ways the data can depart from the expected values. Take the cells and subtract the constraints.</span></p>
+  <div class="tablewrap"><table>
+    <tbody>
+      <tr><td><span lang="ko">칸 수: 10 구간 × 2칸 (일어남, 안 일어남)</span><span lang="en">Cells: 10 bins × 2 (happened, did not)</span></td><td style="white-space:nowrap">20</td></tr>
+      <tr><td><span lang="ko">구간별 제약: 두 칸의 합 = 구간 시장 수 n_b</span><span lang="en">Per-bin constraint: the two cells add to the bin size n_b</span></td><td style="white-space:nowrap">− 10</td></tr>
+      <tr><td><span lang="ko">추정한 모수: 없음 (기대값은 가격에서 온다)</span><span lang="en">Fitted parameters: none (expected values come from prices)</span></td><td style="white-space:nowrap">− 0</td></tr>
+      <tr><td><b><span lang="ko">자유도</span><span lang="en">Degrees of freedom</span></b></td><td style="white-space:nowrap"><b>10</b></td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>구간별 제약:</b> 구간 7에서 일어남이 1,640이면, 안 일어남은 2,301 − 1,640 = 661로 정해진다. 그래서 구간마다 자유로운 칸은 1개다.</span><span lang="en"><b>Per-bin constraint:</b> in bin 7, 1,640 happened, so 2,301 − 1,640 = 661 did not. Each bin has one free cell.</span></li>
+    <li><span lang="ko"><b>구간 7의 두 칸:</b> 일어남은 1,640 대 기대 1,715.6, 안 일어남은 661 대 기대 585.4다. 두 칸이 같은 75.6만큼 반대로 벗어난다. 75.6² / 1,715.6 + 75.6² / 585.4 = 3.33 + 9.76 = 13.1 = z². 두 칸이 독립 조각 하나(z² 하나)를 낸다.</span><span lang="en"><b>Bin 7, two cells:</b> 1,640 happened against 1,715.6 expected, and 661 did not against 585.4. Both cells miss by the same 75.6, in opposite directions. 75.6² / 1,715.6 + 75.6² / 585.4 = 3.33 + 9.76 = 13.1 = z². The two cells give one independent piece, one z².</span></li>
+    <li><span lang="ko"><b>그래서 10:</b> χ²는 독립인 z² 10개의 합이다. 12단계의 χ²_k = Z₁² + … + Z_k²에서 k = 10이다.</span><span lang="en"><b>Hence 10:</b> chi-square is a sum of 10 independent z². In step 12, χ²_k = Z₁² + … + Z_k² with k = 10.</span></li>
+    <li><span lang="ko"><b>모수가 0개인 이유:</b> 기대값은 결과(0/1)를 보고 맞춘 값이 아니다. 가격에서 바로 온다.</span><span lang="en"><b>No fitted parameter:</b> the expected values are not fit to the outcomes. They come straight from the prices.</span></li>
+    <li><span lang="ko"><b>비교:</b> 호스머-렘쇼 검정(Hosmer-Lemeshow test)은 같은 데이터로 로지스틱 모델(a, b)을 맞춘다. 그래서 자유도가 10 − 2 = 8이다. 맞추면 기대값이 관측값 쪽으로 끌려와 χ²가 작아지기 때문이다.</span><span lang="en"><b>Compare:</b> the Hosmer-Lemeshow test fits a logistic model (a, b) on the same data, so it has 10 − 2 = 8. Fitting pulls the expected values toward the data and shrinks chi-square.</span></li>
+    <li><span lang="ko"><b>읽는 법:</b> 자유도 10인 χ²의 평균은 10, 위 5% 경계는 18.3이다. 우리 값은 68.0이다.</span><span lang="en"><b>Reading:</b> chi-square with 10 degrees of freedom has mean 10 and a top-5% cut of 18.3. Ours is 68.0.</span></li>
+  </ul>
+
+  <h4><span lang="ko">3. 구간별 정확 이항 검정</span><span lang="en">3. Exact binomial test per bin</span></h4>
+  <p><span lang="ko">질문: 이 구간의 결과 1 개수가, 가격이 맞을 때 우연히 나올 수준인가? "정확"은 정규 근사 없이 이항 확률을 직접 더한다는 뜻이다.</span><span lang="en">Question: could this bin's count of outcome 1 arise by chance if the price is right? "Exact" means the binomial probabilities are summed directly, with no normal approximation.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">구간 7 단계</span><span lang="en">Bin 7 step</span></th><th><span lang="ko">계산</span><span lang="en">Calculation</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th></tr></thead>
+    <tbody>
+      <tr><td><span lang="ko">기대 개수</span><span lang="en">Expected count</span></td><td>2,301 × 0.7456</td><td style="white-space:nowrap">1,715.6</td></tr>
+      <tr><td><span lang="ko">표준편차</span><span lang="en">Standard deviation</span></td><td>√(2,301 × 0.7456 × 0.2544)</td><td style="white-space:nowrap">≈ 20.9</td></tr>
+      <tr><td><span lang="ko">관측 개수</span><span lang="en">Observed count</span></td><td></td><td style="white-space:nowrap">1,640</td></tr>
+      <tr><td>z</td><td>(1,640 − 1,715.6) / 20.9</td><td style="white-space:nowrap">≈ −3.6</td></tr>
+      <tr><td><span lang="ko">p (정확 이항, 양쪽)</span><span lang="en">p (exact binomial, two-sided)</span></td><td></td><td style="white-space:nowrap">0.00036</td></tr>
+    </tbody>
+  </table></div>
+  <p><span lang="ko">관측이 기대보다 표준편차 3.6개만큼 아래다. 가격이 맞다면 이런 일은 1만 번에 약 4번 생긴다.</span><span lang="en">The observed count is 3.6 standard deviations below the expected. If the price were right, this would happen about 4 times in 10,000.</span></p>
+
+  <h4><span lang="ko">3.1 p값은 이렇게 구한다</span><span lang="en">3.1 How the p-value is computed</span></h4>
+  <p><span lang="ko">p값은 "가격이 맞다면, 지금만큼 또는 그보다 더 이상한 결과가 우연히 나올 확률"이다. 코드는 한 줄이다: <code>scipy.stats.binomtest(k, n, p)</code>. k는 결과 1 개수, n은 시장 수, p는 평균 가격이다. 양쪽 검정이다.</span><span lang="en">The p-value is the chance, if the price is right, of a result this odd or odder. The code is one line: <code>scipy.stats.binomtest(k, n, p)</code>, with k the outcome-1 count, n the market count and p the mean price. It is two-sided.</span></p>
+  <ol>
+    <li><span lang="ko">구간의 n과 평균 가격 p̄로 이항분포 B(n, p̄)를 만든다.</span><span lang="en">Build the binomial B(n, p̄) from the bin's n and mean price.</span></li>
+    <li><span lang="ko">관측값 k가 나올 확률 P(X = k)를 구한다.</span><span lang="en">Compute P(X = k), the chance of the observed k.</span></li>
+    <li><span lang="ko"><b>왼쪽 꼬리:</b> P(X ≤ k)를 더한다. 기대보다 적게 나온 쪽이다.</span><span lang="en"><b>Left tail:</b> add P(X ≤ k), the side below the expected count.</span></li>
+    <li><span lang="ko"><b>오른쪽 꼬리:</b> 기대보다 많은 쪽에서, 확률이 P(X = k) 이하인 값을 모두 더한다. 반대 방향으로 똑같이 드문 결과다.</span><span lang="en"><b>Right tail:</b> on the side above the expected count, add every value whose probability is at most P(X = k). These are equally rare results in the other direction.</span></li>
+    <li><span lang="ko">p = 왼쪽 꼬리 + 오른쪽 꼬리.</span><span lang="en">p = left tail + right tail.</span></li>
+  </ol>
+  <figure>
+  <div class="chart">
+  <svg class="flow" viewBox="0 0 700 220" role="img" aria-labelledby="tail-ko tail-en">
+    <title id="tail-ko" lang="ko">구간 3의 이항분포 B(2769, 0.349). 기대 966.5 중심의 종 모양. 관측 919 왼쪽 꼬리 0.030과 1,015 오른쪽 꼬리 0.028을 칠했다. 합 p = 0.058.</title>
+    <title id="tail-en" lang="en">Binomial B(2769, 0.349) for bin 3, a bell centered at the expected 966.5. The left tail at or below the observed 919 (0.030) and the right tail from 1,015 (0.028) are shaded. Sum p = 0.058.</title>
+    <path d="M60.0 170.0 L65.8 169.9 L71.6 169.9 L77.4 169.9 L83.2 169.8 L89.0 169.8 L94.8 169.7 L100.6 169.6 L106.4 169.5 L112.2 169.4 L118.0 169.2 L123.8 169.0 L129.6 168.7 L135.4 168.3 L141.2 167.9 L147.0 167.3 L152.8 166.6 L158.6 165.8 L164.4 164.9 L170.2 163.7 L176.0 162.4 L181.8 160.8 L187.6 158.9 L193.4 156.8 L199.2 154.4 L205.0 151.6 L210.8 148.4 L213.7 146.7 L213.7 170 L60 170 Z" fill="var(--signal-instruction)" opacity="0.35"/>
+    <path d="M492.1 170 L492.1 148.4 L495.0 150.0 L500.8 153.0 L506.6 155.6 L512.4 157.9 L518.2 159.9 L524.0 161.6 L529.8 163.1 L535.6 164.3 L541.4 165.4 L547.2 166.2 L553.0 167.0 L558.8 167.6 L564.6 168.1 L570.4 168.5 L576.2 168.8 L582.0 169.1 L587.8 169.3 L593.6 169.5 L599.4 169.6 L605.2 169.7 L611.0 169.8 L616.8 169.8 L622.6 169.9 L628.4 169.9 L634.2 169.9 L640.0 169.9 L640 170 Z" fill="var(--signal-instruction)" opacity="0.35"/>
+    <path d="M60.0 170.0 L65.8 169.9 L71.6 169.9 L77.4 169.9 L83.2 169.8 L89.0 169.8 L94.8 169.7 L100.6 169.6 L106.4 169.5 L112.2 169.4 L118.0 169.2 L123.8 169.0 L129.6 168.7 L135.4 168.3 L141.2 167.9 L147.0 167.3 L152.8 166.6 L158.6 165.8 L164.4 164.9 L170.2 163.7 L176.0 162.4 L181.8 160.8 L187.6 158.9 L193.4 156.8 L199.2 154.4 L205.0 151.6 L210.8 148.4 L216.6 144.9 L222.4 141.0 L228.2 136.7 L234.0 132.0 L239.8 126.9 L245.6 121.5 L251.4 115.7 L257.2 109.6 L263.0 103.2 L268.8 96.6 L274.6 89.9 L280.4 83.1 L286.2 76.4 L292.0 69.8 L297.8 63.4 L303.6 57.3 L309.4 51.6 L315.2 46.4 L321.0 41.8 L326.8 37.8 L332.6 34.6 L338.4 32.2 L344.2 30.7 L350.0 30.0 L355.8 30.2 L361.6 31.3 L367.4 33.3 L373.2 36.1 L379.0 39.7 L384.8 43.9 L390.6 48.8 L396.4 54.3 L402.2 60.2 L408.0 66.5 L413.8 73.0 L419.6 79.7 L425.4 86.5 L431.2 93.2 L437.0 99.9 L442.8 106.3 L448.6 112.6 L454.4 118.5 L460.2 124.2 L466.0 129.5 L471.8 134.4 L477.6 138.9 L483.4 143.0 L489.2 146.7 L495.0 150.0 L500.8 153.0 L506.6 155.6 L512.4 157.9 L518.2 159.9 L524.0 161.6 L529.8 163.1 L535.6 164.3 L541.4 165.4 L547.2 166.2 L553.0 167.0 L558.8 167.6 L564.6 168.1 L570.4 168.5 L576.2 168.8 L582.0 169.1 L587.8 169.3 L593.6 169.5 L599.4 169.6 L605.2 169.7 L611.0 169.8 L616.8 169.8 L622.6 169.9 L628.4 169.9 L634.2 169.9 L640.0 169.9" fill="none" stroke="var(--signal-plan)" stroke-width="2"/>
+    <line x1="60" y1="170" x2="640" y2="170" stroke="var(--muted-foreground)"/>
+    <g stroke-width="1" stroke-dasharray="3 3"><line x1="213.7" y1="100" x2="213.7" y2="170" stroke="var(--signal-instruction)"/><line x1="351.5" y1="22" x2="351.5" y2="170" stroke="var(--muted-foreground)"/><line x1="492.1" y1="100" x2="492.1" y2="170" stroke="var(--signal-instruction)"/></g>
+    <g font-size="10.5" fill="var(--foreground)" text-anchor="middle">
+      <text x="213.7" y="186">919</text><text x="351.5" y="186">966.5</text><text x="492.1" y="186">1,015</text>
+    </g>
+    <g font-size="10" fill="var(--muted-foreground)" text-anchor="middle">
+      <text x="213.7" y="200" lang="ko">관측</text><text x="351.5" y="200" lang="ko">기대</text><text x="492.1" y="200" lang="ko">반대쪽, 같은 드묾</text>
+      <text x="213.7" y="200" lang="en">observed</text><text x="351.5" y="200" lang="en">expected</text><text x="492.1" y="200" lang="en">other side, equally rare</text>
+    </g>
+    <g font-size="10.5" fill="var(--signal-instruction)">
+      <text x="110" y="94" lang="ko">왼쪽 꼬리 0.030</text><text x="110" y="94" lang="en">left tail 0.030</text>
+      <text x="500" y="94" lang="ko">오른쪽 꼬리 0.028</text><text x="500" y="94" lang="en">right tail 0.028</text>
+    </g>
+    <text x="350" y="216" font-size="10.5" fill="var(--foreground)" text-anchor="middle" lang="ko">p = 0.030 + 0.028 = 0.058 · 결과 1 개수 (구간 3, 시장 2,769개)</text><text x="350" y="216" font-size="10.5" fill="var(--foreground)" text-anchor="middle" lang="en">p = 0.030 + 0.028 = 0.058 · outcome-1 count (bin 3, 2,769 markets)</text>
+  </svg>
+  </div>
+  <figcaption><span lang="ko">그림 7: 구간 3의 이항분포와 p값이 되는 두 꼬리. 왜: p는 관측값만큼 드문 결과의 확률을 양쪽에서 모두 더한 넓이다.</span><span lang="en">Figure 7: The binomial for bin 3 and the two tails that make its p-value. Why: p is the area of all results as rare as the observed one, on both sides.</span></figcaption>
+  </figure>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th><span lang="ko">구간 0</span><span lang="en">Bin 0</span></th><th><span lang="ko">구간 3</span><span lang="en">Bin 3</span></th></tr></thead>
+    <tbody>
+      <tr><td><span lang="ko">n, 평균 가격</span><span lang="en">n, mean price</span></td><td style="white-space:nowrap">18,209, 0.0183</td><td style="white-space:nowrap">2,769, 0.3490</td></tr>
+      <tr><td><span lang="ko">기대 개수</span><span lang="en">Expected count</span></td><td>332.3</td><td>966.5</td></tr>
+      <tr><td><span lang="ko">관측 개수 k</span><span lang="en">Observed count k</span></td><td>249</td><td>919</td></tr>
+      <tr><td><span lang="ko">왼쪽 꼬리 P(X ≤ k)</span><span lang="en">Left tail P(X ≤ k)</span></td><td>0.00000085</td><td>0.0301</td></tr>
+      <tr><td><span lang="ko">오른쪽 꼬리</span><span lang="en">Right tail</span></td><td style="white-space:nowrap">0.00000079 (X ≥ 423)</td><td style="white-space:nowrap">0.0282 (X ≥ 1,015)</td></tr>
+      <tr><td><b><span lang="ko">p (합)</span><span lang="en">p (sum)</span></b></td><td><b>0.0000016</b></td><td><b>0.058</b></td></tr>
+      <tr><td><span lang="ko">참고: z, 정규 근사 p</span><span lang="en">For reference: z, normal-approximation p</span></td><td style="white-space:nowrap">−4.61, 0.0000040</td><td style="white-space:nowrap">−1.89, 0.058</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>구간 3:</b> 가격이 맞아도 이만한 차이는 100번에 약 6번 나온다. 기준보다 크므로 유의하지 않다.</span><span lang="en"><b>Bin 3:</b> even with a right price, a gap this size shows up about 6 times in 100. That is above the cut, so not significant.</span></li>
+    <li><span lang="ko"><b>구간 0:</b> 가격이 맞다면 100만 번에 약 1.6번 나온다. 우연으로 보기 어렵다.</span><span lang="en"><b>Bin 0:</b> with a right price, about 1.6 times in a million. Hard to call chance.</span></li>
+    <li><span lang="ko"><b>격차가 작은데 p가 작은 이유:</b> 시장이 많으면 표준편차가 상대적으로 작다. 구간 0은 기대 332.3에 표준편차 약 18이다. 83개 차이는 표준편차 4.6개만큼이다.</span><span lang="en"><b>Small gap, small p:</b> with many markets the standard deviation is small relative to the count. Bin 0 expects 332.3 with a standard deviation near 18, so 83 short is 4.6 standard deviations.</span></li>
+    <li><span lang="ko"><b>"정확"이 중요한 곳:</b> 구간 3은 정규 근사도 0.058이다. 구간 0은 가격이 0에 가까워 분포가 한쪽으로 기운다. 그래서 근사가 정확 값의 2.4배다. 직접 더하는 정확 검정을 쓴 이유다.</span><span lang="en"><b>Where "exact" matters:</b> for bin 3 the normal approximation also gives 0.058. Bin 0 has a price near 0, so its distribution is skewed and the approximation is 2.4 times the exact value. That is why we sum exactly.</span></li>
+    <li><span lang="ko"><b>강의:</b> 덱 10(P-value)의 동전 예와 같은 규칙이다. "관측값만큼 드문 결과와 더 드문 결과의 확률을 더한다." 덱에는 "이항 검정"이라는 이름만 없다. 다중 비교 보정은 덱 13(Multiple Hypothesis Testing)이다.</span><span lang="en"><b>Lecture:</b> the same rule as the coin example in deck 10 (P-value): add the chances of results as rare as, or rarer than, the observed one. The deck does not use the name "binomial test". Multiple-comparison corrections are in deck 13 (Multiple Hypothesis Testing).</span></li>
+  </ul>
+
+  <h4><span lang="ko">4. 다중 비교: BH와 Bonferroni</span><span lang="en">4. Multiple comparisons: Benjamini-Hochberg and Bonferroni</span></h4>
+  <p><span lang="ko">검정을 10번 하면, 차이가 하나도 없어도 하나쯤은 우연히 걸린다: 1 − 0.95¹⁰ ≈ 0.40.</span><span lang="en">With 10 tests, one may pass by chance even with no real gap: 1 − 0.95¹⁰ ≈ 0.40.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th><span lang="ko">[[bonf]]</span><span lang="en">Bonferroni correction</span></th><th><span lang="ko">[[bh]]</span><span lang="en">Benjamini-Hochberg correction</span></th></tr></thead>
+    <tbody>
+      <tr><td><b><span lang="ko">지키는 것</span><span lang="en">Controls</span></b></td><td><span lang="ko">[[fwer]] ≤ 5%</span><span lang="en">Family-wise error rate ≤ 5%</span></td><td><span lang="ko">[[fdr]] ≤ 5%</span><span lang="en">False discovery rate ≤ 5%</span></td></tr>
+      <tr><td><b><span lang="ko">뜻</span><span lang="en">Meaning</span></b></td><td><span lang="ko">거짓 발견이 하나라도 생길 확률</span><span lang="en">Chance of even one false finding</span></td><td><span lang="ko">발견한 것 가운데 거짓의 비율</span><span lang="en">Share of false findings among the findings</span></td></tr>
+      <tr><td><b><span lang="ko">기준</span><span lang="en">Rule</span></b></td><td><span lang="ko">모든 p를 0.05 / 10 = 0.005와 비교</span><span lang="en">Every p against 0.05 / 10 = 0.005</span></td><td><span lang="ko">i번째로 작은 p를 i × 0.005와 비교</span><span lang="en">The i-th smallest p against i × 0.005</span></td></tr>
+      <tr><td><b><span lang="ko">성격</span><span lang="en">Character</span></b></td><td><span lang="ko">엄격하다. 놓치는 것이 많다</span><span lang="en">Strict. Misses more</span></td><td><span lang="ko">덜 엄격하다. 더 많이 찾는다</span><span lang="en">Less strict. Finds more</span></td></tr>
+    </tbody>
+  </table></div>
+  <figure>
+  <div class="chart">
+  <svg class="flow" viewBox="0 0 700 320" role="img" aria-labelledby="bh-ko bh-en">
+    <title id="bh-ko" lang="ko">구간 10개의 p값을 작은 순서로 놓은 점 그림. 세로는 p값의 로그 눈금이다. BH 기준선은 순위마다 올라가고, Bonferroni 기준선은 0.005에서 평평하다. 순위 1에서 5(구간 0, 7, 1, 6, 8)가 BH 선 위에 있다. 구간 8은 Bonferroni 선 아래다.</title>
+    <title id="bh-en" lang="en">Dot plot of the 10 bin p-values in rank order, on a log scale. The Benjamini-Hochberg line rises with rank; the Bonferroni line is flat at 0.005. Ranks 1 to 5 (bins 0, 7, 1, 6, 8) lie above the Benjamini-Hochberg line. Bin 8 lies below the Bonferroni line.</title>
+    <g font-size="10.5" fill="var(--foreground)">
+      <circle cx="80" cy="16" r="5" fill="var(--signal-flag-line)"/><text x="90" y="20" lang="ko">BH 기각</text><text x="90" y="20" lang="en">rejected (BH)</text>
+      <circle cx="200" cy="16" r="5" fill="none" stroke="var(--muted-foreground)" stroke-width="1.5"/><text x="210" y="20" lang="ko">기각 안 됨</text><text x="210" y="20" lang="en">not rejected</text>
+      <line x1="320" y1="16" x2="350" y2="16" stroke="var(--signal-plan)" stroke-width="2"/><text x="356" y="20" lang="ko">BH 기준 i × 0.005</text><text x="356" y="20" lang="en">BH cut i × 0.005</text>
+      <line x1="500" y1="16" x2="530" y2="16" stroke="var(--signal-instruction)" stroke-width="2" stroke-dasharray="5 3"/><text x="536" y="20" lang="ko">Bonferroni 0.005</text><text x="536" y="20" lang="en">Bonferroni 0.005</text>
+    </g>
+    <g stroke="var(--border)" stroke-width="1"><line x1="60" y1="50" x2="640" y2="50"/><line x1="60" y1="85" x2="640" y2="85"/><line x1="60" y1="120" x2="640" y2="120"/><line x1="60" y1="155" x2="640" y2="155"/><line x1="60" y1="190" x2="640" y2="190"/><line x1="60" y1="225" x2="640" y2="225"/></g>
+    <line x1="60" y1="260" x2="640" y2="260" stroke="var(--muted-foreground)"/>
+    <line x1="60" y1="40" x2="60" y2="260" stroke="var(--muted-foreground)"/>
+    <g font-size="10" fill="var(--foreground)" text-anchor="end">
+      <text x="54" y="263">1</text><text x="54" y="228">0.1</text><text x="54" y="193">0.01</text><text x="54" y="158">0.001</text><text x="54" y="123">10⁻⁴</text><text x="54" y="88">10⁻⁵</text><text x="54" y="53">10⁻⁶</text>
+    </g>
+    <line x1="90" y1="179.5" x2="612" y2="179.5" stroke="var(--signal-instruction)" stroke-width="2" stroke-dasharray="5 3"/>
+    <polyline points="90,179.5 148,190.0 206,196.2 264,200.5 322,203.9 380,206.7 438,209.0 496,211.1 554,212.9 612,214.5" fill="none" stroke="var(--signal-plan)" stroke-width="2"/>
+    <g fill="var(--signal-flag-line)">
+      <circle cx="90" cy="57.5" r="5"/><circle cx="148" cy="139.5" r="5"/><circle cx="206" cy="148.4" r="5"/><circle cx="264" cy="174.3" r="5"/><circle cx="322" cy="198.9" r="5"/>
+    </g>
+    <g fill="var(--background)" stroke="var(--muted-foreground)" stroke-width="1.5">
+      <circle cx="380" cy="216.8" r="5"/><circle cx="438" cy="228.8" r="5"/><circle cx="496" cy="239.0" r="5"/><circle cx="554" cy="247.9" r="5"/><circle cx="612" cy="258.4" r="5"/>
+    </g>
+    <g font-size="10" fill="var(--foreground)" text-anchor="middle">
+      <text x="90" y="278">1</text><text x="148" y="278">2</text><text x="206" y="278">3</text><text x="264" y="278">4</text><text x="322" y="278">5</text><text x="380" y="278">6</text><text x="438" y="278">7</text><text x="496" y="278">8</text><text x="554" y="278">9</text><text x="612" y="278">10</text>
+    </g>
+    <g font-size="9.5" fill="var(--muted-foreground)" text-anchor="middle">
+      <text x="90" y="291" lang="ko">구간 0</text><text x="148" y="291" lang="ko">구간 7</text><text x="206" y="291" lang="ko">구간 1</text><text x="264" y="291" lang="ko">구간 6</text><text x="322" y="291" lang="ko">구간 8</text><text x="380" y="291" lang="ko">구간 3</text><text x="438" y="291" lang="ko">구간 4</text><text x="496" y="291" lang="ko">구간 2</text><text x="554" y="291" lang="ko">구간 5</text><text x="612" y="291" lang="ko">구간 9</text>
+      <text x="90" y="291" lang="en">bin 0</text><text x="148" y="291" lang="en">bin 7</text><text x="206" y="291" lang="en">bin 1</text><text x="264" y="291" lang="en">bin 6</text><text x="322" y="291" lang="en">bin 8</text><text x="380" y="291" lang="en">bin 3</text><text x="438" y="291" lang="en">bin 4</text><text x="496" y="291" lang="en">bin 2</text><text x="554" y="291" lang="en">bin 5</text><text x="612" y="291" lang="en">bin 9</text>
+    </g>
+    <g font-size="10.5" fill="var(--foreground)" text-anchor="middle">
+      <text x="350" y="312" lang="ko">p값 순위 i (작은 것부터)</text><text x="350" y="312" lang="en">p-value rank i (smallest first)</text>
+    </g>
+    <text x="335" y="165" font-size="10" fill="var(--foreground)" lang="ko">구간 8: BH 위, Bonferroni 아래</text><text x="335" y="165" font-size="10" fill="var(--foreground)" lang="en">bin 8: above BH, below Bonferroni</text>
+  </svg>
+  </div>
+  <figcaption><span lang="ko">그림 8: 구간 10개의 p값(로그 눈금)과 두 보정 기준선. 왜: 점이 선보다 위면 기각이다. BH 선은 순위마다 올라가서 구간 8까지 잡고, Bonferroni 선은 평평해서 구간 8을 놓친다.</span><span lang="en">Figure 8: The 10 bin p-values (log scale) against the two correction lines. Why: a dot above a line is rejected. The Benjamini-Hochberg line rises with rank and catches bin 8, while the flat Bonferroni line misses it.</span></figcaption>
+  </figure>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">순위 i</span><span lang="en">Rank i</span></th><th><span lang="ko">구간</span><span lang="en">Bin</span></th><th>p</th><th><span lang="ko">BH 기준 i × 0.005</span><span lang="en">BH cut i × 0.005</span></th><th>BH</th><th>Bonferroni (0.005)</th></tr></thead>
+    <tbody>
+      <tr><td style="white-space:nowrap">1</td><td style="white-space:nowrap">0</td><td style="white-space:nowrap">0.0000016</td><td style="white-space:nowrap">0.005</td><td>✓</td><td>✓</td></tr>
+      <tr><td style="white-space:nowrap">2</td><td style="white-space:nowrap">7</td><td style="white-space:nowrap">0.00036</td><td style="white-space:nowrap">0.010</td><td>✓</td><td>✓</td></tr>
+      <tr><td style="white-space:nowrap">3</td><td style="white-space:nowrap">1</td><td style="white-space:nowrap">0.00065</td><td style="white-space:nowrap">0.015</td><td>✓</td><td>✓</td></tr>
+      <tr><td style="white-space:nowrap">4</td><td style="white-space:nowrap">6</td><td style="white-space:nowrap">0.0036</td><td style="white-space:nowrap">0.020</td><td>✓</td><td>✓</td></tr>
+      <tr><td style="white-space:nowrap">5</td><td style="white-space:nowrap">8</td><td style="white-space:nowrap">0.018</td><td style="white-space:nowrap">0.025</td><td>✓</td><td>✗</td></tr>
+      <tr><td style="white-space:nowrap">6</td><td style="white-space:nowrap">3</td><td style="white-space:nowrap">0.058</td><td style="white-space:nowrap">0.030</td><td><span lang="ko">✗ (여기서 멈춤)</span><span lang="en">✗ (stop here)</span></td><td>✗</td></tr>
+      <tr><td style="white-space:nowrap">7–10</td><td style="white-space:nowrap">4, 2, 5, 9</td><td style="white-space:nowrap">0.13 – 0.90</td><td></td><td>✗</td><td>✗</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>BH:</b> p가 기준 아래인 가장 큰 순위(5)를 찾고, 거기까지를 모두 기각한다. 5개 구간이다.</span><span lang="en"><b>Benjamini-Hochberg:</b> find the largest rank whose p is under its cut (5), and reject everything up to it. Five bins.</span></li>
+    <li><span lang="ko"><b>Bonferroni:</b> 0.005 아래만 기각한다. 4개 구간이다. 구간 8(p = 0.018)이 빠진다.</span><span lang="en"><b>Bonferroni:</b> reject only p under 0.005. Four bins; bin 8 (p = 0.018) drops out.</span></li>
+    <li><span lang="ko"><b>읽는 법:</b> 구간 0, 1, 6, 7은 엄격한 기준에서도 확실하다. 구간 8은 기준에 따라 판정이 갈리는 경계 구간이다.</span><span lang="en"><b>Reading:</b> bins 0, 1, 6 and 7 hold under the strict rule. Bin 8 is a borderline bin whose verdict depends on the rule.</span></li>
+    <li><span lang="ko"><b>논문:</b> BH를 주 결과로, Bonferroni를 더 엄격한 확인으로 함께 보고했다.</span><span lang="en"><b>Paper:</b> Benjamini-Hochberg is the main result, with Bonferroni as a stricter check.</span></li>
+  </ul>
+  <p class="note"><span lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (<code>n</code>, <code>n_yes</code>, <code>mean_price</code>, <code>binom_p</code>, <code>reject_bh</code>, <code>reject_bonferroni</code>), <code>papers/paper_mvp1/numbers.tex</code> (<code>\QOneChiSq</code>, <code>\QOneDf</code>). 시장 2개 예의 0.71, 0.79는 설명용 값(Illustrative values)이다.</span><span lang="en">Source: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code> (<code>n</code>, <code>n_yes</code>, <code>mean_price</code>, <code>binom_p</code>, <code>reject_bh</code>, <code>reject_bonferroni</code>), <code>papers/paper_mvp1/numbers.tex</code> (<code>\QOneChiSq</code>, <code>\QOneDf</code>). The two-market prices 0.71 and 0.79 are illustrative values.</span></p>
+</section>
+
+<section class="step" id="sec-meaning">
+  <div class="eyebrow"></div>
+  <div class="partlab"><span lang="ko">B부 · 결과 읽기</span><span lang="en">Part B · Reading the result</span></div>
+  <h3><span lang="ko">"구간 5개가 유의하다"는 무슨 뜻인가</span><span lang="en">What "5 bins are significant" means</span></h3>
+  <div class="answer"><b><span lang="ko">답:</span><span lang="en">Answer:</span></b> <span lang="ko">구간 5개에서는 평균 가격과 실제 비율의 차이가 우연으로 보기 어렵다. 그 구간의 가격을 확률로 그대로 읽으면 안 된다. 5개 모두 실제 비율이 가격보다 낮다. 곧 결과 1이 너무 비싸게 매겨졌다. 차이는 작다.</span><span lang="en">In 5 bins the gap between the mean price and the observed rate is unlikely to be chance. There, the price should not be read as a probability as is. In all 5, the observed rate is below the price, so outcome 1 is priced too high. The gaps are small.</span></div>
+
+  <h4><span lang="ko">1. 두 숫자는 어떻게 구하나</span><span lang="en">1. How the two numbers are made</span></h4>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th><span lang="ko">평균 가격</span><span lang="en">Mean price</span></th><th><span lang="ko">실제 비율</span><span lang="en">Observed rate</span></th></tr></thead>
+    <tbody>
+      <tr><td><b><span lang="ko">무엇</span><span lang="en">What</span></b></td><td><span lang="ko">구간 안 시장들의 평가 가격 평균</span><span lang="en">Mean evaluation price of the markets in the bin</span></td><td><span lang="ko">구간 안 시장 가운데 결과 1이 이긴 비율</span><span lang="en">Share of the bin's markets where outcome 1 won</span></td></tr>
+      <tr><td><b><span lang="ko">시장 하나에서</span><span lang="en">Per market</span></b></td><td><span lang="ko">마감 1일 전 이전의 마지막 거래 가격 (그 시각 거래들의 평균), 결과 1의 가격</span><span lang="en">Price of the last trades at or before 1 day before close (their mean), for outcome 1</span></td><td><span lang="ko">결과 1이 이기면 1, 지면 0</span><span lang="en">1 if outcome 1 won, 0 if not</span></td></tr>
+      <tr><td><b><span lang="ko">구간에서</span><span lang="en">Per bin</span></b></td><td><span lang="ko">그 가격들의 평균</span><span lang="en">Mean of those prices</span></td><td><span lang="ko">1의 개수 / 시장 수</span><span lang="en">Count of 1s / number of markets</span></td></tr>
+      <tr><td><b><span lang="ko">구간 7 예</span><span lang="en">Bin 7 example</span></b></td><td style="white-space:nowrap"><span lang="ko">시장 2,301개 가격 평균<br>= 0.7456</span><span lang="en">mean of 2,301 prices<br>= 0.7456</span></td><td style="white-space:nowrap">1,640 / 2,301<br>= 0.7127</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>결과 1:</b> 시장에 먼저 적힌 결과다. 남긴 시장의 63.9%에서 이름이 "Yes"다. 그래서 "Yes"와 거의 같지만 똑같지는 않다.</span><span lang="en"><b>Outcome 1:</b> the first-listed outcome. It is labeled "Yes" in 63.9% of kept markets, so it is close to, but not the same as, "Yes".</span></li>
+    <li><span lang="ko"><b>[[gap]]:</b> 실제 비율 − 평균 가격. 구간 7은 0.7127 − 0.7456 = −3.29pp다. 음수면 가격이 실제보다 높다.</span><span lang="en"><b>Per-bin gap:</b> observed rate − mean price. Bin 7: 0.7127 − 0.7456 = −3.29 percentage points. Negative means the price is above reality.</span></li>
+  </ul>
+
+  <h4><span lang="ko">2. "유의하다"의 뜻</span><span lang="en">2. What "significant" means</span></h4>
+  <svg class="flow" viewBox="0 0 700 92" role="img" aria-labelledby="sig-ko sig-en">
+    <title id="sig-ko" lang="ko">세 상자 흐름: 가격이 확률이라고 가정, 이만큼의 차이가 우연히 나올 확률 p, p가 기준보다 작으면 그 구간의 가격은 틀렸다.</title>
+    <title id="sig-en" lang="en">Three-box flow: assume the price is the probability, p is the chance of a gap this large, if p is under the cut the bin's price is off.</title>
+    <g fill="var(--card)" stroke="var(--border)"><rect x="4" y="10" width="200" height="70"/><rect x="250" y="10" width="200" height="70"/><rect x="496" y="10" width="200" height="70"/></g>
+    <g stroke="var(--foreground)" stroke-width="1.5"><line x1="206" y1="45" x2="246" y2="45"/><line x1="452" y1="45" x2="492" y2="45"/></g>
+    <g fill="var(--foreground)"><path d="M246 40 L246 50 L250 45 Z"/><path d="M492 40 L492 50 L496 45 Z"/></g>
+    <g font-size="11.5" fill="var(--foreground)" text-anchor="middle">
+      <text x="104" y="38" lang="ko">귀무가설:</text><text x="104" y="56" lang="ko">가격 = 확률</text>
+      <text x="104" y="38" lang="en">Null hypothesis:</text><text x="104" y="56" lang="en">price = probability</text>
+      <text x="350" y="38" lang="ko">이만큼 큰 차이가</text><text x="350" y="56" lang="ko">우연히 나올 확률 = p</text>
+      <text x="350" y="38" lang="en">chance of a gap</text><text x="350" y="56" lang="en">this large = p</text>
+      <text x="596" y="38" lang="ko">p &lt; 기준이면</text><text x="596" y="56" lang="ko">그 구간 가격은 틀렸다</text>
+      <text x="596" y="38" lang="en">p under the cut:</text><text x="596" y="56" lang="en">the bin's price is off</text>
+    </g>
+  </svg>
+
+  <h4><span lang="ko">3. 어느 구간이, 어느 쪽으로</span><span lang="en">3. Which bins, which way</span></h4>
+  <figure>
+  <div class="chart">
+  <svg class="flow" viewBox="0 0 700 280" role="img" aria-labelledby="gapb-ko gapb-en">
+    <title id="gapb-ko" lang="ko">구간 10개의 격차 막대. 구간 9만 아주 조금 양수이고 나머지는 모두 음수다. 구간 0, 1, 6, 7은 두 보정에서 유의, 구간 8은 BH에서만 유의하다.</title>
+    <title id="gapb-en" lang="en">Gap bars for the 10 bins. Only bin 9 is slightly positive; the rest are negative. Bins 0, 1, 6 and 7 are significant under both corrections, bin 8 under Benjamini-Hochberg only.</title>
+    <g font-size="10.5" fill="var(--foreground)">
+      <rect x="80" y="8" width="12" height="12" fill="var(--signal-instruction)"/><text x="98" y="18" lang="ko">유의 (BH, Bonferroni 둘 다)</text><text x="98" y="18" lang="en">significant (both corrections)</text>
+      <rect x="330" y="8" width="12" height="12" fill="var(--signal-flag-line)"/><text x="348" y="18" lang="ko">BH만 유의</text><text x="348" y="18" lang="en">Benjamini-Hochberg only</text>
+      <rect x="530" y="8" width="12" height="12" fill="var(--signal-dead-fill)" stroke="var(--border)"/><text x="548" y="18" lang="ko">유의하지 않음</text><text x="548" y="18" lang="en">not significant</text>
+    </g>
+    <g stroke="var(--rule)"><line x1="60" y1="110" x2="660" y2="110"/><line x1="60" y1="160" x2="660" y2="160"/><line x1="60" y1="210" x2="660" y2="210"/></g>
+    <g font-size="10" fill="var(--foreground)" text-anchor="end"><text x="54" y="63">0</text><text x="54" y="113">−1</text><text x="54" y="163">−2</text><text x="54" y="213">−3</text></g>
+    <text x="14" y="140" font-size="10" fill="var(--foreground)" transform="rotate(-90 14 140)" text-anchor="middle" lang="ko">격차 (pp)</text><text x="14" y="140" font-size="10" fill="var(--foreground)" transform="rotate(-90 14 140)" text-anchor="middle" lang="en">gap (pp)</text>
+    <g>
+      <rect x="70" y="60" width="40" height="23" fill="var(--signal-instruction)"/>
+      <rect x="128" y="60" width="40" height="115" fill="var(--signal-instruction)"/>
+      <rect x="186" y="60" width="40" height="50" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+      <rect x="244" y="60" width="40" height="86" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+      <rect x="302" y="60" width="40" height="61.5" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+      <rect x="360" y="60" width="40" height="29" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+      <rect x="418" y="60" width="40" height="139.5" fill="var(--signal-instruction)"/>
+      <rect x="476" y="60" width="40" height="164.5" fill="var(--signal-instruction)"/>
+      <rect x="534" y="60" width="40" height="94" fill="var(--signal-flag-line)"/>
+      <rect x="592" y="58.5" width="40" height="1.5" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    </g>
+    <line x1="60" y1="60" x2="660" y2="60" stroke="var(--foreground)"/>
+    <g font-size="10" fill="var(--foreground)" text-anchor="middle">
+      <text x="90" y="96">−0.46</text><text x="148" y="188">−2.30</text><text x="206" y="123">−1.00</text><text x="264" y="159">−1.72</text><text x="322" y="134">−1.23</text><text x="380" y="102">−0.58</text><text x="438" y="212">−2.79</text><text x="496" y="237">−3.29</text><text x="554" y="167">−1.88</text><text x="612" y="50">+0.03</text>
+    </g>
+    <g font-size="10" fill="var(--muted-foreground)" text-anchor="middle">
+      <text x="90" y="256">0</text><text x="148" y="256">1</text><text x="206" y="256">2</text><text x="264" y="256">3</text><text x="322" y="256">4</text><text x="380" y="256">5</text><text x="438" y="256">6</text><text x="496" y="256">7</text><text x="554" y="256">8</text><text x="612" y="256">9</text>
+    </g>
+    <text x="350" y="274" font-size="10.5" fill="var(--foreground)" text-anchor="middle" lang="ko">구간 (0 = 가격 0–10%, 9 = 가격 90–100%)</text><text x="350" y="274" font-size="10.5" fill="var(--foreground)" text-anchor="middle" lang="en">bin (0 = price 0–10%, 9 = price 90–100%)</text>
+  </svg>
+  </div>
+  <figcaption><span lang="ko">그림 9: 구간별 격차(실제 비율 − 평균 가격)와 유의 판정. 왜: 막대가 아래로 갈수록 가격이 실제보다 높다. 10개 중 9개가 아래로 향한다.</span><span lang="en">Figure 9: Per-bin gap (observed rate − mean price) and significance. Why: a bar below zero means the price is above reality, and 9 of 10 bars point down.</span></figcaption>
+  </figure>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">구간</span><span lang="en">Bin</span></th><th><span lang="ko">가격대</span><span lang="en">Price range</span></th><th><span lang="ko">평균 가격</span><span lang="en">Mean price</span></th><th><span lang="ko">실제 비율</span><span lang="en">Observed rate</span></th><th><span lang="ko">격차</span><span lang="en">Gap</span></th><th><span lang="ko">판정</span><span lang="en">Verdict</span></th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td style="white-space:nowrap">0–10%</td><td>1.8%</td><td>1.4%</td><td style="white-space:nowrap">−0.46pp</td><td><span lang="ko">유의 (둘 다)</span><span lang="en">Significant (both)</span></td></tr>
+      <tr><td>1</td><td style="white-space:nowrap">10–20%</td><td>14.8%</td><td>12.5%</td><td style="white-space:nowrap">−2.30pp</td><td><span lang="ko">유의 (둘 다)</span><span lang="en">Significant (both)</span></td></tr>
+      <tr><td>6</td><td style="white-space:nowrap">60–70%</td><td>64.4%</td><td>61.7%</td><td style="white-space:nowrap">−2.79pp</td><td><span lang="ko">유의 (둘 다)</span><span lang="en">Significant (both)</span></td></tr>
+      <tr><td>7</td><td style="white-space:nowrap">70–80%</td><td>74.6%</td><td>71.3%</td><td style="white-space:nowrap">−3.29pp</td><td><span lang="ko">유의 (둘 다)</span><span lang="en">Significant (both)</span></td></tr>
+      <tr><td>8</td><td style="white-space:nowrap">80–90%</td><td>84.5%</td><td>82.7%</td><td style="white-space:nowrap">−1.88pp</td><td><span lang="ko">BH만 유의</span><span lang="en">Benjamini-Hochberg only</span></td></tr>
+      <tr><td style="white-space:nowrap">2–5, 9</td><td><span lang="ko">나머지</span><span lang="en">Others</span></td><td></td><td></td><td style="white-space:nowrap">−1.72 ~ +0.03pp</td><td><span lang="ko">유의하지 않음</span><span lang="en">Not significant</span></td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>방향:</b> 유의한 5개 모두 음수다. 결과 1이 가격보다 덜 일어났다. 곧 결과 1이 너무 비싸게 매겨졌다.</span><span lang="en"><b>Direction:</b> all 5 significant gaps are negative. Outcome 1 happened less often than priced, so it was priced too high.</span></li>
+    <li><span lang="ko"><b>"Yes" 시장만 보면:</b> 결과 1이 "Yes"인 시장 30,630개에서도 구간 0–8의 9개 모두 음수다. 격차는 0.4–5.6pp다. 새 검정 없는 기술 통계다. 그래서 "Yes 쪽으로 비싸다"는 이 범위에서만 말할 수 있다.</span><span lang="en"><b>"Yes" markets only:</b> in the 30,630 markets where outcome 1 is "Yes", all 9 bins 0–8 are negative, by 0.4 to 5.6 percentage points. This is descriptive, with no new test. So "Yes is overpriced" holds only in this descriptive sense.</span></li>
+    <li><span lang="ko"><b>구간 7로 보면:</b> 74.6센트에 결과 1을 사면 71.3%만 이긴다. 수수료 전 단순 계산으로 1주에 약 3.3센트를 잃는다.</span><span lang="en"><b>Bin 7 in money:</b> buying outcome 1 at 74.6 cents wins only 71.3% of the time. Before fees, that is about 3.3 cents lost per share.</span></li>
+    <li><span lang="ko"><b>구간 0 (싼 베팅):</b> 1.8% 가격에 1.4%만 일어났다. 격차는 0.46pp로 작지만, 가격의 약 4분의 1만큼 덜 일어났다. χ²에 가장 많이(31.3%) 기여한 구간이다.</span><span lang="en"><b>Bin 0 (cheap bets):</b> priced at 1.8%, happened 1.4%. The gap is only 0.46 points, but about a quarter of the price. It is the top chi-square contributor (31.3%).</span></li>
+  </ul>
+
+  <h4><span lang="ko">4. 5개 대 4개</span><span lang="en">4. Five vs four</span></h4>
+  <ul>
+    <li><span lang="ko"><b>4개 ([[bonf]]):</b> 구간 0, 1, 6, 7. 가장 엄격한 기준에서도 남는다.</span><span lang="en"><b>Four (Bonferroni):</b> bins 0, 1, 6 and 7. They hold under the strictest rule.</span></li>
+    <li><span lang="ko"><b>5번째 (구간 8):</b> [[bh]]에서만 유의하다. 기준에 따라 판정이 갈리는 경계 구간이다.</span><span lang="en"><b>Fifth (bin 8):</b> significant under Benjamini-Hochberg only. A borderline bin.</span></li>
+    <li><span lang="ko"><b>그래서:</b> 어느 기준이든 방향은 같다. 결론은 기준 선택에 좌우되지 않는다.</span><span lang="en"><b>So:</b> the direction is the same under either rule. The conclusion does not hinge on the choice.</span></li>
+  </ul>
+
+  <h4><span lang="ko">5. 주의할 점</span><span lang="en">5. Cautions</span></h4>
+  <ul>
+    <li><span lang="ko"><b>유의하지 않음 ≠ 맞음:</b> 구간 2–5와 9는 차이를 증명하지 못했을 뿐이다. 가격이 정확하다는 뜻이 아니다. 구간 3은 p = 0.058로 기준 가까이에 있다.</span><span lang="en"><b>Not significant is not correct:</b> bins 2–5 and 9 only failed to show a gap. That does not prove the price is right. Bin 3 sits near the cut, at p = 0.058.</span></li>
+    <li><span lang="ko"><b>일관된 방향:</b> 10개 중 9개가 음수다. 구간 하나하나보다 이 방향이 더 강한 증거다.</span><span lang="en"><b>One direction:</b> 9 of 10 gaps are negative. That pattern is stronger evidence than any single bin.</span></li>
+    <li><span lang="ko"><b>크기는 작다:</b> 격차는 0.5–3.3pp다. 전체 [[netgap]]은 −0.99%다. 시장이 47,948개로 많아서 작은 차이도 잡혔다.</span><span lang="en"><b>Small size:</b> the gaps are 0.5 to 3.3 points, and the net gap is −0.99%. With 47,948 markets, even small gaps are detected.</span></li>
+    <li><span lang="ko"><b>독립 가정:</b> p값은 시장이 서로 독립이라고 가정한다. 한 사건의 시장들은 함께 움직이므로 p값이 너무 작을 수 있다.</span><span lang="en"><b>Independence:</b> the p-values assume independent markets. Markets of one event move together, so the p-values may be too small.</span></li>
+  </ul>
+  <p><span lang="ko"><b>종합:</b> Polymarket 가격은 대체로 확률에 가깝다. 다만 결과 1이 작고 일관되게 비싸다. 그 차이가 확실한 구간이 4–5개다.</span><span lang="en"><b>Overall:</b> Polymarket prices are close to probabilities. But outcome 1 is priced slightly and consistently too high, with a clear gap in 4 to 5 bins.</span></p>
+  <p class="note"><span lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>, <code>papers/paper_mvp1/numbers.tex</code> (<code>\OutcomeOneYesShare</code>, <code>\OutcomeOneYesN</code>, <code>\OutcomeOneYesGapMin</code>, <code>\OutcomeOneYesGapMax</code>, <code>\GapNetDiffMain</code>, <code>\ChiTopShare</code>, <code>\NMarketsKept</code>). 구간 7의 3.3센트는 평균 가격과 실제 비율로 한 단순 계산이다.</span><span lang="en">Source: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>, <code>papers/paper_mvp1/numbers.tex</code> (<code>\OutcomeOneYesShare</code>, <code>\OutcomeOneYesN</code>, <code>\OutcomeOneYesGapMin</code>, <code>\OutcomeOneYesGapMax</code>, <code>\GapNetDiffMain</code>, <code>\ChiTopShare</code>, <code>\NMarketsKept</code>). The bin 7 figure of 3.3 cents is a plain calculation from the mean price and the observed rate.</span></p>
+</section>
+
 <footer>
   <p><span lang="ko">출처: <code>papers/paper_mvp1/main.tex</code>, <code>sections/*.tex</code>, <code>numbers.tex</code> (실행 <code>142082_mvp1_full_v1r3</code>), <code>analysis/lecture_method_audit.md</code>, <code>analysis/lecture_hw_method_audit_2026_11_16.md</code>, <code>analysis/prereg_review_fixes.md</code>, <code>RQ.md</code>, <code>PLAN.md</code> 임무 블록, <code>DECISIONS.md</code> D-024에서 D-030, D-034, D-039, D-041. 이 페이지는 그 파일에 없는 숫자를 더하지 않는다. 이름이 바뀐 방법은 논문의 현재 이름을 따른다. 덱 번호는 <code>notes/</code> 파일 이름의 번호다.</span><span lang="en">Sources: <code>papers/paper_mvp1/main.tex</code>, <code>sections/*.tex</code>, <code>numbers.tex</code> (run <code>142082_mvp1_full_v1r3</code>), <code>analysis/lecture_method_audit.md</code>, <code>analysis/lecture_hw_method_audit_2026_11_16.md</code>, <code>analysis/prereg_review_fixes.md</code>, <code>RQ.md</code>, the <code>PLAN.md</code> mission block, <code>DECISIONS.md</code> D-024 to D-030, D-034, D-039, D-041. This page adds no number that is not in those files. Renamed methods follow the paper's current name. A deck number is the number in the <code>notes/</code> file name.</span></p>
 </footer>
@@ -618,12 +1033,20 @@ table.sum th:first-child,table.sum td:first-child{width:96px}
     pareto:["파레토 차트(Pareto chart)","항목을 큰 순서로 세운 막대 그림. 누적 몫 선을 더하기도 한다."],
     wald:["왈드 구간(Wald interval)","추정값에 표준 오차의 1.96배를 더하고 빼서 만드는 95% 신뢰구간."],
     simpson:["심슨의 역설(Simpson's paradox)","합친 자료의 추세가 하위 집단별 추세와 달라지는 현상."],
-    hier:["계층적 군집화(hierarchical clustering)","가까운 군집을 차례로 합쳐 나무 그림(dendrogram)으로 묶는 방법."]
+    hier:["계층적 군집화(hierarchical clustering)","가까운 군집을 차례로 합쳐 나무 그림(dendrogram)으로 묶는 방법."],
+    tdist:["t 분포(t distribution)","표준편차를 표본에서 추정할 때 평균 차이가 따르는 분포. 0 중심 대칭, 정규보다 꼬리가 두껍다."],
+    chidist:["카이제곱 분포(chi-square distribution)","표준 정규 값 여러 개를 제곱해 더한 값의 분포. 0 이상이고 오른쪽 꼬리가 길다."],
+    welch:["웰치 t 검정(Welch t-test)","두 그룹의 분산이 달라도 평균을 비교할 수 있는 t 검정."],
+    pbinom:["포아송-이항분포(Poisson binomial distribution)","성공 확률이 서로 다른 시행들의 성공 횟수 분포. 포아송 분포와는 다르다."],
+    dof:["자유도(degrees of freedom)","데이터가 기대에서 서로 독립으로 벗어날 수 있는 기회의 수. 칸 수에서 제약 수를 뺀다."],
+    bonf:["본페로니 보정(Bonferroni correction)","유의수준을 검정 수로 나눠 모든 p값에 같은 기준을 쓰는 보정."],
+    fwer:["가족별 오류율(family-wise error rate, FWER)","여러 검정에서 거짓 발견이 하나라도 생길 확률."],
+    fdr:["거짓 발견 비율(false discovery rate, FDR)","발견한 것 가운데 거짓 발견의 기대 비율."]
   };
   var d=document.documentElement;
   var TITLE={ko:"6344 Polymarket 강의와 RQ 해설서",en:"6344 Polymarket Lecture and RQ Guide"};
   var KEY="group01-lang";
-  var NAMES={map:["지도","Map"],"a-q1":["A Q1","A Q1"],"a-q2":["A Q2","A Q2"],"a-q3":["A Q3·R2","A Q3, R2"],"a-out":["강의 밖","Outside"],"a-hw":["A 숙제·덱 22~25","A Homeworks, decks 22 to 25"],"b-setup":["B 질문 설정","B Setup"],q1:["B Q1","B Q1"],q2:["B Q2","B Q2"],q3:["B Q3","B Q3"]};
+  var NAMES={map:["지도","Map"],"a-q1":["A Q1","A Q1"],"a-q2":["A Q2","A Q2"],"a-q3":["A Q3·R2","A Q3, R2"],"a-out":["강의 밖","Outside"],"a-hw":["A 숙제·덱 22~25","A Homeworks, decks 22 to 25"],"b-setup":["B 질문 설정","B Setup"],q1map:["Q1 한눈에","Q1 at a glance"],q1:["B Q1","B Q1"],q2:["B Q2","B Q2"],q3:["B Q3","B Q3"],tests:["χ² 대 t","Chi-square vs t"],bintests:["구간 검정","Bin tests"],meaning:["결과 읽기","Reading the result"]};
   function sp(l,h){var s=document.createElement("span");s.setAttribute("lang",l);s.textContent=h;return s;}
   /* A bare [[key]] outside any lang span becomes a ko link plus an English name */
   var walker=document.createTreeWalker(document.querySelector("main"),NodeFilter.SHOW_TEXT,null);

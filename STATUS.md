@@ -94,3 +94,4 @@ One line per step, newest at the bottom. Why each choice was made: `DECISIONS.md
 - 2026-11-16 docs: D-050 lecture and homework method re-audit, docs only (DECISIONS.md D-050)
 - 2026-11-17 paper: D-051 wallet PnL in Q2 results and Appendix D.3 (kept scope, macros from run 156432); paper 22 pages, 0 warnings. Course report unchanged: one added line makes 3 pages, owner to decide
 - 2026-11-17 presentation: D-051 option A, slide q2-money after q2-roles (online deck version 10, local slides_local rebuilt, 33 slides); course report stays without PnL
+- 2026-11-17 paper: D-052 future work (Platt scaling, isotonic regression, time split) in the conclusion; closing value sentence still an owner todo
