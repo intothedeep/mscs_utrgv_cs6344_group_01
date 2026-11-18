@@ -63,15 +63,13 @@ Future work can correct prices after the fact and test the correction on later m
 \end{abstract}
 
 \hd{1. Data and method}
-We use the Polymarket-v1 database, which holds \PaperTrades{} trades and \PaperMarkets{} markets from \PaperPeriod{} \citep{qin2026polymarketv1}.
-Of \NMarketsInScope{} Yes/No markets in scope we keep \NMarketsKept{} (\PctMarketsKept).
-We read each market's price \DaysShort{} day before its scheduled close. A price after the close can contain the answer.
-We drop prices older than \MaxStaleHours{} hours and markets with fewer than \MinTrades{} trades.
-We cut the price into \NBins{} equal-width bins.
-We test each bin with a binomial test (Benjamini-Hochberg corrected \citep{benjamini1995controlling}).
-We test all bins with a chi-square test.
-We fixed the criteria in a pre-registration before any Q1 result.
-We report one later rule change as an amendment (tie rule for the price).
+% Filters and methods moved to Appendices A and B (owner, 2026-11-18)
+We use Polymarket-v1, every Polymarket trade from \PaperPeriod{} \citep{qin2026polymarketv1}.
+We keep \NMarketsKept{} resolved Yes/No markets (\PctMarketsKept{} of \NMarketsInScope).
+We read each price \DaysShort{} day before close, so it cannot contain the answer.
+Appendix A lists the filters and why we use them.
+Appendix B lists the tests and what each one answers.
+We fixed these rules before any Q1 result. One later change (the price tie rule) is reported as an amendment.
 
 \hd{2. Q1: is the crowd right?}
 {\centering
@@ -79,12 +77,9 @@ We report one later rule change as an amendment (tie rule for the price).
 \captionof{figure}{Observed outcome-1 rate against mean price per bin (left), and the per-bin gap with \CiLevel{} intervals (right). Why: the right panel shows the gaps that the diagonal hides.}
 \label{fig:calib}\par}
 \smallskip
-\textbf{\VerdictQOne} The effect is small and runs one way.
-Outcome 1 is priced too high.
-We set no size line before the results, so ``small'' is our reading.
-With the minimum-trade filter, cheap bets pay off less often than priced.
-This matches horse racing \citep{snowberg2010favorite}.
-Without the filter, the cheapest bin flips above the price.
+\textbf{\VerdictQOne} The chi-square test says the prices miss, and the bin tests show where and which way.
+In \GapNegBinsMain{} of \GapBinsTotal{} bins events happen less often than priced.
+In the 70 to 80\% bin, prices average \BinSeventyEightyPrice{} and \BinSeventyEightyObs{} of events happen.
 
 \smallskip
 \noindent\begin{minipage}[t]{0.36\textwidth}\vspace{0pt}
@@ -108,22 +103,18 @@ Largest per-bin gap & \LargestGapAbs \\
 \textbf{Price rule:} with a volume-weighted average price the net gap is \RThreeMOneVwapNetGap{}, and with a trade-based midpoint it is \RThreeMOneMidNetGap{}. So the price rule does not create the gap.\par
 \textbf{Markets labelled Yes/No} (n=\RThreeMTwoYesNoN): Yes is priced above its observed rate, net gap \RThreeMTwoYesNoNetGap{}.\par
 \textbf{Dependent markets:} with markets grouped by a proxy event key, the net-gap interval is [\RThreeMThreeKOneNetGapCiLow, \RThreeMThreeKOneNetGapCiHigh]. It stays below 0.\par
-\textbf{Size:} the largest implied gap is \RThreeMFiveMaxAbsDelta{}, against a mean half spread of \RThreeMOneMeanHalfSpread.
+\textbf{Size and volume:} Appendix C compares the gap with the trading cost and across market volume.
 \end{minipage}
 
-\hd{3. Q2: who is the crowd? (descriptive, no verdict)}
-Q2 tells us who holds the total.
-The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker USDC volume.
-They hold \TakerTopTwentyShare{} of taker USDC volume.
-The 80/20 reference is \TopTwentyReference.
-The Welch test on log volume gives $t=\RoleWelchT$.
-Mean log10 volume is \RoleLogTenDiff{} higher for makers than for takers.
-Winnings are concentrated like volume.
-Before fees the kept markets are zero-sum: wallets won \PnlGrossWonM{} M USDC and lost the same.
-The median wallet net profit is \PnlMedianNet{} USD.
-The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings.
-
+% Reading states only what Figure 1 and the table show; size and volume groups moved to Appendix C (owner, 2026-11-18).
+% Bins 0 to 8 have a negative gap, bin 9 (0.98) is near 0 (q1_bins.csv, run 142082)
 \smallskip
+\textbf{Reading.} In Figure~\ref{fig:calib}, outcome 1 wins less often than priced in the cheapest bins and in the 60 to 90\% bins.
+Horse racing shows this only for cheap bets \citep{snowberg2010favorite}, so the pattern here is different.
+We do not test its cause.
+
+\hd{3. Q2: who is the crowd? (descriptive, no verdict)}
+% Figures first, then the text (owner, 2026-11-18)
 \noindent\begin{minipage}[t]{0.48\textwidth}\vspace{0pt}
 \centering
 \figorbox{../paper_mvp1/figures/fig6_ccdf_top_sampled_half}{3.504in}
@@ -135,36 +126,150 @@ The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings
 \figorbox{../paper_mvp1/figures/fig_report_q2_winnings}{3.504in}
 \captionof{figure}{Share held by the top 1\% and 10\% of wallets, each ranked by its own measure. Why: winnings are as concentrated as volume.}
 \label{fig:winnings}
-\end{minipage}
+\end{minipage}\par
+\smallskip
+Q2 tells us who holds the total.
+The top \TopTwentyLabel{} of wallets hold \MakerTopTwentyShare{} of maker USDC volume.
+They hold \TakerTopTwentyShare{} of taker USDC volume.
+The 80/20 reference is \TopTwentyReference.
+The Welch test on log volume gives $t=\RoleWelchT$.
+Mean log10 volume is \RoleLogTenDiff{} higher for makers than for takers.
+Winnings are concentrated like volume.
+Before fees the kept markets are zero-sum: wallets won \PnlGrossWonM{} M USDC and lost the same.
+The median wallet net profit is \PnlMedianNet{} USD.
+The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings.
+\textbf{Reading.} The crowd behind a price may be small. Volume is not price-setting power, and we do not test who sets the price.
 
 \hd{4. Q3: what does betting look like? (descriptive, no verdict)}
-\noindent\begin{minipage}[t]{0.47\textwidth}\vspace{0pt}
+% Figure first (left), then the text (right), so the reading order puts the figure first (owner, 2026-11-18)
+\noindent\begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
+\centering
+\figorbox{../paper_mvp1/figures/qq_trade_size_raw_log_half}{3.65in}
+\captionof{figure}{QQ plot of trade size against the normal, raw (left) and log (right). Why: the log points follow the line, so log sizes are closer to normal.}
+\label{fig:qq}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}\vspace{0pt}
 Q3 tells us what a typical trade looks like.
 Mean trade size is \TradeSizeMean{} USDC.
 The median is \TradeSizeMedian{} USDC.
 So sizes are strongly right skewed.
 The price \pOne{} has a mean of \PriceOneDayMean{} and a median of \PriceOneDayMedian.
 Prices pile up near both ends of the scale.
-\end{minipage}\hfill
-\begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
-\centering
-\figorbox{../paper_mvp1/figures/qq_trade_size_raw_log_half}{3.65in}
-\captionof{figure}{QQ plot of trade size against the normal, raw (left) and log (right). Why: the log points follow the line, so log sizes are closer to normal.}
-\label{fig:qq}
+\textbf{Reading.} A typical trade is small, so the median, not the mean, describes it.
 \end{minipage}
 
 \hd{5. Limitations}
-\textbf{Independence.} Markets on one event move together, so the p-values may be too small. No event key exists, so we size this only with proxy keys.
-\textbf{Selection.} Only \PctMarketsKept{} of markets pass the filters. Kept markets trade more than dropped ones.
+% Owner asked for the limits only, without numbers (2026-11-18); the numbers stay in the paper (check M3)
+\textbf{Independence.} Our tests assume that markets are independent.
+Markets on one event move together, so the p-values may be too small.
+The data hold no event key, so our check with a proxy key is only partial.
+\textbf{Selection.} Only a small share of markets pass the filters, and kept markets trade more than dropped ones.
 
-\hd{6. Interpretation and conclusion}
-\todo{owner: interpretation of why prices run high and what the gaps mean in practice for a reader of the price}
-\todo{owner: closing sentence on the value of the study, and future work}
+\hd{6. Conclusion}
+Polymarket prices are close to probabilities, but not equal to them: across the checks we ran, events happen slightly less often than priced.
+The bias is small, and it holds for the \PctMarketsKept{} of markets that pass the filters.
+A reader can use a price as a probability if they read it a little lower.
+
+\hd{7. Future work}
+Build a true event key and test Q1 with markets grouped by event.
+Test whether markets with more distinct wallets are better calibrated, holding volume fixed.
+Correct prices after the fact and test the correction on later markets.
 
 \clearpage
 \begingroup\footnotesize\raggedright
 \bibliographystyle{plainnat}
 \bibliography{../paper_mvp1/references}
 \endgroup
+
+
+% Appendices after the references (owner, 2026-11-18). Counts are macros from numbers.tex.
+\clearpage
+\appendix
+\hd{Appendix A. Data filters}
+Each rule removes markets that cannot answer Q1: a test needs a clear outcome, a price before the close, and a crowd behind that price.
+\par\smallskip
+\noindent\begin{tabularx}{\textwidth}{@{}lrX@{}}
+\toprule
+Rule & Markets & Why \\
+\midrule
+In scope: standard Yes/No markets & \NMarketsInScope & Start of the funnel. \\
+\midrule
+Drop Up/Down markets & $-$\NUpdown & The dataset paper says they settle in a different way and should not be pooled \citep{qin2026polymarketv1}. \\
+\midrule
+Drop markets with no clear winner & $-$\NNoOutcome & Calibration compares the price with the outcome, so an outcome is needed. \\
+\midrule
+Drop markets with no price \DaysShort{} day before close & $-$\NNoPrice & A later price can contain the answer, so there is nothing to test. \\
+\midrule
+Drop prices older than \MaxStaleHours{} hours & $-$\NStalePrice & An old price misses the news since then. \\
+\midrule
+Drop markets with fewer than \MinTrades{} trades & $-$\NBelowMinTrades & One or two traders are not a crowd. Q1 is also reported without this rule. \\
+\midrule
+Kept & \NMarketsKept & \PctMarketsKept{} of the scope. All three questions use these markets. \\
+\bottomrule
+\end{tabularx}
+
+\hd{Appendix B. Methods}
+\noindent\begin{tabularx}{\textwidth}{@{}lXl@{}}
+\toprule
+Method & What it answers & Used in \\
+\midrule
+Price \pOne & Mean trade price at the last timestamp at or before \DaysShort{} day before close. & All \\
+\midrule
+Chi-square goodness of fit & Do the 10 bins as a whole match the price (H0: price = probability)? Expected counts come from the prices, so the degrees of freedom are \NBins. & Q1 \\
+\midrule
+Exact binomial test per bin & Where, and which way, does a bin miss? The bin mean price stands in for the exact Poisson binomial, which makes the test slightly conservative. & Q1 \\
+\midrule
+Benjamini-Hochberg, Bonferroni & Ten bin tests could give a false find by chance. BH is the main correction \citep{benjamini1995controlling}. Bonferroni is a stricter check. & Q1 \\
+\midrule
+\CiLevel{} z interval & How large is each bin gap, and how sure are we? & Q1 \\
+\midrule
+Review checks & Does the gap survive other price rules, Yes-labelled markets only, markets grouped by a proxy event key, and a practical size line? & Q1 \\
+\midrule
+Volume groups & Is the gap different in busy markets? Markets are cut into three equal groups by volume before the price day. Welch t test on high against low. & Q1 \\
+\midrule
+Top shares, CCDF & How much of the volume and the winnings do the top wallets hold? & Q2 \\
+\midrule
+Welch t test on log volume & Do makers and takers trade different amounts? & Q2 \\
+\midrule
+Mean, median, QQ plot & What does a typical trade look like, and is it close to normal? & Q3 \\
+\bottomrule
+\end{tabularx}
+
+% Appendix C sentences copied from ../paper_mvp1/sections/app-g-review.tex (M5, peer question a); figures from run 150310 (owner, 2026-11-18)
+\clearpage
+\hd{Appendix C. Size of the Q1 gap}
+\textbf{C.1 Gap against the trading cost.}
+We fit a logistic calibration of the outcome on the price, $\mathrm{logit}\,P(y=1)=a+b\,\mathrm{logit}(p)$.
+The fit gives an implied gap, fitted probability minus price, at each price.
+The practical line is the mean half spread, \RThreeMOneMeanHalfSpread.
+A trader pays about this cost on each trade.
+The largest implied gap on the price grid is \RThreeMFiveMaxAbsDelta{} in size.
+Of \RThreeMFiveGridPrices{} grid prices, \RThreeMFivePracticalPrices{} have their whole \CiLevel{} band past the practical line.
+So the gap is clear in the statistics, but it is not larger than the mean trading cost.
+We set no size line before the results, so ``small'' is our reading.
+\par\smallskip
+{\centering
+\figorbox{../paper_mvp1/figures/fig_r3_m5_implied_gap}{5.36in}
+\captionof{figure}{Implied gap between the fitted probability and the price, against the practical line. Why: a band that excludes 0 at a price shows the gap there is not noise.}
+\label{fig:size}\par}
+% Source: runs 150310_r3_review_fixes_v6 (m5_calibration_fit.json) and local_r3figs_v10
+
+\medskip
+\textbf{C.2 Gap by market volume.}
+We split the kept markets into three equal groups by volume before the price day.
+The cut points are \RThreePeerACutLowMid{} and \RThreePeerACutMidHigh{} USDC.
+The net gap is \RThreePeerALowNetGap{} in the low group (CI [\RThreePeerALowNetGapCiLow, \RThreePeerALowNetGapCiHigh]).
+It is \RThreePeerAMidNetGap{} in the middle group (CI [\RThreePeerAMidNetGapCiLow, \RThreePeerAMidNetGapCiHigh]).
+It is \RThreePeerAHighNetGap{} in the high group (CI [\RThreePeerAHighNetGapCiLow, \RThreePeerAHighNetGapCiHigh]).
+The middle group has the largest gap, so the gap does not shrink step by step with volume.
+The test compares the high and low groups only.
+The high minus low difference is \RThreePeerADiff{} (CI [\RThreePeerADiffCiLow, \RThreePeerADiffCiHigh], $p=\RThreePeerADiffP$).
+That difference is weak evidence.
+\par\smallskip
+{\centering
+\figorbox{../paper_mvp1/figures/fig_r3_peer_a_volume}{5.36in}
+\captionof{figure}{Net gap per volume group (tercile), with \CiLevel{} intervals. Why: only the high group comes close to no gap, and its interval touches 0.}
+\label{fig:volume}\par}
+% Source: runs 150310_r3_review_fixes_v6 (peer_a_results.json) and local_r3figs_v10
 
 \end{document}
