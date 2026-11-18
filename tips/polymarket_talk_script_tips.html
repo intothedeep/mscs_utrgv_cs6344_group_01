@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<title>6344 Polymarket Talk Script</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<script>
+/* Runs first: marks JS as on and sets the language. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){var d=document.documentElement;d.className="js";var l="en";try{var s=localStorage.getItem("talkscript-lang");if(s==="ko"||s==="en"){l=s;}}catch(e){}try{var q=/[?&]lang=(ko|en)(&|$)/.exec(location.search);if(q){l=q[1];}}catch(e){}d.setAttribute("data-lang",l);d.lang=l;})();
+</script>
+<style>
+/* theme.css (skills/html-theme), inlined. Layout: tips exemplar, step boxes. */
+:root{--radius:0;--background:oklch(1 0 0);--foreground:oklch(0.145 0 0);--card:oklch(1 0 0);--card-foreground:oklch(0.145 0 0);--primary:oklch(0.205 0 0);--primary-foreground:oklch(0.985 0 0);--muted:oklch(0.97 0 0);--muted-foreground:oklch(0.556 0 0);--border:oklch(0.55 0 0);--rule:oklch(0.9 0 0);--ring:oklch(0.45 0 0);--signal-instruction:#d40000;--signal-plan:#0432ff;--signal-flag-fill:#fff3a0;--signal-flag-line:#e6d24a;--signal-dead-fill:#e4e4e2;--signal-dead-ink:oklch(0.53 0.01 260);--font:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,"SF Mono",Menlo,monospace;
+--over:oklch(0.62 0.17 45);--under:oklch(0.5 0.1 210);--busy:oklch(0.62 0.17 45);--quiet:oklch(0.82 0 0);--obs:#0432ff}
+*{box-sizing:border-box;border-radius:var(--radius)}
+body{background:var(--background);color:var(--foreground);font:15px/1.5 var(--font);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 40px;margin:0;overflow-wrap:anywhere}
+main{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:650;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:650;margin-bottom:10px}
+h3{font-size:14px;font-weight:600;margin:12px 0 4px}
+p{margin:0 0 6px}
+.eyebrow{font:500 11px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--signal-plan);margin-bottom:8px}
+.lede{font-size:15.5px;color:var(--muted-foreground);margin-top:8px}
+.steps-nav{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0;padding:0;list-style:none;counter-reset:st}
+.steps-nav li{counter-increment:st}
+.steps-nav a{display:block;padding:4px 10px;border:1px solid var(--rule);color:var(--foreground);text-decoration:none;font-size:12.5px}
+.steps-nav a::before{content:counter(st) " ";color:var(--signal-plan);font-weight:600}
+main>section{border:1px solid var(--border);border-top:4px solid var(--signal-plan);background:var(--card);padding:16px 18px 18px;margin-top:14px;scroll-margin-top:12px;display:flex;flex-direction:column;gap:8px}
+main>section>.eyebrow{font-size:12px;margin-bottom:0}
+.flow{display:flex;flex-wrap:wrap;gap:6px}
+.stage{flex:1 1 160px;background:var(--card);border:1px solid var(--rule);padding:6px 8px;min-width:0}
+.stage.big{border-color:var(--signal-plan)}
+.stage .n{font:600 12.5px var(--font)}
+.stage .s{font:12px/1.4 var(--font);color:var(--muted-foreground)}
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:520px}
+svg text{font-family:var(--font)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card);overflow-wrap:normal}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 11px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground);background:var(--background)}
+tr:last-child td{border-bottom:0}
+td.num{white-space:nowrap;color:var(--signal-plan)}
+td ul{margin:0;padding-left:16px}
+ul,ol{margin:0;padding-left:18px}
+li{margin:2px 0}
+.note{font-size:12.5px;color:var(--muted-foreground)}
+.callout{border-left:3px solid var(--signal-flag-line);background:var(--signal-flag-fill);padding:6px 12px;font-size:13px}
+.callout p:last-child{margin:0}
+.add{border:1px solid var(--signal-plan);padding:6px 12px;font-size:13.5px}
+.add b{color:var(--signal-plan)}
+footer{font-size:12.5px;color:var(--muted-foreground);border-top:1px solid var(--rule);padding-top:8px}
+a{color:var(--signal-plan)}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+@media (max-width:720px){main>section{padding:12px}}
+html[data-lang="ko"] [lang="en"],html[data-lang="en"] [lang="ko"]{display:none!important}
+html[data-lang="ko"] body{word-break:keep-all}
+.topbar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-bottom:6px}
+.langbar{display:none}
+html.js .langbar{display:flex}
+.langbar button{font:500 12.5px var(--font);padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);cursor:pointer;margin-left:-1px}
+.langbar button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+.row2{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:12px;align-items:center;color:var(--muted-foreground)}
+.row2 .cur{color:var(--foreground);font-weight:600;border-bottom:2px solid var(--signal-plan)}
+</style>
+<style>
+.slide{border:1px solid var(--rule);padding:8px 12px;margin-top:4px}
+.slide .meta{font-size:12px;color:var(--muted-foreground);margin-bottom:4px}
+.slide .meta b{color:var(--signal-plan)}
+.say{border-left:3px solid var(--signal-plan);padding:4px 12px;font-size:14.5px;background:var(--muted)}
+.show{font-size:13px}
+.show b{color:var(--foreground)}
+.lec{font-size:12.5px;border:1px dashed var(--border);padding:4px 10px}
+.lec b{color:var(--signal-plan)}
+.owner{background:var(--signal-flag-fill);padding:0 4px;font-weight:600}
+figure{margin:0}
+figure img{max-width:min(100%,560px);display:block;border:1px solid var(--rule)}
+figcaption{font-size:12px;color:var(--muted-foreground)}
+</style>
+</head>
+<body>
+<main>
+<nav class="topbar" aria-label="Page navigation">
+  <div class="langbar" role="group" aria-label="Language">
+    <button type="button" data-set="ko" aria-pressed="false">한국어</button>
+    <button type="button" data-set="en" aria-pressed="true">English</button>
+  </div>
+  <div class="row2">
+    <span lang="ko">다른 페이지:</span><span lang="en">Other pages:</span>
+    <span class="cur" aria-current="page"><span lang="ko">이 페이지 (발표 스크립트)</span><span lang="en">This page (talk script)</span></span>
+    <a href="index.html" target="_top"><span lang="ko">전체 보기</span><span lang="en">All pages</span></a>
+    <a href="polymarket_slides_tips.html"><span lang="ko">슬라이드 안내</span><span lang="en">Slides guide</span></a>
+    <a href="polymarket_lecture_rq_guide_tips.html"><span lang="ko">강의와 RQ 안내</span><span lang="en">Lecture and RQ guide</span></a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow"><span lang="ko">CS 6344 데이터 과학 입문 · 1조 · 발표 스크립트 · 약 25분</span><span lang="en">CS 6344 Intro to Data Science · Group 1 · Talk script · about 25 min</span></div>
+  <h1><span lang="ko">데이터에서 정보를 뽑는다: Polymarket 가격은 확률인가?</span><span lang="en">Getting information out of data: is a Polymarket price a probability?</span></h1>
+  <p class="lede"><span lang="ko">발표는 영어로 한다. 회색 상자가 말할 문장이다. 한국어 보기는 같은 문장의 번역이다.</span><span lang="en">The grey boxes are the lines to say. The Korean view holds the same lines in Korean.</span></p>
+  <div class="add">
+    <p><span lang="ko"><b>임무(mission):</b> 데이터에서 정보를 잘 뽑는다.</span><span lang="en"><b>Mission:</b> get information out of data well.</span></p>
+    <p><span lang="ko"><b>비전(vision):</b> 어떻게 뽑았고, 무엇을 뽑았고, 왜 의미 있는지를 수업 내용으로 설명한다.</span><span lang="en"><b>Vision:</b> explain, with the course methods, how we got the information, what we got, and why it matters.</span></p>
+  </div>
+  <div class="chart" aria-label="Talk flow">
+  <svg viewBox="0 0 860 92" role="img">
+    <g font-size="12">
+      <rect x="2" y="10" width="96" height="56" fill="none" stroke="#0432ff"/><text x="50" y="34" text-anchor="middle">1 Market</text><text x="50" y="52" text-anchor="middle" fill="#777">3 min</text>
+      <rect x="108" y="10" width="96" height="56" fill="none" stroke="#0432ff"/><text x="156" y="34" text-anchor="middle">2 Size</text><text x="156" y="52" text-anchor="middle" fill="#777">2 min</text>
+      <rect x="214" y="10" width="96" height="56" fill="none" stroke="#0432ff"/><text x="262" y="34" text-anchor="middle">3 Data</text><text x="262" y="52" text-anchor="middle" fill="#777">2 min</text>
+      <rect x="320" y="10" width="96" height="56" fill="none" stroke="#0432ff"/><text x="368" y="34" text-anchor="middle">4 RQs</text><text x="368" y="52" text-anchor="middle" fill="#777">1 min</text>
+      <rect x="426" y="10" width="110" height="56" fill="#eef1ff" stroke="#0432ff"/><text x="481" y="34" text-anchor="middle">5 Q1 calib.</text><text x="481" y="52" text-anchor="middle" fill="#777">7 min</text>
+      <rect x="546" y="10" width="96" height="56" fill="none" stroke="#0432ff"/><text x="594" y="34" text-anchor="middle">6 Q2 wallets</text><text x="594" y="52" text-anchor="middle" fill="#777">4 min</text>
+      <rect x="652" y="10" width="96" height="56" fill="none" stroke="#0432ff"/><text x="700" y="34" text-anchor="middle">7 Q3 shapes</text><text x="700" y="52" text-anchor="middle" fill="#777">3 min</text>
+      <rect x="758" y="10" width="98" height="56" fill="none" stroke="#0432ff"/><text x="807" y="34" text-anchor="middle">8 Conclusion</text><text x="807" y="52" text-anchor="middle" fill="#777">3 min</text>
+      <text x="2" y="86" fill="#777">Intro speaker: 1–4, 8 · Q1 speaker: 5 · Q2 speaker: 6 · Q3 speaker: 7</text>
+    </g>
+  </svg>
+  </div>
+  <ul class="steps-nav">
+    <li><a href="#s1"><span lang="ko">예측시장</span><span lang="en">Market</span></a></li>
+    <li><a href="#s2"><span lang="ko">시장 규모</span><span lang="en">Size</span></a></li>
+    <li><a href="#s3"><span lang="ko">뽑을 정보</span><span lang="en">Data</span></a></li>
+    <li><a href="#s4">RQs</a></li>
+    <li><a href="#s5"><span lang="ko">Q1 보정</span><span lang="en">Q1 calibration</span></a></li>
+    <li><a href="#s6"><span lang="ko">Q2 거래 분포</span><span lang="en">Q2 who trades</span></a></li>
+    <li><a href="#s7"><span lang="ko">Q3 분포 모양</span><span lang="en">Q3 shapes</span></a></li>
+    <li><a href="#s8"><span lang="ko">결론</span><span lang="en">Conclusion</span></a></li>
+    <li><a href="#s9"><span lang="ko">강의 덱 지도</span><span lang="en">Lecture map</span></a></li>
+    <li><a href="#s9b"><span lang="ko">강의 밖 4가지</span><span lang="en">Outside the lectures</span></a></li>
+    <li><a href="#s10"><span lang="ko">소유자가 채울 것</span><span lang="en">Owner to fill</span></a></li>
+  </ul>
+  <div class="callout"><p><span lang="ko"><b>숫자 출처:</b> 우리 데이터 숫자는 모두 저장된 실행 산출물(MVP1 전체 실행, 검토 확인 실행, 지갑 손익 실행)에서 읽었다. 시장 규모 숫자는 뉴스와 공시이며 우리 데이터가 아니다.</span><span lang="en"><b>Where numbers come from:</b> every number about our data is read from the saved run outputs (the MVP1 full run, the review-check run, the wallet PnL run). Market-size numbers are news and filings, not our data.</span></p></div>
+</header>
+
+<section id="s1">
+  <div class="eyebrow"><span lang="ko">Step 1 of 11 · 도입 발표자 · 약 3분</span><span lang="en">Step 1 of 11 · Intro speaker · about 3 min</span></div>
+  <h2><span lang="ko">예측시장이란? Kalshi와 Polymarket</span><span lang="en">What is a prediction market? Kalshi and Polymarket</span></h2>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 1a</b> · <span lang="ko">표지 + 뉴스 고리 · 40초</span><span lang="en">Cover + news hook · 40 s</span></div>
+    <p class="show"><span lang="ko"><b>보일 것:</b> 제목, 팀, "Polymarket이 2026 중간선거 98.4%를 맞혔다고 보고" (자체 보고, 우리 데이터 아님).</span><span lang="en"><b>Show:</b> title, team, "Polymarket reports it called 98.4% of the 2026 midterm races right" (self-reported, not in our data).</span></p>
+    <div class="say"><span lang="ko">안녕하세요. 1조입니다. 이번 달 Polymarket은 2026년 중간선거 결과의 98.4%를 맞혔다고 스스로 보고했습니다. 그러면 질문이 생깁니다. Polymarket이 70%라고 말하면, 그 일은 정말 10번 중 7번 일어날까요? 이 숫자는 자체 보고이고, 그 시장들은 우리 데이터에 없습니다. 오늘 우리는 실제 거래 데이터에서 그 답을 뽑습니다.</span><span lang="en">Good morning, we are Group 1. This month Polymarket reported that it called 98.4% of the 2026 midterm races right. That number is self-reported, and those markets are not in our data. But it raises our question. When Polymarket says 70%, does the event really happen 7 times out of 10? Today we pull that answer out of real trade data.</span></div>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 1b</b> · <span lang="ko">두 시장 · 1분</span><span lang="en">Two markets · 1 min</span></div>
+    <p class="show"><span lang="ko"><b>보일 것:</b> <span class="owner">[소유자: Polymarket 시장 화면 스크린샷, 예: 슈퍼볼 또는 선거]</span> <span class="owner">[소유자: Kalshi 시장 화면 스크린샷]</span>. 아래 비교표.</span><span lang="en"><b>Show:</b> <span class="owner">[Owner: Polymarket market page screenshot, e.g. Super Bowl or election]</span> <span class="owner">[Owner: Kalshi market page screenshot]</span>. The table below.</span></p>
+    <div class="tablewrap"><table>
+      <tr><th></th><th>Polymarket</th><th>Kalshi</th></tr>
+      <tr><td><span lang="ko">무엇을 거래하나</span><span lang="en">What you trade</span></td><td colspan="2"><span lang="ko">"이 일이 일어날까?"에 대한 YES / NO 지분</span><span lang="en">YES / NO shares on "will this happen?"</span></td></tr>
+      <tr><td><span lang="ko">주제</span><span lang="en">Topics</span></td><td colspan="2"><span lang="ko">선거, 스포츠(슈퍼볼), 경제, 날씨, 문화</span><span lang="en">Elections, sports (Super Bowl), economy, weather, culture</span></td></tr>
+      <tr><td><span lang="ko">미국 규제</span><span lang="en">US regulation</span></td><td><span lang="ko">2022 CFTC 벌금 후 미국 차단. QCEX 인수, Polymarket US가 2025-07-09 지정 거래소(DCM)</span><span lang="en">Blocked US users after a 2022 CFTC fine. Bought QCEX. Polymarket US became a designated contract market (DCM) on 2025-07-09</span></td><td><span lang="ko">2020년부터 CFTC 지정 거래소(DCM)</span><span lang="en">CFTC designated contract market (DCM) since 2020</span></td></tr>
+      <tr><td><span lang="ko">돈</span><span lang="en">Money</span></td><td><span lang="ko">USDC (달러 연동 토큰, 우리 데이터 단위)</span><span lang="en">USDC (a dollar-pegged token, the unit in our data)</span></td><td><span lang="ko">미국 달러 계좌</span><span lang="en">US dollar account</span></td></tr>
+      <tr><td><span lang="ko">큰 사례</span><span lang="en">Big example</span></td><td><span lang="ko">2024 대선 약 37억 달러 (자체 집계)</span><span lang="en">2024 election about $3.7B (self-reported)</span></td><td><span lang="ko">슈퍼볼 LX 당일 10억 달러 이상 (자체 발표)</span><span lang="en">Super Bowl LX game day over $1B (self-reported)</span></td></tr>
+      <tr><td><span lang="ko">우리 데이터</span><span lang="en">In our data</span></td><td><span lang="ko">예 (거래 기록 전체)</span><span lang="en">Yes (full trade records)</span></td><td><span lang="ko">아니오</span><span lang="en">No</span></td></tr>
+    </table></div>
+    <div class="say"><span lang="ko">예측시장은 미래 사건에 돈을 거는 시장입니다. 두 곳이 가장 큽니다. Polymarket과 Kalshi입니다. 질문은 늘 같은 꼴입니다. "이 일이 일어날까?" 선거, 스포츠, 슈퍼볼, 금리까지 다룹니다. 우리 데이터는 Polymarket만 담고 있습니다.</span><span lang="en">A prediction market is a market where people bet money on future events. The two largest are Polymarket and Kalshi. Every question has the same form: will this happen? They cover elections, sports like the Super Bowl, and even interest rates. Our data covers Polymarket only.</span></div>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 1c</b> · <span lang="ko">돈을 거는 법, 따는 법 · 1분 20초</span><span lang="en">How to bet, how to win · 1 min 20 s</span></div>
+    <div class="chart"><svg viewBox="0 0 860 170" role="img" aria-label="YES share payoff at price 0.70">
+      <g font-size="13">
+        <rect x="10" y="50" width="170" height="60" fill="none" stroke="#0432ff"/><text x="95" y="75" text-anchor="middle">Buy 1 YES</text><text x="95" y="96" text-anchor="middle">pay $0.70</text>
+        <line x1="180" y1="80" x2="250" y2="40" stroke="#555"/><line x1="180" y1="80" x2="250" y2="125" stroke="#555"/>
+        <rect x="250" y="15" width="230" height="50" fill="none" stroke="#2a7"/><text x="365" y="36" text-anchor="middle">Event happens: get $1</text><text x="365" y="56" text-anchor="middle" fill="#2a7">profit +$0.30</text>
+        <rect x="250" y="100" width="230" height="50" fill="none" stroke="#d40000"/><text x="365" y="121" text-anchor="middle">Does not happen: get $0</text><text x="365" y="141" text-anchor="middle" fill="#d40000">loss −$0.70</text>
+        <rect x="520" y="40" width="330" height="80" fill="#eef1ff" stroke="#0432ff"/><text x="685" y="64" text-anchor="middle">Price $0.70 is read as 70%</text><text x="685" y="86" text-anchor="middle">You gain on average only if</text><text x="685" y="106" text-anchor="middle">your true chance &gt; 70%</text>
+      </g></svg></div>
+    <p class="note"><span lang="ko">설명용 값(Illustrative values). 수수료는 빼지 않았다.</span><span lang="en">Illustrative values. Fees are not subtracted.</span></p>
+    <div class="say"><span lang="ko">거는 방법은 이렇습니다. YES 한 장은 사건이 일어나면 1달러, 아니면 0달러를 줍니다. 지금 가격이 70센트면, 사면 30센트를 벌거나 70센트를 잃습니다. 그래서 사람들은 70센트를 70% 확률로 읽습니다. 이기는 방법은 두 가지입니다. 첫째, 실제 확률이 가격보다 높을 때 사서 결과까지 기다립니다. 둘째, 결과 전에 가격이 오르면 팝니다. 결과가 1 아니면 0이라는 점은 Lecture 6의 베르누이(Bernoulli) 변수와 같습니다.</span><span lang="en">Here is how you bet. One YES share pays one dollar if the event happens and zero if it does not. If the price is 70 cents, you either gain 30 cents or lose 70 cents. That is why people read 70 cents as a 70% chance. There are two ways to win. First, buy when the true chance is higher than the price, and wait for the result. Second, sell before the result if the price goes up. An outcome that is 1 or 0 is the Bernoulli variable from Lecture 6.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D6 s23 베르누이(Bernoulli), s24 평균 = p.</span><span lang="en"><b>Lecture:</b> D6 s23 Bernoulli, s24 mean = p.</span></p>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="eyebrow"><span lang="ko">Step 2 of 11 · 도입 발표자 · 약 2분</span><span lang="en">Step 2 of 11 · Intro speaker · about 2 min</span></div>
+  <h2><span lang="ko">시장 규모: 얼마나 큰가?</span><span lang="en">Market size: how big is it?</span></h2>
+  <div class="slide">
+    <div class="meta"><b>Slide 2</b> · <span lang="ko">거래량은 거래량끼리, 매출은 매출끼리 · 2분</span><span lang="en">Volume next to volume, revenue next to revenue · 2 min</span></div>
+    <h3><span lang="ko">A. 오간 돈 (거래량 = 베팅 금액)</span><span lang="en">A. Money traded (volume = amount bet)</span></h3>
+    <div class="chart"><svg viewBox="0 0 860 140" role="img" aria-label="Volume comparison, USD billions">
+      <g font-size="13">
+        <text x="10" y="30">DraftKings handle, 2025</text><rect x="250" y="16" width="540" height="22" fill="#999"/><text x="782" y="32" text-anchor="end" fill="#fff">$54B</text>
+        <text x="10" y="70">All prediction markets, 2025*</text><rect x="250" y="56" width="510" height="22" fill="#0432ff"/><text x="752" y="72" text-anchor="end" fill="#fff">$51B</text>
+        <text x="10" y="110">Kalshi + Polymarket, 2026</text><text x="10" y="124" font-size="11" fill="#555">Jan 1 – Apr 14*</text><rect x="250" y="96" width="600" height="22" fill="#0432ff"/><text x="842" y="112" text-anchor="end" fill="#fff">~$60B</text>
+        <text x="250" y="136" fill="#555" font-size="12">* Bernstein estimates. Prediction-market volume may count both sides of a trade.</text>
+      </g></svg></div>
+    <h3><span lang="ko">B. 1년 매출 (회사가 번 돈)</span><span lang="en">B. Revenue in a year (what the company earns)</span></h3>
+    <div class="chart"><svg viewBox="0 0 860 110" role="img" aria-label="Revenue comparison, USD billions">
+      <g font-size="13">
+        <text x="10" y="30">FanDuel (Flutter US), 2025</text><rect x="250" y="16" width="558" height="22" fill="#999"/><text x="800" y="32" text-anchor="end" fill="#fff">$6.97B</text>
+        <text x="10" y="70">DraftKings, 2025</text><rect x="250" y="56" width="484" height="22" fill="#999"/><text x="726" y="72" text-anchor="end" fill="#fff">$6.05B</text>
+        <text x="10" y="100" fill="#555">Kalshi, Polymarket: revenue not verified from an original source.</text>
+      </g></svg></div>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">회사 가치 신호</span><span lang="en">Value signal</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th></tr>
+      <tr><td><span lang="ko">Kalshi 기업가치 (2026-10)</span><span lang="en">Kalshi valuation (Oct 2026)</span></td><td class="num">$40B</td></tr>
+      <tr><td><span lang="ko">ICE(뉴욕증권거래소 모회사)의 Polymarket 투자</span><span lang="en">ICE (NYSE parent) investment in Polymarket</span></td><td class="num">$1B (2025-10) + $0.6B (2026-03)</td></tr>
+    </table></div>
+    <div class="say"><span lang="ko">얼마나 큰 시장일까요? 거래량은 거래량끼리 비교합니다. 2025년 DraftKings 스포츠북에 걸린 돈은 540억 달러입니다. 같은 해 예측시장 전체 거래량은 Bernstein 추정으로 510억 달러입니다. 2026년에는 Kalshi와 Polymarket 두 곳만으로 4월 중순까지 약 600억 달러입니다. 다만 예측시장 거래량은 거래 양쪽을 세서 커 보일 수 있습니다. 매출은 FanDuel 미국 69.7억, DraftKings 60.5억 달러입니다. 두 예측시장의 매출은 원문으로 확인하지 못했습니다. 대신 Kalshi 기업가치는 400억 달러이고, 뉴욕증권거래소의 모회사 ICE가 Polymarket에 16억 달러를 넣었습니다. 그래서 이 가격이 정확한지는 이제 큰 질문입니다.</span><span lang="en">How big is this market? We compare volume with volume. In 2025, people bet 54 billion dollars at DraftKings' sportsbook. In the same year, all prediction markets traded about 51 billion, a Bernstein estimate. In 2026, Kalshi and Polymarket alone reached about 60 billion by mid-April. Prediction-market volume may count both sides of a trade, so it can look larger. For revenue, FanDuel US earned 6.97 billion and DraftKings 6.05 billion. We could not verify the two prediction markets' revenue from an original source. But Kalshi is valued at 40 billion dollars, and ICE, the owner of the New York Stock Exchange, put 1.6 billion into Polymarket. So whether these prices are accurate is now a big question.</span></div>
+    <p class="note"><span lang="ko">뉴스와 공시이며 우리 데이터가 아니다. 출처: DraftKings SEC 8-K와 실적 통화, Flutter SEC 보도자료, CNBC (Bernstein, Kalshi), ICE 보도자료. 매출에는 스포츠북 외 사업도 섞여 있다. Kalshi 238억, Polymarket 약 225억 달러(2025)는 원문 미확인이라 뺐다.</span><span lang="en">News and filings, not our data. Sources: DraftKings SEC 8-K and earnings call, Flutter SEC release, CNBC (Bernstein, Kalshi), ICE press release. Revenue includes non-sportsbook business. Kalshi $23.8B and Polymarket ~$22.5B (2025) are left out: not verified from the original.</span></p>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="eyebrow"><span lang="ko">Step 3 of 11 · 도입 발표자 · 약 2분</span><span lang="en">Step 3 of 11 · Intro speaker · about 2 min</span></div>
+  <h2><span lang="ko">이 데이터에서 어떤 정보를 뽑을 수 있나?</span><span lang="en">What information can we pull out of this data?</span></h2>
+  <div class="slide">
+    <div class="meta"><b>Slide 3a</b> · <span lang="ko">기록 → 정보 → 질문 · 1분 10초</span><span lang="en">Record → information → question · 1 min 10 s</span></div>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">기록</span><span lang="en">Record</span></th><th><span lang="ko">뽑는 정보</span><span lang="en">Information</span></th><th><span lang="ko">던질 질문</span><span lang="en">Question it opens</span></th></tr>
+      <tr><td><span lang="ko">시장: 질문, 마감 시각, 결과</span><span lang="en">Market: question, close time, outcome</span></td><td><span lang="ko">결과 1 또는 0</span><span lang="en">Outcome 1 or 0</span></td><td><span lang="ko">가격이 결과와 맞나? → Q1</span><span lang="en">Does the price match the outcome? → Q1</span></td></tr>
+      <tr><td><span lang="ko">거래: 가격, 시각</span><span lang="en">Trade: price, time</span></td><td><span lang="ko">마감 1일 전 가격 = 군중의 확률</span><span lang="en">Price 1 day before close = the crowd's chance</span></td><td><span lang="ko">70%는 정말 70%인가? → Q1</span><span lang="en">Is 70% really 70%? → Q1</span></td></tr>
+      <tr><td><span lang="ko">거래: maker 지갑, taker 지갑</span><span lang="en">Trade: maker wallet, taker wallet</span></td><td><span lang="ko">지갑별 거래량, 손익</span><span lang="en">Volume and profit per wallet</span></td><td><span lang="ko">군중은 누구인가? → Q2</span><span lang="en">Who is the crowd? → Q2</span></td></tr>
+      <tr><td><span lang="ko">거래: 크기 (USDC)</span><span lang="en">Trade: size (USDC)</span></td><td><span lang="ko">거래 크기 분포</span><span lang="en">Trade size distribution</span></td><td><span lang="ko">전형적인 베팅은 얼마인가? → Q3</span><span lang="en">What is a typical bet? → Q3</span></td></tr>
+      <tr><td><span lang="ko">더 열 수 있는 질문 (이번 범위 밖)</span><span lang="en">More questions (outside this scope)</span></td><td colspan="2"><span lang="ko">주제별 정확도, 마감 근처 정확도, 거래 많은 시장의 정확도, 차익거래(arbitrage)</span><span lang="en">Accuracy by topic, near the deadline, in busy markets, arbitrage</span></td></tr>
+    </table></div>
+    <div class="say"><span lang="ko">데이터에는 세 종류의 기록이 있습니다. 시장, 거래, 그리고 거래 양쪽의 지갑입니다. 시장은 결과를 줍니다. 거래는 가격과 크기를 줍니다. 지갑은 누가 거래했는지를 줍니다. 각 기록에서 정보를 하나씩 뽑으면 질문이 하나씩 생깁니다. 가격이 결과와 맞나? 군중은 누구인가? 전형적인 베팅은 얼마인가? 주제별 정확도나 차익거래 같은 질문도 열 수 있지만, 이번에는 세 개에 집중했습니다.</span><span lang="en">The data has three kinds of records: markets, trades, and the wallets on both sides of each trade. A market gives us the outcome. A trade gives us a price and a size. A wallet tells us who traded. Each record gives one piece of information, and each piece opens one question. Does the price match the outcome? Who is the crowd? What does a typical bet look like? We could also ask about accuracy by topic or about arbitrage, but this time we focus on three.</span></div>
+  </div>
+  <div class="slide">
+    <div class="meta"><b>Slide 3b</b> · <span lang="ko">걸러낸 데이터 · 50초</span><span lang="en">Filtered data · 50 s</span></div>
+    <div class="chart"><svg viewBox="0 0 860 110" role="img" aria-label="688,131 to 47,948 markets">
+      <g font-size="13"><rect x="10" y="20" width="820" height="30" fill="#ddd"/><text x="18" y="40">688,131 markets in scope</text>
+      <rect x="10" y="62" width="57" height="30" fill="#0432ff"/><text x="76" y="82">47,948 kept (7.0%): a price 1 day before close · a clear outcome · at least 10 trades</text></g></svg></div>
+    <div class="say"><span lang="ko">가격이 정보가 되려면 세 가지가 필요합니다. 마감 하루 전 가격, 분명한 결과, 그리고 최소 10건의 거래입니다. 이 규칙은 결과를 보기 전에 정했습니다. 688,131개 시장 중 47,948개, 7.0%가 남았습니다. 세 질문 모두 같은 시장을 씁니다.</span><span lang="en">For a price to be information, we need three things: a price one day before the close, a clear outcome, and at least 10 trades. We fixed these rules before we saw any result. Out of 688,131 markets, 47,948 are kept, which is 7.0%. All three questions use the same markets.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D2, D3 데이터와 데이터 행렬 (규칙만, 방법 아님).</span><span lang="en"><b>Lecture:</b> D2, D3 data and data matrix (data rules only, not a method).</span></p>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="eyebrow"><span lang="ko">Step 4 of 11 · 도입 발표자 · 약 1분</span><span lang="en">Step 4 of 11 · Intro speaker · about 1 min</span></div>
+  <h2><span lang="ko">연구 질문(research questions, RQs)</span><span lang="en">Research questions (RQs)</span></h2>
+  <div class="flow">
+    <div class="stage big"><div class="n">Q1 <span lang="ko">군중이 맞나?</span><span lang="en">Is the crowd right?</span></div><div class="s"><span lang="ko">70% 가격 → 70%로 일어나나? 정보: 가격을 확률로 믿어도 되나</span><span lang="en">Priced 70% → happens 70%? Information: can we trust the price as a probability</span></div></div>
+    <div class="stage"><div class="n">Q2 <span lang="ko">군중은 누구?</span><span lang="en">Who is the crowd?</span></div><div class="s"><span lang="ko">소수 지갑이 거래 대부분? 정보: 가격 뒤에 누가 있나</span><span lang="en">A few wallets do most trading? Information: who stands behind the price</span></div></div>
+    <div class="stage"><div class="n">Q3 <span lang="ko">베팅의 모양?</span><span lang="en">What does betting look like?</span></div><div class="s"><span lang="ko">거래 크기, 가격의 분포. 정보: 어떤 요약 숫자가 정직한가</span><span lang="en">Spread of trade sizes and prices. Information: which summary number is honest</span></div></div>
+  </div>
+  <div class="say"><span lang="ko">그래서 질문은 세 개입니다. Q1, 군중이 맞나? 70%로 매긴 일이 70%로 일어나나? Q2, 군중은 누구인가? 소수 지갑이 거래 대부분을 하나? Q3, 베팅은 어떤 모양인가? 셋 다 하나로 이어집니다. 우리가 이 가격을 믿어도 되나?</span><span lang="en">So we ask three questions. Q1: is the crowd right? Do events priced at 70% happen 70% of the time? Q2: who is the crowd? Do a few wallets do most of the trading? Q3: what does betting look like? All three lead to one question: can we trust this price?</span></div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 4b</b> · <span lang="ko">Q2와 Q3는 무엇이 다른가 · 40초 (질문이 나오면)</span><span lang="en">How Q2 differs from Q3 · 40 s (if asked)</span></div>
+    <div class="chart"><svg viewBox="0 0 860 150" role="img" aria-label="Same wallet volume data, two questions">
+      <g font-size="13">
+        <rect x="230" y="6" width="400" height="34" fill="none" stroke="#999"/><text x="430" y="28" text-anchor="middle">Same data: volume of 581,435 maker wallets</text>
+        <line x1="380" y1="40" x2="215" y2="64" stroke="#555"/><line x1="480" y1="40" x2="645" y2="64" stroke="#555"/>
+        <rect x="20" y="64" width="390" height="80" fill="none" stroke="#0432ff"/>
+        <text x="215" y="86" text-anchor="middle" font-weight="600">Q3: shape of single values</text>
+        <text x="215" y="106" text-anchor="middle">"What is a typical wallet?" counted by wallets</text>
+        <text x="215" y="128" text-anchor="middle" fill="#0432ff">mean 14,103 vs median 101.2 USDC</text>
+        <rect x="450" y="64" width="390" height="80" fill="#eef1ff" stroke="#0432ff"/>
+        <text x="645" y="86" text-anchor="middle" font-weight="600">Q2: shares of the total</text>
+        <text x="645" y="106" text-anchor="middle">"Who holds the total?" counted by volume</text>
+        <text x="645" y="128" text-anchor="middle" fill="#0432ff">top 20% hold 98.9%</text>
+      </g></svg></div>
+    <div class="tablewrap"><table>
+      <tr><th></th><th><span lang="ko">Q2: 누가 거래하나</span><span lang="en">Q2: who trades</span></th><th><span lang="ko">Q3: 어떤 모양인가</span><span lang="en">Q3: what shape</span></th></tr>
+      <tr><td><span lang="ko">묻는 것</span><span lang="en">Asks</span></td><td><span lang="ko">전체 거래량이 누구에게 몰렸나</span><span lang="en">Who holds the total volume</span></td><td><span lang="ko">값 하나하나가 어떻게 퍼져 있나</span><span lang="en">How single values are spread</span></td></tr>
+      <tr><td><span lang="ko">세는 단위</span><span lang="en">Counts by</span></td><td><span lang="ko">양(거래량)의 몫</span><span lang="en">Share of the amount (volume)</span></td><td><span lang="ko">개수(지갑, 거래, 시장)의 비율</span><span lang="en">Share of items (wallets, trades, markets)</span></td></tr>
+      <tr><td><span lang="ko">도구</span><span lang="en">Tools</span></td><td><span lang="ko">상위 몫, 로렌츠 곡선, CCDF, Welch t, 손익</span><span lang="en">Top shares, Lorenz curve, CCDF, Welch t, PnL</span></td><td><span lang="ko">히스토그램, QQ 그림, 로그 변환, 분포 적합</span><span lang="en">Histogram, QQ plot, log transform, distribution fits</span></td></tr>
+      <tr><td><span lang="ko">보여 주는 것</span><span lang="en">Shows</span></td><td><span lang="ko">가격 뒤에 누가 있나</span><span lang="en">Who stands behind the price</span></td><td><span lang="ko">숫자를 어떻게 읽어야 정직한가</span><span lang="en">How to read the numbers honestly</span></td></tr>
+    </table></div>
+    <p><span lang="ko"><b>왜 따로 묻나:</b></span><span lang="en"><b>Why ask both:</b></span></p>
+    <ol>
+      <li><span lang="ko">모양만으로는 몫을 알 수 없다. 꼬리가 긴 분포에서도 상위 20%의 몫은 60%일 수도, 99%일 수도 있다.</span><span lang="en">Shape alone does not give the shares. A long tail can mean the top 20% hold 60%, or 99%.</span></li>
+      <li><span lang="ko">몫만으로는 전형적인 값을 알 수 없다. "상위 20%가 98.9%"는 보통 지갑의 크기를 말해 주지 않는다.</span><span lang="en">Shares alone do not give a typical value. "Top 20% hold 98.9%" does not say what a typical wallet trades.</span></li>
+      <li><span lang="ko">Q1을 돕는 방식이 다르다. Q2는 가격이 누구의 판단인지 묻는다. Q3는 Q1을 읽는 법을 정한다 (예: 구간 0에 시장 18,209개).</span><span lang="en">They help Q1 in different ways. Q2 asks whose view the price is. Q3 sets how to read Q1 (for example, 18,209 markets in bin 0).</span></li>
+    </ol>
+    <div class="say"><span lang="ko">Q2와 Q3는 같은 지갑 거래량을 쓰지만 다른 질문입니다. Q3는 값 하나의 모양을 봅니다. 보통 maker 지갑은 101.2 USDC를 거래합니다. Q2는 전체의 몫을 봅니다. 상위 20%가 98.9%를 가집니다. 모양만으로는 몫을 알 수 없고, 몫만으로는 보통 값을 알 수 없습니다. Q3는 전형적인 거래가 어떤 모습인지 알려 주고, Q2는 전체를 누가 가졌는지 알려 줍니다.</span><span lang="en">Q2 and Q3 use the same wallet volume, but they ask different questions. Q3 looks at the shape of single values: a typical maker wallet trades 101.2 USDC. Q2 looks at shares of the total: the top 20% hold 98.9%. The shape does not give the shares, and the shares do not give a typical value. Q3 tells us what a typical trade looks like. Q2 tells us who holds the total.</span></div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="eyebrow"><span lang="ko">Step 5 of 11 · Q1 발표자 · 약 7분</span><span lang="en">Step 5 of 11 · Q1 speaker · about 7 min</span></div>
+  <h2><span lang="ko">Q1: 가격은 잘 보정(well calibrated)되었나? 차익거래는? 정규분포인가?</span><span lang="en">Q1: are prices well calibrated? Arbitrage? Is it normal?</span></h2>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 5a</b> · <span lang="ko">보정의 뜻 · 1분</span><span lang="en">What calibration means · 1 min</span></div>
+    <div class="chart"><svg viewBox="0 0 860 120" role="img" aria-label="binning idea">
+      <g font-size="13"><rect x="10" y="20" width="250" height="70" fill="none" stroke="#0432ff"/><text x="135" y="45" text-anchor="middle">Markets priced 0.70–0.80</text><text x="135" y="68" text-anchor="middle">put in one bin</text>
+      <text x="290" y="60">→</text>
+      <rect x="320" y="20" width="250" height="70" fill="none" stroke="#0432ff"/><text x="445" y="45" text-anchor="middle">Count outcome 1</text><text x="445" y="68" text-anchor="middle">observed rate</text>
+      <text x="600" y="60">→</text>
+      <rect x="630" y="20" width="220" height="70" fill="#eef1ff" stroke="#0432ff"/><text x="740" y="45" text-anchor="middle">rate ≈ mean price?</text><text x="740" y="68" text-anchor="middle">yes = well calibrated</text></g></svg></div>
+    <div class="say"><span lang="ko">보정(calibration)은 이런 뜻입니다. 70센트 근처에서 거래된 시장 100개를 모읍니다. 그중 약 70개가 YES로 끝나면 가격은 잘 보정된 것입니다. 20센트 근처 100개 중 약 20개면 역시 맞습니다. 그래서 가격을 10개 구간(bin)으로 나누고, 구간마다 실제 비율과 평균 가격을 비교합니다. 이것이 맞으면 가격은 확률로 읽을 수 있습니다.</span><span lang="en">Calibration means this. Take 100 markets traded near 70 cents. If about 70 of them end YES, the price is well calibrated. If about 20 of 100 markets near 20 cents end YES, that is right too. So we split prices into 10 bins and compare the observed rate with the mean price in each bin. If they match, we can read the price as a probability.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D6 s23, s26, s29 베르누이와 이항(binomial) · D7 s13, s14 같은 폭 구간(equal-width bins).</span><span lang="en"><b>Lecture:</b> D6 s23, s26, s29 Bernoulli and binomial · D7 s13, s14 equal-width bins.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 5a2</b> · <span lang="ko">Q1 방법, 처음부터 순서대로 · 1분 30초</span><span lang="en">Q1 method, step by step · 1 min 30 s</span></div>
+    <div class="chart"><svg viewBox="0 0 860 210" role="img" aria-label="Q1 method flow">
+      <g font-size="12">
+        <rect x="4" y="10" width="150" height="40" fill="none" stroke="#999"/><text x="79" y="35" text-anchor="middle">0 Price at T − 1 day</text>
+        <text x="160" y="35">→</text>
+        <rect x="176" y="10" width="150" height="40" fill="none" stroke="#999"/><text x="251" y="35" text-anchor="middle">1 Filter: 47,948</text>
+        <text x="332" y="35">→</text>
+        <rect x="348" y="10" width="150" height="40" fill="none" stroke="#0432ff"/><text x="423" y="35" text-anchor="middle">2 Ten bins</text>
+        <text x="504" y="35">→</text>
+        <rect x="520" y="10" width="336" height="40" fill="none" stroke="#0432ff"/><text x="688" y="35" text-anchor="middle">3 Per bin: mean price, observed rate</text>
+        <line x1="600" y1="50" x2="230" y2="80" stroke="#555"/><line x1="770" y1="50" x2="650" y2="80" stroke="#555"/>
+        <rect x="60" y="80" width="340" height="44" fill="#eef1ff" stroke="#0432ff"/><text x="230" y="100" text-anchor="middle">4 Chi-square goodness of fit, 1 test</text><text x="230" y="117" text-anchor="middle" fill="#555">Is the whole set right?</text>
+        <rect x="470" y="80" width="360" height="44" fill="none" stroke="#0432ff"/><text x="650" y="100" text-anchor="middle">5 Binomial test, 10 tests</text><text x="650" y="117" text-anchor="middle" fill="#555">Which bin is off?</text>
+        <line x1="650" y1="124" x2="650" y2="140" stroke="#555"/>
+        <rect x="470" y="140" width="360" height="26" fill="none" stroke="#0432ff"/><text x="650" y="158" text-anchor="middle">6 Correction: BH and Bonferroni</text>
+        <line x1="230" y1="124" x2="230" y2="185" stroke="#555"/><line x1="650" y1="166" x2="650" y2="185" stroke="#555"/>
+        <rect x="60" y="182" width="770" height="26" fill="none" stroke="#999"/><text x="445" y="200" text-anchor="middle">7 Verdict rule (fixed first) → 8 Effect size → 9 Checks</text>
+      </g></svg></div>
+    <div class="tablewrap"><table>
+      <tr><th>#</th><th><span lang="ko">단계</span><span lang="en">Step</span></th><th><span lang="ko">무엇을, 왜</span><span lang="en">What and why</span></th><th><span lang="ko">우리 값</span><span lang="en">Our value</span></th><th><span lang="ko">강의</span><span lang="en">Lecture</span></th></tr>
+      <tr><td>0</td><td><span lang="ko">평가 가격</span><span lang="en">Evaluation price</span></td><td><span lang="ko">마감 1일 전 또는 그 전의 마지막 시각에 있는 거래들의 평균 가격. 마감 뒤 가격에는 답이 섞인다</span><span lang="en">Mean price of the trades at the last time stamp at or before 1 day before close. A later price already knows the answer</span></td><td><span lang="ko">outcome 1의 가격</span><span lang="en">Price of outcome 1</span></td><td><span lang="ko">데이터 규칙</span><span lang="en">Data rule</span></td></tr>
+      <tr><td>1</td><td><span lang="ko">시장 거르기</span><span lang="en">Filter markets</span></td><td><span lang="ko">24시간 넘게 묵은 가격과 거래 10건 미만 시장을 뺀다. 빈 시장의 가격은 군중의 판단이 아니다</span><span lang="en">Drop prices older than 24 h and markets with under 10 trades. A price in an empty market is not a crowd's view</span></td><td class="num">47,948</td><td><span lang="ko">데이터 규칙</span><span lang="en">Data rule</span></td></tr>
+      <tr><td>2</td><td><span lang="ko">구간 10개</span><span lang="en">Ten bins</span></td><td><span lang="ko">0.1 폭으로 나눈다. 비슷한 가격끼리 모아야 "70%가 70%인가"를 셀 수 있다</span><span lang="en">Width 0.1. Similar prices must be grouped to count "is 70% really 70%"</span></td><td><span lang="ko">같은 폭 10개</span><span lang="en">10 equal-width</span></td><td>D7 s13, s14</td></tr>
+      <tr><td>3</td><td><span lang="ko">구간별 두 숫자</span><span lang="en">Two numbers per bin</span></td><td><span lang="ko">평균 가격, 그리고 실제 비율 = outcome 1이 이긴 수 / 시장 수. 격차 = 실제 비율 − 평균 가격</span><span lang="en">Mean price, and observed rate = outcome-1 wins / markets. Gap = observed rate − mean price</span></td><td><span lang="ko">구간 7: 0.746 대 0.713, −3.29pp</span><span lang="en">Bin 7: 0.746 vs 0.713, −3.29 pp</span></td><td>D12 s3</td></tr>
+      <tr><td>3a</td><td><span lang="ko">이항 모형 (전제)</span><span lang="en">Binomial model (premise)</span></td><td><span lang="ko">시장 하나 = 성공 확률이 가격인 베르누이 시행. 구간의 1 개수 ≈ B(n, 평균 가격)</span><span lang="en">One market = a Bernoulli trial with success chance = price. Count of 1s in a bin ≈ B(n, mean price)</span></td><td></td><td>D6 s23, s26, s29</td></tr>
+      <tr><td>4</td><td><span lang="ko">카이제곱 적합도 (1번)</span><span lang="en">Chi-square goodness of fit (1 test)</span></td><td><span lang="ko">구간 10개가 모두 함께 가격대로인가? 칸 20개의 (O − E)²/E를 더한다. 기대값 E는 가격에서 온다</span><span lang="en">Do all 10 bins match the prices together? Sum (O − E)²/E over 20 cells. E comes from the prices</span></td><td><span lang="ko">χ² = 68.0, 자유도 10, p = 1.1 × 10⁻¹⁰</span><span lang="en">χ² = 68.0, df 10, p = 1.1 × 10⁻¹⁰</span></td><td><span lang="ko">D12 s3, s4 (적합도 형태는 부분)</span><span lang="en">D12 s3, s4 (goodness-of-fit form partly)</span></td></tr>
+      <tr><td>5</td><td><span lang="ko">구간별 정확 이항 검정 (10번)</span><span lang="en">Exact binomial test per bin (10 tests)</span></td><td><span lang="ko">카이제곱은 "어딘가 틀렸다"만 말한다. 그래서 구간마다 이 차이가 우연인지 본다</span><span lang="en">Chi-square only says "something is off". So each bin asks: is this gap chance?</span></td><td><span lang="ko">구간 7: p = 0.00036</span><span lang="en">Bin 7: p = 0.00036</span></td><td><span lang="ko">D10 s8–s13 (동전 예, 같은 규칙)</span><span lang="en">D10 s8–s13 (coin example, same rule)</span></td></tr>
+      <tr><td>6</td><td><span lang="ko">다중 비교 보정</span><span lang="en">Multiple-testing correction</span></td><td><span lang="ko">10번 검정하면 차이가 없어도 하나쯤 걸릴 확률이 1 − 0.95¹⁰ ≈ 40%다. Bonferroni는 모든 p를 0.005와 비교한다. BH는 i번째로 작은 p를 i × 0.005와 비교한다</span><span lang="en">With 10 tests, the chance of at least one false hit is 1 − 0.95¹⁰ ≈ 40%. Bonferroni compares each p with 0.005. BH compares the i-th smallest p with i × 0.005</span></td><td><span lang="ko">BH 5개, Bonferroni 4개</span><span lang="en">BH 5, Bonferroni 4</span></td><td>D13 s16, s18, s19</td></tr>
+      <tr><td>7</td><td><span lang="ko">판정 규칙</span><span lang="en">Verdict rule</span></td><td><span lang="ko">결과 전에 정했다. 카이제곱 p &lt; 0.05이면 "전체가 보정되지 않았다". 구간별 판정은 BH 보정 p &lt; 0.05</span><span lang="en">Fixed before the results. Chi-square p &lt; 0.05 means "not calibrated as a whole". A bin is off when its BH p &lt; 0.05</span></td><td><span lang="ko">보정되지 않음</span><span lang="en">Not calibrated</span></td><td><span lang="ko">사전 등록</span><span lang="en">Pre-registration</span></td></tr>
+      <tr><td>8</td><td><span lang="ko">효과 크기</span><span lang="en">Effect size</span></td><td><span lang="ko">유의한지와 차이가 큰지는 다른 질문이다. 격차, 순 격차, 95% z 구간으로 크기를 본다</span><span lang="en">Significant and large are different questions. Gap, net gap and the 95% z interval show the size</span></td><td><span lang="ko">9개 구간 −0.46 ~ −3.29pp, 구간 9는 +0.03pp. 순 격차 −0.99%</span><span lang="en">9 bins −0.46 to −3.29 pp, bin 9 +0.03 pp. Net gap −0.99%</span></td><td>D12 s3, D5 s24, D6 s25</td></tr>
+      <tr><td>9</td><td><span lang="ko">확인 검사</span><span lang="en">Checks</span></td><td><span lang="ko">결론이 선택 하나에 좌우되지 않는지 본다: 같은 빈도 구간, 10건 기준 없이, 군집 부트스트랩, 로지스틱 보정</span><span lang="en">Does one choice drive the result? Equal-frequency bins, no 10-trade rule, cluster bootstrap, logistic calibration</span></td><td><span lang="ko">5f 참고</span><span lang="en">See 5f</span></td><td><span lang="ko">D7 s13–s15, D5 s25, s26, D21 s15–s19, D23 s3</span><span lang="en">D7 s13–s15, D5 s25, s26, D21 s15–s19, D23 s3</span></td></tr>
+    </table></div>
+    <div class="tablewrap"><table>
+      <tr><th></th><th><span lang="ko">카이제곱 적합도 (4)</span><span lang="en">Chi-square goodness of fit (4)</span></th><th><span lang="ko">이항 검정 × 10 (5)</span><span lang="en">Binomial test × 10 (5)</span></th></tr>
+      <tr><td><span lang="ko">질문</span><span lang="en">Question</span></td><td><span lang="ko">전체가 맞나</span><span lang="en">Is the whole set right?</span></td><td><span lang="ko">어느 구간이 틀렸나</span><span lang="en">Which bin is off?</span></td></tr>
+      <tr><td><span lang="ko">검정 수</span><span lang="en">Tests</span></td><td>1</td><td>10</td></tr>
+      <tr><td><span lang="ko">보정</span><span lang="en">Correction</span></td><td><span lang="ko">필요 없음</span><span lang="en">Not needed</span></td><td><span lang="ko">필요함 (6)</span><span lang="en">Needed (6)</span></td></tr>
+      <tr><td><span lang="ko">관계</span><span lang="en">Link</span></td><td><span lang="ko">χ² = 구간 10개 z²의 합 (z는 가격으로 계산한 표준편차를 씀)</span><span lang="en">χ² = sum of the 10 bins' z² (z uses the SD from the price)</span></td><td><span lang="ko">각 구간의 z가 그 구간의 p를 정한다</span><span lang="en">Each bin's z sets that bin's p</span></td></tr>
+    </table></div>
+    <div class="say"><span lang="ko">방법을 순서대로 보겠습니다. 표본을 뽑지 않습니다. 남긴 47,948개 시장을 모두 씁니다. 먼저 시장마다 마감 하루 전 가격을 정합니다. 마감 뒤 가격에는 답이 섞이기 때문입니다. 가격을 10개 구간으로 나누고, 구간마다 평균 가격과 실제 비율을 셉니다. 그다음 두 가지 검정을 합니다. 카이제곱 적합도 검정은 한 번만 합니다. 10개 구간이 모두 함께 맞는지 묻습니다. 이항 검정은 구간마다 한 번씩, 모두 10번 합니다. 어느 구간이 틀렸는지 묻습니다. 검정을 10번 하면 우연히 하나쯤 걸릴 확률이 약 40%입니다. 그래서 Benjamini-Hochberg와 Bonferroni로 보정합니다. 판정 규칙은 결과를 보기 전에 정했습니다.</span><span lang="en">Here is the method in order. We do not sample. We use all 47,948 kept markets. First, each market gets its price one day before the close, because a later price already knows the answer. We split the prices into 10 bins and count the mean price and the observed rate in each bin. Then we run two kinds of test. The chi-square goodness-of-fit test runs once. It asks whether all 10 bins match together. The binomial test runs once per bin, 10 times in all. It asks which bin is off. With 10 tests, the chance of a false hit somewhere is about 40%, so we correct with Benjamini-Hochberg and Bonferroni. We fixed the verdict rule before we saw any result.</span></div>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 5b</b> · <span lang="ko">결과: 전체로는 보정되지 않았다 · 1분 30초</span><span lang="en">Result: not calibrated as a whole · 1 min 30 s</span></div>
+    <div class="chart"><svg viewBox="0 0 860 260" role="img" aria-label="Gap per bin, observed rate minus mean price, percentage points">
+      <g font-size="12">
+        <line x1="60" y1="40" x2="840" y2="40" stroke="#333"/><text x="54" y="44" text-anchor="end">0</text>
+        <text x="54" y="104" text-anchor="end">−1</text><line x1="60" y1="100" x2="840" y2="100" stroke="#eee"/>
+        <text x="54" y="164" text-anchor="end">−2</text><line x1="60" y1="160" x2="840" y2="160" stroke="#eee"/>
+        <text x="54" y="224" text-anchor="end">−3</text><line x1="60" y1="220" x2="840" y2="220" stroke="#eee"/>
+        <rect x="70"  y="40" width="56" height="27.5" fill="#0432ff"/>
+        <rect x="148" y="40" width="56" height="137.9" fill="#0432ff"/>
+        <rect x="226" y="40" width="56" height="60.0" fill="#999"/>
+        <rect x="304" y="40" width="56" height="102.9" fill="#999"/>
+        <rect x="382" y="40" width="56" height="73.7" fill="#999"/>
+        <rect x="460" y="40" width="56" height="35.1" fill="#999"/>
+        <rect x="538" y="40" width="56" height="167.1" fill="#0432ff"/>
+        <rect x="616" y="40" width="56" height="197.2" fill="#0432ff"/>
+        <rect x="694" y="40" width="56" height="112.6" fill="#0432ff"/>
+        <rect x="772" y="38.1" width="56" height="1.9" fill="#999"/>
+        <g text-anchor="middle" fill="#555"><text x="98" y="20">0–.1</text><text x="176" y="20">.1–.2</text><text x="254" y="20">.2–.3</text><text x="332" y="20">.3–.4</text><text x="410" y="20">.4–.5</text><text x="488" y="20">.5–.6</text><text x="566" y="20">.6–.7</text><text x="644" y="20">.7–.8</text><text x="722" y="20">.8–.9</text><text x="800" y="20">.9–1</text></g>
+        <text x="644" y="254" text-anchor="middle" fill="#0432ff">−3.29</text>
+        <text x="62" y="254">Blue: bin off after BH correction (5 of 10)</text>
+      </g></svg></div>
+    <p class="note"><span lang="ko">구간별 차이 = 실제 비율 − 평균 가격, 단위 %포인트. 47,948개 시장.</span><span lang="en">Gap per bin = observed rate − mean price, in percentage points. 47,948 markets.</span></p>
+    <div class="say"><span lang="ko">결과입니다. 전체로 보면 가격은 잘 보정되지 않았습니다. 카이제곱(chi-square) 적합도 검정에서 χ² = 68.0, 자유도 10, p = 1.1 × 10⁻¹⁰입니다. 10개 구간 중 9개에서 실제 비율이 가격보다 낮습니다. 가장 큰 차이는 70–80% 구간입니다. 가격은 74.6%, 실제는 71.3%였습니다. 전체 순 차이(net gap)는 −0.99%입니다. 작지만 한 방향입니다. outcome 1(시장의 첫 번째 결과, 63.9%는 Yes)이 조금 비싸게 매겨져 있습니다.</span><span lang="en">Here is the result. As a whole, the prices are not well calibrated. The chi-square goodness-of-fit test gives chi-square 68.0 with 10 degrees of freedom, and p is 1.1 times ten to the minus ten. In 9 of the 10 bins, the observed rate is below the price. The biggest gap is the 70 to 80% bin: priced at 74.6%, observed 71.3%. The net gap over all markets is minus 0.99%. It is small, but it goes one way. Outcome 1, the first-listed outcome of a market, is priced a little too high. In 63.9% of the markets it is labeled Yes.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D12 s3, s4 카이제곱(관측 대 기대) · D10 s8–s13 구간별 이항 검정 · D13 s16, s18, s19 Benjamini-Hochberg(BH) 보정 · D5 s24 z 구간.</span><span lang="en"><b>Lecture:</b> D12 s3, s4 chi-square (observed vs expected) · D10 s8–s13 per-bin binomial test · D13 s16, s18, s19 Benjamini-Hochberg (BH) correction · D5 s24 z interval.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 5c</b> · <span lang="ko">맞히기 ≠ 보정 · 1분</span><span lang="en">Being right ≠ calibrated · 1 min</span></div>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">잰 것</span><span lang="en">Measure</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th></tr>
+      <tr><td><span lang="ko">0.5 기준 정확도 (accuracy)</span><span lang="en">Accuracy at the 0.5 line</span></td><td class="num">83.4%</td></tr>
+      <tr><td><span lang="ko">늘 다수 쪽을 찍을 때 정확도</span><span lang="en">Always guess the majority</span></td><td class="num">63.4%</td></tr>
+      <tr><td><span lang="ko">가격의 평균 제곱 잔차 (mean squared error, MSE)</span><span lang="en">Mean squared error (MSE) of the price</span></td><td class="num">0.107</td></tr>
+      <tr><td><span lang="ko">카이제곱 판정</span><span lang="en">Chi-square verdict</span></td><td class="num"><span lang="ko">보정 안 됨</span><span lang="en">not calibrated</span></td></tr>
+    </table></div>
+    <div class="say"><span lang="ko">그런데 시장은 자주 맞힙니다. 0.5를 기준으로 결과를 맞히면 정확도가 83.4%입니다. 늘 다수 쪽을 찍으면 63.4%입니다. 그러니 가격은 쓸모 있는 정보입니다. 하지만 자주 맞히는 것과 확률이 정확한 것은 다른 질문입니다. 뉴스의 98.4%도 같은 이야기입니다.</span><span lang="en">Still, the market is right often. Calling the outcome at the 0.5 line is right 83.4% of the time. Always guessing the majority gives 63.4%. So the price carries real information. But being right often and having an exact probability are two different questions. The 98.4% in the news is the same story.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D23 s5–s14 정확도, s7, s10 다수 클래스 기준선 · D23 s3 MSE. <b>숙제:</b> hw07 (정확도, 늘-아니오 기준선), hw06 (MSE).</span><span lang="en"><b>Lecture:</b> D23 s5–s14 accuracy, s7, s10 majority baseline · D23 s3 MSE. <b>Homework:</b> hw07 (accuracy, always-no baseline), hw06 (MSE).</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 5d</b> · <span lang="ko">차익거래(arbitrage) 기회는? · 1분 30초</span><span lang="en">Any arbitrage chance? · 1 min 30 s</span></div>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">종류</span><span lang="en">Kind</span></th><th><span lang="ko">예</span><span lang="en">Example</span></th><th><span lang="ko">우리가 쟀나?</span><span lang="en">Measured?</span></th></tr>
+      <tr><td><span lang="ko">무위험: 한 시장 안</span><span lang="en">Riskless: inside one market</span></td><td><span lang="ko">YES $0.48 + NO $0.49 = $0.97 → 둘 다 사면 $1 받음, +$0.03 (설명용 값)</span><span lang="en">YES $0.48 + NO $0.49 = $0.97 → buy both, get $1, +$0.03 (illustrative)</span></td><td><span lang="ko">아니오</span><span lang="en">No</span></td></tr>
+      <tr><td><span lang="ko">무위험: 두 거래소 사이</span><span lang="en">Riskless: across exchanges</span></td><td><span lang="ko">Kalshi YES + Polymarket NO &lt; $1</span><span lang="en">Kalshi YES + Polymarket NO &lt; $1</span></td><td><span lang="ko">아니오 (Kalshi 데이터 없음)</span><span lang="en">No (no Kalshi data)</span></td></tr>
+      <tr><td><span lang="ko">통계적 우위: 보정 차이를 이용</span><span lang="en">Statistical edge: use the calibration gap</span></td><td><span lang="ko">비싸게 매겨진 outcome 1의 반대쪽을 산다</span><span lang="en">Buy the other side of the over-priced outcome 1</span></td><td><span lang="ko">예, 검토 확인 M5</span><span lang="en">Yes, review check M5</span></td></tr>
+    </table></div>
+    <div class="chart"><svg viewBox="0 0 860 90" role="img" aria-label="Largest implied gap vs trading cost">
+      <g font-size="13"><text x="10" y="30">Largest implied gap</text><rect x="200" y="16" width="444" height="20" fill="#0432ff"/><text x="652" y="31">2.22%</text>
+      <text x="10" y="68">Trading cost line</text><rect x="200" y="54" width="314" height="20" fill="#999"/><text x="522" y="69">1.57% (mean half spread)</text></g></svg></div>
+    <div class="say"><span lang="ko">그러면 공짜 돈, 차익거래가 있을까요? 무위험 차익거래는 YES와 NO를 합쳐 1달러보다 싸게 살 때입니다. 우리는 이것을 재지 않았습니다. Kalshi 데이터도 없습니다. 대신 가까운 질문을 쟀습니다. 보정 차이로 돈을 벌 수 있나? 가장 큰 차이는 2.22%이고, 거래 비용 선은 평균 반 스프레드 1.57%입니다. 점 추정으로는 비용보다 큽니다. 하지만 7개 가격 중 95% 구간 전체가 비용 선을 넘는 곳은 0개입니다. 그래서 확실한 공짜 돈이라고 말할 수 없습니다.</span><span lang="en">So is there free money, an arbitrage? Riskless arbitrage means buying YES and NO together for less than one dollar. We did not measure that, and we have no Kalshi data. Instead we measured a close question: can the calibration gap make money? The largest implied gap is 2.22%. The trading cost line, the mean half spread, is 1.57%. As a point estimate, the gap is above the cost. But for 0 of 7 grid prices does the whole 95% band clear the cost line. So we cannot call it sure money.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D21 s15–s19 로지스틱 회귀(logistic regression)를 가격의 logit에 적용 (부분, 논문이 강의 밖으로 표시) · D5 s25, s26 부트스트랩(bootstrap) 구간 (부분). 무위험 차익거래는 강의 밖이며 다음 연구 질문이다.</span><span lang="en"><b>Lecture:</b> D21 s15–s19 logistic regression applied to the logit of the price (partly, the paper labels it outside) · D5 s25, s26 bootstrap interval (partly). Riskless arbitrage is outside the lectures and is a next question.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 5e</b> · <span lang="ko">베팅 가격은 정규분포인가? 포아송처럼 n이 크면? · 1분 30초</span><span lang="en">Are bet prices normal? Like Poisson for large n? · 1 min 30 s</span></div>
+    <div class="flow">
+      <div class="stage"><div class="n"><span lang="ko">가격 하나하나</span><span lang="en">Each price</span></div><div class="s"><span lang="ko">정규 아님. 양 끝에 몰림. 25% 분위 0.015, 중앙값 0.32, 95% 분위 0.997</span><span lang="en">Not normal. Piles at both ends. 25th pct 0.015, median 0.32, 95th pct 0.997</span></div></div>
+      <div class="stage"><div class="n"><span lang="ko">거래 크기 하나하나</span><span lang="en">Each trade size</span></div><div class="s"><span lang="ko">정규 아님. 정규 적합 KS D = 0.469. 로그 값은 직선을 훨씬 잘 따름</span><span lang="en">Not normal. Normal fit KS D = 0.469. Log points follow the line much better</span></div></div>
+      <div class="stage big"><div class="n"><span lang="ko">구간 안의 outcome 1 개수</span><span lang="en">Count of outcome 1 in a bin</span></div><div class="s"><span lang="ko">이항(binomial). n이 크면 정규에 가까움 → z 구간이 맞음. 70–80% 구간 n = 2,301</span><span lang="en">Binomial. Near normal for large n → the z interval works. 70–80% bin n = 2,301</span></div></div>
+    </div>
+    <figure><img src="../reports/figures/hist_price_p1d.png" alt="Histogram of the price one day before close"><figcaption><span lang="ko">마감 1일 전 가격의 히스토그램. 양 끝에 몰린다.</span><span lang="en">Histogram of the price one day before close. It piles up at both ends.</span></figcaption></figure>
+    <div class="say"><span lang="ko">자주 받는 질문입니다. 베팅 가격은 정규분포를 따를까요? 아닙니다. 가격 하나하나는 0과 1 근처 양 끝에 몰립니다. 중앙값은 0.32이고 95% 분위는 0.997입니다. 거래 크기도 정규가 아닙니다. 그럼 데이터가 많아지면 정규가 되나요? 개별 값은 아닙니다. 정규에 가까워지는 것은 개수와 평균입니다. 한 구간의 outcome 1 개수는 이항분포입니다. n이 크면 이항분포는 정규에 가까워집니다. 포아송도 평균이 크면 같습니다. 그래서 우리는 구간마다 1.96 곱하기 표준오차로 z 구간을 그릴 수 있었습니다.</span><span lang="en">A common question: do bet prices follow a normal distribution? No. Each price piles up near 0 and near 1. The median is 0.32 and the 95th percentile is 0.997. Trade sizes are not normal either. Then does more data make it normal? Not the single values. What becomes near normal is a count or a mean. The count of outcome 1 in one bin is binomial. When n is large, the binomial is close to normal, and so is a Poisson with a large mean. That is why we can draw a z interval, 1.96 standard errors, in each bin.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D6 s26, s29 이항과 그 표준편차 · D5 s24 z 구간 · D7 s5, s11 QQ 그림 · D6 s4 정규. 포아송과 중심극한정리(central limit theorem, CLT)는 강의 덱 글에서 찾지 못했다: 강의 밖으로 말한다.</span><span lang="en"><b>Lecture:</b> D6 s26, s29 binomial and its SD · D5 s24 z interval · D7 s5, s11 QQ plot · D6 s4 normal. Poisson and the central limit theorem (CLT) were not found in the deck text: say they are outside the lectures.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>Slide 5f</b> · <span lang="ko">확인과 의미 · 30초</span><span lang="en">Checks and meaning · 30 s</span></div>
+    <div class="say"><span lang="ko">우리 선택 때문에 차이가 생긴 걸까요? 다섯 가지 확인을 했습니다. 가격 규칙을 바꾸면 −1.20%, Yes/No 시장만 보면 −1.32%입니다. 같은 사건의 시장을 묶은 부트스트랩 구간은 −1.41%에서 −0.58%로 모두 0 아래입니다. 의미는 이렇습니다. 가격은 유용한 정보지만, 확률로 읽을 때는 outcome 1 쪽으로 약 1%포인트 높다고 기억해야 합니다.</span><span lang="en">Did our own choices create the gap? We ran five checks. A different price rule gives minus 1.20%. Yes/No markets alone give minus 1.32%. A bootstrap that groups markets on the same event gives an interval from minus 1.41% to minus 0.58%, all below zero. The meaning: the price is useful information, but read as a probability, outcome 1 runs about one point too high.</span></div>
+    <p class="note"><span class="owner"><span lang="ko">[소유자: 왜 가격이 높게 매겨지나]</span><span lang="en">[Owner: why prices run high]</span></span></p>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="eyebrow"><span lang="ko">Step 6 of 11 · Q2 발표자 · 약 4분</span><span lang="en">Step 6 of 11 · Q2 speaker · about 4 min</span></div>
+  <h2><span lang="ko">Q2 거래 분포: 군중은 누구인가?</span><span lang="en">Q2 trade distribution: who is the crowd?</span></h2>
+  <div class="slide">
+    <div class="meta"><b>Slide 6a</b> · <span lang="ko">상위 지갑의 몫 · 2분</span><span lang="en">Share of the top wallets · 2 min</span></div>
+    <div class="chart"><svg viewBox="0 0 860 150" role="img" aria-label="Top 20% share of volume vs 80/20 rule">
+      <g font-size="13"><text x="10" y="30">80/20 rule</text><rect x="230" y="16" width="480" height="22" fill="#bbb"/><text x="718" y="32">80.0%</text>
+      <text x="10" y="70">Top 20% makers</text><rect x="230" y="56" width="593" height="22" fill="#0432ff"/><text x="718" y="72" fill="#fff" text-anchor="end">98.9%</text>
+      <text x="10" y="110">Top 20% takers</text><rect x="230" y="96" width="588" height="22" fill="#0432ff"/><text x="718" y="112" fill="#fff" text-anchor="end">98.0%</text>
+      <text x="10" y="142" fill="#555">Top 1%: makers 86.1%, takers 75.9% of USDC volume</text></g></svg></div>
+    <figure><img src="../reports/figures/lorenz_top_shares.png" alt="Lorenz curve with top shares"><figcaption><span lang="ko">로렌츠 곡선(Lorenz curve). 강의 밖, 논문에 표시.</span><span lang="en">Lorenz curve. Outside the lectures, labeled in the paper.</span></figcaption></figure>
+    <div class="say"><span lang="ko">가격은 군중의 가격입니다. 그러면 군중은 누구일까요? 지갑을 USDC 거래량으로 줄 세웠습니다. 80/20 법칙이면 상위 20%가 80%를 가져야 합니다. 실제로는 상위 20% maker 지갑이 maker 거래량의 98.9%, taker는 98.0%를 가집니다. 상위 1%만으로도 86.1%와 75.9%입니다. 평균 maker 거래량은 14,103 USDC, 중앙값은 101.2입니다.</span><span lang="en">A price is the crowd's price, so who is the crowd? We ranked wallets by USDC volume. The 80/20 rule says the top 20% hold 80%. In our data, the top 20% of maker wallets hold 98.9% of maker volume, and takers 98.0%. The top 1% alone hold 86.1% and 75.9%. The mean maker volume is 14,103 USDC, but the median is 101.2.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D6 s19 80/20 법칙 · D6 s21 CCDF · D5 s2 평균과 중앙값. <b>숙제:</b> hw02 (CCDF).</span><span lang="en"><b>Lecture:</b> D6 s19 80/20 rule · D6 s21 CCDF · D5 s2 mean and median. <b>Homework:</b> hw02 (CCDF).</span></p>
+  </div>
+  <div class="slide">
+    <div class="meta"><b>Slide 6b</b> · <span lang="ko">maker와 taker, 그리고 돈 · 2분</span><span lang="en">Makers, takers, and money · 2 min</span></div>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">잰 것</span><span lang="en">Measure</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th></tr>
+      <tr><td><span lang="ko">Welch t (로그 거래량, maker 대 taker)</span><span lang="en">Welch t (log volume, maker vs taker)</span></td><td class="num">117.1</td></tr>
+      <tr><td><span lang="ko">평균 log10 거래량 차이</span><span lang="en">Difference in mean log10 volume</span></td><td class="num">0.219</td></tr>
+      <tr><td><span lang="ko">Spearman: 거래 수와 거래량</span><span lang="en">Spearman: trade count vs volume</span></td><td class="num">ρ = 0.655</td></tr>
+      <tr><td><span lang="ko">수수료 전 딴 돈 = 잃은 돈 (남긴 시장)</span><span lang="en">Won = lost before fees (kept markets)</span></td><td class="num">$389.8M</td></tr>
+      <tr><td><span lang="ko">상위 1% 지갑이 가져간 딴 돈의 몫 (추정)</span><span lang="en">Share of winnings to the top 1% (estimate)</span></td><td class="num">~88.0%</td></tr>
+      <tr><td><span lang="ko">중앙값 지갑 순손익</span><span lang="en">Median wallet net profit</span></td><td class="num">−$0.20</td></tr>
+    </table></div>
+    <div class="say"><span lang="ko">maker와 taker는 조금 다릅니다. Welch t 검정에서 t = 117.1이고, 평균 log10 거래량 차이는 0.219입니다. 거래를 많이 할수록 거래량도 큽니다. Spearman ρ = 0.655입니다. 돈은 어떨까요? 수수료 전에는 딴 돈과 잃은 돈이 389.8백만 USDC로 같습니다. 제로섬입니다. 딴 돈의 약 88%가 상위 1% 지갑에 갑니다. 중앙값 지갑은 약 20센트를 잃습니다. 의미는 이렇습니다. 이 가격은 소수 지갑의 거래량이 크게 실린 가격입니다. 단, 지갑은 사람이 아니라 주소이고, 거래량이 가격을 정하는 힘이라고 말하지는 않습니다.</span><span lang="en">Makers and takers differ a little. The Welch t-test gives t = 117.1, and the difference in mean log10 volume is 0.219. Wallets that trade more also move more money: Spearman rho is 0.655. What about money? Before fees, wallets won 389.8 million USDC and lost the same amount. It is zero-sum. About 88% of the winnings go to the top 1% of wallets. The median wallet loses about 20 cents. The meaning: this price carries a lot of volume from a small group of wallets. But a wallet is an address, not a person, and we do not claim volume is price-setting power.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D11 s2, s3, s6 두 표본 t 검정 (Welch는 부분) · D11 s13 KS · D14 s32, s33 Spearman. <b>숙제:</b> hw04 (Spearman). 손익은 기술 통계이며 사전 판정 기준 밖이다.</span><span lang="en"><b>Lecture:</b> D11 s2, s3, s6 two-sample t-test (Welch partly) · D11 s13 KS · D14 s32, s33 Spearman. <b>Homework:</b> hw04 (Spearman). PnL is descriptive, outside the pre-registered criteria.</span></p>
+    <p class="note"><span class="owner"><span lang="ko">[소유자: 몰린 거래량이 가격 읽기에 주는 의미]</span><span lang="en">[Owner: what concentrated volume means for reading a price]</span></span></p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="eyebrow"><span lang="ko">Step 7 of 11 · Q3 발표자 · 약 3분</span><span lang="en">Step 7 of 11 · Q3 speaker · about 3 min</span></div>
+  <h2><span lang="ko">Q3: 베팅은 어떤 모양인가?</span><span lang="en">Q3: what does betting look like?</span></h2>
+  <div class="slide">
+    <div class="meta"><b>Slide 7a</b> · <span lang="ko">거래 크기 · 1분 30초</span><span lang="en">Trade size · 1 min 30 s</span></div>
+    <figure><img src="../reports/figures/qq_trade_size_raw_log.png" alt="QQ plot of trade size, raw and log"><figcaption><span lang="ko">거래 크기 QQ 그림. 원값은 휘고, 로그 값은 직선에 가깝다.</span><span lang="en">QQ plot of trade size. Raw points bend away, and log points follow the line.</span></figcaption></figure>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">거래 크기 (USDC)</span><span lang="en">Trade size (USDC)</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th></tr>
+      <tr><td><span lang="ko">평균</span><span lang="en">Mean</span></td><td class="num">129.8</td></tr>
+      <tr><td><span lang="ko">중앙값</span><span lang="en">Median</span></td><td class="num">6.9</td></tr>
+      <tr><td><span lang="ko">정규 적합 KS D / 지수 적합 KS D</span><span lang="en">Normal fit KS D / exponential fit KS D</span></td><td class="num">0.469 / 0.534</td></tr>
+    </table></div>
+    <div class="say"><span lang="ko">거래 크기는 베팅의 기본 단위입니다. 평균은 129.8 USDC인데 중앙값은 6.9입니다. 소수의 아주 큰 거래가 평균을 끌어올립니다. QQ 그림에서 원값은 직선에서 휘지만, 로그를 취하면 직선을 따라갑니다. 정규 적합의 KS 거리는 0.469로 나쁜 적합입니다.</span><span lang="en">Trade size is the basic unit of a bet. The mean is 129.8 USDC but the median is only 6.9. A few very large trades pull the mean up. In the QQ plot, the raw points bend away from the line, but after a log they follow it. The normal fit has a KS distance of 0.469, a poor fit.</span></div>
+  </div>
+  <div class="slide">
+    <div class="meta"><b>Slide 7b</b> · <span lang="ko">가격과 지갑, 의미 · 1분 30초</span><span lang="en">Prices, wallets, meaning · 1 min 30 s</span></div>
+    <div class="say"><span lang="ko">가격도 같은 모양을 보입니다. 마감 하루 전 가격의 평균은 0.376, 중앙값은 0.320이고 양 끝에 몰립니다. 지갑 거래량은 maker 평균 14,103, 중앙값 101.2 USDC입니다. 의미는 이렇습니다. 꼬리가 긴 데이터에서 평균은 전형적인 거래를 말해 주지 않습니다. 중앙값과 로그 척도로 읽어야 정직합니다.</span><span lang="en">Prices show a shape too. The price one day before close has a mean of 0.376 and a median of 0.320, and it piles up at both ends. Maker wallet volume has a mean of 14,103 and a median of 101.2 USDC. The meaning: with a long tail, the mean does not describe a typical trade. Read the median and the log scale to be honest.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> D5 s2 평균과 중앙값 · D5 s12, s13 히스토그램 · D7 s5, s11 QQ · D7 s12 로그 변환 · D6 s4, s15, s16 정규와 지수 · D6 s19–s22 멱법칙(power law) (부분) · D11 s13, s15–s19 KS. <b>숙제:</b> hw01 (평균, 중앙값, 히스토그램), hw02 (QQ, 멱법칙, KS).</span><span lang="en"><b>Lecture:</b> D5 s2 mean and median · D5 s12, s13 histogram · D7 s5, s11 QQ · D7 s12 log transform · D6 s4, s15, s16 normal and exponential · D6 s19–s22 power law (partly) · D11 s13, s15–s19 KS. <b>Homework:</b> hw01 (mean, median, histogram), hw02 (QQ, power law, KS).</span></p>
+    <p class="note"><span class="owner"><span lang="ko">[소유자: 멱법칙 적합의 x_min 선택]</span><span lang="en">[Owner: x_min choice for the power-law fit]</span></span></p>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="eyebrow"><span lang="ko">Step 8 of 11 · 도입 발표자 · 약 3분</span><span lang="en">Step 8 of 11 · Intro speaker · about 3 min</span></div>
+  <h2><span lang="ko">결론: 무엇을 뽑았고, 왜 의미 있나</span><span lang="en">Conclusion: what we pulled out, and why it matters</span></h2>
+  <div class="tablewrap"><table>
+    <tr><th>Q</th><th><span lang="ko">뽑은 정보</span><span lang="en">Information</span></th><th><span lang="ko">핵심 숫자</span><span lang="en">Key number</span></th><th><span lang="ko">왜 의미 있나</span><span lang="en">Why it matters</span></th></tr>
+    <tr><td>Q1</td><td><span lang="ko">outcome 1 가격이 조금 높다</span><span lang="en">Prices run a little high for outcome 1</span></td><td class="num">−0.99%</td><td><span lang="ko">가격을 확률로 읽을 때 보정이 필요</span><span lang="en">Reading a price as a probability needs a small correction</span></td></tr>
+    <tr><td>Q2</td><td><span lang="ko">소수 지갑이 거래량 대부분</span><span lang="en">A few wallets carry most volume</span></td><td class="num">98.9%</td><td><span lang="ko">"군중"은 생각보다 작다</span><span lang="en">The "crowd" is smaller than it sounds</span></td></tr>
+    <tr><td>Q3</td><td><span lang="ko">꼬리가 긴 분포</span><span lang="en">Long-tailed shapes</span></td><td class="num">129.8 vs 6.9</td><td><span lang="ko">평균 대신 중앙값과 로그</span><span lang="en">Use the median and the log, not the mean</span></td></tr>
+  </table></div>
+  <div class="say"><span lang="ko">정리합니다. 우리는 거래 기록에서 세 가지 정보를 뽑았습니다. 첫째, 가격은 쓸모 있지만 전체로 보정되지는 않았습니다. outcome 1 쪽으로 약 1%포인트 높습니다. 둘째, 군중은 작습니다. 상위 20% 지갑이 maker 거래량의 98.9%를 가집니다. 셋째, 베팅은 꼬리가 긴 모양이라 평균보다 중앙값이 정직합니다. 한계도 있습니다. 시장의 7.0%만 남겼고, 같은 사건의 시장은 함께 움직여 p값이 낙관적일 수 있으며, 지갑은 사람이 아닙니다. 뉴스로 돌아가면, 98%를 맞히는 것과 확률이 정확한 것은 다릅니다. 감사합니다.</span><span lang="en">To sum up, we pulled three pieces of information out of the trade records. First, the price is useful but not calibrated as a whole: outcome 1 runs about one point high. Second, the crowd is small: the top 20% of wallets hold 98.9% of maker volume. Third, betting has a long tail, so the median is more honest than the mean. There are limits. We kept only 7.0% of the markets. Markets on one event move together, so our p-values may be too small. And a wallet is not a person. Back to the news: being right 98% of the time is not the same as an exact probability. Thank you.</span></div>
+</section>
+
+<section id="s9">
+  <div class="eyebrow"><span lang="ko">Step 9 of 11 · 참고</span><span lang="en">Step 9 of 11 · Reference</span></div>
+  <h2><span lang="ko">강의 덱에서 가져온 것</span><span lang="en">What we took from the lecture decks</span></h2>
+  <p class="note"><span lang="ko">D6 = Lecture 6 덱, s23 = 슬라이드 id. 2026-11-16 감사 기준: 논문의 방법 44개 중 강의 안 30, 부분 12, 강의 밖 2. 숙제에서 직접 계산 18.</span><span lang="en">D6 = Lecture 6 deck, s23 = slide id. From the 2026-11-16 audit: of 44 methods in the paper, 30 in lecture, 12 partly, 2 outside. 18 computed in a homework.</span></p>
+  <div class="tablewrap"><table>
+    <tr><th><span lang="ko">덱</span><span lang="en">Deck</span></th><th><span lang="ko">가져온 방법</span><span lang="en">Method</span></th><th><span lang="ko">발표 위치</span><span lang="en">Where in talk</span></th><th><span lang="ko">숙제</span><span lang="en">Homework</span></th></tr>
+    <tr><td>D5 Stat &amp; Visualization</td><td><span lang="ko">평균, 중앙값, 히스토그램, z 구간, 부트스트랩</span><span lang="en">Mean, median, histogram, z interval, bootstrap</span></td><td>5b, 5e, 5f, 6a, 7</td><td><span lang="ko">hw01: 평균, 중앙값, 히스토그램</span><span lang="en">hw01: mean, median, histogram</span></td></tr>
+    <tr><td>D6 Data Distribution</td><td><span lang="ko">베르누이, 이항, 정규, 지수, 80/20, 멱법칙, CCDF</span><span lang="en">Bernoulli, binomial, normal, exponential, 80/20, power law, CCDF</span></td><td>1c, 5a, 5e, 6a, 7</td><td><span lang="ko">hw02: 정규, 지수, 멱법칙, CCDF</span><span lang="en">hw02: normal, exponential, power law, CCDF</span></td></tr>
+    <tr><td>D7 QQ &amp; Normalization</td><td><span lang="ko">구간 나누기, QQ 그림, 로그 변환</span><span lang="en">Binning, QQ plot, log transform</span></td><td>5a, 5e, 7a</td><td><span lang="ko">hw02: QQ 그림</span><span lang="en">hw02: QQ plot</span></td></tr>
+    <tr><td>D10 P-value</td><td><span lang="ko">구간별 이항 검정</span><span lang="en">Per-bin binomial test</span></td><td>5b</td><td></td></tr>
+    <tr><td>D11 Comparing Distributions</td><td><span lang="ko">t 검정, KS 검정, ECDF</span><span lang="en">t-test, KS test, ECDF</span></td><td>6b, 7a</td><td><span lang="ko">hw02: KS, ECDF</span><span lang="en">hw02: KS, ECDF</span></td></tr>
+    <tr><td>D12 Chi-square Test</td><td><span lang="ko">관측 대 기대 카이제곱 (적합도 형태는 부분)</span><span lang="en">Observed vs expected chi-square (goodness-of-fit form partly)</span></td><td>5b</td><td><span lang="ko">없음 (hw04, hw05는 독립성 형태만)</span><span lang="en">None (hw04, hw05 did the independence form only)</span></td></tr>
+    <tr><td>D13 Multiple Testing</td><td><span lang="ko">Bonferroni, BH 보정</span><span lang="en">Bonferroni, BH correction</span></td><td>5b</td><td></td></tr>
+    <tr><td>D14 Pairwise Association</td><td>Spearman</td><td>6b</td><td><span lang="ko">hw04: Spearman</span><span lang="en">hw04: Spearman</span></td></tr>
+    <tr><td>D15 Entropy</td><td><span lang="ko">로그 손실, 이진 엔트로피 (논문만)</span><span lang="en">Log loss, binary entropy (paper only)</span></td><td></td><td></td></tr>
+    <tr><td>D17 Clustering</td><td><span lang="ko">k-means, 엘보 (논문 부록만)</span><span lang="en">k-means, elbow (paper appendix only)</span></td><td></td><td>hw05, hw08</td></tr>
+    <tr><td>D21 Logistic Regression</td><td><span lang="ko">가격 logit에 로지스틱 보정 (부분)</span><span lang="en">Logistic calibration on price logit (partly)</span></td><td>5d</td><td><span lang="ko">hw07: 로지스틱 회귀 (상위 방법만)</span><span lang="en">hw07: logistic regression (parent method only)</span></td></tr>
+    <tr><td>D23 Model Evaluation</td><td><span lang="ko">MSE, 정확도, 다수 기준선</span><span lang="en">MSE, accuracy, majority baseline</span></td><td>5c</td><td><span lang="ko">hw06: MSE · hw07: 정확도, 늘-아니오 기준선</span><span lang="en">hw06: MSE · hw07: accuracy, always-no baseline</span></td></tr>
+    <tr><td><span lang="ko">강의 밖</span><span lang="en">Outside</span></td><td><span lang="ko">로렌츠 곡선, Wald 구간, 포아송과 CLT 설명, 무위험 차익거래</span><span lang="en">Lorenz curve, Wald interval, Poisson and CLT remark, riskless arbitrage</span></td><td>5d, 5e, 6a</td><td></td></tr>
+  </table></div>
+</section>
+
+<section id="s9b">
+  <div class="eyebrow"><span lang="ko">Step 10 of 11 · 질문 대비 (backup)</span><span lang="en">Step 10 of 11 · Backup for questions</span></div>
+  <h2><span lang="ko">강의 밖 4가지: 무엇이고, 어디에 썼고, 왜</span><span lang="en">Four items outside the lectures: what, where, why</span></h2>
+
+  <div class="slide">
+    <div class="meta"><b>B1</b> · <span lang="ko">포아송과 이항분포</span><span lang="en">Poisson and binomial</span></div>
+    <div class="tablewrap"><table>
+      <tr><th></th><th><span lang="ko">이항(binomial) B(n, p)</span><span lang="en">Binomial B(n, p)</span></th><th><span lang="ko">포아송(Poisson) Pois(λ)</span><span lang="en">Poisson Pois(λ)</span></th></tr>
+      <tr><td><span lang="ko">세는 것</span><span lang="en">Counts</span></td><td><span lang="ko">정해진 n번 시행 중 성공 수</span><span lang="en">Successes in a fixed n trials</span></td><td><span lang="ko">한 구간에 일어난 사건 수, n 한도 없음</span><span lang="en">Events in an interval, no fixed n</span></td></tr>
+      <tr><td><span lang="ko">평균, 분산</span><span lang="en">Mean, variance</span></td><td>np, np(1 − p)</td><td>λ, λ</td></tr>
+      <tr><td><span lang="ko">관계</span><span lang="en">Link</span></td><td colspan="2"><span lang="ko">n이 크고 p가 작으면 B(n, p) ≈ Pois(np)</span><span lang="en">For large n and small p, B(n, p) ≈ Pois(np)</span></td></tr>
+      <tr><td><span lang="ko">정규로</span><span lang="en">To normal</span></td><td><span lang="ko">np(1 − p)가 크면 정규에 가까움</span><span lang="en">Near normal when np(1 − p) is large</span></td><td><span lang="ko">λ가 크면 정규에 가까움</span><span lang="en">Near normal when λ is large</span></td></tr>
+    </table></div>
+    <p><span lang="ko"><b>우리 데이터의 예, 구간 0:</b> 시장 n = 18,209, 평균 가격 0.0183.</span><span lang="en"><b>Our data, bin 0:</b> n = 18,209 markets, mean price 0.0183.</span></p>
+    <ul>
+      <li><span lang="ko">기대 개수 = 18,209 × 0.0183 = 332</span><span lang="en">Expected count = 18,209 × 0.0183 = 332</span></li>
+      <li><span lang="ko">이항 표준편차 = √(332 × 0.982) = 18.1</span><span lang="en">Binomial SD = √(332 × 0.982) = 18.1</span></li>
+      <li><span lang="ko">포아송 표준편차 = √332 = 18.2</span><span lang="en">Poisson SD = √332 = 18.2</span></li>
+      <li><span lang="ko">관측 개수 = 249. z = (249 − 332) / 18.1 = −4.6</span><span lang="en">Observed count = 249. z = (249 − 332) / 18.1 = −4.6</span></li>
+    </ul>
+    <div class="say"><span lang="ko">구간 안의 outcome 1 개수는 이항분포입니다. 시장 수 n이 정해져 있기 때문입니다. 포아송은 n이 크고 p가 작을 때 이항과 거의 같습니다. 구간 0이 그런 경우입니다. 이항 표준편차는 18.1, 포아송은 18.2로 거의 같습니다. 둘 다 평균이 크면 정규에 가까워집니다. 우리 검정은 정확 이항 검정이라 이 근사가 필요 없습니다. 근사는 z 구간에만 씁니다.</span><span lang="en">The count of outcome 1 in a bin is binomial, because the number of markets n is fixed. When n is large and p is small, the Poisson is almost the same. Bin 0 is such a case: the binomial SD is 18.1 and the Poisson SD is 18.2. Both are near normal when the mean is large. Our per-bin test is the exact binomial test, so it needs no approximation. We use the normal approximation only for the z interval.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> 이항은 D6 s26, s29. 포아송은 덱 글에서 찾지 못했다.</span><span lang="en"><b>Lecture:</b> binomial is D6 s26, s29. Poisson was not found in the deck text.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>B2</b> · <span lang="ko">중심극한정리는 어디에?</span><span lang="en">Where is the central limit theorem?</span></div>
+    <p><span lang="ko"><b>뜻:</b> 독립인 값을 많이 더하거나 평균하면, 원래 분포가 무엇이든 그 합과 평균은 정규에 가까워진다.</span><span lang="en"><b>Meaning:</b> add or average many independent values, and the sum or mean is near normal, whatever the original shape.</span></p>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">쓴 곳</span><span lang="en">Where</span></th><th><span lang="ko">평균내는 것</span><span lang="en">What is averaged</span></th><th><span lang="ko">기대는 것</span><span lang="en">What relies on it</span></th></tr>
+      <tr><td><span lang="ko">구간별 95% z 구간 (Q1, 8단계)</span><span lang="en">Per-bin 95% z interval (Q1, step 8)</span></td><td><span lang="ko">0/1 결과의 평균 = 실제 비율</span><span lang="en">Mean of 0/1 outcomes = observed rate</span></td><td><span lang="ko">비율 ± 1.96 × 표준오차</span><span lang="en">rate ± 1.96 × standard error</span></td></tr>
+      <tr><td><span lang="ko">카이제곱 적합도 (Q1, 4단계)</span><span lang="en">Chi-square goodness of fit (Q1, step 4)</span></td><td><span lang="ko">구간마다 정규에 가까운 z</span><span lang="en">A near-normal z per bin</span></td><td><span lang="ko">z² 10개의 합 ≈ χ² 분포</span><span lang="en">Sum of 10 z² ≈ χ² distribution</span></td></tr>
+      <tr><td><span lang="ko">순 격차의 t 구간 (확인 검사)</span><span lang="en">t interval of the net gap (checks)</span></td><td><span lang="ko">시장별 격차의 평균</span><span lang="en">Mean of per-market gaps</span></td><td><span lang="ko">평균 ± t × 표준오차</span><span lang="en">mean ± t × standard error</span></td></tr>
+      <tr><td><span lang="ko">쓰지 않은 곳</span><span lang="en">Not used</span></td><td colspan="2"><span lang="ko">가격 하나, 거래 크기 하나. 개별 값은 평균이 아니라 정규가 되지 않는다 (5e)</span><span lang="en">A single price or trade size. Single values are not means, so they do not become normal (5e)</span></td></tr>
+    </table></div>
+    <div class="say"><span lang="ko">중심극한정리는 숫자 하나하나가 아니라 평균에 작동합니다. 실제 비율은 0과 1의 평균이라 정규에 가깝고, 그래서 z 구간을 그립니다. 카이제곱도 정규에 가까운 z를 제곱해 더한 것입니다. 다만 한 사건의 시장들은 독립이 아닙니다. 그래서 p값이 너무 작을 수 있고, 군집 부트스트랩으로 확인했습니다.</span><span lang="en">The central limit theorem works on means, not on single values. The observed rate is a mean of 0s and 1s, so it is near normal, and we can draw a z interval. The chi-square is a sum of squared near-normal z values. But markets on one event are not independent. So the p-values may be too small, and we checked with a cluster bootstrap.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> 이 이름은 덱 글에 없다. 이 정리를 쓰는 도구는 덱에 있다: z 구간 D5 s24, t 구간 D11 s9.</span><span lang="en"><b>Lecture:</b> not named in the deck text. The tools that use it are: z interval D5 s24, t interval D11 s9.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>B3</b> · <span lang="ko">무위험 차익거래는 어떻게?</span><span lang="en">How does riskless arbitrage work?</span></div>
+    <div class="tablewrap"><table>
+      <tr><th><span lang="ko">종류</span><span lang="en">Kind</span></th><th><span lang="ko">조건</span><span lang="en">Condition</span></th><th><span lang="ko">할 일</span><span lang="en">Action</span></th><th><span lang="ko">이익 (설명용 값)</span><span lang="en">Profit (illustrative)</span></th></tr>
+      <tr><td><span lang="ko">한 시장의 YES와 NO</span><span lang="en">YES and NO of one market</span></td><td>YES + NO &lt; $1</td><td><span lang="ko">둘 다 산다. 결과와 상관없이 $1</span><span lang="en">Buy both. $1 whatever happens</span></td><td>$0.48 + $0.49 → +$0.03</td></tr>
+      <tr><td><span lang="ko">결과가 여럿인 사건</span><span lang="en">Event with many outcomes</span></td><td><span lang="ko">모든 YES 가격의 합 &lt; $1</span><span lang="en">Sum of all YES prices &lt; $1</span></td><td><span lang="ko">모든 YES를 산다. 하나는 반드시 $1</span><span lang="en">Buy every YES. Exactly one pays $1</span></td><td>$0.30 + $0.30 + $0.35 → +$0.05</td></tr>
+      <tr><td><span lang="ko">두 거래소</span><span lang="en">Two exchanges</span></td><td><span lang="ko">Kalshi YES + Polymarket NO &lt; $1</span><span lang="en">Kalshi YES + Polymarket NO &lt; $1</span></td><td><span lang="ko">양쪽에서 반대편을 산다</span><span lang="en">Buy opposite sides on each</span></td><td><span lang="ko">정산 규칙이 다르면 위험이 남는다</span><span lang="en">Risk remains if resolution rules differ</span></td></tr>
+    </table></div>
+    <p><span lang="ko"><b>우리 데이터로 재려면:</b> 같은 시각에 한 시장의 두 지분 가격을 맞춰 합을 본다. 그 합에서 수수료를 뺀다.</span><span lang="en"><b>To measure it in our data:</b> match the two share prices of one market at the same time, then take the sum minus fees.</span></p>
+    <p><span lang="ko"><b>한계:</b> 우리는 체결된 거래만 갖고 있다. 실제로 살 수 있는 호가(order book)는 없다. 그래서 체결가 합이 $1보다 작아도 실제로 살 수 있었다고 말할 수 없다.</span><span lang="en"><b>Limit:</b> we have filled trades only, not the order book. A sum of fill prices below $1 does not prove anyone could have bought at those prices.</span></p>
+    <p class="note"><span lang="ko">새 숫자는 클러스터 실행과 소유자 결정이 필요하다. 이번 발표에서는 하지 않는다.</span><span lang="en">A new number needs a cluster run and an owner decision. Not in this talk.</span></p>
+  </div>
+
+  <div class="slide">
+    <div class="meta"><b>B4</b> · <span lang="ko">로렌츠 곡선: 무엇, 어떻게, 왜</span><span lang="en">Lorenz curve: what, how, why</span></div>
+    <div class="chart"><svg viewBox="0 0 860 230" role="img" aria-label="How to read a Lorenz curve">
+      <g font-size="12">
+        <line x1="60" y1="200" x2="260" y2="200" stroke="#333"/><line x1="60" y1="200" x2="60" y2="20" stroke="#333"/>
+        <line x1="60" y1="200" x2="260" y2="20" stroke="#999" stroke-dasharray="4 3"/>
+        <path d="M60 200 L220 198 Q245 190 252 120 L260 20" fill="none" stroke="#0432ff" stroke-width="2"/>
+        <circle cx="220" cy="198" r="4" fill="#0432ff"/>
+        <text x="160" y="222" text-anchor="middle">Share of wallets, smallest first</text>
+        <text x="20" y="110" transform="rotate(-90 20 110)" text-anchor="middle">Share of volume</text>
+        <text x="150" y="100" fill="#777">equality</text>
+        <text x="300" y="50">1. Sort wallets from smallest volume to largest.</text>
+        <text x="300" y="75">2. x = share of wallets so far, y = share of volume so far.</text>
+        <text x="300" y="100">3. Diagonal = everyone trades the same.</text>
+        <text x="300" y="125" fill="#0432ff">4. Dot at x = 80%: bottom 80% hold 1.1% of maker volume,</text>
+        <text x="300" y="142" fill="#0432ff">    so the top 20% hold 98.9%.</text>
+        <text x="300" y="170">5. Area between curve and diagonal × 2 = Gini.</text>
+        <text x="300" y="190">    Makers 0.978, takers 0.963 (1 = one wallet holds all).</text>
+      </g></svg></div>
+    <p class="note"><span lang="ko">곡선 모양은 설명용이다. 점과 Gini 값은 MVP1 전체 실행 값이다.</span><span lang="en">The curve shape is illustrative. The dot and the Gini values are from the MVP1 full run.</span></p>
+    <div class="say"><span lang="ko">로렌츠 곡선은 몫을 한 장에 보이는 그림입니다. 지갑을 작은 것부터 줄 세우고, 누적 지갑 비율을 가로에, 누적 거래량 비율을 세로에 놓습니다. 모두 똑같이 거래하면 대각선이 됩니다. 곡선이 아래로 처질수록 몰려 있습니다. 우리 그림에서 가로 80% 지점의 높이는 1.1%입니다. 하위 80% 지갑이 maker 거래량의 1.1%만 가진다는 뜻이고, 곧 상위 20%가 98.9%를 가집니다. 왜 썼을까요? 상위 1%, 5%, 20%의 몫을 곡선 하나로 함께 보이고, 80/20 법칙의 점과 바로 비교할 수 있기 때문입니다. CCDF는 꼬리 모양을 보이고, 로렌츠 곡선은 몫을 보입니다.</span><span lang="en">A Lorenz curve shows shares in one picture. Sort the wallets from smallest to largest. Put the cumulative share of wallets on the x-axis and the cumulative share of volume on the y-axis. If everyone traded the same, the curve would be the diagonal. The lower it sags, the more concentrated. In our figure, the height at x = 80% is 1.1%. So the bottom 80% of wallets hold only 1.1% of maker volume, and the top 20% hold 98.9%. Why use it? One curve shows the top 1%, 5% and 20% shares together, and we can compare it directly with the 80/20 point. The CCDF shows the shape of the tail. The Lorenz curve shows the shares.</span></div>
+    <p class="lec"><span lang="ko"><b>강의:</b> 덱 글에 없다. 논문이 강의 밖으로 표시했다. 가장 가까운 덱 내용은 80/20 법칙(D6 s19)과 파레토 차트(D25 s76)다. 파레토 차트에 누적 선이 있는지는 아직 확인 전이다.</span><span lang="en"><b>Lecture:</b> not in the deck text, and the paper labels it outside. The closest deck content is the 80/20 rule (D6 s19) and the Pareto chart (D25 s76). Whether that Pareto chart has a cumulative line is not yet checked.</span></p>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="eyebrow"><span lang="ko">Step 11 of 11 · 발표 전에</span><span lang="en">Step 11 of 11 · Before the talk</span></div>
+  <h2><span lang="ko">소유자가 채울 것</span><span lang="en">Owner to fill</span></h2>
+  <ol>
+    <li><span lang="ko">스크린샷 2장: Polymarket 시장 화면, Kalshi 시장 화면 (Slide 1b).</span><span lang="en">Two screenshots: a Polymarket market page and a Kalshi market page (Slide 1b).</span></li>
+    <li><span lang="ko">왜 가격이 높게 매겨지나 (Slide 5f).</span><span lang="en">Why prices run high (Slide 5f).</span></li>
+    <li><span lang="ko">몰린 거래량이 가격 읽기에 주는 의미 (Slide 6b).</span><span lang="en">What concentrated volume means for reading a price (Slide 6b).</span></li>
+    <li><span lang="ko">멱법칙 x_min 선택 (Slide 7b).</span><span lang="en">The power-law x_min choice (Slide 7b).</span></li>
+  </ol>
+  <p class="note"><span lang="ko">무위험 차익거래(YES + NO &lt; $1)를 재려면 새 클러스터 실행과 소유자 결정이 필요하다.</span><span lang="en">Measuring riskless arbitrage (YES + NO &lt; $1) needs a new cluster run and an owner decision.</span></p>
+</section>
+
+<div class="note" id="terms">
+  <h3><span lang="ko">용어 부록</span><span lang="en">Terms</span></h3>
+  <ul>
+    <li><span lang="ko">상품선물거래위원회(Commodity Futures Trading Commission, CFTC): 미국 선물과 예측시장 규제 기관</span><span lang="en">Commodity Futures Trading Commission (CFTC): the US regulator of futures and prediction markets</span></li>
+    <li><span lang="ko">지정 거래소(designated contract market, DCM): CFTC가 허가한 거래소</span><span lang="en">Designated contract market (DCM): an exchange the CFTC approves</span></li>
+    <li><span lang="ko">USDC(USD Coin): 1달러에 묶인 토큰</span><span lang="en">USD Coin (USDC): a token pegged to one dollar</span></li>
+    <li><span lang="ko">outcome 1: 시장의 첫 번째 결과. 남긴 시장의 63.9%에서 Yes</span><span lang="en">Outcome 1: the first-listed outcome of a market. Labeled Yes in 63.9% of kept markets</span></li>
+    <li><span lang="ko">콜모고로프-스미르노프(Kolmogorov-Smirnov, KS) 거리: 두 누적분포의 최대 차이</span><span lang="en">Kolmogorov-Smirnov (KS) distance: the largest gap between two cumulative distributions</span></li>
+    <li><span lang="ko">상보 누적분포함수(complementary cumulative distribution function, CCDF): 값 x보다 큰 비율</span><span lang="en">Complementary cumulative distribution function (CCDF): the share of values above x</span></li>
+    <li><span lang="ko">분위수-분위수 그림(quantile-quantile plot, QQ plot): 데이터 분위수를 정규 분위수와 비교. 직선이면 정규에 가깝다</span><span lang="en">Quantile-quantile (QQ) plot: data quantiles against normal quantiles. A straight line means close to normal</span></li>
+    <li><span lang="ko">Benjamini-Hochberg(BH) 보정: 여러 검정을 한 번에 할 때 거짓 발견 비율을 묶는 보정</span><span lang="en">Benjamini-Hochberg (BH) correction: controls the false discovery rate over many tests</span></li>
+    <li><span lang="ko">손익(profit and loss, PnL): 지갑이 딴 돈 빼기 잃은 돈</span><span lang="en">Profit and loss (PnL): what a wallet won minus what it lost</span></li>
+    <li><span lang="ko">반 스프레드(half spread): 사는 가격과 파는 가격 차이의 절반. 거래 비용의 기준</span><span lang="en">Half spread: half the gap between buy and sell prices. Our trading-cost line</span></li>
+  </ul>
+</div>
+<footer><span lang="ko">우리 데이터 숫자: MVP1 전체 실행, 검토 확인 실행(M1–M5), 지갑 손익 실행의 저장 파일. 강의 매핑: 2026-11-16 강의·숙제 방법 감사.</span><span lang="en">Numbers about our data: saved files of the MVP1 full run, the review-check run (M1–M5), and the wallet PnL run. Lecture map: the 2026-11-16 lecture and homework method audit.</span></footer>
+</main>
+<script>
+/* Language toggle. The ?lang= query wins over the saved choice. Storage may be blocked. */
+(function(){
+  var d=document.documentElement;
+  var TITLE={ko:"6344 Polymarket 발표 스크립트",en:"6344 Polymarket Talk Script"};
+  var KEY="talkscript-lang";
+  function setLang(l,save){
+    d.setAttribute("data-lang",l);
+    d.lang=l;
+    document.title=TITLE[l];
+    var b=document.querySelectorAll(".langbar button");
+    for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",b[i].getAttribute("data-set")===l?"true":"false");}
+    if(save){try{localStorage.setItem(KEY,l);}catch(e){}}
+  }
+  setLang(d.getAttribute("data-lang")==="en"?"en":"ko",false);
+  var btn=document.querySelectorAll(".langbar button");
+  for(var i=0;i<btn.length;i++){
+    btn[i].addEventListener("click",function(){setLang(this.getAttribute("data-set"),true);});
+  }
+})();
+</script>
+</body>
+</html>
