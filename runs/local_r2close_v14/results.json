@@ -1,0 +1,24 @@
+{
+  "p_1d": {
+    "price": "p_1d",
+    "n": 47948,
+    "chi_square": 67.98672458887768,
+    "df": 10,
+    "p": 1.0834473799354908e-10,
+    "bins_bh": 5,
+    "bins_bonferroni": 4,
+    "bins_negative": 9,
+    "net_gap_pp": -0.9911514254075271
+  },
+  "p_T": {
+    "price": "p_T",
+    "n": 47948,
+    "chi_square": 53.63544156717926,
+    "df": 10,
+    "p": 5.6729346403505204e-08,
+    "bins_bh": 5,
+    "bins_bonferroni": 3,
+    "bins_negative": 9,
+    "net_gap_pp": -0.6473911628598283
+  }
+}

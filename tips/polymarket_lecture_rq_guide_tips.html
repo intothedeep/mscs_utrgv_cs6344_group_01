@@ -446,6 +446,31 @@ table.sum th:first-child,table.sum td:first-child{width:96px}
       <tr><td><b><span lang="ko">관계</span><span lang="en">Link</span></b></td><td><span lang="ko">χ² = 구간 10개의 z² 합</span><span lang="en">Chi-square = sum of the 10 bin z²</span></td><td><span lang="ko">각 구간의 z가 그 구간의 p를 정한다</span><span lang="en">Each bin's z sets its p</span></td></tr>
     </tbody>
   </table></div>
+  <h4><span lang="ko">각 검정은 무엇을 위해 하나</span><span lang="en">What each test is for</span></h4>
+  <ul>
+    <li><span lang="ko"><b>χ² 적합도 = 화재경보기:</b> "집 어딘가에 불이 났다"를 한 번에 알린다.</span><span lang="en"><b>Chi-square fit = smoke alarm:</b> it says at once that there is a fire somewhere in the house.</span></li>
+    <li><span lang="ko"><b>이항 검정 = 방마다 점검:</b> "부엌(구간 7)과 거실(구간 0)이다"를 찾는다.</span><span lang="en"><b>Binomial tests = room-by-room check:</b> they find that it is the kitchen (bin 7) and the living room (bin 0).</span></li>
+  </ul>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th><span lang="ko">χ² 적합도 (1번)</span><span lang="en">Chi-square fit (once)</span></th><th><span lang="ko">이항 검정 (10번)</span><span lang="en">Binomial tests (10)</span></th></tr></thead>
+    <tbody>
+      <tr><td><b><span lang="ko">질문</span><span lang="en">Question</span></b></td><td><span lang="ko">가격 = 확률이면 구간 10개가 모두 함께 맞아야 한다. 정말 그런가</span><span lang="en">If price = probability, all 10 bins must fit together. Do they?</span></td><td><span lang="ko">이 구간 하나의 결과 1 개수가 우연히 나올 수준인가</span><span lang="en">Could this one bin's outcome-1 count be chance?</span></td></tr>
+      <tr><td><b><span lang="ko">왜 하나</span><span lang="en">Why</span></b></td><td><ul><li><span lang="ko">판정을 하나로 낸다. 사전 등록한 판정 규칙이 이 p값으로 정한다</span><span lang="en">One verdict. The pre-registered rule reads this p</span></li><li><span lang="ko">검정이 1번이라 보정이 필요 없다</span><span lang="en">One test, so no correction</span></li><li><span lang="ko">구간마다 작은 차이를 모아 전체로 드러낸다</span><span lang="en">It adds small gaps across bins into one signal</span></li></ul></td><td><ul><li><span lang="ko">어느 구간이 틀렸나</span><span lang="en">Which bins are off</span></li><li><span lang="ko">어느 방향인가</span><span lang="en">Which direction</span></li><li><span lang="ko">구간마다 얼마나 드문가</span><span lang="en">How rare, bin by bin</span></li></ul></td></tr>
+      <tr><td><b><span lang="ko">우리 값</span><span lang="en">Our value</span></b></td><td style="white-space:nowrap">χ² = 68.0, df = 10<br>p = 1.1 × 10⁻¹⁰</td><td><span lang="ko">BH로 구간 0, 1, 6, 7, 8. 5개 모두 실제 &lt; 가격. 구간 7: p = 0.00036</span><span lang="en">BH: bins 0, 1, 6, 7, 8, all with observed &lt; price. Bin 7: p = 0.00036</span></td></tr>
+      <tr><td><b><span lang="ko">한계 또는 대가</span><span lang="en">Limit or cost</span></b></td><td><span lang="ko">제곱해서 더하므로 방향이 사라진다. 어느 구간인지 말하지 않는다</span><span lang="en">Squaring drops the direction, and it does not name the bins</span></td><td><span lang="ko">검정이 10번이라 우연한 발견이 생긴다. 그래서 BH와 Bonferroni로 보정한다</span><span lang="en">Ten tests produce chance hits, so BH and Bonferroni correct them</span></td></tr>
+    </tbody>
+  </table></div>
+  <h4><span lang="ko">두 결과를 함께 읽기</span><span lang="en">Reading the two together</span></h4>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">결과</span><span lang="en">Result</span></th><th><span lang="ko">읽는 법</span><span lang="en">Reading</span></th></tr></thead>
+    <tbody>
+      <tr><td><b><span lang="ko">χ² 유의 + 구간 몇 개 유의</span><span lang="en">Chi-square significant + some bins significant</span></b></td><td><span lang="ko">전체가 틀렸고, 어디인지도 보인다 (우리 경우)</span><span lang="en">The whole is off, and we see where (our case)</span></td></tr>
+      <tr><td><b><span lang="ko">χ² 유의 + 유의한 구간 없음</span><span lang="en">Chi-square significant + no bin significant</span></b></td><td><span lang="ko">작은 차이가 여러 구간에 퍼져 있다</span><span lang="en">Small gaps are spread over many bins</span></td></tr>
+      <tr><td><b><span lang="ko">χ² 유의하지 않음 + 구간 하나만 유의</span><span lang="en">Chi-square not significant + one bin significant</span></b></td><td><span lang="ko">한 구간만 튀었을 수 있다. 우연일 수도 있다</span><span lang="en">One bin may stand out, possibly by chance</span></td></tr>
+      <tr><td><b><span lang="ko">둘 다 유의하지 않음</span><span lang="en">Neither significant</span></b></td><td><span lang="ko">이 표본 크기로는 어긋남의 증거가 없다</span><span lang="en">No evidence of a mismatch at this sample size</span></td></tr>
+    </tbody>
+  </table></div>
+  <p><span lang="ko"><b>정리:</b> χ²로 "틀렸다"는 판정을 내린다. 이항 검정으로 "어디가, 어느 쪽으로"를 보인다. 우리 결론 "결과 1이 조금씩 비싸게 매겨졌다"는 두 검정을 합친 것이다.</span><span lang="en"><b>Summary:</b> chi-square gives the verdict that prices are off. The binomial tests show where and which way. Our conclusion, that outcome 1 is priced slightly too high, combines both.</span></p>
   <p class="note"><span lang="ko">덱 번호는 <code>notes/</code> 파일 이름의 번호다. 덱 5 StatandVisualization, 6 DataDistribution, 7 qqPlotandNormalization, 10 P-value, 12 chiSquareTest, 13 Multiple Hypothesis Testing, 21 LogisticRegression, 23 ModelEvaluation. 출처: <code>analysis/lecture_hw_method_audit_2026_11_16.md</code>, <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>, <code>papers/paper_mvp1/numbers.tex</code>.</span><span lang="en">Deck numbers are the numbers in the <code>notes/</code> file names: 5 StatandVisualization, 6 DataDistribution, 7 qqPlotandNormalization, 10 P-value, 12 chiSquareTest, 13 Multiple Hypothesis Testing, 21 LogisticRegression, 23 ModelEvaluation. Sources: <code>analysis/lecture_hw_method_audit_2026_11_16.md</code>, <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>, <code>papers/paper_mvp1/numbers.tex</code>.</span></p>
 </section>
 
@@ -984,6 +1009,174 @@ table.sum th:first-child,table.sum td:first-child{width:96px}
     <li><span lang="ko"><b>크기는 작다:</b> 격차는 0.5–3.3pp다. 전체 [[netgap]]은 −0.99%다. 시장이 47,948개로 많아서 작은 차이도 잡혔다.</span><span lang="en"><b>Small size:</b> the gaps are 0.5 to 3.3 points, and the net gap is −0.99%. With 47,948 markets, even small gaps are detected.</span></li>
     <li><span lang="ko"><b>독립 가정:</b> p값은 시장이 서로 독립이라고 가정한다. 한 사건의 시장들은 함께 움직이므로 p값이 너무 작을 수 있다.</span><span lang="en"><b>Independence:</b> the p-values assume independent markets. Markets of one event move together, so the p-values may be too small.</span></li>
   </ul>
+  <h4><span lang="ko">6. 기대 개수와 관측 개수</span><span lang="en">6. Expected and observed counts</span></h4>
+  <ul>
+    <li><span lang="ko"><b>관측 개수:</b> 구간 안 시장 가운데 결과 1이 실제로 이긴 시장의 수. 결과 1이 이기면 1, 지면 0을 더한다.</span><span lang="en"><b>Observed count:</b> the number of the bin's markets where outcome 1 actually won. Add 1 for a win, 0 for a loss.</span></li>
+    <li><span lang="ko"><b>기대 개수:</b> 가격이 확률이라면 이길 것으로 기대되는 수. 시장마다 가격을 더한다. 이 합은 n × 평균 가격과 같다.</span><span lang="en"><b>Expected count:</b> the wins we expect if price = probability. Add up the prices; the sum equals n × mean price.</span></li>
+  </ul>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">시장 (설명용 값)</span><span lang="en">Market (illustrative)</span></th><th><span lang="ko">가격</span><span lang="en">Price</span></th><th><span lang="ko">결과 1이 이겼나</span><span lang="en">Outcome 1 won?</span></th></tr></thead>
+    <tbody>
+      <tr><td>A</td><td>0.72</td><td>1</td></tr>
+      <tr><td>B</td><td>0.75</td><td>0</td></tr>
+      <tr><td>C</td><td>0.78</td><td>1</td></tr>
+      <tr><td><b><span lang="ko">합</span><span lang="en">Sum</span></b></td><td><b><span lang="ko">기대 2.25</span><span lang="en">expected 2.25</span></b></td><td><b><span lang="ko">관측 2</span><span lang="en">observed 2</span></b></td></tr>
+    </tbody>
+  </table></div>
+  <p><span lang="ko">기대 2.25 = 3 × 평균 가격 0.75. 구간 7은 같은 계산을 시장 2,301개로 한다. 기대 1,715.6 = 2,301 × 0.7456, 관측 1,640이다.</span><span lang="en">Expected 2.25 = 3 × mean price 0.75. Bin 7 does the same over 2,301 markets: expected 1,715.6 = 2,301 × 0.7456, observed 1,640.</span></p>
+
+  <h4><span lang="ko">7. χ² = 68.0은 어디서 나왔나</span><span lang="en">7. Where chi-square = 68.0 comes from</span></h4>
+  <p><span lang="ko">구간마다 관측이 기대에서 표준편차 몇 개만큼 벗어났나(z)를 구한다. 제곱해서 더한다. 가격이 맞다면 구간마다 z² ≈ 1이라 합은 약 10이다.</span><span lang="en">For each bin, take how many standard deviations the observed count is from the expected (z). Square and add. If prices were right, each z² would be about 1, so the sum would be near 10.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">구간</span><span lang="en">Bin</span></th><th><span lang="ko">기대 개수</span><span lang="en">Expected</span></th><th><span lang="ko">관측 개수</span><span lang="en">Observed</span></th><th><span lang="ko">차이</span><span lang="en">Diff.</span></th><th>z</th><th><span lang="ko">z² (χ² 기여)</span><span lang="en">z² (share of chi-square)</span></th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>332.3</td><td>249</td><td>−83.3</td><td>−4.61</td><td><b>21.28</b></td></tr>
+      <tr><td>1</td><td>401.1</td><td>339</td><td>−62.1</td><td>−3.36</td><td><b>11.30</b></td></tr>
+      <tr><td>2</td><td>634.4</td><td>609</td><td>−25.4</td><td>−1.17</td><td>1.36</td></tr>
+      <tr><td>3</td><td>966.5</td><td>919</td><td>−47.5</td><td>−1.89</td><td>3.59</td></tr>
+      <tr><td>4</td><td>1,738.4</td><td>1,691</td><td>−47.4</td><td>−1.53</td><td>2.35</td></tr>
+      <tr><td>5</td><td>2,292.8</td><td>2,268</td><td>−24.8</td><td>−0.76</td><td>0.58</td></tr>
+      <tr><td>6</td><td>1,645.1</td><td>1,574</td><td>−71.1</td><td>−2.94</td><td><b>8.64</b></td></tr>
+      <tr><td>7</td><td>1,715.6</td><td>1,640</td><td>−75.6</td><td>−3.62</td><td><b>13.10</b></td></tr>
+      <tr><td>8</td><td>1,803.0</td><td>1,763</td><td>−40.0</td><td>−2.40</td><td>5.75</td></tr>
+      <tr><td>9</td><td>6,486.9</td><td>6,489</td><td>+2.1</td><td>+0.17</td><td>0.03</td></tr>
+      <tr><td><b><span lang="ko">합</span><span lang="en">Sum</span></b></td><td></td><td></td><td></td><td></td><td><b>68.0</b></td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>큰 기여:</b> 구간 0, 7, 1, 6이 68.0의 약 4분의 3이다.</span><span lang="en"><b>Big shares:</b> bins 0, 7, 1 and 6 make about three quarters of 68.0.</span></li>
+    <li><span lang="ko"><b>같은 부호:</b> 9개 구간의 차이가 모두 −다. 우연이라면 +와 −가 섞여야 한다.</span><span lang="en"><b>One sign:</b> nine of the differences are negative. Chance would mix + and −.</span></li>
+  </ul>
+
+  <h4><span lang="ko">8. 가격은 확률을 반영하나</span><span lang="en">8. Do prices reflect probabilities?</span></h4>
+  <p><span lang="ko">대부분은 반영한다. "정확히 같다"까지는 아니다.</span><span lang="en">Mostly yes, but not exactly.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">증거</span><span lang="en">Evidence</span></th><th><span lang="ko">값</span><span lang="en">Value</span></th><th><span lang="ko">뜻</span><span lang="en">Meaning</span></th></tr></thead>
+    <tbody>
+      <tr><td><span lang="ko">가격 1.8% 구간</span><span lang="en">Bin priced 1.8%</span></td><td><span lang="ko">실제 1.4%</span><span lang="en">observed 1.4%</span></td><td><span lang="ko">싸면 거의 안 일어난다</span><span lang="en">Cheap means it rarely happens</span></td></tr>
+      <tr><td><span lang="ko">가격 97.7% 구간</span><span lang="en">Bin priced 97.7%</span></td><td><span lang="ko">실제 97.8%</span><span lang="en">observed 97.8%</span></td><td><span lang="ko">비싸면 거의 일어난다</span><span lang="en">Expensive means it nearly always happens</span></td></tr>
+      <tr><td><span lang="ko">[[msr]]: 가격 대 평균 비율만 말하는 예측</span><span lang="en">Mean squared residual: price vs the base-rate forecast</span></td><td style="white-space:nowrap">0.107 <span lang="ko">대</span><span lang="en">vs</span> 0.232</td><td><span lang="ko">가격이 오차를 절반 넘게 줄인다</span><span lang="en">Prices cut the error by more than half</span></td></tr>
+      <tr><td><span lang="ko">[[logcal]] 기울기</span><span lang="en">Logistic calibration slope</span></td><td>1.028</td><td><span lang="ko">1이면 완벽, 0이면 무관</span><span lang="en">1 is perfect, 0 is no relation</span></td></tr>
+      <tr><td><span lang="ko">구간별 격차</span><span lang="en">Per-bin gaps</span></td><td style="white-space:nowrap">−0.5 ~ −3.3pp</td><td><span lang="ko">작다</span><span lang="en">Small</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h4><span lang="ko">9. 왜 정확히 맞지 않나 (가설)</span><span lang="en">9. Why not exact (hypotheses)</span></h4>
+  <p class="note"><span lang="ko">우리 논문은 원인을 검정하지 않았다. 아래는 예측 시장과 베팅 연구에서 흔히 드는 설명이다. 우리 데이터로 확인한 것이 아니다.</span><span lang="en">Our paper does not test the cause. Below are common explanations from prediction-market and betting research, not checked on our data.</span></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">가설</span><span lang="en">Hypothesis</span></th><th><span lang="ko">내용</span><span lang="en">Idea</span></th><th><span lang="ko">우리 결과와 맞나</span><span lang="en">Fits our result?</span></th></tr></thead>
+    <tbody>
+      <tr><td><b>[[longshot]] <span lang="ko">편향</span><span lang="en">bias</span></b></td><td><span lang="ko">싼 베팅을 과하게 산다. 경마에서 오래 알려졌다</span><span lang="en">People overbuy cheap bets, long known in horse racing</span></td><td><span lang="ko">구간 0, 1과 맞다. 논문도 "경마와 같은 방향"이라고 썼다</span><span lang="en">Fits bins 0 and 1. The paper calls it the horse-racing direction</span></td></tr>
+      <tr><td><b><span lang="ko">"Yes" 선호</span><span lang="en">"Yes" preference</span></b></td><td><span lang="ko">일어나는 쪽에 거는 것을 더 좋아한다</span><span lang="en">People prefer betting that things happen</span></td><td><span lang="ko">"Yes" 시장 30,630개에서 구간 0–8이 모두 음수다 (숫자만 본 것)</span><span lang="en">In 30,630 "Yes" markets, bins 0–8 are all negative (descriptive only)</span></td></tr>
+      <tr><td><b><span lang="ko">차익 거래의 한계</span><span lang="en">Limits to arbitrage</span></b></td><td><span lang="ko">바로잡으려면 돈이 마감까지 묶인다. 몇 센트 차이는 남는다</span><span lang="en">Fixing a price locks money until close, so a few cents stay</span></td><td><span lang="ko">차이가 작게 남는 것과 맞다</span><span lang="en">Fits small, persistent gaps</span></td></tr>
+      <tr><td><b><span lang="ko">평가 시점</span><span lang="en">Timing</span></b></td><td><span lang="ko">가격은 마감 1일 전 값이다. 마지막 하루의 정보는 빠진다</span><span lang="en">The price is from 1 day before close, so the last day's news is missing</span></td><td><span lang="ko">일부를 설명한다. 다 설명하지는 못한다 (10번)</span><span lang="en">Explains part, not all (part 10)</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h4><span lang="ko">10. 마감 직전 가격 p_T로 다시 재면</span><span lang="en">10. Measured again with the last price before close, p_T</span></h4>
+  <p><span lang="ko">9번의 "평가 시점" 가설을 확인한다. 같은 시장 47,948개, 같은 구간, 같은 검정으로, 가격만 p_1d에서 p_T로 바꿨다. p_T는 마감 직전 마지막 시각의 거래 가격 평균이다. p_1d로 다시 계산한 값은 본 결과(χ² 68.0, BH 5개)와 같다.</span><span lang="en">This checks the timing hypothesis in part 9. Same 47,948 markets, same bins, same tests; only the price changes from p_1d to p_T, the mean price at the last trade time before close. Recomputing with p_1d reproduces the main result (chi-square 68.0, 5 BH bins).</span></p>
+  <figure>
+  <div class="chart">
+  <svg class="flow" viewBox="0 0 700 530" role="img" aria-labelledby="pt-ko pt-en">
+    <title id="pt-ko" lang="ko">구간별 격차 막대 두 줄. 위는 마감 1일 전 가격, 아래는 마감 직전 가격. 두 줄 모두 10개 중 9개가 음수다.</title>
+    <title id="pt-en" lang="en">Two rows of per-bin gap bars. Top: price 1 day before close. Bottom: last price before close. In both rows 9 of 10 bars are negative.</title>
+    <g font-size="10.5" fill="var(--foreground)">
+      <rect x="80" y="8" width="12" height="12" fill="var(--signal-instruction)"/><text x="98" y="18" lang="ko">유의 (BH, Bonferroni 둘 다)</text><text x="98" y="18" lang="en">significant (both corrections)</text>
+      <rect x="330" y="8" width="12" height="12" fill="var(--signal-flag-line)"/><text x="348" y="18" lang="ko">BH만 유의</text><text x="348" y="18" lang="en">Benjamini-Hochberg only</text>
+      <rect x="530" y="8" width="12" height="12" fill="var(--signal-dead-fill)" stroke="var(--border)"/><text x="548" y="18" lang="ko">유의하지 않음</text><text x="548" y="18" lang="en">not significant</text>
+    </g>
+    <text x="60" y="32" font-size="11" font-weight="700" fill="var(--foreground)" lang="ko">p_1d: 마감 1일 전 (논문 본 결과) · χ² = 68.0</text><text x="60" y="32" font-size="11" font-weight="700" fill="var(--foreground)" lang="en">p_1d: 1 day before close (paper) · chi-square = 68.0</text>
+    <g stroke="var(--rule)"><line x1="60" y1="120" x2="660" y2="120"/><line x1="60" y1="170" x2="660" y2="170"/><line x1="60" y1="220" x2="660" y2="220"/></g>
+    <g font-size="10" fill="var(--foreground)" text-anchor="end"><text x="54" y="73">0</text><text x="54" y="123">−1</text><text x="54" y="173">−2</text><text x="54" y="223">−3</text></g>
+    <rect x="70" y="70.0" width="40" height="22.9" fill="var(--signal-instruction)"/>
+    <text x="90" y="105.9" font-size="10" fill="var(--foreground)" text-anchor="middle">−0.46</text>
+    <rect x="128" y="70.0" width="40" height="114.9" fill="var(--signal-instruction)"/>
+    <text x="148" y="197.9" font-size="10" fill="var(--foreground)" text-anchor="middle">−2.30</text>
+    <rect x="186" y="70.0" width="40" height="50.0" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="206" y="133.0" font-size="10" fill="var(--foreground)" text-anchor="middle">−1.00</text>
+    <rect x="244" y="70.0" width="40" height="85.8" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="264" y="168.8" font-size="10" fill="var(--foreground)" text-anchor="middle">−1.72</text>
+    <rect x="302" y="70.0" width="40" height="61.4" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="322" y="144.4" font-size="10" fill="var(--foreground)" text-anchor="middle">−1.23</text>
+    <rect x="360" y="70.0" width="40" height="29.2" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="380" y="112.2" font-size="10" fill="var(--foreground)" text-anchor="middle">−0.58</text>
+    <rect x="418" y="70.0" width="40" height="139.3" fill="var(--signal-instruction)"/>
+    <text x="438" y="222.3" font-size="10" fill="var(--foreground)" text-anchor="middle">−2.79</text>
+    <rect x="476" y="70.0" width="40" height="164.3" fill="var(--signal-instruction)"/>
+    <text x="496" y="247.3" font-size="10" fill="var(--foreground)" text-anchor="middle">−3.29</text>
+    <rect x="534" y="70.0" width="40" height="93.9" fill="var(--signal-flag-line)"/>
+    <text x="554" y="176.9" font-size="10" fill="var(--foreground)" text-anchor="middle">−1.88</text>
+    <rect x="592" y="68.4" width="40" height="1.6" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="612" y="63.4" font-size="10" fill="var(--foreground)" text-anchor="middle">+0.03</text>
+    <line x1="60" y1="70" x2="660" y2="70" stroke="var(--foreground)"/>
+    <text x="60" y="262" font-size="11" font-weight="700" fill="var(--foreground)" lang="ko">p_T: 마감 직전 · χ² = 53.6</text><text x="60" y="262" font-size="11" font-weight="700" fill="var(--foreground)" lang="en">p_T: last price before close · chi-square = 53.6</text>
+    <g stroke="var(--rule)"><line x1="60" y1="350" x2="660" y2="350"/><line x1="60" y1="400" x2="660" y2="400"/><line x1="60" y1="450" x2="660" y2="450"/></g>
+    <g font-size="10" fill="var(--foreground)" text-anchor="end"><text x="54" y="303">0</text><text x="54" y="353">−1</text><text x="54" y="403">−2</text><text x="54" y="453">−3</text></g>
+    <rect x="70" y="300.0" width="40" height="11.6" fill="var(--signal-instruction)"/>
+    <text x="90" y="324.6" font-size="10" fill="var(--foreground)" text-anchor="middle">−0.23</text>
+    <rect x="128" y="300.0" width="40" height="65.8" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="148" y="378.8" font-size="10" fill="var(--foreground)" text-anchor="middle">−1.32</text>
+    <rect x="186" y="300.0" width="40" height="80.4" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="206" y="393.4" font-size="10" fill="var(--foreground)" text-anchor="middle">−1.61</text>
+    <rect x="244" y="300.0" width="40" height="112.6" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="264" y="425.6" font-size="10" fill="var(--foreground)" text-anchor="middle">−2.25</text>
+    <rect x="302" y="291.5" width="40" height="8.5" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="322" y="286.5" font-size="10" fill="var(--foreground)" text-anchor="middle">+0.17</text>
+    <rect x="360" y="300.0" width="40" height="15.7" fill="var(--signal-dead-fill)" stroke="var(--border)"/>
+    <text x="380" y="328.7" font-size="10" fill="var(--foreground)" text-anchor="middle">−0.31</text>
+    <rect x="418" y="300.0" width="40" height="146.1" fill="var(--signal-flag-line)"/>
+    <text x="438" y="459.1" font-size="10" fill="var(--foreground)" text-anchor="middle">−2.92</text>
+    <rect x="476" y="300.0" width="40" height="171.9" fill="var(--signal-instruction)"/>
+    <text x="496" y="484.9" font-size="10" fill="var(--foreground)" text-anchor="middle">−3.44</text>
+    <rect x="534" y="300.0" width="40" height="159.5" fill="var(--signal-instruction)"/>
+    <text x="554" y="472.5" font-size="10" fill="var(--foreground)" text-anchor="middle">−3.19</text>
+    <rect x="592" y="300.0" width="40" height="12.2" fill="var(--signal-flag-line)"/>
+    <text x="612" y="325.2" font-size="10" fill="var(--foreground)" text-anchor="middle">−0.24</text>
+    <line x1="60" y1="300" x2="660" y2="300" stroke="var(--foreground)"/>
+    <g font-size="10" fill="var(--muted-foreground)" text-anchor="middle"><text x="90" y="504">0</text><text x="148" y="504">1</text><text x="206" y="504">2</text><text x="264" y="504">3</text><text x="322" y="504">4</text><text x="380" y="504">5</text><text x="438" y="504">6</text><text x="496" y="504">7</text><text x="554" y="504">8</text><text x="612" y="504">9</text></g>
+    <text x="14" y="270" font-size="10" fill="var(--foreground)" transform="rotate(-90 14 270)" text-anchor="middle" lang="ko">격차 (pp)</text><text x="14" y="270" font-size="10" fill="var(--foreground)" transform="rotate(-90 14 270)" text-anchor="middle" lang="en">gap (pp)</text>
+    <text x="350" y="524" font-size="10.5" fill="var(--foreground)" text-anchor="middle" lang="ko">구간 (0 = 가격 0–10%, 9 = 가격 90–100%)</text><text x="350" y="524" font-size="10.5" fill="var(--foreground)" text-anchor="middle" lang="en">bin (0 = price 0–10%, 9 = price 90–100%)</text>
+  </svg>
+  </div>
+  <figcaption><span lang="ko">그림 10: 구간별 격차, 마감 1일 전 가격(위)과 마감 직전 가격(아래). 왜: 마지막 하루의 정보를 넣어도 막대 9개가 여전히 아래로 향한다.</span><span lang="en">Figure 10: Per-bin gap with the price 1 day before close (top) and the last price before close (bottom). Why: even with the last day's news, 9 bars still point down.</span></figcaption>
+  </figure>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th><span lang="ko">p_1d (마감 1일 전)</span><span lang="en">p_1d (1 day before)</span></th><th><span lang="ko">p_T (마감 직전)</span><span lang="en">p_T (just before close)</span></th></tr></thead>
+    <tbody>
+      <tr><td><b><span lang="ko">χ² (자유도 10)</span><span lang="en">Chi-square (10 df)</span></b></td><td>68.0</td><td>53.6</td></tr>
+      <tr><td><b>p</b></td><td>1.1 × 10⁻¹⁰</td><td>5.7 × 10⁻⁸</td></tr>
+      <tr><td><b><span lang="ko">판정</span><span lang="en">Verdict</span></b></td><td><span lang="ko">기각</span><span lang="en">Reject</span></td><td><span lang="ko">여전히 기각</span><span lang="en">Still reject</span></td></tr>
+      <tr><td><b><span lang="ko">BH 유의 구간</span><span lang="en">BH bins</span></b></td><td><span lang="ko">5개 (0, 1, 6, 7, 8)</span><span lang="en">5 (0, 1, 6, 7, 8)</span></td><td><span lang="ko">5개 (0, 6, 7, 8, 9)</span><span lang="en">5 (0, 6, 7, 8, 9)</span></td></tr>
+      <tr><td><b><span lang="ko">Bonferroni 유의 구간</span><span lang="en">Bonferroni bins</span></b></td><td><span lang="ko">4개</span><span lang="en">4</span></td><td><span lang="ko">3개</span><span lang="en">3</span></td></tr>
+      <tr><td><b><span lang="ko">음수 구간</span><span lang="en">Negative bins</span></b></td><td>9 / 10</td><td>9 / 10</td></tr>
+      <tr><td><b>[[netgap]]</b></td><td>−0.99%</td><td>−0.65%</td></tr>
+      <tr><td><b>[[msr]]</b></td><td>0.107</td><td>0.075</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tablewrap"><table>
+    <thead><tr><th><span lang="ko">구간</span><span lang="en">Bin</span></th><th><span lang="ko">시장 수 p_1d</span><span lang="en">Markets p_1d</span></th><th><span lang="ko">시장 수 p_T</span><span lang="en">Markets p_T</span></th><th><span lang="ko">격차 p_1d (pp)</span><span lang="en">Gap p_1d (pp)</span></th><th><span lang="ko">격차 p_T (pp)</span><span lang="en">Gap p_T (pp)</span></th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>18,209</td><td>21,897</td><td style="white-space:nowrap">−0.46</td><td style="white-space:nowrap">−0.23</td></tr>
+      <tr><td>1</td><td>2,703</td><td>1,801</td><td style="white-space:nowrap">−2.30</td><td style="white-space:nowrap">−1.32</td></tr>
+      <tr><td>2</td><td>2,543</td><td>1,680</td><td style="white-space:nowrap">−1.00</td><td style="white-space:nowrap">−1.61</td></tr>
+      <tr><td>3</td><td>2,769</td><td>2,009</td><td style="white-space:nowrap">−1.72</td><td style="white-space:nowrap">−2.25</td></tr>
+      <tr><td>4</td><td>3,859</td><td>2,971</td><td style="white-space:nowrap">−1.23</td><td style="white-space:nowrap">+0.17</td></tr>
+      <tr><td>5</td><td>4,240</td><td>3,176</td><td style="white-space:nowrap">−0.58</td><td style="white-space:nowrap">−0.31</td></tr>
+      <tr><td>6</td><td>2,553</td><td>1,775</td><td style="white-space:nowrap">−2.79</td><td style="white-space:nowrap">−2.92</td></tr>
+      <tr><td>7</td><td>2,301</td><td>1,320</td><td style="white-space:nowrap">−3.29</td><td style="white-space:nowrap">−3.44</td></tr>
+      <tr><td>8</td><td>2,133</td><td>1,151</td><td style="white-space:nowrap">−1.88</td><td style="white-space:nowrap">−3.19</td></tr>
+      <tr><td>9</td><td>6,638</td><td>10,168</td><td style="white-space:nowrap">+0.03</td><td style="white-space:nowrap">−0.24</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><span lang="ko"><b>시점은 일부를 설명한다:</b> 마감 직전 가격이 결과에 더 가깝다. 오차가 0.107에서 0.075로, 순 격차가 −0.99%에서 −0.65%로 줄었다.</span><span lang="en"><b>Timing explains part:</b> the last price is closer to the outcome. The error falls from 0.107 to 0.075 and the net gap from −0.99% to −0.65%.</span></li>
+    <li><span lang="ko"><b>어긋남은 남는다:</b> 마감 직전에도 χ² = 53.6으로 기각되고, 9개 구간이 음수다. 시점만으로는 다 설명되지 않는다.</span><span lang="en"><b>The mismatch stays:</b> just before close, chi-square = 53.6 still rejects, and 9 bins are negative. Timing alone does not explain it.</span></li>
+    <li><span lang="ko"><b>어디가 바뀌나:</b> 싼 쪽(구간 0, 1)은 격차가 줄었다. 60–90% 구간(6, 7, 8)은 그대로이거나 커졌다.</span><span lang="en"><b>Where it changes:</b> the cheap bins (0, 1) shrink. Bins 6, 7 and 8 (60–90%) stay or grow.</span></li>
+    <li><span lang="ko"><b>주의:</b> p_T는 마지막 하루의 뉴스를 담아 "하루 전 예측"이 아니다. 마감 직전에는 시장이 0이나 1 쪽으로 몰린다(구간 0: 18,209 → 21,897개). 그래서 구간끼리 같은 시장 집합이 아니다.</span><span lang="en"><b>Caution:</b> p_T holds the last day's news, so it is not a one-day-ahead forecast. Near the close, markets crowd toward 0 or 1 (bin 0: 18,209 → 21,897), so a bin does not hold the same markets in both rows.</span></li>
+  </ul>
+  <p class="note"><span lang="ko">출처: <code>runs/local_r2close_v14/</code> (<code>results.json</code>, <code>bins_p_1d.csv</code>, <code>bins_p_T.csv</code>), 입력 <code>runs/142123_robust_full_v4/r2_markets.csv</code>, 코드 <code>code/r2_close_calibration.py</code>. 평균 제곱 잔차는 <code>numbers.tex</code>(<code>\RobRTwoAllBrierOneDay</code>, <code>\RobRTwoAllBrierAtClose</code>). p_T 구간 보정은 논문에 없는 확인이다.</span><span lang="en">Source: <code>runs/local_r2close_v14/</code> (<code>results.json</code>, <code>bins_p_1d.csv</code>, <code>bins_p_T.csv</code>), input <code>runs/142123_robust_full_v4/r2_markets.csv</code>, code <code>code/r2_close_calibration.py</code>. The mean squared residuals are from <code>numbers.tex</code> (<code>\RobRTwoAllBrierOneDay</code>, <code>\RobRTwoAllBrierAtClose</code>). The p_T bin calibration is a check that is not in the paper.</span></p>
+
+
   <p><span lang="ko"><b>종합:</b> Polymarket 가격은 대체로 확률에 가깝다. 다만 결과 1이 작고 일관되게 비싸다. 그 차이가 확실한 구간이 4–5개다.</span><span lang="en"><b>Overall:</b> Polymarket prices are close to probabilities. But outcome 1 is priced slightly and consistently too high, with a clear gap in 4 to 5 bins.</span></p>
   <p class="note"><span lang="ko">출처: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>, <code>papers/paper_mvp1/numbers.tex</code> (<code>\OutcomeOneYesShare</code>, <code>\OutcomeOneYesN</code>, <code>\OutcomeOneYesGapMin</code>, <code>\OutcomeOneYesGapMax</code>, <code>\GapNetDiffMain</code>, <code>\ChiTopShare</code>, <code>\NMarketsKept</code>). 구간 7의 3.3센트는 평균 가격과 실제 비율로 한 단순 계산이다.</span><span lang="en">Source: <code>runs/142082_mvp1_full_v1r3/q1_bins.csv</code>, <code>papers/paper_mvp1/numbers.tex</code> (<code>\OutcomeOneYesShare</code>, <code>\OutcomeOneYesN</code>, <code>\OutcomeOneYesGapMin</code>, <code>\OutcomeOneYesGapMax</code>, <code>\GapNetDiffMain</code>, <code>\ChiTopShare</code>, <code>\NMarketsKept</code>). The bin 7 figure of 3.3 cents is a plain calculation from the mean price and the observed rate.</span></p>
 </section>
