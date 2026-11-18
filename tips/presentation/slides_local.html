@@ -268,6 +268,33 @@ table.t td,table.t th{padding:12px 16px;text-align:left;vertical-align:middle}
 .qstep svg{display:block;width:100%;height:auto;flex:none}
 .fragment{opacity:0;transition:opacity .4s}
 .fragment.visible{opacity:1}
+
+/* questions slide: one question at the top, three sketch cards below, each appears on click */
+.hub{align-self:center;background:#171717;color:#FAFAFA;font-size:36px;font-weight:700;line-height:1.2;padding:16px 48px;margin-top:16px;flex:none}
+.hublines{display:block;width:100%;height:40px;flex:none}
+.qtri{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.qtri .qstep{justify-content:flex-start;gap:12px}
+.qtri .qstep{padding:16px 24px}
+.qtri .qstep svg{max-height:310px}
+
+/* backup Q1 BH slide: legend above the chart */
+.legend{display:flex;gap:40px;font-size:24px;color:var(--body);flex:none;align-items:center}
+.legend span{display:flex;align-items:center;gap:12px}
+
+/* Q1 meaning: four labelled rows */
+.rows{flex:1;min-height:0;display:grid;grid-template-columns:300px 1fr;grid-auto-rows:auto;align-content:center;border-top:2px solid var(--line)}
+.rowk,.rowv{padding:18px 0;border-bottom:2px solid var(--line);font-size:28px;line-height:1.3}
+.rowk{font-weight:700;color:var(--accent)}
+.rowv{color:var(--foreground)}
+.rowfig{display:flex;align-items:center;gap:40px;padding:8px 0}
+
+/* conclusion: three cautions under the answer */
+.caveats{display:flex;flex-direction:column;gap:8px;font-size:24px;line-height:1.3;color:#D4D4D4;border-left:6px solid #737373;padding-left:20px}
+.bg-dark .caveats b{color:#FAFAFA}
+
+/* backup Q1 tests: formula block, one formula per line */
+.fx{margin-top:16px;padding:12px 18px;background:#F5F5F5;border:1px solid var(--line);font-size:24px;line-height:1.5;color:var(--foreground)}
+.fxn{color:var(--muted)}
 /* local viewer only: fixed 1920x1080 slides, scaled to the window; notes under each slide */
 html,body{margin:0;background:#E5E5E5}
 body{counter-reset:page}
@@ -416,63 +443,72 @@ aside{display:none}
 <div class="slide">
 <section id="questions" class="bg-light padf">
   <div class="frame"><span class="chip on">Why</span><span class="chip">How</span><span class="chip">Result</span><span class="chip">Meaning</span></div>
-  <h2 class="t44">Three questions, one reason: can we trust the price?</h2>
-  <div class="flow">
-    <div class="step q1">
-      <div class="mid">Q1</div>
-      <div class="ask">Is the crowd right?</div>
-      <div class="lab">Do events priced at 70% happen about 70% of the time?</div>
-      <div class="lab"><b>Matters:</b> a price we can trust is a probability.</div>
+  <h2 class="t44 tight">One question, three ways to look at it</h2>
+  <div class="hub">70¢ → is it really a 70% chance?</div>
+  <svg class="hublines" aria-label="Lines from the one question to the three questions" width="1664" height="48" viewBox="0 0 1664 48" preserveAspectRatio="none"><path d="M832 0 V24 M267 24 H1397 M267 24 V48 M832 24 V48 M1397 24 V48" fill="none" stroke="#A3A3A3" stroke-width="3"/></svg>
+  <div class="qtri">
+    <div class="qstep q1 fragment">
+      <h3>Q1<br>Is the crowd right?</h3>
+      <svg aria-label="Sketch: dots sit just under the dashed diagonal where price equals rate" width="390" height="270" viewBox="0 0 390 270"><line x1="40" y1="230" x2="370" y2="230" stroke="#737373" stroke-width="2"/><line x1="40" y1="20" x2="40" y2="230" stroke="#737373" stroke-width="2"/><line x1="40" y1="230" x2="370" y2="20" stroke="#A3A3A3" stroke-width="2" stroke-dasharray="8 6"/><path d="M66 223a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M115.5 191a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M165 160a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M214.5 128a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M264 97a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M313.5 66a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" fill="#C04F00"/><g font-family="IBM Plex Mono, Menlo, monospace" font-size="22"><text x="205" y="260" fill="#171717" text-anchor="middle">price</text><text x="50" y="22" fill="#171717">how often it happened</text><text x="236" y="66" fill="#737373" text-anchor="end">price = rate</text></g></svg>
+      <div class="lab">Does 70¢ happen 70% of the time?</div>
     </div>
-    <div class="arrow">→</div>
-    <div class="step q2">
-      <div class="mid">Q2</div>
-      <div class="ask">Who is the crowd?</div>
-      <div class="lab">Does a small group of wallets do most of the trading?</div>
-      <div class="lab"><b>Matters:</b> it shows who the crowd is. Volume is not price-setting power.</div>
+    <div class="qstep q2 fragment">
+      <h3>Q2<br>Who is the crowd?</h3>
+      <svg aria-label="Sketch: one tall bar for a few wallets, nine short bars for the rest" width="390" height="270" viewBox="0 0 390 270"><line x1="40" y1="230" x2="370" y2="230" stroke="#737373" stroke-width="2"/><rect x="44" y="40" width="26" height="190" fill="#0072B2"/><path d="M77 196h26v34h-26zM110 206h26v24h-26zM143 212h26v18h-26zM176 216h26v14h-26zM209 219h26v11h-26zM242 221h26v9h-26zM275 223h26v7h-26zM308 224h26v6h-26zM341 225h26v5h-26z" fill="#A3A3A3"/><g font-family="IBM Plex Mono, Menlo, monospace" font-size="22"><text x="82" y="62" fill="#0072B2">most of the $</text><text x="57" y="260" fill="#171717" text-anchor="middle">few</text><text x="222" y="260" fill="#171717" text-anchor="middle">everyone else</text></g></svg>
+      <div class="lab">Do a few wallets hold most of the money?</div>
     </div>
-    <div class="arrow">→</div>
-    <div class="step q3">
-      <div class="mid">Q3</div>
-      <div class="ask">What does betting look like?</div>
-      <div class="lab">How are trade sizes, wallet volumes and prices spread?</div>
-      <div class="lab"><b>Matters:</b> the shape tells us which summary number is honest.</div>
+    <div class="qstep q3 fragment">
+      <h3>Q3<br>What does betting look like?</h3>
+      <svg aria-label="Sketch: right-skewed trade sizes, the median sits left of the mean" width="390" height="270" viewBox="0 0 390 270"><line x1="40" y1="230" x2="370" y2="230" stroke="#737373" stroke-width="2"/><path d="M44 30h24v200h-24zM71 80h24v150h-24zM98 135h24v95h-24zM125 170h24v60h-24zM152 192h24v38h-24zM179 206h24v24h-24zM206 215h24v15h-24zM233 220h24v10h-24zM260 224h24v6h-24zM287 226h24v4h-24zM314 227h24v3h-24zM341 228h24v2h-24z" fill="#007A5A" opacity="0.35"/><line x1="79" y1="36" x2="79" y2="230" stroke="#171717" stroke-width="3"/><line x1="152" y1="60" x2="152" y2="230" stroke="#007A5A" stroke-width="3" stroke-dasharray="8 6"/><g font-family="IBM Plex Mono, Menlo, monospace" font-size="22"><text x="86" y="28" fill="#171717">median</text><text x="160" y="76" fill="#007A5A">mean</text><text x="370" y="260" fill="#171717" text-anchor="end">trade size →</text></g></svg>
+      <div class="lab">Which summary number is honest?</div>
     </div>
   </div>
-  <div class="foot"><span>Source: README section 1, paper Section 1</span><span class="pg"></span></div>
-  <aside>Speaker 1 (Taek Lim). About 45 seconds. Why: the hook gave us one question, so we split it into three. How: each question gets the same four steps. Why we did it, how we did it, what we got, and why it matters. Result: Q1 asks whether the crowd is right, meaning whether events priced at 70% happen about 70% of the time. Q2 asks who the crowd is, meaning whether a small group of wallets does most of the trading. Q3 describes what the betting looks like, meaning how trade sizes, wallet volumes and prices are spread. Meaning: Q1 tests the price directly. Q2 tells us who stands behind it, but volume is not price-setting power. Q3 tells us which summary number is honest.</aside>
+  <div class="foot"><span>Sketches show shapes only, not our data. Source: README section 1, paper Section 1</span><span class="pg"></span></div>
+  <aside>Speaker 1 (Taek Lim). About 45 seconds. Why: the hook gave us one question. If a share costs 70 cents, is it really a 70% chance? We look at it in three ways. Click. Q1 asks whether the crowd is right. In this sketch the dots sit just under the line where price equals how often things happen. That is the test: do events priced at 70% happen about 70% of the time? Click. Q2 asks who the crowd is. Does a small group of wallets hold most of the money? If so, the price may reflect a few traders, but volume is not price-setting power. Click. Q3 asks what betting looks like. When sizes have a long right tail, the mean moves far from the median, so we must pick the honest summary number. These sketches show shapes only. The real results come next.</aside>
 </section>
 </div>
-<div class="notes"><b>Notes:</b> Speaker 1 (Taek Lim). About 45 seconds. Why: the hook gave us one question, so we split it into three. How: each question gets the same four steps. Why we did it, how we did it, what we got, and why it matters. Result: Q1 asks whether the crowd is right, meaning whether events priced at 70% happen about 70% of the time. Q2 asks who the crowd is, meaning whether a small group of wallets does most of the trading. Q3 describes what the betting looks like, meaning how trade sizes, wallet volumes and prices are spread. Meaning: Q1 tests the price directly. Q2 tells us who stands behind it, but volume is not price-setting power. Q3 tells us which summary number is honest.</div>
+<div class="notes"><b>Notes:</b> Speaker 1 (Taek Lim). About 45 seconds. Why: the hook gave us one question. If a share costs 70 cents, is it really a 70% chance? We look at it in three ways. Click. Q1 asks whether the crowd is right. In this sketch the dots sit just under the line where price equals how often things happen. That is the test: do events priced at 70% happen about 70% of the time? Click. Q2 asks who the crowd is. Does a small group of wallets hold most of the money? If so, the price may reflect a few traders, but volume is not price-setting power. Click. Q3 asks what betting looks like. When sizes have a long right tail, the mean moves far from the median, so we must pick the honest summary number. These sketches show shapes only. The real results come next.</div>
 <div class="slide">
 <section id="data" class="bg-light padf">
   <div class="frame"><span class="chip on">Why</span><span class="chip on">How</span><span class="chip">Result</span><span class="chip">Meaning</span></div>
   <h2 class="t44">Data: we keep 47,948 Polymarket markets for all three questions</h2>
   <p class="line24"><b>Polymarket-v1:</b> 1.2 billion trades, 1.3 million markets, Nov 2022 to Apr 2026. In scope: standard yes/no markets.</p>
-  <svg aria-label="Funnel of markets: 688,131 in scope, then 432,711 after removing Up/Down markets, 369,993 after removing markets with no clear winner, 154,704 after removing markets with no price one day before close, 74,474 after removing prices older than 24 hours, 47,948 after removing markets with fewer than 10 trades" width="1664" height="470" viewBox="0 0 1664 470" style="margin-top:24px;flex:none">
+  <svg aria-label="Funnel of markets. 688,131 in scope. Minus 255,420 Up/Down markets, which settle a different way, leaves 432,711. Minus 62,718 with no clear winner, no outcome to compare, leaves 369,993. Minus 215,289 with no price 1 day before close, nothing to test, leaves 154,704. Minus 80,230 with a price older than 24 hours, out of date, leaves 74,474. Minus 26,526 with fewer than 10 trades, one or two people and not a crowd, leaves 47,948 kept, 7.0 percent" width="1664" height="500" viewBox="0 0 1664 500" style="margin-top:16px;flex:none">
     <g fill="#A3A3A3">
-      <rect x="0" y="0" width="900" height="56"/>
-      <rect x="0" y="80" width="566" height="56"/>
-      <rect x="0" y="160" width="484" height="56"/>
-      <rect x="0" y="240" width="202" height="56"/>
-      <rect x="0" y="320" width="97" height="56"/>
+      <rect x="0" y="0" width="900" height="40"/>
+      <rect x="0" y="92" width="566" height="40"/>
+      <rect x="0" y="184" width="484" height="40"/>
+      <rect x="0" y="276" width="202" height="40"/>
+      <rect x="0" y="368" width="97" height="40"/>
     </g>
-    <rect x="0" y="400" width="63" height="56" fill="#C04F00"/>
+    <rect x="0" y="460" width="63" height="40" fill="#C04F00"/>
     <g font-family="IBM Plex Mono, Menlo, monospace" font-size="26" fill="#262626">
-      <text x="920" y="37"><tspan font-weight="700" fill="#0A0A0A">688,131</tspan> standard yes/no markets in scope</text>
-      <text x="586" y="117"><tspan font-weight="700" fill="#0A0A0A">432,711</tspan>  − 255,420 Up/Down markets</text>
-      <text x="504" y="197"><tspan font-weight="700" fill="#0A0A0A">369,993</tspan>  − 62,718 with no clear winner</text>
-      <text x="222" y="277"><tspan font-weight="700" fill="#0A0A0A">154,704</tspan>  − 215,289 with no price 1 day before close</text>
-      <text x="117" y="357"><tspan font-weight="700" fill="#0A0A0A">74,474</tspan>  − 80,230 with a price older than 24 hours</text>
-      <text x="83" y="437"><tspan font-weight="700" fill="#C04F00">47,948 kept (7.0%)</tspan>  − 26,526 with fewer than 10 trades</text>
+      <text x="920" y="29"><tspan font-weight="700" fill="#0A0A0A">688,131</tspan> standard yes/no markets in scope</text>
+      <text x="586" y="121" font-weight="700" fill="#0A0A0A">432,711</text>
+      <text x="504" y="213" font-weight="700" fill="#0A0A0A">369,993</text>
+      <text x="222" y="305" font-weight="700" fill="#0A0A0A">154,704</text>
+      <text x="117" y="397" font-weight="700" fill="#0A0A0A">74,474</text>
+      <text x="83" y="489" font-weight="700" fill="#C04F00">47,948 kept (7.0%)</text>
+    </g>
+    <g font-family="IBM Plex Mono, Menlo, monospace" font-size="24" fill="#262626">
+      <text x="8" y="75" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="74"><tspan font-weight="700" fill="#0A0A0A">− 255,420</tspan> Up/Down markets <tspan fill="#737373">· settle a different way</tspan></text>
+      <text x="8" y="167" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="166"><tspan font-weight="700" fill="#0A0A0A">− 62,718</tspan> with no clear winner <tspan fill="#737373">· no outcome to compare</tspan></text>
+      <text x="8" y="259" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="258"><tspan font-weight="700" fill="#0A0A0A">− 215,289</tspan> with no price 1 day before close <tspan fill="#737373">· nothing to test</tspan></text>
+      <text x="8" y="351" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="350"><tspan font-weight="700" fill="#0A0A0A">− 80,230</tspan> with a price older than 24 hours <tspan fill="#737373">· out of date</tspan></text>
+      <text x="8" y="443" fill="#737373" font-size="28">↓</text>
+      <text x="48" y="442"><tspan font-weight="700" fill="#0A0A0A">− 26,526</tspan> with fewer than 10 trades <tspan fill="#737373">· one or two people, not a crowd</tspan></text>
     </g>
   </svg>
   <div class="callout mt16">We fixed these rules before any Q1 result. All three questions use the same 47,948 markets.</div>
   <div class="foot"><span>Source: paper, Data section; Qin and Yang 2026 (Polymarket-v1)</span><span class="pg"></span></div>
-  <aside>Speaker 1 (Taek Lim). About 1 minute. Why: a price is only useful if it exists before the market closes and the outcome is clear, so we filter. How: we use Polymarket-v1, a public database of 1.2 billion trades and 1.3 million markets from November 2022 to April 2026. In scope are 688,131 standard yes/no markets. Each bar shows what is left after one rule. We remove 255,420 Up/Down markets, which settle in a different way. We remove 62,718 with no clear winner. We remove 215,289 with no price one day before the close, 80,230 whose price is older than 24 hours, and 26,526 with fewer than 10 trades. We fixed these rules before we saw any Q1 result. Result: 47,948 markets are left, 7.0% of the scope. Meaning: all three questions use the same 47,948 markets, so the three answers fit together. The results hold for markets that pass these filters.</aside>
+  <aside>Speaker 1 (Taek Lim). About 1 minute. Why: to test a price, each market needs a clear answer, a price one day before the close, and a crowd behind that price. Each rule removes markets that miss one of these. How: we use Polymarket-v1, a public database of 1.2 billion trades and 1.3 million markets from November 2022 to April 2026. In scope are 688,131 standard yes/no markets. Each arrow shows what one rule removes from the bar above it. First, 255,420 Up/Down markets. The dataset paper says they settle a different way, so we do not mix them in. Next, 62,718 with no clear winner, so there is no outcome to compare. Next, 215,289 with no price one day before the close. A later price can already contain the answer, so without that price there is nothing to test. Next, 80,230 whose price is older than 24 hours, so it misses the news since then. Last, 26,526 with fewer than 10 trades. Their price comes from one or two people, not a crowd. We fixed these rules before we saw any Q1 result. Result: 47,948 markets are left, 7.0% of the scope. Meaning: all three questions use the same 47,948 markets, so the three answers fit together. The results hold for markets that pass these filters.</aside>
 </section>
 </div>
-<div class="notes"><b>Notes:</b> Speaker 1 (Taek Lim). About 1 minute. Why: a price is only useful if it exists before the market closes and the outcome is clear, so we filter. How: we use Polymarket-v1, a public database of 1.2 billion trades and 1.3 million markets from November 2022 to April 2026. In scope are 688,131 standard yes/no markets. Each bar shows what is left after one rule. We remove 255,420 Up/Down markets, which settle in a different way. We remove 62,718 with no clear winner. We remove 215,289 with no price one day before the close, 80,230 whose price is older than 24 hours, and 26,526 with fewer than 10 trades. We fixed these rules before we saw any Q1 result. Result: 47,948 markets are left, 7.0% of the scope. Meaning: all three questions use the same 47,948 markets, so the three answers fit together. The results hold for markets that pass these filters.</div>
+<div class="notes"><b>Notes:</b> Speaker 1 (Taek Lim). About 1 minute. Why: to test a price, each market needs a clear answer, a price one day before the close, and a crowd behind that price. Each rule removes markets that miss one of these. How: we use Polymarket-v1, a public database of 1.2 billion trades and 1.3 million markets from November 2022 to April 2026. In scope are 688,131 standard yes/no markets. Each arrow shows what one rule removes from the bar above it. First, 255,420 Up/Down markets. The dataset paper says they settle a different way, so we do not mix them in. Next, 62,718 with no clear winner, so there is no outcome to compare. Next, 215,289 with no price one day before the close. A later price can already contain the answer, so without that price there is nothing to test. Next, 80,230 whose price is older than 24 hours, so it misses the news since then. Last, 26,526 with fewer than 10 trades. Their price comes from one or two people, not a crowd. We fixed these rules before we saw any Q1 result. Result: 47,948 markets are left, 7.0% of the scope. Meaning: all three questions use the same 47,948 markets, so the three answers fit together. The results hold for markets that pass these filters.</div>
 <div class="slide">
 <section id="q1-how" class="bg-light padf q1">
   <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
@@ -584,25 +620,34 @@ aside{display:none}
   <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
   <div class="frame"><span class="chip">Why</span><span class="chip">How</span><span class="chip">Result</span><span class="chip on">Meaning</span></div>
   <h2 class="t44">Q1 meaning: prices run a little high, in one direction</h2>
-  <div class="flow">
-    <div class="step">
-      <div class="ask">What we found</div>
-      <div class="lab">Prices are not calibrated as a whole. 9 of 10 bins are below the price. Net gap −0.99%. Small: the largest bin gap is 3.29 points.</div>
+  <div class="rows">
+    <div class="rowk">What for</div>
+    <div class="rowv">χ² says the prices miss. The bin tests ask where, and which way.</div>
+    <div class="rowk">Result</div>
+    <div class="rowv">9 of 10 bins below the price. Bonferroni keeps 4 bins, BH keeps 5, all below. Largest gap 3.29 points: priced 74.6%, happened 71.3%.</div>
+    <div class="rowk">Meaning</div>
+    <div class="rowv rowfig">
+      <div>Outcome 1 (mostly Yes) is priced a little high at almost every price. Only the cheapest bins match the favorite-longshot bias. We do not test why.</div>
+      <svg aria-label="Gap by price bin. Our ten gaps sit below zero almost everywhere. The favorite-longshot bias would put cheap bins below zero and dear bins above zero." width="600" height="205" viewBox="0 0 440 150" style="flex:none">
+        <line x1="20" y1="70" x2="420" y2="70" stroke="#737373" stroke-width="2"/>
+        <path d="M20 100 C 160 100, 280 40, 420 40" fill="none" stroke="#A3A3A3" stroke-width="3" stroke-dasharray="8 6"/>
+        <path d="M24 76a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M66 97.6a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M108 82a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M150 90.4a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M192 84.4a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M234 77.2a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M276 103.6a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M318 109.6a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M360 92.8a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M402 70a6 6 0 1 0 12 0a6 6 0 1 0 -12 0" fill="#C04F00"/>
+        <g font-family="IBM Plex Mono, Menlo, monospace" font-size="22">
+          <text x="420" y="26" text-anchor="end" fill="#737373">bias would say</text>
+          <text x="20" y="140" fill="#262626">cheap</text>
+          <text x="420" y="140" text-anchor="end" fill="#262626">dear</text>
+          <text x="220" y="140" text-anchor="middle" fill="#C04F00" font-weight="700">ours</text>
+        </g>
+      </svg>
     </div>
-    <div class="step">
-      <div class="ask">The hook, answered</div>
-      <div class="lab">Right 83.4% of the time does not mean calibrated. χ² = 68.0 says the prices miss.</div>
-    </div>
-    <div class="step ph">
-      <div class="ask">Why prices run high</div>
-      <div class="lab">[Owner: why prices run high]</div>
-    </div>
+    <div class="rowk">Why it matters</div>
+    <div class="rowv"><b>Right 83.4% of the time is not calibrated.</b> Read a price as a probability, a little lower.</div>
   </div>
-  <div class="foot"><span>Source: paper Section 5.1 and Discussion</span><span class="pg"></span></div>
-  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. Why: the numbers only matter if we say what they mean. How: we put the Q1 result next to the hook. Result: prices are not calibrated as a whole. The effect is small and runs one way, with a net gap of minus 0.99%. The largest gap in one bin is 3.29 points, in the 70 to 80% bin. Meaning: this answers the hook. A market can be right 83.4% of the time and still have prices that are not calibrated, because being right often and being calibrated are different things. The third box is a placeholder. The owner has not yet written why the prices run high, and we do not invent a reason. Fill this in before the talk.</aside>
+  <div class="foot"><span>Dots: gap (rate − price) per bin. Dashed: favorite-longshot shape only. Source: paper Section 5.1; run 142082</span><span class="pg"></span></div>
+  <aside>Speaker: Q1 speaker. About 1 minute 15 seconds. What for: the chi-square test said the prices miss, 68.0 against a cut of 18.3. But it does not say where or which way, so we tested each bin. Result: 9 of 10 bins are below the price. After correcting for ten tests, Bonferroni keeps 4 bins and Benjamini-Hochberg keeps 5, and all of them are below the price. The largest gap is in the 70 to 80% bin: prices average 74.6%, but 71.3% of those events happen. Meaning: outcome 1, which is mostly Yes, is priced a little high at almost every price. In horse racing there is the favorite-longshot bias: cheap bets win less often than priced, and favorites win more often. The dashed line shows that shape. Only our two cheapest bins match it. At high prices our gaps are also below zero, the opposite of that bias. So our pattern is a small shift down almost everywhere. We do not test why. Why it matters: a market can be right 83.4% of the time and still not be calibrated. You can read a Polymarket price as a probability, but read it a little lower.</aside>
 </section>
 </div>
-<div class="notes"><b>Notes:</b> Speaker: Q1 speaker. About 1 minute 15 seconds. Why: the numbers only matter if we say what they mean. How: we put the Q1 result next to the hook. Result: prices are not calibrated as a whole. The effect is small and runs one way, with a net gap of minus 0.99%. The largest gap in one bin is 3.29 points, in the 70 to 80% bin. Meaning: this answers the hook. A market can be right 83.4% of the time and still have prices that are not calibrated, because being right often and being calibrated are different things. The third box is a placeholder. The owner has not yet written why the prices run high, and we do not invent a reason. Fill this in before the talk.</div>
+<div class="notes"><b>Notes:</b> Speaker: Q1 speaker. About 1 minute 15 seconds. What for: the chi-square test said the prices miss, 68.0 against a cut of 18.3. But it does not say where or which way, so we tested each bin. Result: 9 of 10 bins are below the price. After correcting for ten tests, Bonferroni keeps 4 bins and Benjamini-Hochberg keeps 5, and all of them are below the price. The largest gap is in the 70 to 80% bin: prices average 74.6%, but 71.3% of those events happen. Meaning: outcome 1, which is mostly Yes, is priced a little high at almost every price. In horse racing there is the favorite-longshot bias: cheap bets win less often than priced, and favorites win more often. The dashed line shows that shape. Only our two cheapest bins match it. At high prices our gaps are also below zero, the opposite of that bias. So our pattern is a small shift down almost everywhere. We do not test why. Why it matters: a market can be right 83.4% of the time and still not be calibrated. You can read a Polymarket price as a probability, but read it a little lower.</div>
 <div class="slide">
 <section id="q2-result" class="bg-light padf q2">
   <div class="band"><span class="bq">Q1 Calibration</span><span class="dot">·</span><span class="bq bq2 on">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
@@ -724,6 +769,31 @@ aside{display:none}
 </div>
 <div class="notes"><b>Notes:</b> Speaker: Q3 speaker. About 1 minute. Why: Q1 uses the price and Q2 uses wallet volume, so we check their shapes too. How: a histogram of the price one day before close, and a QQ plot of wallet volume, raw and log. Result: prices pile up near both ends of the scale, with a mean of 0.376 and a median of 0.320. Wallet volume is strongly skewed. Makers have a mean of 14,103 USDC against a median of 101.2, and takers have 5,339 against 86.6. Meaning: the same long-tail shape appears in the prices and in the wallets. We report it without a verdict.</div>
 <div class="slide">
+<section id="conclusion" class="bg-dark pad center">
+  <h2 class="t64">Prices are close to probabilities, but events happen a little less often than priced</h2>
+  <div class="stats3 mt48">
+    <div class="sbox q1">
+      <div class="tag">Q1</div>
+      <div class="big">−0.99%</div>
+      <div class="lab">net gap over 47,948 markets: events happen slightly less often than priced</div>
+    </div>
+    <div class="sbox q2">
+      <div class="tag">Q2</div>
+      <div class="big">98.9%</div>
+      <div class="lab">of maker volume held by the top 20% of wallets. The top 1% take about 88.0% of winnings</div>
+    </div>
+    <div class="sbox q3">
+      <div class="tag">Q3</div>
+      <div class="big">6.9 USDC</div>
+      <div class="lab">median trade, against a mean of 129.8: a typical trade is small</div>
+    </div>
+  </div>
+  <p class="line mt48"><b>Takeaway:</b> read a Polymarket price as a probability, a little lower.</p>
+  <aside>Speaker: Intro (Taek Lim). About 45 seconds. We asked three questions, so here are three answers. Q1: is the crowd right? Almost. On 47,948 markets the net gap is minus 0.99%. Events happen slightly less often than priced. Q2: who is the crowd? A few wallets. The top 20% of wallets hold 98.9% of maker volume, and the top 1% take an estimated 88.0% of all winnings. Q3: what does a trade look like? Small. The median trade is 6.9 USDC, while the mean is 129.8, so the median describes a typical trade. So the takeaway is simple. You can read a Polymarket price as a probability, if you read it a little lower. Next, what this study cannot say, and what we would do next.</aside>
+</section>
+</div>
+<div class="notes"><b>Notes:</b> Speaker: Intro (Taek Lim). About 45 seconds. We asked three questions, so here are three answers. Q1: is the crowd right? Almost. On 47,948 markets the net gap is minus 0.99%. Events happen slightly less often than priced. Q2: who is the crowd? A few wallets. The top 20% of wallets hold 98.9% of maker volume, and the top 1% take an estimated 88.0% of all winnings. Q3: what does a trade look like? Small. The median trade is 6.9 USDC, while the mean is 129.8, so the median describes a typical trade. So the takeaway is simple. You can read a Polymarket price as a probability, if you read it a little lower. Next, what this study cannot say, and what we would do next.</div>
+<div class="slide">
 <section id="limits" class="bg-light padf">
   <h2 class="t44">Limits: read the results as measured patterns, not as proof of cause</h2>
   <div class="lim">
@@ -744,46 +814,12 @@ aside{display:none}
       <p>One owner may control many addresses. Volume is not price-setting power.</p>
     </div>
   </div>
+  <div class="strip"><b>Future work:</b> build a true event key and test Q1 by event · Q2 is not yet linked to Q1, so test whether the gap depends on the number of distinct wallets, holding volume fixed · correct prices after the fact and test the correction on later markets.</div>
   <div class="foot"><span>Source: paper, Limitations section</span><span class="pg"></span></div>
-  <aside>Speaker: Intro (Taek Lim). About 45 seconds. We want to be clear about what this study cannot say. We keep only 7.0% of the markets, so the result holds for markets that pass our filters. The data has no true event key, so markets on the same event move together and our p-values are optimistic. We price one day before the close, and that choice rests on a one-month pilot. Finally, a wallet is an address and not a person, and one pre-registered rule was changed after we saw a result, which we report as an amendment.</aside>
+  <aside>Speaker: Intro (Taek Lim). About 45 seconds. We want to be clear about what this study cannot say. We keep only 7.0% of the markets, so the result holds for markets that pass our filters. The data has no true event key, so markets on the same event move together and our p-values are optimistic. We price one day before the close, and that choice rests on a one-month pilot. Finally, a wallet is an address and not a person, and one pre-registered rule was changed after we saw a result, which we report as an amendment. Future work follows from these limits. First, build a true event key and test Q1 with markets grouped by event. Second, Q2 shows a concentrated crowd, but we do not link it to Q1. Volume counts money, not people, so test whether the gap depends on the number of distinct wallets, holding volume fixed. Third, correct the prices after the fact and test that correction on later markets.</aside>
 </section>
 </div>
-<div class="notes"><b>Notes:</b> Speaker: Intro (Taek Lim). About 45 seconds. We want to be clear about what this study cannot say. We keep only 7.0% of the markets, so the result holds for markets that pass our filters. The data has no true event key, so markets on the same event move together and our p-values are optimistic. We price one day before the close, and that choice rests on a one-month pilot. Finally, a wallet is an address and not a person, and one pre-registered rule was changed after we saw a result, which we report as an amendment.</div>
-<div class="slide">
-<section id="conclusion" class="bg-dark pad center">
-  <h2 class="t64">Not exactly: prices are not calibrated as a whole, in one small direction</h2>
-  <div class="stats3 mt48">
-    <div class="sbox q1">
-      <div class="tag">Q1</div>
-      <div class="big">−0.99%</div>
-      <div class="lab">net gap: observed rate minus price, over 47,948 markets</div>
-    </div>
-    <div class="sbox q2">
-      <div class="tag">Q2</div>
-      <div class="big">98.9%</div>
-      <div class="lab">of maker volume held by the top 20% of wallets</div>
-    </div>
-    <div class="sbox q3">
-      <div class="tag">Q3</div>
-      <div class="big">129.8</div>
-      <div class="lab">USDC mean trade size, against a median of 6.9</div>
-    </div>
-  </div>
-  <p class="line mt48">Back to the hook: being right often is not the same as being calibrated.</p>
-  <aside>Speaker: Intro (Taek Lim). About 1 minute. Why: we started with one question, so we end with its answer. How: we read Q1, Q2 and Q3 together. Result: can a Polymarket price be read as a probability? Not exactly. On 47,948 markets the prices are not calibrated as a whole. The net gap is minus 0.99%, which is small but runs in one direction. By volume, the top 20% of wallets hold 98.9% of maker volume. Trade sizes are strongly right skewed, with a mean of 129.8 USDC and a median of 6.9. Meaning: back to the news story. A market can be right most of the time and still have prices that are not calibrated. In our data it is right 83.4% of the time at the 0.5 line, and the prices still miss. These are measured patterns, not proof of cause.</aside>
-</section>
-</div>
-<div class="notes"><b>Notes:</b> Speaker: Intro (Taek Lim). About 1 minute. Why: we started with one question, so we end with its answer. How: we read Q1, Q2 and Q3 together. Result: can a Polymarket price be read as a probability? Not exactly. On 47,948 markets the prices are not calibrated as a whole. The net gap is minus 0.99%, which is small but runs in one direction. By volume, the top 20% of wallets hold 98.9% of maker volume. Trade sizes are strongly right skewed, with a mean of 129.8 USDC and a median of 6.9. Meaning: back to the news story. A market can be right most of the time and still have prices that are not calibrated. In our data it is right 83.4% of the time at the 0.5 line, and the prices still miss. These are measured patterns, not proof of cause.</div>
-<div class="slide">
-<section id="qa" class="bg-alt pad center">
-  <div class="stripes"><div class="s1"></div><div class="s2"></div><div class="s3"></div></div>
-  <h1 class="t96">Questions?</h1>
-  <p class="sub mt48">Thank you</p>
-  <p class="names mt16">Taek Lim · Zhugang Liu (Tony) · Francisco Cortez</p>
-  <aside>Speaker: all three. About 30 seconds. Thank you for listening. We are happy to take questions. Backup slides follow this one if you want to see how we handled the 7% sample, the kept and dropped markets, the Lorenz curve, the practical size of the gap, the price rule and Yes/No labels, or what outcome 1 means.</aside>
-</section>
-</div>
-<div class="notes"><b>Notes:</b> Speaker: all three. About 30 seconds. Thank you for listening. We are happy to take questions. Backup slides follow this one if you want to see how we handled the 7% sample, the kept and dropped markets, the Lorenz curve, the practical size of the gap, the price rule and Yes/No labels, or what outcome 1 means.</div>
+<div class="notes"><b>Notes:</b> Speaker: Intro (Taek Lim). About 45 seconds. We want to be clear about what this study cannot say. We keep only 7.0% of the markets, so the result holds for markets that pass our filters. The data has no true event key, so markets on the same event move together and our p-values are optimistic. We price one day before the close, and that choice rests on a one-month pilot. Finally, a wallet is an address and not a person, and one pre-registered rule was changed after we saw a result, which we report as an amendment. Future work follows from these limits. First, build a true event key and test Q1 with markets grouped by event. Second, Q2 shows a concentrated crowd, but we do not link it to Q1. Volume counts money, not people, so test whether the gap depends on the number of distinct wallets, holding volume fixed. Third, correct the prices after the fact and test that correction on later markets.</div>
 <div class="slide">
 <section id="references" class="bg-light pad">
   <h2 class="t44">References</h2>
@@ -812,6 +848,16 @@ aside{display:none}
 </section>
 </div>
 <div class="notes"><b>Notes:</b> Reference slide. Not presented. It lists the data, the method papers, and the news sources used on slides 3 and 4.</div>
+<div class="slide">
+<section id="qa" class="bg-alt pad center">
+  <div class="stripes"><div class="s1"></div><div class="s2"></div><div class="s3"></div></div>
+  <h1 class="t96">Questions?</h1>
+  <p class="sub mt48">Thank you</p>
+  <p class="names mt16">Taek Lim · Zhugang Liu (Tony) · Francisco Cortez</p>
+  <aside>Speaker: all three. About 30 seconds. Thank you for listening. We are happy to take questions. Backup slides follow this one if you want to see how we handled the 7% sample, the kept and dropped markets, the Lorenz curve, the practical size of the gap, the price rule and Yes/No labels, or what outcome 1 means.</aside>
+</section>
+</div>
+<div class="notes"><b>Notes:</b> Speaker: all three. About 30 seconds. Thank you for listening. We are happy to take questions. Backup slides follow this one if you want to see how we handled the 7% sample, the kept and dropped markets, the Lorenz curve, the practical size of the gap, the price rule and Yes/No labels, or what outcome 1 means.</div>
 <div class="slide">
 <section id="price" class="bg-light padf">
   <div class="frame"><span class="chip on">Why</span><span class="chip">How</span><span class="chip">Result</span><span class="chip">Meaning</span></div>
@@ -923,6 +969,126 @@ aside{display:none}
 </section>
 </div>
 <div class="notes"><b>Notes:</b> Speaker: Q1 speaker. About 1 minute 15 seconds. Why: with this many markets, a tiny gap gives a tiny p-value, so a small p alone does not tell us whether the gap matters. How: we look at size three ways. The largest per-bin gap, a practical line, and plain accuracy. The practical line is the mean half spread of 1.57%. Result: the largest per-bin gap is 3.29 points. The largest implied gap is 2.22%, above the line as a point estimate. But a price passes only when its whole 95% band lies beyond the line, and 0 of 7 grid prices do. Accuracy at the 0.5 line is 83.4% against 63.4% for always guessing the majority. We set no size line before the results, so small is our reading. Meaning: the gap is real in direction but we cannot say it is surely larger than the cost of trading.</div>
+<div class="slide">
+<section id="backup-q1-tests" class="bg-light padf q1">
+  <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <h2 class="t44">Q: Why a χ² test first, then a test per bin?</h2>
+  <div class="body g-two">
+    <div class="panel" style="display:flex;flex-direction:column;justify-content:center">
+      <h3>χ² test: all 10 bins at once</h3>
+      <div class="mid" style="font-size:44px">68.0 &gt; 18.3</div>
+      <p class="line24 mt16">H0: price = probability.</p>
+      <p class="line24">p = 1.1 × 10⁻¹⁰, so we reject H0.</p>
+      <div class="fx">
+        <div>Eₖ = nₖ · p̄ₖ <span class="fxn">expected Yes in bin k</span></div>
+        <div>zₖ = (Oₖ − Eₖ) / √(nₖ · p̄ₖ · (1 − p̄ₖ))</div>
+        <div>χ² = z₁² + z₂² + … + z₁₀²</div>
+        <div class="fxn">bin 7: z = (1,640 − 1,716) / 20.9 = −3.6</div>
+      </div>
+      <p class="line24 mt16"><b>It says only that something is off.</b></p>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;justify-content:center">
+      <h3>Binomial test: one bin at a time</h3>
+      <div class="mid" style="font-size:44px">9 of 10 bins below price</div>
+      <div class="fx">
+        <div>K = X₁ + … + Xₙ, <span class="fxn">Xᵢ = 1 with prob. pᵢ</span></div>
+        <div>P(K = k) = Σ Πᵢ∈A pᵢ · Πⱼ∉A (1 − pⱼ) <span class="fxn">|A| = k</span></div>
+        <div>Var K = Σ pᵢ(1 − pᵢ) ≤ n · p̄(1 − p̄)</div>
+        <div class="fxn">all pᵢ = p̄: P(K = k) = C(n, k) · p̄ᵏ · (1 − p̄)ⁿ⁻ᵏ</div>
+      </div>
+      <p class="line24 mt16">It shows where and which way.</p>
+      <p class="line24">Largest gap: 3.29 points (70 to 80% bin).</p>
+      <p class="line24 mt16"><b>Ten tests, so we correct (next slide).</b></p>
+    </div>
+  </div>
+  <div class="strip"><b>Q: Why binomial, not t?</b> Outcomes are 0/1 counts, not means of continuous values. The exact model is the Poisson binomial: each market has its own price. We test with the binomial at the bin mean price. Its variance is a little larger, so the test is slightly conservative (gap at most 1.3% in the 70 to 80% bin).</div>
+  <div class="foot"><span>Source: paper Section 5.1, Appendix B; run 142082 q1_bins.csv</span><span class="pg"></span></div>
+  <aside>Backup, Q1 speaker. About 45 seconds. Why: someone may ask why we run two kinds of test. How: the chi-square test looks at all 10 bins at once. Its null is that the price equals the probability. We get 68.0 against a 5% cut of 18.3, so p is about one in ten billion and we reject the null. But the chi-square only says that something is off. It does not say where or which way. So we test each bin with a binomial test. Nine of ten bins come out below the price, and the largest gap is 3.29 points in the 70 to 80% bin. If asked why binomial and not t: outcomes are zero-or-one counts, not means of continuous values. The exact model is the Poisson binomial, because each market has its own price. We use the binomial at the bin mean price. Its variance is a little larger, so the test is slightly conservative. In the 70 to 80% bin the difference is at most 1.3%. The formulas, if asked: on the left, each bin gives a z score, the observed Yes count minus the expected count, divided by the binomial standard deviation. Chi-square adds the ten squared z scores. On the right, the Yes count K in a bin adds one coin per market, each with its own price. That is the Poisson binomial. Its variance is never larger than the binomial variance, which is why the binomial test is slightly conservative.</aside>
+</section>
+</div>
+<div class="notes"><b>Notes:</b> Backup, Q1 speaker. About 45 seconds. Why: someone may ask why we run two kinds of test. How: the chi-square test looks at all 10 bins at once. Its null is that the price equals the probability. We get 68.0 against a 5% cut of 18.3, so p is about one in ten billion and we reject the null. But the chi-square only says that something is off. It does not say where or which way. So we test each bin with a binomial test. Nine of ten bins come out below the price, and the largest gap is 3.29 points in the 70 to 80% bin. If asked why binomial and not t: outcomes are zero-or-one counts, not means of continuous values. The exact model is the Poisson binomial, because each market has its own price. We use the binomial at the bin mean price. Its variance is a little larger, so the test is slightly conservative. In the 70 to 80% bin the difference is at most 1.3%. The formulas, if asked: on the left, each bin gives a z score, the observed Yes count minus the expected count, divided by the binomial standard deviation. Chi-square adds the ten squared z scores. On the right, the Yes count K in a bin adds one coin per market, each with its own price. That is the Poisson binomial. Its variance is never larger than the binomial variance, which is why the binomial test is slightly conservative.</div>
+<div class="slide">
+<section id="backup-q1-bh" class="bg-light padf q1">
+  <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <h2 class="t44">Q: Why report both BH and Bonferroni?</h2>
+  <div class="body g-bk">
+    <div class="col col-top">
+      <div class="legend"><span><svg width="48" height="12" aria-label="dashed black line"><line x1="0" y1="6" x2="48" y2="6" stroke="#171717" stroke-width="3" stroke-dasharray="8 6"/></svg> Bonferroni: p &lt; 0.005</span><span><svg width="48" height="12" aria-label="solid orange line"><line x1="0" y1="6" x2="48" y2="6" stroke="#C04F00" stroke-width="4"/></svg> BH: p &lt; rank × 0.005</span></div>
+      <svg aria-label="The 10 bin p-values sorted on a log scale. Bins 0, 7, 1 and 6 fall below both lines. Bin 8, p 0.018, falls below the BH step line but above the flat Bonferroni line. Bins 3, 4, 2, 5 and 9 sit above both lines." width="900" height="530" viewBox="0 0 900 530" style="width:100%;height:auto">
+        <g stroke="#E5E5E5" stroke-width="1"><line x1="100" y1="20" x2="880" y2="20"/><line x1="100" y1="140" x2="880" y2="140"/><line x1="100" y1="260" x2="880" y2="260"/><line x1="100" y1="380" x2="880" y2="380"/></g>
+        <line x1="100" y1="450" x2="880" y2="450" stroke="#737373" stroke-width="2"/>
+        <line x1="100" y1="10" x2="100" y2="450" stroke="#737373" stroke-width="2"/>
+        <line x1="100" y1="158.1" x2="880" y2="158.1" stroke="#171717" stroke-width="3" stroke-dasharray="8 6"/>
+        <path d="M100 158.1 H180 V140 H260 V129.4 H340 V121.9 H420 V116.1 H500 V111.4 H580 V107.4 H660 V103.9 H740 V100.8 H820 V98.1 H880" fill="none" stroke="#C04F00" stroke-width="4"/>
+        <path d="M130 367.8a10 10 0 1 0 20 0a10 10 0 1 0 -20 0M210 226.6a10 10 0 1 0 20 0a10 10 0 1 0 -20 0M290 211.2a10 10 0 1 0 20 0a10 10 0 1 0 -20 0M370 166.6a10 10 0 1 0 20 0a10 10 0 1 0 -20 0" fill="#171717"/>
+        <circle cx="460" cy="124.7" r="11" fill="#C04F00" stroke="#0A0A0A" stroke-width="2"/>
+        <path d="M530 94.2a10 10 0 1 0 20 0a10 10 0 1 0 -20 0M610 73.2a10 10 0 1 0 20 0a10 10 0 1 0 -20 0M690 56.1a10 10 0 1 0 20 0a10 10 0 1 0 -20 0M770 40.8a10 10 0 1 0 20 0a10 10 0 1 0 -20 0M850 22.8a10 10 0 1 0 20 0a10 10 0 1 0 -20 0" fill="#FFFFFF" stroke="#737373" stroke-width="3"/>
+        <line x1="462" y1="138" x2="476" y2="186" stroke="#C04F00" stroke-width="2"/>
+        <g font-family="IBM Plex Mono, Menlo, monospace" font-size="24">
+          <text x="90" y="28" text-anchor="end" fill="#262626">1</text>
+          <text x="90" y="148" text-anchor="end" fill="#262626">0.01</text>
+          <text x="90" y="268" text-anchor="end" fill="#262626">10⁻⁴</text>
+          <text x="90" y="388" text-anchor="end" fill="#262626">10⁻⁶</text>
+          <text x="476" y="210" fill="#C04F00" font-weight="700">bin 8: p = 0.018</text>
+          <text x="476" y="240" fill="#262626">below BH, above Bonferroni</text>
+          <text x="476" y="420" fill="#737373">below a line = significant</text>
+          <g text-anchor="middle" fill="#0A0A0A"><text x="140" y="482">0</text><text x="220" y="482">7</text><text x="300" y="482">1</text><text x="380" y="482">6</text><text x="460" y="482" fill="#C04F00" font-weight="700">8</text><text x="540" y="482">3</text><text x="620" y="482">4</text><text x="700" y="482">2</text><text x="780" y="482">5</text><text x="860" y="482">9</text></g>
+          <text x="490" y="520" text-anchor="middle" fill="#262626">bins sorted by p-value (label = bin number)</text>
+        </g>
+      </svg>
+    </div>
+    <div class="col">
+      <div class="stat"><div class="mid" style="font-size:44px;color:#0A0A0A">Bonferroni: 4 bins</div><div class="lab">Guards the chance of even one false find. Cut: 0.05 / 10 = 0.005 for every bin. Strict.</div></div>
+      <div class="stat"><div class="mid" style="font-size:44px">BH: 5 bins</div><div class="lab">Guards the share of false finds among the finds. The cut grows with rank. Less strict.</div></div>
+      <div class="callout">Only bin 8 differs. The strict rule still keeps 4 bins, all priced too high. The answer does not depend on the choice.</div>
+    </div>
+  </div>
+  <div class="foot"><span>p-value axis: log scale. Source: run 142082 q1_bins.csv; paper Section 5.1</span><span class="pg"></span></div>
+  <aside>Backup, Q1 speaker. About 45 seconds. Why: we run ten tests, one per bin, so by chance alone one could look significant. We must correct for that, and there are two common ways. How: the chart sorts the ten p-values from smallest to largest on a log scale. A bin is significant when its point falls below a line. Bonferroni, the dashed line, guards the chance of even one false find. It uses 0.05 divided by 10, so 0.005 for every bin. That is strict. Benjamini-Hochberg, or BH, the orange step line, guards the share of false finds among the finds. Its cut grows with the rank: rank times 0.005. That is less strict. Result: Bonferroni keeps 4 bins: 0, 7, 1 and 6. BH keeps 5. The only difference is bin 8, with p equal to 0.018. It falls below the BH line but above the Bonferroni line. Meaning: even under the strict rule, 4 bins remain, and all of them are priced too high. So our answer does not depend on which correction we pick. The paper reports BH as the main result and Bonferroni as a stricter check.</aside>
+</section>
+</div>
+<div class="notes"><b>Notes:</b> Backup, Q1 speaker. About 45 seconds. Why: we run ten tests, one per bin, so by chance alone one could look significant. We must correct for that, and there are two common ways. How: the chart sorts the ten p-values from smallest to largest on a log scale. A bin is significant when its point falls below a line. Bonferroni, the dashed line, guards the chance of even one false find. It uses 0.05 divided by 10, so 0.005 for every bin. That is strict. Benjamini-Hochberg, or BH, the orange step line, guards the share of false finds among the finds. Its cut grows with the rank: rank times 0.005. That is less strict. Result: Bonferroni keeps 4 bins: 0, 7, 1 and 6. BH keeps 5. The only difference is bin 8, with p equal to 0.018. It falls below the BH line but above the Bonferroni line. Meaning: even under the strict rule, 4 bins remain, and all of them are priced too high. So our answer does not depend on which correction we pick. The paper reports BH as the main result and Bonferroni as a stricter check.</div>
+<div class="slide">
+<section id="backup-q1-volume" class="bg-light padf q1">
+  <div class="band"><span class="bq bq1 on">Q1 Calibration</span><span class="dot">·</span><span class="bq">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
+  <h2 class="t44">Q: Does the gap depend on trading volume?</h2>
+  <div class="body g-bk">
+    <div class="col">
+      <svg aria-label="Net gap with 95 percent intervals for three volume groups. Low volume minus 1.12 percent, middle minus 1.43 percent, high minus 0.42 percent with an interval that reaches 0. All markets minus 0.99 percent." width="900" height="440" viewBox="0 0 900 440" style="width:100%;height:auto">
+        <line x1="786.7" y1="40" x2="786.7" y2="360" stroke="#737373" stroke-width="2"/>
+        <line x1="601.9" y1="40" x2="601.9" y2="360" stroke="#A3A3A3" stroke-width="2" stroke-dasharray="8 6"/>
+        <line x1="320" y1="360" x2="880" y2="360" stroke="#737373" stroke-width="2"/>
+        <g stroke="#171717" stroke-width="4"><line x1="478.0" y1="100" x2="676.9" y2="100"/><line x1="419.6" y1="200" x2="621.6" y2="200"/></g>
+        <line x1="626.1" y1="300" x2="792.3" y2="300" stroke="#C04F00" stroke-width="4"/>
+        <path d="M566.7 100a12 12 0 1 0 24 0a12 12 0 1 0 -24 0M508.8 200a12 12 0 1 0 24 0a12 12 0 1 0 -24 0" fill="#171717"/>
+        <circle cx="708.3" cy="300" r="12" fill="#C04F00"/>
+        <g font-family="IBM Plex Mono, Menlo, monospace" font-size="24">
+          <text x="300" y="108" text-anchor="end" fill="#0A0A0A">Low (≤ 499)</text>
+          <text x="300" y="208" text-anchor="end" fill="#0A0A0A">Middle</text>
+          <text x="300" y="308" text-anchor="end" fill="#C04F00" font-weight="700">High (&gt; 6,207)</text>
+          <text x="578.7" y="78" text-anchor="middle" fill="#171717">−1.12%</text>
+          <text x="520.8" y="178" text-anchor="middle" fill="#171717">−1.43%</text>
+          <text x="708.3" y="278" text-anchor="middle" fill="#C04F00" font-weight="700">−0.42%</text>
+          <text x="601.9" y="30" text-anchor="middle" fill="#737373">all: −0.99%</text>
+          <text x="786.7" y="30" text-anchor="middle" fill="#262626">0</text>
+          <text x="413.3" y="390" text-anchor="middle" fill="#262626">−2%</text>
+          <text x="600" y="390" text-anchor="middle" fill="#262626">−1%</text>
+          <text x="786.7" y="390" text-anchor="middle" fill="#262626">0%</text>
+          <text x="600" y="428" text-anchor="middle" fill="#262626">net gap: rate − price, with 95% interval</text>
+        </g>
+      </svg>
+    </div>
+    <div class="col">
+      <div class="stat"><div class="lab"><b>Volume:</b> USDC traded in a market up to 1 day before close, the time we read the price.</div></div>
+      <div class="stat"><div class="lab"><b>Groups:</b> all 47,948 markets, cut into 3 equal groups (about 16,000 each) at the 1/3 and 2/3 points. Fixed before the run.</div></div>
+      <div class="callout">Only the busiest third is near 0. High minus low: +0.71 points (p = 0.046), a weak difference. The middle third has the largest gap.</div>
+    </div>
+  </div>
+  <div class="foot"><span>Group labels in USDC. Source: paper Appendix G, peer question a; run 150310 peer_a_results.json</span><span class="pg"></span></div>
+  <aside>Backup, Q1 speaker. About 45 seconds. Why: a classmate asked whether the gap depends on how much a market trades. How: volume is the USDC traded in a market up to one day before the close, the same time we read the price. We cut all 47,948 markets into three equal groups at the one-third and two-thirds points, 499 and 6,207 USDC. We fixed this split before the run. In each group we redo the Q1 test. Result: the low group has a net gap of minus 1.12%, the middle group minus 1.43%, and the high group minus 0.42%. Only the high group's interval reaches zero. High minus low is plus 0.71 points with p equal to 0.046. Meaning: the busiest markets are close to calibrated. But the evidence is weak, and the gap does not shrink step by step, because the middle group has the largest gap. Volume also counts money, not people, so a few large wallets can make a market look busy.</aside>
+</section>
+</div>
+<div class="notes"><b>Notes:</b> Backup, Q1 speaker. About 45 seconds. Why: a classmate asked whether the gap depends on how much a market trades. How: volume is the USDC traded in a market up to one day before the close, the same time we read the price. We cut all 47,948 markets into three equal groups at the one-third and two-thirds points, 499 and 6,207 USDC. We fixed this split before the run. In each group we redo the Q1 test. Result: the low group has a net gap of minus 1.12%, the middle group minus 1.43%, and the high group minus 0.42%. Only the high group's interval reaches zero. High minus low is plus 0.71 points with p equal to 0.046. Meaning: the busiest markets are close to calibrated. But the evidence is weak, and the gap does not shrink step by step, because the middle group has the largest gap. Volume also counts money, not people, so a few large wallets can make a market look busy.</div>
 <div class="slide">
 <section id="q2-why-how" class="bg-light padf q2">
   <div class="band"><span class="bq">Q1 Calibration</span><span class="dot">·</span><span class="bq bq2 on">Q2 Wallets</span><span class="dot">·</span><span class="bq">Q3 Distributions</span></div>
