@@ -40,6 +40,10 @@
 \newcommand{\PaperMarkets}{1.3 million}
 \newcommand{\PaperPeriod}{November 2022 to April 2026}
 \newcommand{\pOne}{\ensuremath{p_{1\mathrm{d}}}}
+\newcommand{\TopOneLabel}{1\%}
+\newcommand{\TopTenLabel}{10\%}
+\newcommand{\DeltaA}{0.10}
+% Captions carry no "Why:" sentence in this report (owner, 2026-11-18); rules/figures.md section 3 is waived here
 
 \title{When Polymarket Says \HookPct, Does It Happen \HookPct{} of the Time?\\[1pt]
 \large CS 6344 Introduction to Data Science, Final Report}
@@ -74,7 +78,7 @@ We fixed these rules before any Q1 result. One later change (the price tie rule)
 \hd{2. Q1: is the crowd right?}
 {\centering
 \figorbox{../paper_mvp1/figures/fig4_calibration_gap_row}{\textwidth}
-\captionof{figure}{Observed outcome-1 rate against mean price per bin (left), and the per-bin gap with \CiLevel{} intervals (right). Why: the right panel shows the gaps that the diagonal hides.}
+\captionof{figure}{Observed outcome-1 rate against mean price per bin (left), and the per-bin gap with \CiLevel{} intervals (right).}
 \label{fig:calib}\par}
 \smallskip
 \textbf{\VerdictQOne} The chi-square test says the prices miss, and the bin tests show where and which way.
@@ -118,13 +122,13 @@ We do not test its cause.
 \noindent\begin{minipage}[t]{0.48\textwidth}\vspace{0pt}
 \centering
 \figorbox{../paper_mvp1/figures/fig6_ccdf_top_sampled_half}{3.504in}
-\captionof{figure}{CCDF of wallet volume, one line per role. Why: the tail bends down, so it is not a power law.}
+\captionof{figure}{CCDF of wallet volume, one line per role.}
 \label{fig:ccdf}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\textwidth}\vspace{0pt}
 \centering
 \figorbox{../paper_mvp1/figures/fig_report_q2_winnings}{3.504in}
-\captionof{figure}{Share held by the top 1\% and 10\% of wallets, each ranked by its own measure. Why: winnings are as concentrated as volume.}
+\captionof{figure}{Share held by the top 1\% and 10\% of wallets, each ranked by its own measure.}
 \label{fig:winnings}
 \end{minipage}\par
 \smallskip
@@ -144,7 +148,7 @@ The top 1\% of wallets take an estimated \PnlTopOnePctShareWon{} of all winnings
 \noindent\begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
 \centering
 \figorbox{../paper_mvp1/figures/qq_trade_size_raw_log_half}{3.65in}
-\captionof{figure}{QQ plot of trade size against the normal, raw (left) and log (right). Why: the log points follow the line, so log sizes are closer to normal.}
+\captionof{figure}{QQ plot of trade size against the normal, raw (left) and log (right).}
 \label{fig:qq}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.47\textwidth}\vspace{0pt}
@@ -264,7 +268,7 @@ We set no size line before the results, so ``small'' is our reading.
 \par\smallskip
 {\centering
 \figorbox{../paper_mvp1/figures/fig_r3_m5_implied_gap}{5.36in}
-\captionof{figure}{Implied gap between the fitted probability and the price, against the practical line. Why: a band that excludes 0 at a price shows the gap there is not noise.}
+\captionof{figure}{Implied gap between the fitted probability and the price, against the practical line.}
 \label{fig:size}\par}
 % Source: runs 150310_r3_review_fixes_v6 (m5_calibration_fit.json) and local_r3figs_v10
 
@@ -282,8 +286,60 @@ That difference is weak evidence.
 \par\smallskip
 {\centering
 \figorbox{../paper_mvp1/figures/fig_r3_peer_a_volume}{5.36in}
-\captionof{figure}{Net gap per volume group (tercile), with \CiLevel{} intervals. Why: only the high group comes close to no gap, and its interval touches 0.}
+\captionof{figure}{Net gap per volume group (tercile), with \CiLevel{} intervals.}
 \label{fig:volume}\par}
 % Source: runs 150310_r3_review_fixes_v6 (peer_a_results.json) and local_r3figs_v10
+
+% Appendix D sentences copied from ../paper_mvp1/sections/app-f-robust.tex (R1, R2), app-g-review.tex (peer b),
+% 07-res-q2.tex (power law, dataset-paper reference) and 08-res-q3.tex (fits) (owner, 2026-11-18)
+\clearpage
+\hd{Appendix D. Other checks}
+\textbf{D.1 More Q1 checks.} Each row sits next to the original Q1 result and does not replace it.
+\par\smallskip
+\noindent\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Check & What it asks & Result \\
+\midrule
+R1 clean payout & Does Q1 hold without markets that have no clean payout? & We remove \RobROneNExcluded{} markets, so n=\RobROneSensN. $\chi^2$ moves from \QOneChiSq{} to \RobROneSensChiSq. The Q1 rule result is the same. \\
+\midrule
+R2 last-day price & How far does the price move from \pOne{} to the last trade before the close? & The median absolute change is \RobRTwoMedianAbsDelta. The change is at least \DeltaA{} in \RobRTwoShareDeltaAtLeastTen{} of markets. So \pOne{} is not the price at the close. \\
+\midrule
+Close period & Does the gap change with the close year? & \RThreePeerBPeriodOneLabel: \RThreePeerBPeriodOneNetGap{} [\RThreePeerBPeriodOneNetGapCiLow, \RThreePeerBPeriodOneNetGapCiHigh], n=\RThreePeerBPeriodOneN.\newline
+\RThreePeerBPeriodTwoLabel: \RThreePeerBPeriodTwoNetGap{} [\RThreePeerBPeriodTwoNetGapCiLow, \RThreePeerBPeriodTwoNetGapCiHigh], n=\RThreePeerBPeriodTwoN.\newline
+\RThreePeerBPeriodThreeLabel: \RThreePeerBPeriodThreeNetGap{} [\RThreePeerBPeriodThreeNetGapCiLow, \RThreePeerBPeriodThreeNetGapCiHigh], n=\RThreePeerBPeriodThreeN.\newline
+In \RThreePeerBPeriodThreeLabel{} the chi-square test does not reject (BH $p=\RThreePeerBPeriodThreeBhP$), but the interval excludes 0. \\
+\bottomrule
+\end{tabularx}
+
+\medskip
+\textbf{D.2 Q2 wallet volume.}
+The top \TopOneLabel{} of makers hold \MakerTopOneShare{} of maker volume.
+The dataset paper reports \PaperTopShare{} on the full data \citep{qin2026polymarketv1}.
+The populations differ, so we use that value as a reference only.
+The top \TopTenLabel{} tail of wallet volume has a fitted power-law exponent $\alpha=\WalletVolumePowerAlpha$.
+The KS test rejects an exact power law ($D=\WalletVolumePowerKsD$, $p=\WalletVolumePowerKsP$).
+We set no line for how close it is, so we do not say wallet volume follows a power law.
+
+\medskip
+\textbf{D.3 Q3 distribution fits.}
+The KS statistic $D$ measures how far a fitted curve is from the data.
+The parameters are fitted on the same data, so a rejection stands, and a pass would not.
+\par\smallskip
+\noindent\begin{tabularx}{\textwidth}{@{}Xrrrrr@{}}
+\toprule
+Variable & Power-law $\alpha$ & $x_{\min}$ (USDC) & $D$, power law & $D$, normal & $D$, exponential \\
+\midrule
+Trade size & \TradeSizePowerAlpha & \TradeSizePowerXmin & \TradeSizePowerKsD & \TradeSizeNormalKsD & \TradeSizeExponentialKsD \\
+\midrule
+Wallet volume & \WalletVolumePowerAlpha & \WalletVolumePowerXmin & \WalletVolumePowerKsD & \WalletVolumeNormalKsD & \WalletVolumeExponentialKsD \\
+\bottomrule
+\end{tabularx}
+\par\smallskip
+The normal fit is poor for both variables.
+The power-law fit covers the tail only, so its $D$ is not directly comparable, and we do not rank the fits.
+We did not compare a lognormal.
+Wallet volume is strongly right skewed.
+The mean is \MakerMeanVolume{} USDC for makers and \TakerMeanVolume{} USDC for takers.
+The medians are \MakerMedianVolume{} and \TakerMedianVolume{} USDC.
 
 \end{document}
