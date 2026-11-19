@@ -1,0 +1,19 @@
+<section id="backup-methods-table" class="bg-light padf">
+  <div class="frame"><span class="chip">Why</span><span class="chip on">How</span><span class="chip">Result</span><span class="chip">Meaning</span></div>
+  <h2 class="t44">Each method answers one question</h2>
+  <table class="t" style="font-size:21px;line-height:1.25;margin-top:16px">
+    <tr class="hd"><th style="width:29%">Method</th><th style="width:59%">What it answers</th><th style="width:12%">Used in</th></tr>
+    <tr class="r1"><td><b>Price 1 day before close</b></td><td>Mean trade price at the last timestamp at or before 1 day before close</td><td>All</td></tr>
+    <tr class="r2"><td><b>Chi-square goodness of fit</b></td><td>Do the 10 bins as a whole match the price? H0: price = probability. Degrees of freedom 10</td><td>Q1</td></tr>
+    <tr class="r1"><td><b>Exact binomial test per bin</b></td><td>Where, and which way, does a bin miss? Uses the bin mean price</td><td>Q1</td></tr>
+    <tr class="r2"><td><b>Benjamini-Hochberg (BH), Bonferroni</b></td><td>10 bin tests can give a false find by chance. BH is the main correction, Bonferroni a stricter check</td><td>Q1</td></tr>
+    <tr class="r1"><td><b>95% z interval</b></td><td>How large is each bin gap, and how sure are we? Error bars in Figure 1</td><td>Q1</td></tr>
+    <tr class="r2"><td><b>Review checks</b></td><td>Does the gap survive other price rules, Yes/No markets only, and markets grouped by a proxy event key?</td><td>Q1</td></tr>
+    <tr class="r1"><td><b>Volume groups</b></td><td>Is the gap different in busy markets? Three equal groups by volume. Welch t test, high against low</td><td>Q1</td></tr>
+    <tr class="r2"><td><b>Top shares, CCDF</b></td><td>How much of the volume and the winnings do the top wallets hold?</td><td>Q2</td></tr>
+    <tr class="r1"><td><b>Welch t test on log volume</b></td><td>Do makers and takers trade different amounts?</td><td>Q2</td></tr>
+    <tr class="r2"><td><b>Mean, median, QQ plot</b></td><td>What does a typical trade look like, and is it close to normal?</td><td>Q3</td></tr>
+  </table>
+  <div class="foot"><span>CCDF: complementary cumulative distribution function. Source: course report Appendix B</span><span class="pg"></span></div>
+  <aside>Backup. Speaker: Intro (Taek Lim). About 45 seconds. Why: someone may ask which method answers which question. How: each row names one method, the question it answers, and where we use it. Result: Q1 uses one price, a chi-square test for the whole verdict, an exact binomial test per bin, BH and Bonferroni corrections for the ten bin tests, a 95% z interval for the error bars, the review checks and the volume groups. Q2 uses top shares, the CCDF and a Welch t test on log volume. Q3 uses the mean, the median and the QQ plot. Meaning: every number in the talk comes from one of these rows. The table is Appendix B of the course report.</aside>
+</section>
